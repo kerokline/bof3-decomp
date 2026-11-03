@@ -1438,13 +1438,20 @@ splat names an unnamed unit by its uppercase hex offset. When its functions are 
 
 ### Rename steps
 
-Add the symbol's `config/symbols.toml` row with its `source`, rewrite every tracked user, move the unit file,
-then prove every touched image with `check-<image>`:
+`tools/symbol.py rename` adds the symbol's `config/symbols.toml` row with its `source`, rewrites every
+tracked user (definition, prototypes, uses, `config/`), keeps the address name in a comment and moves
+the unit file. Then prove every touched image with `check-<image>`:
 
 ```sh
-git grep -l -w 'func_<ADDR>' | xargs sed -i 's/\bfunc_<ADDR>\b/<Name>/g'
-git mv src/<path>/func_<ADDR>.c src/<path>/<Name>.c
+tools/symbol.py rename func_<ADDR> <Name> --image <target> --local --source "<evidence>" --dry-run
+tools/symbol.py rename func_<ADDR> <Name> --image <target> --local --source "<evidence>"
+tools/symbol.py params <Name> old=new ...     # parameter names: definition and prototypes
 ```
+
+An address name is unique only per image: `--local` limits the rename to that image's `src/` and
+`config/` folders, and `--scope PATH...` names the folders. The resident images
+(`exe/slus_004_22`, `emi/etc/game/00`) rename with no scope. `tools/symbol.py add` writes a row
+without a rename, and `tools/symbol.py refs` ranks the units to name first.
 
 ### Symbols and the link
 

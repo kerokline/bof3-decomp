@@ -19,7 +19,10 @@ Follow the [README quick start](README.md#quick-start). The host tools and what 
 [toolchain guide](docs/toolchain.md#host-tools). Keep the disc, the extracted data and the
 toolchain objects local: they are ignored by Git and never belong in a commit.
 
-For the permuter, the differ and m2c, run `tools/setup.sh --dev --matching` instead.
+For the permuter, the differ and m2c, run `tools/setup.sh --dev --matching` instead. Setup checks
+your disc against [`config/disc.toml`](config/disc.toml) and names each file that differs;
+`tools/disc.py verify` repeats the check. Every routine task has one command in
+[`tools/README.md`](tools/README.md); `tools/worktree.sh` adds a worktree for parallel work.
 
 ## Your first match
 
@@ -34,12 +37,15 @@ A function is `TARGET@0xADDRESS`; `<image>` is the target with `/` written as `+
    wc -l asm/exe/slus_004_22/func_<ADDR>.s     # the split assembly; fewer lines are easier
    ```
 
-2. **Look for a twin.** A matched body with the same instructions is shared, not lifted again.
-   Build once, then search ([coddog](docs/toolchain.md#coddog)):
+2. **Look for a twin or a template.** A matched body with the same instructions is shared, not
+   lifted again. Build once, then search ([coddog](docs/toolchain.md#coddog)). A template is a
+   matched function of the same shape; the diff prints only the instructions that differ
+   ([templates](tools/README.md#templates)):
 
    ```sh
    meson compile -C build/meson
    bin/coddog match exe/slus_004_22 func_<ADDR> -t 0.95
+   tools/template_diff.py exe/slus_004_22@func_<ADDR>
    ```
 
 3. **Read.** Open `asm/exe/slus_004_22/func_<ADDR>.s` and its callers (`rg -uu 'jal\s+func_<ADDR>' asm/`).
@@ -56,7 +62,8 @@ A function is `TARGET@0xADDRESS`; `<image>` is the target with `/` written as `+
    ```
 
    An unnamed function keeps its address name (`MATCH void func_<ADDR>(void)`). Names need
-   evidence: [conventions](docs/conventions.md#names).
+   evidence: [conventions](docs/conventions.md#names). `tools/symbol.py rename` changes a name
+   everywhere ([rename steps](docs/conventions.md#rename-steps)).
 
 5. **Compare.** `tools/match.sh` builds the one object and compares the function with retail:
 
@@ -89,6 +96,7 @@ A new header, a `NON_MATCHING` marker or an `asm/<target>/hand/` file needs
 meson compile -C build/meson format
 meson test -C build/meson
 meson compile -C build/meson check check-headers check-tree include-asm format-check
+tools/typeloss.py origin/main WORK        # a rename, move or retype must not weaken a type
 ```
 
 Without a disc Meson does not offer `check`; leave it out. Each check:

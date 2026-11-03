@@ -1,0 +1,112 @@
+# Tools
+
+Every routine task is one command from the repository root. `<image>` is a target id with `/` written
+as `+`. Run each Python tool with `.venv/bin/python tools/<name>.py` or directly (`tools/<name>.py`);
+`--help` prints its verbs and examples. The Meson names run as `meson compile -C build/meson <name>`.
+
+## Tasks
+
+| Task                                     | Command                                                                  | More                                                      |
+| ---------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------- |
+| Set up                                   | `tools/setup.sh --dev` (`--matching`, `--no-payloads`, `--no-sdk`)       | [toolchain: setup](../docs/toolchain.md#setup)            |
+| Check the disc, extracted files, images  | `tools/disc.py verify`                                                   | [toolchain: disc](../docs/toolchain.md#disc-manifest)     |
+| Build and check every image              | `meson compile -C build/meson check`                                     | [toolchain: commands](../docs/toolchain.md#commands)      |
+| Check one image                          | `meson compile -C build/meson check-<image>`                             | same                                                      |
+| Compare one function with retail         | `tools/match.sh <target>@0x<ADDR>`                                       | [match.sh](../docs/toolchain.md#matchsh)                  |
+| Preprocess the context for m2c or a scratch | `tools/m2ctx.py include/common.h -o ctx.c`                            | [m2c](../docs/toolchain.md#m2c)                           |
+| Draft and upload                         | m2c draft, then a decomp.me scratch with the project flags               | [m2c](../docs/toolchain.md#m2c), [decomp.me](../docs/decomp-me.md) |
+| Permute a near match                     | `tools/permuter_import.py src/<path>/<Name>.c`                           | [permuter](../docs/toolchain.md#permuter)                 |
+| Find a template for an assembly function | `tools/template_diff.py <target>@<func>`                                 | [template diff](#templates)                               |
+| Try templates in batch                   | `tools/template_try.py rows.tsv`                                         | [template diff](#templates)                               |
+| Find twins in one image                  | `bin/coddog match <target> <func> -t 0.95`                               | [coddog](../docs/toolchain.md#coddog)                     |
+| Find alike functions across images       | `tools/dups.py near`                                                     | [duplicates](#duplicates-and-names)                       |
+| List same-name groups and split names    | `tools/dups.py shared-names`, `tools/dups.py split-names`                | same                                                      |
+| Rename a function or global everywhere   | `tools/symbol.py rename OLD NEW --image <target> --local`                | [rename steps](../docs/conventions.md#rename-steps)       |
+| Rename parameters                        | `tools/symbol.py params <func> old=new ...`                              | same                                                      |
+| Rank units to name first                 | `tools/symbol.py refs src/<path>`                                        | same                                                      |
+| Add a symbol row                         | `tools/symbol.py add <target> <Name> 0x<ADDR> --source "<evidence>"`     | [symbols](../docs/conventions.md#symbols-and-the-link)    |
+| Split a data unit                        | add a `[0xOFFSET, type, name]` row to `config/<target>/splat.yaml`       | [split](../docs/toolchain.md#split)                       |
+| Check type loss between two revisions    | `tools/typeloss.py HEAD~5 HEAD`                                          | [type loss](#type-loss)                                   |
+| Scan prototypes against definitions      | `tools/sigs.py scan`                                                     | [signatures](#signatures)                                 |
+| Scan arrays for text and struct shapes   | `tools/shapes.py text`, `tools/shapes.py strided`, `tools/shapes.py types` | [data shapes](#data-shapes)                             |
+| Write decimal for quantities             | `tools/values.py fields`                                                 | [values](#values)                                         |
+| Format                                   | `meson compile -C build/meson format` (or `tools/format.sh`)             | [toolchain: commands](../docs/toolchain.md#commands)      |
+| Write the progress report                | `meson compile -C build/meson report`                                    | [toolchain: commands](../docs/toolchain.md#commands)      |
+| Set up a worktree for parallel work      | `tools/worktree.sh --from <checkout> <branch>`                           | [worktrees](#worktrees)                                   |
+| Read bytes through Rizin                 | `bin/rz <target> 'pdf @ <func>'`                                         | [rizin](../docs/toolchain.md#rizin)                       |
+
+## Templates
+
+A template is a matched C function with the same shape as an assembly function. `template_diff.py`
+lists the closest by opcode sequence and prints only the instructions that differ: `~` same opcode,
+other operands; `-` only in the template; `+` only in the target.
+
+```sh
+tools/template_diff.py emi/plchar/plp016/00@func_801CF610
+tools/template_diff.py <target>@<func> <template target>@<template func>
+```
+
+`template_try.py` takes rows of `TARGET@NAME<TAB>TEMPLATE@NAME`, replaces each `INCLUDE_ASM` line with
+the template's body under the target's name, runs `tools/match.sh`, and keeps only the exact ones. A
+kept body is a lead: run `check-<image>`, then name it from evidence and share it
+([shared bodies](../docs/conventions.md#shared-bodies)). Both tools read the function index
+`build/func_index.json.gz`, built from the images on first use; add `--rebuild` after a build.
+They need `rapidfuzz` for the search (`tools/setup.sh --matching`).
+
+## Duplicates and names
+
+`dups.py near` groups functions with alike opcodes across all images and names the matched template of
+each assembly function. `shared-names` lists one name that several bodies use, worst first.
+`split-names` lists byte-equal bodies that carry several names. All print tab-separated rows.
+
+## Signatures
+
+`sigs.py scan` prints one row per prototype that disagrees with its definition, implicit
+declaration, call-through cast or return cast (`--kind` selects one). `cross` and `sync` find and
+rewrite a prototype that differs from a definition in another file. `uncast` removes the call cast of
+one function. Every edit is a lead: run `check` afterwards.
+
+## Type loss
+
+`typeloss.py OLD NEW` lists prototypes and externs that carry fewer named types in `NEW` than in `OLD`
+(`WORK` is the working tree). Run it before a pull request that renames, moves or retypes.
+
+## Data shapes
+
+`shapes.py text` finds byte arrays written as hex that hold text; `strided` finds arrays read with a
+stride or a wider cast; `types` finds one role name declared with several types; `literal` rewrites a
+hex initializer as string rows. The reader of the array decides its type.
+
+## Values
+
+`values.py fields` and `values.py compare` list hex literals that are quantities (coordinates,
+primitive macro arguments, compares with named variables). `--write` rewrites them after you review
+the lines.
+
+## Worktrees
+
+`tools/worktree.sh --from <checkout> <branch>` adds a Git worktree under `.worktrees/<branch>` and
+links the local inputs, toolchains, `.venv` and extracted disc from a built checkout, so the new
+worktree builds without extracting again. Keep that checkout while the worktree exists.
+
+## Build plumbing
+
+Meson, setup or another tool calls these. A contributor does not run them.
+
+| File                                         | Job                                                                     |
+| -------------------------------------------- | ----------------------------------------------------------------------- |
+| `setup.py`, `setup.sh`, `psyq.sh`, `psyq_lib.py`, `fetch_verified.sh` | Install the toolchain and extract the disc                |
+| `split.py`, `link_symbols.py`, `decomp_yaml.py` | Split an image, write its link script, and write the coddog settings    |
+| `cc.py`, `psxdecomp/dmpsx.py`                | The compiler wrapper and the DMPSX rewrite                              |
+| `objdiff_config.py`, `rzproject.py`          | Build the objdiff project and the Rizin projects                        |
+| `check_asm.sh`, `check_hand.sh`, `check_headers.sh`, `check_tree.sh` | The bodies of the `include-asm`, `check-headers` and `check-tree` gates |
+| `format.sh`                                  | The body of `format` and `format-check`                                 |
+
+`bin/coddog` and `bin/rz` stay: coddog finds twins and `rz` reads retail bytes, and no other tool does
+either. `bin/internal/` holds `find-tool` and the binutils wrappers (`as`, `ld`, `nm`, `objcopy`, `objdump`) that the build uses.
+
+## Layout
+
+One flat file per task: `tools/<name>.py`, in snake case, with verbs as sub-commands. Shared logic
+lives in the `tools/bof3/` package, and the tests are in `tools/tests/`. A command with no arguments
+that every contributor runs is also a Meson run target.

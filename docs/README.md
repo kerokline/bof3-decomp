@@ -10,6 +10,9 @@ Each fact lives on one page. Start from the task.
 | Find out why a function does not match    | [matching: diagnose](matching.md#diagnose)                                         |
 | Compare one function with retail in 0.1 s | [toolchain: match.sh](toolchain.md#matchsh)                                        |
 | Find twins of a function                  | [toolchain: coddog](toolchain.md#coddog)                                           |
+| Find a template for an assembly function  | [tools: templates](../tools/README.md#templates)                                   |
+| Run a routine task with one command       | [tools](../tools/README.md)                                                        |
+| Check the disc and the extracted files    | [toolchain: disc manifest](toolchain.md#disc-manifest)                             |
 | Use the permuter                          | [matching: permuter](matching.md#permuter), [toolchain](toolchain.md#permuter)     |
 | Name a function, global, type or constant | [conventions: names](conventions.md#names)                                         |
 | Add a type, a member or a constant        | [conventions: types and values](conventions.md#types-and-values)                   |

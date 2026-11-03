@@ -240,9 +240,6 @@ extern u8               D_801462E7;
 /* D_801462F0 */
 extern u8               g_BattlePartyCount;
 extern u8               D_801462F6[];
-/* D_80146303 */
-/* s8 here: the u8 form of battle/battle/15 changes the bytes of func_801D25A0 (signed compare). */
-extern s8               g_BattleCommandCount;
 extern u8               D_80146304; /* oscillation direction latch */
 extern u8               D_80146308; /* UI oscillator byte */
 extern u8               D_8014630C;

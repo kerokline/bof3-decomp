@@ -3,6 +3,7 @@
 
 /* The scratchpad work-area pointer (cell 0x1F800044) is reloaded per access. */
 #define SPAD_WORK_VOLATILE
+#define BATTLE_COMMAND_COUNT_VOLATILE
 
 /* The battle/battle/15 overlay's local declarations: the command, step and damage
  * dispatch tables, the actor views it shares with battle/battle/03 and the prototypes
@@ -550,8 +551,6 @@ extern u8                                D_801460F2;
 extern volatile u8                       D_801462E7;
 /* D_801462F0 */
 extern volatile u8                       g_BattlePartyCount; /* u8 active-battler count at 0x801462F0. */
-/* D_80146303 */
-extern volatile u8                       g_BattleCommandCount;
 extern u8                                D_8014630C[];
 /* D_80146374 */
 extern volatile u8                       g_BattleActingBattler;

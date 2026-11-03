@@ -144,27 +144,35 @@ typedef enum BattleResultFlags {
     BATTLE_RESULT_NO_BGM  = 1 << 3,
 } BattleResultFlags;
 
-extern s32           D_801459E8;
+extern s32          D_801459E8;
 /* Battle frame/sequence word read by both battle overlays. */
 /* D_801459F0 */
-extern volatile u32  g_ScriptBank;
-extern u8            D_80145A00;
-extern s32           D_80145A04;
-extern u8            D_80146229;
-extern u16           D_8014622A;
-extern u8            D_80146232;
+extern volatile u32 g_ScriptBank;
+extern u8           D_80145A00;
+extern s32          D_80145A04;
+extern u8           D_80146229;
+extern u16          D_8014622A;
+extern u8           D_80146232;
 /* Stock count owned by the main executable. */
-extern u8            g_PartySize;
+extern u8           g_PartySize;
 /* D_80146255 */
-extern u8            g_BattlePartyOrder;
-extern s16           D_801462AA;
+extern u8           g_BattlePartyOrder;
+extern s16          D_801462AA;
 /* D_801462E5 */
-extern u8            g_BattleRowCursor;
+extern u8           g_BattleRowCursor;
 /* D_801462ED */
-extern u8            g_BattleBossFlags;
-extern u8            D_801462EE;
+extern u8           g_BattleBossFlags;
+extern u8           D_801462EE;
 /* D_801462F1 */
-extern u8            g_BattleLivingPartyCount;
+extern u8           g_BattleLivingPartyCount;
+/* D_80146303. A unit that reads it as volatile (battle/battle/15) defines
+ * BATTLE_COMMAND_COUNT_VOLATILE before its first include. Retail loads it signed
+ * in battle/battle/03 func_801D1E8C and func_801D25A0 and unsigned elsewhere. */
+#ifdef BATTLE_COMMAND_COUNT_VOLATILE
+extern volatile u8 g_BattleCommandCount;
+#else
+extern u8 g_BattleCommandCount;
+#endif
 /* D_80146324 */
 extern u8            g_BattleSurprise;
 extern Spoils        D_80146326;

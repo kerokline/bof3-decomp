@@ -11,7 +11,7 @@ MATCH void func_801D25A0(void) {
 
     g_BattleMessageState = 2;
     i                    = 0;
-    if (g_BattleCommandCount > 0) {
+    if ((s8)g_BattleCommandCount > 0) {
         do {
             rank = D_801462F6[i & BYTE_MASK];
             if ((rank != GAME_NONE) && ((Battle_SlotIsBlocked(rank) & BYTE_MASK) == 0)) {
@@ -20,7 +20,7 @@ MATCH void func_801D25A0(void) {
                 }
             }
             i += 1;
-        } while ((i & BYTE_MASK) < g_BattleCommandCount);
+        } while ((i & BYTE_MASK) < (s8)g_BattleCommandCount);
     }
     i = 0;
     if (g_BattlePartyCount != 0) {

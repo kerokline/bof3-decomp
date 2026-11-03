@@ -13,7 +13,7 @@ in two targets is two unrelated functions. Progress: [live status](https://raulc
 
 ## Quick start
 
-Linux is the primary host; use WSL2 on Windows. Install `git`, `curl`, `tar`, `unzip`, `7z`,
+Linux is the primary host; use WSL2 on Windows. Install `git`, `curl`, `tar`, `unzip`, `7z` (not needed with `--no-sdk`),
 [`uv`](https://docs.astral.sh/uv/), Meson, Ninja, `clang-format` and
 [`dprint`](https://dprint.dev/install/) first ([full list](docs/toolchain.md#host-tools)).
 
@@ -22,7 +22,7 @@ Without a disc you can edit code and docs and run every check that needs no game
 ```sh
 git clone https://github.com/raulcorreia7/bof3-decomp.git
 cd bof3-decomp
-tools/setup.sh --dev --no-payloads
+tools/setup.sh --dev --no-payloads --no-sdk
 meson setup build/meson
 meson compile -C build/meson format-check check-headers check-tree include-asm
 meson test -C build/meson

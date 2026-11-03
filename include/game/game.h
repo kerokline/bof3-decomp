@@ -82,7 +82,8 @@ extern Callback  g_MenuActionHandlers[3];
 extern Callback  g_MenuTaskHandlers[4];
 extern char      D_801C7C34[5][8];
 extern u8*       D_801C7C5C[5];
-extern Callback  D_801C7C70[187];
+/* D_801C7C70 */
+extern Callback  g_ActorHandlers[187];
 extern u8        D_801C7F74[];
 extern Callback  D_801C8090[3];
 /* D_801C809C */

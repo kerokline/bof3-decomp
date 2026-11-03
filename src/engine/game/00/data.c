@@ -103,7 +103,8 @@ char D_801C7C34[5][8] = {"ITEM" T_END T_END T_END T_END, "WEAPON" T_END T_END, "
 u8 *D_801C7C5C[5] = {(u8 *)&D_801C7C34[0][0], (u8 *)&D_801C7C34[1][0], (u8 *)&D_801C7C34[2][0], (u8 *)&D_801C7C34[3][0],
                      (u8 *)&D_801C7C34[4][0]};
 
-Callback D_801C7C70[187] = {
+/* D_801C7C70 */
+Callback g_ActorHandlers[187] = {
     (Callback)func_8019A210, (Callback)func_801F6DC0, (Callback)func_801D0C98, (Callback)func_801D1B10,
     (Callback)func_8019AB5C, (Callback)func_801D20C8, (Callback)func_8019A3B8, (Callback)func_801F70F0,
     (Callback)func_801F7440, (Callback)func_801F7A18, (Callback)func_801D2978, (Callback)func_801F8748,

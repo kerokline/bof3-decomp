@@ -10,8 +10,8 @@ MATCH void Actor_DispatchAll(void) {
         if (g_ActorSlots[count & BYTE_MASK].flags_00 != 0) {
             slot       = &g_ActorSlots[count & BYTE_MASK];
             g_SpadWork = (Actor*)slot;
-            D_801C7C70[slot->type]();
+            g_ActorHandlers[slot->type]();
         }
         count++;
-    } while ((u32)(count & BYTE_MASK) < 20U);
+    } while ((u32)(count & BYTE_MASK) < ACTOR_SLOT_COUNT);
 }

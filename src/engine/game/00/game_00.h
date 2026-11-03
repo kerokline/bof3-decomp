@@ -755,7 +755,7 @@ void    func_8019CEDC(void);
 void    func_8019CFCC(void);
 bool    func_8019D054(s32 point_x, s32 point_y);
 s32     func_8019D20C(s16 map_x, s16 map_y);
-void    func_8019D270(); /* K&R: one caller leaves two arguments in $a0/$a1. */
+void    func_8019D270(void);
 void    func_8019D4BC(void);
 void    func_8019D648(void);
 void    func_8019D800(void);
@@ -828,6 +828,8 @@ s32     func_801A239C(Actor* value_a, s32 value_b, u8 flag_bits);
 s32     func_801A246C(s32 value_a, s32 value_b, s32 flag_bits);
 void    func_801A253C(Actor* entity);
 void    func_801A271C(void* record);
+/* Kept (): retail callers load $a0 in the jal delay slot (`addiu a0,s0,116`) and the callee never reads it; with (void)
+ * that instruction is dropped (func_801A253C) or the frame shrinks by 8 bytes (func_801A1384). */
 void    func_801A275C();
 void    func_801A2788(s32 handler_index);
 void    func_801A27C4(Actor* entity);
@@ -837,7 +839,7 @@ u8      func_801A2C10(void* record);
 u8      func_801A2C94(Actor* actor);
 u8      func_801A2DB4(Actor* entity);
 u8      func_801A2ED4(Actor* entity, u8 route_step);
-void    func_801A3080();
+void    func_801A3080(Actor* actor, s32 facing);
 void    func_801A3410(void* work_index);
 void    func_801A3594(void);
 void    func_801A35D8(void);
@@ -1008,7 +1010,7 @@ u8*     func_801B3C3C(s32 bounds_x, s32 bounds_y);
 void    Area_RollEncounterThreshold(u32 keep_armed);
 /* func_801B3EB0 */
 s32     Area_CanStartEncounter(void);
-s32     func_801B4150();
+s32     func_801B4150(void);
 s32     func_801B43D0(s32 x, s32 y, s32 dir);
 u8      func_801B4494(u8 wanted_code);
 u8      func_801B44DC(u8 wanted_code);
@@ -1115,7 +1117,7 @@ s32     func_801BD938(void);
 /* func_801BDB7C */
 u8      Party_CountOrder(u8 mode);
 void    func_801BDBC4(void);
-s16     func_801BDCF8();
+s16     func_801BDCF8(s32 x, s32 y);
 s32     func_801BDD58(s32 pos_x, s32 pos_y, s16 z, s32 reach, Actor* record);
 s32     func_801BDF08(void);
 s8      func_801BE0C0(s32 pos_x, s32 pos_y, s32 range_mode);

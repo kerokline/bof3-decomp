@@ -787,7 +787,7 @@ MATCH void func_801F878C(void) {
     *(s8*)&tail->color_b    = -0x80;
     *(s8*)&tail->color_g    = -0x80;
     *(s8*)&tail->color_r    = -0x80;
-    func_801F8BCC(work);
+    func_801F8BCC();
     late       = SCN_EFFECT;
     late->step = (u8)late->channel_07;
 }
@@ -814,7 +814,7 @@ MATCH void func_801F882C(void) {
         if ((tail->counter_09 & 3) == 0) {
             tail->channel_06 += 1;
         }
-        func_801F8BCC(shade);
+        func_801F8BCC();
     } else {
         Actor_Clear();
     }
@@ -839,7 +839,7 @@ MATCH void func_801F8930(void) {
         if ((tail->counter_09 & 7) == 0) {
             tail->channel_06 += 1;
         }
-        func_801F8BCC(work);
+        func_801F8BCC();
     } else {
         Actor_Clear();
     }
@@ -896,7 +896,7 @@ MATCH void func_801F8AB8(void) {
         if ((tail->counter_09 & 7) == 0) {
             tail->channel_06 += 1;
         }
-        func_801F8BCC(current);
+        func_801F8BCC();
     } else {
         Actor_Clear();
     }

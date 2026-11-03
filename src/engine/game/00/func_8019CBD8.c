@@ -19,7 +19,7 @@ MATCH void func_8019CBD8(void) {
     work->unk_10                         = 0;
     work->vz                             = 0;
     work->unk_09                         = 0;
-    func_8019D270(other, record);
+    func_8019D270();
     g_SpadWork->unk_0B = 0U;
     counter            = g_SpadWork;
     counter->unk_01    = (u8)(counter->unk_01 + 1);

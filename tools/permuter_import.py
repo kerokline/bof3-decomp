@@ -68,6 +68,11 @@ def main() -> int:
     asm = ROOT / directory / f"{name}.s"
     if not asm.is_file():
         raise SystemExit(f"{asm}: missing split assembly for {name}")
+    importer = ROOT / "third_party/decomp-permuter/import.py"
+    if not importer.is_file():
+        raise SystemExit(
+            f"{importer}: decomp-permuter is not checked out; run `tools/setup.sh --matching`"
+        )
     work = ROOT / "work/permute"
     settings = work / "settings.toml"
     prelude = work / "prelude.inc"
@@ -91,7 +96,7 @@ def main() -> int:
     result = subprocess.run(
         [
             sys.executable,
-            str(ROOT / "third_party/decomp-permuter/import.py"),
+            str(importer),
             "--settings",
             str(settings),
             str(source),

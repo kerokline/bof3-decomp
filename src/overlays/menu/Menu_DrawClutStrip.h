@@ -4,18 +4,11 @@
  */
 /* func_801DBD24 (shop), func_801DF21C (start) */
 MATCH void Menu_DrawClutStrip(u8 clut_index) {
-    typedef struct {
-        u8 u;
-        u8 v;
-        u8 w;
-        u8 h;
-    } MenuSpriteCell;
-
     u16             cluts[4];
     u16*            clut;
     SPRT*           prim;
     u8*             entry;
-    MenuSpriteCell* desc;
+    MenuSpriteRect* desc;
     s16             x;
     s16             y;
     s32             index;
@@ -46,7 +39,7 @@ MATCH void Menu_DrawClutStrip(u8 clut_index) {
                 prim->x0   = x;
                 prim->y0   = y;
                 prim->clut = *clut;
-                desc       = (MenuSpriteCell*)((u8*)MENU_CLUT_STRIP_CELLS + *entry * 4);
+                desc       = &MENU_CLUT_STRIP_CELLS[*entry];
                 prim->u0   = desc->u;
                 prim->v0   = desc->v;
                 prim->w    = desc->w;

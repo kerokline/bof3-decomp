@@ -24,6 +24,6 @@ MATCH void GFX_StepPaletteAnimation(u8 slot_index) {
         }
         slot->unk_01 = slot->current_entry[3];
     }
-    GFX_UploadPaletteAnimation(slot);
+    GFX_CopyPaletteAnimationColors(slot);
     slot->unk_01--;
 }

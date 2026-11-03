@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import contextlib
 import itertools
 import sys
 from pathlib import Path
@@ -37,8 +38,12 @@ def functions(args: argparse.Namespace, min_words: int = 0) -> list[Func]:
 
 def emit(args: argparse.Namespace, header: list[str], rows: list[list]) -> None:
     """Write the table to ``--out`` or stdout."""
-    out = open(args.out, "w", encoding="utf-8") if args.out else sys.stdout
-    with out:
+    with contextlib.ExitStack() as stack:
+        out = (
+            stack.enter_context(open(args.out, "w", encoding="utf-8"))
+            if args.out
+            else sys.stdout
+        )
         print("\t".join(header), file=out)
         for row in rows:
             print("\t".join(map(str, row)), file=out)

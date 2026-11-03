@@ -109,14 +109,15 @@ typedef struct PartySlot {
 
 /* 0x1C-byte front-end handler row. Game_FindAreaHandler returns the row whose key
  * byte at +0x18 matches the current world state; the handlers sit at +0, +4,
- * +8, +0x0C and +0x10, and +0x14 is a selector word. */
+ * +8, +0x0C and +0x10, and +0x14 points to the four-byte rows (x, y, context seed,
+ * context kind) func_801B690C searches for the actor cell. */
 typedef struct AreaHandler {
     Callback handler_00;
     Callback handler_04;
     Callback handler_08;
     Callback handler_0C;
     Callback handler_10;
-    s32      selector_14;
+    u8*      cell_rows_14;
     u8       area_id;
     u8       unk_19[3];
 } AreaHandler;

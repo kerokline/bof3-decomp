@@ -251,7 +251,7 @@ MATCH void func_801F2FB0(void* slot) {
     work->scale     = 0x280;
 }
 
-MATCH void* func_801F3004(void) {
+MATCH AreaSlotWork* func_801F3004(void) {
     u8 i;
 
     D_801F3E00 = MEM_PTR(AreaSlotWork, 0x800E4800u);
@@ -293,12 +293,12 @@ MATCH void func_801F3060(void) {
         i += 1u;
     } while (i < WORLD_WORK_SLOT_COUNT);
 
-    D_801F3E00 = (AreaSlotWork*)func_801F3004();
+    D_801F3E00 = func_801F3004();
     if (D_801F3E00 != 0) {
         func_801F2FB0((void*)D_801F3E00);
     }
 
-    D_801F3E00 = (AreaSlotWork*)func_801F3004();
+    D_801F3E00 = func_801F3004();
     if (D_801F3E00 != 0) {
         func_801F2FB0((void*)D_801F3E00);
     }

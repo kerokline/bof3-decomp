@@ -28,7 +28,7 @@ NON_MATCHING void func_801D1E8C(void) {
     if (*state != 0) {
         --*state;
     }
-    if ((D_80145AC4 & *pad) && (g_BattleCommandCount != 0)) {
+    if ((D_80145AC4 & *pad) && ((s8)g_BattleCommandCount != 0)) {
         SND_PlayCue(EMI_CUE_ID(1, 6));
         temp_v0_50           = (u8)g_BattleCommandCount - 1;
         g_BattleCommandCount = temp_v0_50;

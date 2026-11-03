@@ -225,8 +225,6 @@ extern u8              g_MenuLabelEquip[8];    /* the equipment panel caption. @
 extern u8              g_MenuPortraitAtlas[96];
 /* D_801EC9CC */
 extern u8              MENU_CAPTION_ICON[792];
-/* D_801ECB40 */
-extern u8              MENU_CLUT_STRIP_CELLS[];
 extern s32             D_801ECC98[];
 extern Callback        D_801ECCF8[];
 extern Callback        D_801ECD1C[];

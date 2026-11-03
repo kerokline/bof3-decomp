@@ -1178,8 +1178,8 @@ GFX_FindPaletteCell = { addr = 0x80196B20, type = "func", source = "finds the D_
 GFX_UploadPaletteRows = { addr = 0x80196B9C, type = "func", source = "uploads the work record's palette rows to g_GraphicsPaletteDst through the D_801C7AE0/D_801C7AE8 tables" }
 GFX_UpdatePaletteAnimations = { addr = 0x80196C8C, type = "func", source = "steps every active D_80145D94 palette slot through func_80196D84" }
 GFX_StartPaletteAnimation = { addr = 0x80196CF0, type = "func", source = "claims a free D_80145D94 palette slot for the owner and source table" }
-GFX_StepPaletteAnimation = { addr = 0x80196D84, type = "func", source = "advances one D_80145D94 palette slot's animation and uploads its entry" }
-GFX_UploadPaletteAnimation = { addr = 0x80196E74, type = "func", source = "uploads one D_80145D94 palette slot's entry through the D_801C7AF8/D_801C7B00 tables" }
+GFX_StepPaletteAnimation = { addr = 0x80196D84, type = "func", source = "advances one D_80145D94 palette slot's animation entry and calls GFX_UploadPaletteAnimation" }
+GFX_UploadPaletteAnimation = { addr = 0x80196E74, type = "func", source = "copies one D_80145D94 palette slot's entry colours inside the working copy g_GraphicsPaletteDst (0x80037800), through the D_801C7AF8/D_801C7B00 tables, and sets g_GfxPalettePending; it does not write the arena" }
 Game_RunCampMenuLoop = { addr = 0x80196F78, type = "func", source = "runs the g_GameCampMenuLoad frontend loop and Menu_RunPanelTasks - etc/game/01 registers it" }
 Game_LoadCampMenu = { addr = 0x80196FFC, type = "func", source = "entry 0 of D_801C7B08 loads slot 0x268 - resets the palette and advances the frontend selector" }
 Game_RunMainLoop = { addr = 0x80197068, type = "func", source = "runs the g_GameStates selection loop - etc/game/01 and etc/start/08 register it" }
@@ -2781,6 +2781,8 @@ g_InventoryIds = { addr = 0x8014504C, size = 0x200, source = "Party_CountItem an
 g_InventoryCounts = { addr = 0x8014524C, size = 0x200, source = "Party_CountItem and the item menu read one 128-slot quantity array per category through the D_801C8950 pointer table, and func_801D8364 prints the accessory count when it is 2 or more" }
 g_VitalItemIds = { addr = 0x8014544C, size = 0x20, source = "Party_HasVitalItem scans it for an id, Party_AddVitalItem stores an id in a free entry and returns 0 when the table is full (32 entries)" }
 g_BattleTargetRows = { addr = 0x80145500, type = "BattleSlot", source = "six 4-byte gene selection rows {gene,gene,gene,gate} gate 0xFF = row unusable (func_800A4FD8.c 13), rows priced in AP through D_800B4C7C (func_800A4FD8.c 16-24) moved from" }
+g_GameCelerityTimer = { addr = 0x80145554, size = 0x4, source = "func_80198CAC counts it down each frame like g_PlayClock in reverse, func_801AF5B0 refuses the celerity ability while it is nonzero; it lies at save offset +0xE7C" }
+g_GameBonebreakTimer = { addr = 0x80145558, size = 0x4, source = "func_80198CAC counts it down each frame like g_PlayClock in reverse, func_801AF5B0 refuses the bonebreak ability while it is nonzero, func_8009F6EC sets it; it lies at save offset +0xE80" }
 g_FairyJobs = { addr = 0x801455C8, size = 0x1E0, source = "func_801F00D4 fills a free slot of the 60 8-byte rows with the job kind and the battle count, func_801F01F4 retires one, and Fairy_VillageCountFairies counts the active rows" }
 g_FairyRooms = { addr = 0x801457A8, source = "func_801EF214 and func_801F08D8 read the 8-byte room rows, both loop 8 rows" }
 D_801457A9 = { addr = 0x801457A9, alias = true, source = "byte 1 of each g_FairyRooms row, 6 uses and the VILLAGE_ROOM_SUBTYPE macro in commu00/00; written as g_FairyRooms + 1 the compiler shares the base and changes the bytes" }

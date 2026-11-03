@@ -41,7 +41,7 @@ NON_MATCHING void func_8019625C(void) {
             source_index      = (u8)(scale * source_index);
             destination_index = (u8)(scale * destination_index);
             source            = g_GraphicsPaletteDst + quotient * 256u;
-            destination       = MEM_PTR(u16, 0x80037800u) + remainder * 256u;
+            destination       = MEM_PTR(u16, AREA_PALETTE_WORK) + remainder * 256u;
 
             for (color_index = 0; color_index < count; color_index++) {
                 high_bit = 1u;

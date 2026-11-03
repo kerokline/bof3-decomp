@@ -1,9 +1,7 @@
 #include "engine/slus/slus.h"
 
-/* Destination palette bank (g_GraphicsPaletteDst, include/gfx/prim.h; named
- * AREA_PALETTE_WORK in the world views). A literal address keeps the lui+ori
- * codegen the original binary uses for the bank. */
-#define PALETTE_BANK_DST 0x80037800u
+/* Destination palette bank (AREA_PALETTE_WORK, the g_GraphicsPaletteDst of include/gfx/prim.h). The constant keeps the
+ * lui+ori codegen the original binary uses for the bank. */
 
 /* searches the palette records for the id g_FrameCount modulo the header word gives, copies the record's 0x20
  * bytes into the palette bank and raises the palette stage serial; a record id above the wanted id ends the search.
@@ -22,7 +20,7 @@ MATCH void Area_LoadPaletteBank(u8* palette_list) {
     id  = (s32)((u32)g_FrameCount % *(u16*)ptr) + 1;
     ptr += 4;
     if ((Area_TestCondition(*(s16*)ptr) << 24) != 0) {
-        base = PALETTE_BANK_DST;
+        base = AREA_PALETTE_WORK;
         for (;;) {
             ptr += 4;
             entry = *(u32*)ptr;

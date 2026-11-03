@@ -348,8 +348,6 @@ extern u8                       D_80144FC4[]; /* 0x80144FC4; per-slot spawn-gate
 extern u8                       D_80145004[]; /* 0x80145004 */
 extern s32                      D_8014503C;   /* 0x8014503C */
 extern s8                       D_8014504B;   /* 0x8014504B */
-extern u32                      D_80145554;
-extern u32                      D_80145558;
 extern u8                       g_FairyRooms;
 extern u8                       D_801457AB;
 extern PaletteFade              D_80145BD4[];

@@ -16,7 +16,7 @@ MATCH void func_801C308C(s32 arg) {
     index    = 1;
     work     = SCRATCH_WORK;
     /* Palette bank base as a literal keeps the lui+ori codegen. */
-    base_dst = 0x80037800u;
+    base_dst = AREA_PALETTE_WORK;
     do {
         off = index << 1;
         sel = work->unk_27;

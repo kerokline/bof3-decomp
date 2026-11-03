@@ -16,9 +16,6 @@
  * overlays, so the layout is shared rather than target-local.
  */
 
-#define GAME_CELERITY_TIMER              0x80145554u
-#define GAME_BONEBREAK_TIMER             0x80145558u
-
 #define GAME_CLOCK_THIRTIETHS_PER_SECOND 0x1E
 #define GAME_CLOCK_SECONDS_PER_MINUTE    0x3C
 #define GAME_CLOCK_MINUTES_PER_HOUR      0x3C
@@ -42,5 +39,11 @@ ASSERT_OFFSET(GameClock, thirtieths_03, 0x03);
 
 /* D_80144FC0 */
 extern GameClock g_PlayClock;
+/* The countdown timers of the celerity and bonebreak abilities. Both lie in the saved block, at save offsets
+ * +0xE7C and +0xE80. */
+/* D_80145554 */
+extern GameClock g_GameCelerityTimer;
+/* D_80145558 */
+extern GameClock g_GameBonebreakTimer;
 
 #endif

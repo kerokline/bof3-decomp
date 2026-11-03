@@ -18,7 +18,7 @@ MATCH void func_801D0F5C(void) {
 
     i        = 1;
     selected = &D_80145EB7;
-    palette  = 0x80037800u;
+    palette  = AREA_PALETTE_WORK;
     dst      = MEM_PTR(u8, 0x80039602u);
     do {
         entry  = *selected;

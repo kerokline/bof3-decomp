@@ -53,9 +53,9 @@ case_2:
         return 0;
     if ((u8)kind == ABILITY_DISEMBOWEL && *(const u8*)(D_80145F1E + (u32)(u8)ch * BATTLE_PARTY_STRIDE) >= 5u)
         return 0;
-    if ((u8)kind == ABILITY_BONEBREAK && D_80145558 != 0u)
+    if ((u8)kind == ABILITY_BONEBREAK && *(u32*)&g_GameBonebreakTimer != 0u)
         return 0;
-    if ((u8)kind == ABILITY_CELERITY && D_80145554 != 0u)
+    if ((u8)kind == ABILITY_CELERITY && *(u32*)&g_GameCelerityTimer != 0u)
         return 0;
     if ((u8)kind == ABILITY_TRUMP && *(const u16*)(D_80145F1A + (u32)(u8)ch * BATTLE_PARTY_STRIDE) != 0u)
         return 0;

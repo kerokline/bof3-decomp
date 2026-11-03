@@ -21,13 +21,10 @@
 #define g_PartyY                 ((u32*)&g_PartyY)
 
 #define g_ScriptVarsReq          (*(SceneRequest*)&g_ScriptVars)
-/* Kept as separate symbols: the retail code loads each from its own base, and the
- * members g_ScriptVars[n] and g_SceneState.* share one base register here. */
-extern s8 D_80146874;
-extern u8 D_80146875;
-extern u8 D_80146865;
+/* g_ScriptVars[2] in func_801FA7D8: retail loads every access through its own `lui $r, %hi(D_80146866)`; the array
+ * member shares one %hi across the accesses and the function grows by 12 bytes (an absolute address and a local
+ * pointer also move bytes). */
 extern u8 D_80146866;
-extern u8 D_80146867;
 
 #define g_AreaScrollTargetY ((u32*)&g_AreaScrollTargetY)
 #define g_AreaLoads         ((void**)g_AreaLoads)

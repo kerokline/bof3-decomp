@@ -1,0 +1,40 @@
+name: Bug report
+description: A build, setup, check or tool problem that you can reproduce
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens
+      description: The command you ran, the output you got, and the output you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Start from a fresh clone if you can.
+      placeholder: |
+        1. tools/setup.sh --dev --no-payloads
+        2. meson setup build/meson
+        3. meson compile -C build/meson check-tree
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Platform
+      description: OS, and whether you use WSL2.
+    validations:
+      required: true
+  - type: dropdown
+    id: disc
+    attributes:
+      label: Disc data
+      options:
+        - Setup ran without a disc (--no-payloads)
+        - Setup ran with my own US disc
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: Do not attach game data, disc images, extracted files or SDK files.

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or idea
+    url: https://github.com/raulcorreia7/bof3-decomp/discussions
+    about: Ask how something works or propose a change before you write it.
+  - name: Security problem
+    url: https://github.com/raulcorreia7/bof3-decomp/security/advisories/new
+    about: Report a vulnerability privately; see SECURITY.md.

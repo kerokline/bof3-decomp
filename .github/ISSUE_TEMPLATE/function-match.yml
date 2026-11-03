@@ -1,0 +1,32 @@
+name: Function or match
+description: A function that will not match, a wrong name or type, or a match to claim
+body:
+  - type: input
+    id: function
+    attributes:
+      label: Function
+      description: The target and address, as TARGET@0xADDRESS.
+      placeholder: exe/slus_004_22@0x8014AA04
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - I want to match it
+        - It does not match (describe the first difference)
+        - A name or type is wrong
+        - A match is not byte-exact
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and status
+      description: What you tried, the first differing instruction, callers or retail strings that support a name. No game data.
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: Do not attach game data, disc images, extracted files or SDK files.

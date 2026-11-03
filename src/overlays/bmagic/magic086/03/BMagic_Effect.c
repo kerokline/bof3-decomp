@@ -78,6 +78,7 @@ MATCH void func_801EF70C(void) {
 
 #include "overlays/bmagic/Effect_CountUpAndStep.h"
 
+/* Template: bmagic/magic040 func_801EF114; size 0x6C against retail 0x7C, first difference lbu v0,9(v1) at +0x0C. */
 INCLUDE_ASM(func_801EF7D4);
 
 MATCH void func_801EF850(void) {

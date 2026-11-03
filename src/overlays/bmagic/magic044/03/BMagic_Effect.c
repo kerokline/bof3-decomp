@@ -24,6 +24,7 @@ INCLUDE_ASM(func_801EF138);
 
 INCLUDE_ASM(func_801EF320);
 
+/* Template: area125/13 func_801F2CD8 reads unk_01 of the effect struct, which this image's struct lacks; compile fails. */
 INCLUDE_ASM(func_801EF478);
 
 INCLUDE_ASM(func_801EF4E0);

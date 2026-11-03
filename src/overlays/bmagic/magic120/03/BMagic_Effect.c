@@ -20,6 +20,7 @@ INCLUDE_ASM(func_801EF054);
 
 INCLUDE_ASM(func_801EF0D8);
 
+/* Template: bmagic/magic040 func_801EF114; size 0x6C against retail 0x7C, first difference lbu v0,9(v1) at +0x0C. */
 INCLUDE_ASM(func_801EF270);
 
 MATCH void func_801EF2EC(void) {
@@ -71,6 +72,7 @@ INCLUDE_ASM(func_801F0104);
 
 INCLUDE_ASM(func_801F0158);
 
+/* Template: area125/13 func_801F2CD8 passes a wrong pointer type to RotTrans; compile fails. */
 INCLUDE_ASM(func_801F01C0);
 
 INCLUDE_ASM(func_801F0224);

@@ -1,5 +1,5 @@
 id,kind,size,version,object,symbol,evidence
-exe/slus_004_22@0x8014AA0C,assembly,172,3.7,,stup2,"psyq signature 2MBYTE.OBJ 196 bytes, the same bytes in every signature version from 2.6 to 4.7; no version's 2MBYTE.OBJ converts to a member object, so the retail split assembly stays; links with --allow-assembly"
+exe/slus_004_22@0x8014AA0C,assembly,172,3.7,,stup2,"psyq signature 2MBYTE.OBJ 196 bytes, the same bytes in every signature version from 2.6 to 4.7; no version's 2MBYTE.OBJ converts to a member object, so the retail split assembly stays and links as the unit (empty object column)"
 exe/slus_004_22@0x801682E0,object,148,3.7,toolchains/psyq/3.7/libspu/s_gks.o,SpuGetKeyStatus,"words equal retail (37/37); reproduces in versions: 3.7, 4.0"
 exe/slus_004_22@0x80168374,object,660,3.7,toolchains/psyq/3.7/libspu/spu.o,_spu_init,"words equal retail (165/165); reproduces in versions: 3.7, 4.0"
 exe/slus_004_22@0x80168608,object,460,3.7,toolchains/psyq/3.7/libspu/spu.o,_spu_writeByIO,words equal retail (115/115); reproduces in versions: 3.7
@@ -254,7 +254,7 @@ exe/slus_004_22@0x80178468,object,340,3.7,toolchains/psyq/3.7/libgte/cor_05.o,cs
 exe/slus_004_22@0x801785BC,object,156,3.7,toolchains/psyq/3.7/libgte/cor_05.o,csqrt,words equal retail (39/39); reproduces in versions: 3.7
 exe/slus_004_22@0x80178660,object,128,3.7,toolchains/psyq/3.7/libgte/msc00.o,InitGeom,"words equal retail (32/32); reproduces in versions: 3.5, 3.6, 3.7, 4.0, 4.7"
 exe/slus_004_22@0x801786E8,object,124,3.7,toolchains/psyq/3.7/libgte/msc01.o,SquareRoot0,words equal retail (31/31); reproduces in versions: 3.7
-exe/slus_004_22@0x80178764,assembly,152,3.7,,MSC01-tail/InvSquareRoot,"span crosses members: +0x00..+0x14 last 5 words of libgte/msc01.o SquareRoot0, +0x14..+0x98 33 words of libgte/msc02.o InvSquareRoot; 3.7 words equal retail (38/38, relocations masked) across two members, and 4.7 matches only 36/38, so the retail split assembly stays; links with --allow-assembly"
+exe/slus_004_22@0x80178764,assembly,152,3.7,,MSC01-tail/InvSquareRoot,"span crosses members: +0x00..+0x14 last 5 words of libgte/msc01.o SquareRoot0, +0x14..+0x98 33 words of libgte/msc02.o InvSquareRoot; 3.7 words equal retail (38/38, relocations masked) across two members, and 4.7 matches only 36/38, so the retail split assembly stays and links as the unit (empty object column)"
 exe/slus_004_22@0x80178778,object,140,3.7,toolchains/psyq/3.7/libgte/msc02.o,InvSquareRoot,words equal retail (35/35); reproduces in versions: 3.7
 exe/slus_004_22@0x80178804,object,64,3.7,toolchains/psyq/3.7/libgte/msc02.o,VectorNormalS,words equal retail (16/16); reproduces in versions: 3.7
 exe/slus_004_22@0x80178818,object,44,3.7,toolchains/psyq/3.7/libgte/msc02.o,VectorNormal,words equal retail (11/11); reproduces in versions: 3.7
@@ -493,8 +493,8 @@ exe/slus_004_22@0x8017F39C,object,16,3.7,toolchains/psyq/3.7/libapi/l02.o,SysEnq
 exe/slus_004_22@0x8017F3AC,object,12,3.7,toolchains/psyq/3.7/libapi/l03.o,SysDeqIntRP,"words equal retail (3/3); reproduces in versions: 3.5, 3.6, 3.7, 4.0, 4.7"
 exe/slus_004_22@0x8017F3D0,object,20,3.7,toolchains/psyq/3.7/libapi/patch.o,DesablePAD,words equal retail (5/5); reproduces in versions: 3.7
 exe/slus_004_22@0x8017F3E4,object,104,3.7,toolchains/psyq/3.7/libapi/patch.o,_patch_pad,"patch.o _patch_pad (0x28-0x90): words equal retail (26/26, relocations masked); reproduces in 3.7"
-exe/logo@0x801CE724,assembly,52,3.7,,func_801CE724,"psyq signature NONE3.OBJ 60 bytes (0x801CE724-0x801CE760), the same bytes in every signature version from 3.4 to 4.7; no version's NONE3.OBJ converts to a member object, so the retail split assembly stays; links with --allow-assembly"
-exe/logo@0x801CE758,assembly,8,3.7,,func_801CE758,"the tail of the NONE3.OBJ 60-byte span (0x801CE724-0x801CE760) that 3.7's signature reproduces; no version's NONE3.OBJ converts to a member object, so the retail split assembly stays; links with --allow-assembly"
+exe/logo@0x801CE724,assembly,52,3.7,,func_801CE724,"psyq signature NONE3.OBJ 60 bytes (0x801CE724-0x801CE760), the same bytes in every signature version from 3.4 to 4.7; no version's NONE3.OBJ converts to a member object, so the retail split assembly stays and links as the unit (empty object column)"
+exe/logo@0x801CE758,assembly,8,3.7,,func_801CE758,"the tail of the NONE3.OBJ 60-byte span (0x801CE724-0x801CE760) that 3.7's signature reproduces; no version's NONE3.OBJ converts to a member object, so the retail split assembly stays and links as the unit (empty object column)"
 exe/logo@0x801CEE7C,object,80,3.7,toolchains/psyq/3.7/libetc/pad.o,PadInit,"words equal retail (20/20); reproduces in versions: 3.5, 3.6, 3.7, 4.0"
 exe/logo@0x801CEECC,object,40,3.7,toolchains/psyq/3.7/libetc/pad.o,PadRead,"words equal retail (10/10); reproduces in versions: 3.7, 4.0, 4.7"
 exe/logo@0x801CEEF4,object,32,3.7,toolchains/psyq/3.7/libetc/pad.o,PadStop,words equal retail (8/8); reproduces in versions: 3.7

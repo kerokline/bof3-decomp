@@ -14,7 +14,7 @@ checkout, and `tools/setup.sh` checks the SHA-256 of every compiler download.
 | [`uv`](https://docs.astral.sh/uv/)                           | Creates the `.venv` Python environment             | its installer or a system package                                | `tools/setup.sh`       |
 | `cargo` 1.99 or later, a C compiler                          | Build the disc extractor                           | [rustup](https://rustup.rs/), system package                     | extracting the disc    |
 | Meson 1.3 or later, Ninja                                    | Build and check the images                         | system package or `uv tool install meson ninja`                  | every build            |
-| `clang-format`                                               | Formats C; CI uses the latest release              | system package or `uv tool install clang-format`                 | `format`               |
+| `clang-format`                                               | Formats C; CI pins 23.1.3                          | system package or `uv tool install clang-format`                 | `format`               |
 | [`dprint`](https://github.com/dprint/dprint/releases/latest) | Formats Markdown, JSON and TOML                    | release binary on `PATH`; it needs no Node runtime               | `format`               |
 | Ruff, pytest                                                 | Lint Python; run the tool tests                    | `tools/setup.sh --dev`                                           | `format`, `meson test` |
 | `splat64[mips]`, `spimdisasm`                                | Split and disassembly                              | `tools/setup.sh`                                                 | game build             |
@@ -25,15 +25,9 @@ checkout, and `tools/setup.sh` checks the SHA-256 of every compiler download.
 
 ## Setup
 
-Linux is the primary host; use WSL2 on Windows. Install the host tools above, then:
-
-```sh
-git clone https://github.com/raulcorreia7/bof3-decomp.git
-cd bof3-decomp
-tools/setup.sh --dev           # add --matching for the permuter, differ and m2c
-meson setup build/meson
-meson compile -C build/meson check
-```
+Linux is the primary host; use WSL2 on Windows. Install the host tools above, then run the
+commands of the [README quick start](../README.md#quick-start). Add `--matching` to
+`tools/setup.sh` for the permuter, the differ and m2c.
 
 Put your disc in `inputs/external/` before `tools/setup.sh` ([inputs](../inputs/README.md)). The
 script is safe to run again; each step checks its result first. It runs:
@@ -441,87 +435,6 @@ range. The entry cannot be the target's own entry, and a `disc_id` appears once.
 the catalog and checks every row against the disc: the entry's SHA-256 must equal both the row's hash
 and the declaring target's payload, and its load address and size must equal the row's. A mismatch
 fails the setup. Program families: [runtime](https://raulcorreia7.github.io/bof3-wiki/data/programs.html#program-families).
-
-## Reproducing documented facts
-
-The commands run from the repository root. `bof3` is the CLI that `tools/setup.sh` builds at
-`build/rust/release/bof3`, or the binary named by `BOF3_CLI`. `$DISC` is the extracted disc folder
-(`build/disc`) and `$OUT` is a scratch folder. Each block reproduces the facts of one wiki page.
-The tools are in [bof3-tools](https://github.com/raulcorreia7/bof3-tools/blob/main/docs/cli.md).
-
-### Battle tables
-
-Facts: [battle](https://raulcorreia7.github.io/bof3-wiki/data/battle.html).
-
-```sh
-bof3 emi list "$DISC/BIN/BATTLE/BATTLE.EMI"
-bof3 emi extract -e "$DISC/BIN/BATTLE/BATTLE.EMI" -o $OUT/battle
-# the 0x80096800 program carries the escape and difficulty bytes
-rizin -q -a mips -b 32 -m 0x80096800 \
-  -c 'pxb 6 @ 0x800B44F0; pxb 8 @ 0x800B50DC' $OUT/battle/15.bin
-# the 0x801D0C00 program carries the drop chances and the dispatch tables
-rizin -q -a mips -b 32 -m 0x801D0C00 \
-  -c 'pxb 8 @ 0x801D0CB8; pxw 4 @ 0x801D0C04' $OUT/battle/3.bin
-```
-
-### Field area records
-
-Facts: [field](https://raulcorreia7.github.io/bof3-wiki/data/field.html).
-
-```sh
-bof3 emi list "$DISC/BIN/WORLD00/AREA001.EMI"
-bof3 emi extract -e "$DISC/BIN/WORLD00/AREA001.EMI" -o $OUT/area
-bof3 assets encounters $OUT/area/10.bin -o $OUT/encounters.json
-bof3 assets export terrain $OUT/area/12.bin -o $OUT/area.glb
-bof3 assets export message $OUT/area/11.bin -o $OUT/messages.json
-```
-
-### Record tables
-
-Facts: [records](https://raulcorreia7.github.io/bof3-wiki/data/records.html).
-
-```sh
-bof3 emi list "$DISC/BIN/ETC/GAME.EMI"
-bof3 emi extract -e "$DISC/BIN/ETC/GAME.EMI" -o $OUT/game
-bof3 assets tables $OUT/game/0.bin -o $OUT/tables
-jq '.[0]' $OUT/tables/items.json
-```
-
-One extraction of the whole disc writes the same JSON with its hashes:
-
-```sh
-bof3 assets extract --only data-table -i "Breath of Fire III (USA).cue" -o $OUT/tables
-```
-
-### Write-back pipeline
-
-Facts: [editor guide](https://raulcorreia7.github.io/bof3-wiki/guides/index.html).
-
-```sh
-bof3 emi extract BIN/ETC/GAME.EMI -o work/game -J      # entries + emi.json manifest
-# edit or import one entry file, then:
-bof3 assets import emi BIN/ETC/GAME.EMI --entry 0=work/new0.bin -o work/GAME.EMI
-bof3 assets import disc game.cue --file BIN/ETC/GAME.EMI=work/GAME.EMI -o $OUT/patched
-```
-
-### Coverage
-
-Facts: [coverage](https://raulcorreia7.github.io/bof3-wiki/appendix/coverage.html), [EMI](https://raulcorreia7.github.io/bof3-wiki/formats/emi.html).
-
-```sh
-bof3 assets coverage -i "<cue sheet>"   # round trips per kind
-bof3 emi coverage -i $DISC/BIN          # which formats rebuild their own bytes
-```
-
-### Palette export
-
-Facts: [graphics](https://raulcorreia7.github.io/bof3-wiki/formats/graphics.html).
-
-```sh
-bof3 emi extract -e "$DISC/BIN/WORLD00/AREA001.EMI" -o $OUT/area
-bof3 assets export palette $OUT/area/8.bin -o $OUT/palette.json
-jq '{words, rows_4bpp, rows_8bpp}' $OUT/palette.json
-```
 
 ## Settings
 

@@ -37,6 +37,8 @@
 #define SAVE_CLOCK           0x8E8
 #define SAVE_FISHING_RECORD  0x90C
 #define SAVE_DRAGON_GENES    0xE70
+#define SAVE_CELERITY_TIMER  0xE7C
+#define SAVE_BONEBREAK_TIMER 0xE80
 #define SAVE_NAME            0xEA0
 #define SAVE_PORTRAITS       0xEA5
 #define SAVE_LEVEL           0xEA8

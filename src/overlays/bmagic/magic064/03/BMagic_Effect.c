@@ -48,7 +48,15 @@ MATCH void func_801EF78C(void) {
     SYS_DISPATCH_TASK(table.handlers, 1, g_SpadWork);
 }
 
-INCLUDE_ASM(func_801EF7F8);
+MATCH void func_801EF7F8(void) {
+    BattleHandlerTable3 handlers;
+
+    handlers = D_801EEC50;
+    handlers.handlers[g_SpadWork->unk_02]();
+    if (g_SpadWork->flags_00) {
+        func_8014D290();
+    }
+}
 
 MATCH void func_801EF87C(void) {
     g_SpadWork->unk_02 += 1;

@@ -26,7 +26,7 @@ MATCH void func_801D5894(void) {
                 D_801E60FC -= 1;
                 D_801E610C += 1;
             }
-            if (((SaveProbe)CardAccessFile)(1, (s32)date_label, 2, 0x12B0, 0) != -1) {
+            if (((SaveProbe)CardAccessFile)(1, (s32)date_label, 2, SAVE_FILE_SIZE, 0) != -1) {
                 g_SaveCardStatus = 0xA;
                 D_80148652       = 0xC;
                 D_80148654       = 0x3C;

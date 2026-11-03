@@ -18,6 +18,7 @@
 #include "menu/inventory.h"
 #include "menu/panel.h"
 #include "menu/party.h"
+#include "menu/save.h"
 #include "slus/facing.h"
 #include "work/area_spad.h"
 #include <stdio.h>

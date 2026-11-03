@@ -2923,8 +2923,8 @@ D_80149998 = { addr = 0x80149998, size = 0x178, alias = true }
 g_EmiCdSteps = { addr = 0x80149C3C, alias = true, source = "EMI_LoaderRunCd calls the entry selected by the step byte" }
 g_EmiSlotDrainFuncs = { addr = 0x80149C60, alias = true, source = "EMI_LoaderServiceStream copies it" }
 __main = { addr = 0x8014AA04, type = "func", source = "SLUS entry, C calls it by its func_ name" }
-stup2 = { addr = 0x8014AA0C, type = "func", source = "2MBYTE.OBJ 196 bytes" }
-stup1 = { addr = 0x8014AA30, type = "func", source = "2MBYTE.OBJ 196 bytes" }
+stup2 = { addr = 0x8014AA0C, type = "func", source = "2MBYTE.OBJ 196 bytes; zero-fills the BSS 0x8018B2B8..0x80190C60, then falls into stup1" }
+stup1 = { addr = 0x8014AA30, type = "func", source = "2MBYTE.OBJ 196 bytes; sets sp to 0x80200000, gp to 0x8018B2B4 and calls InitHeap(0x80190C64, 0x673A0)" }
 stup0 = { addr = 0x8014AAAC, type = "func", source = "2MBYTE.OBJ 196 bytes" }
 SYS_Main = { addr = 0x8014AAC8, type = "func", source = "crt0 stub stup0 calls it, runs the VSync frame loop" }
 SYS_InitRuntime = { addr = 0x8014ACA0, type = "func", source = "boot init of the render records, console and callback threads" }
@@ -3826,6 +3826,7 @@ rcossin_tbl = { addr = 0x80186908, source = "LIBGTE cstbl.o rcossin_tbl, 16384 b
 ratan_tbl = { addr = 0x8018A908, source = "LIBGTE ratan.o ratan_tbl, 2050 bytes equal retail" }
 GPU_printf = { addr = 0x8018B158, alias = true }
 g_GpuGp1 = { addr = 0x8018B230, source = "pointer to GPU_GP1, the GP1 register seam the draw code writes" }
+g_SysStartupReturn = { addr = 0x8018B2B8, size = 0x4, source = "stup1 stores $ra there before it sets gp to 0x8018B2B4; it is the first word of the BSS 0x8018B2B8..0x80190C60 that stup2 zero-fills" }
 g_SysHardwareInitialized = { addr = 0x8018B300, source = "SYS_Main clears it and SYS_InitHardware sets it after initialization" }
 _svm_okon1 = { addr = 0x8018DB50, alias = true }
 _svm_okon2 = { addr = 0x8018DB52, alias = true }

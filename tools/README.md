@@ -102,8 +102,7 @@ Meson, setup or another tool calls these. A contributor does not run them.
 | `check_asm.sh`, `check_hand.sh`, `check_headers.sh`, `check_tree.sh` | The bodies of the `include-asm`, `check-headers` and `check-tree` gates |
 | `format.sh`                                  | The body of `format` and `format-check`                                 |
 
-`bin/coddog` and `bin/rz` stay: coddog finds twins and `rz` reads retail bytes, and no other tool does
-either. `bin/internal/` holds `find-tool` and the binutils wrappers (`as`, `ld`, `nm`, `objcopy`, `objdump`) that the build uses.
+`bin/coddog` finds twins and `bin/rz` reads retail bytes; no other tool does either. `bin/internal/` holds `find-tool` and the binutils wrappers (`as`, `ld`, `nm`, `objcopy`, `objdump`) that the build uses.
 
 ## Layout
 

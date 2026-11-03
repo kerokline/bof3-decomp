@@ -76,7 +76,7 @@ MATCH void UI_WaitTitleInput(void) { /* func_801D0F00 */
     if (EMI_LoaderIsReady() && g_UiWindowEffectBusy == 0u && (g_InputPressed & INPUT_ACTION_BUTTONS) != 0u) {
         u8  sel;
         u16 bank;
-        D_80146874 = 1u;
+        g_SceneState.state_04 = 1u;
         UI_SetMode(4);
         sel  = g_SndBgmId;
         bank = D_80143F20;

@@ -13,7 +13,7 @@ MATCH void Master_ApplyMaster(void) {
     }
     value = D_801D4270[D_801448ED];
     if (value != GAME_NONE) {
-        D_80146889[D_80146867 * ACTOR_SIZE] = value;
+        D_80146889[g_ScriptVars[3] * ACTOR_SIZE] = value;
     }
     g_MasterStep = 0;
     D_801448EC++;

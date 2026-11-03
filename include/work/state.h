@@ -13,7 +13,7 @@ typedef struct SceneState {
     u8  flags_01;
     u8  mode_02;
     u8  unk_03;
-    u8  state_04;
+    s8  state_04;
     u8  step_05;
     u16 timer_06;
     u16 unk_08;

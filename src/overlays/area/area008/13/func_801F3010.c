@@ -4,7 +4,7 @@ MATCH void func_801F3010(void) {
     volatile Actor* previous;
 
     g_SpadWork->unk_09 = 0;
-    if ((WORLD00_AREA008_D_80146867 & 0x80u) != 0u) {
+    if ((g_ScriptVars[3] & 0x80u) != 0u) {
         g_SpadWork->unk_01 = 9;
         return;
     }

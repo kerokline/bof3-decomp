@@ -148,7 +148,7 @@ INCLUDE_ASM(func_801FA6BC);
 INCLUDE_ASM(func_801FA854);
 
 MATCH void func_801FA998(void) {
-    SYS_DISPATCH_BYTE(D_801FE678, D_80146874);
+    SYS_DISPATCH_BYTE(D_801FE678, g_SceneState.state_04);
 }
 
 MATCH void func_801FA9D4(void) {
@@ -189,8 +189,8 @@ INCLUDE_ASM(func_801FDDC0);
 
 MATCH void func_801FDE2C(void) {
     Game_SetScriptActive();
-    D_80146874 = 3;
-    D_80146875 = 0x32;
+    g_SceneState.state_04 = 3;
+    g_SceneState.step_05  = 0x32;
 }
 
 INCLUDE_ASM(func_801FDE64);

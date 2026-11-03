@@ -16,5 +16,5 @@ static inline void World_SelectAnswerValue(u16 reset, u8 state0, u8 state1) {
         default:
             return;
     }
-    g_ScriptVars = value;
+    g_ScriptVars[0] = value;
 }

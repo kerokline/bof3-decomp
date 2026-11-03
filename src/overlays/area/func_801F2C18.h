@@ -6,8 +6,8 @@
 MATCH void func_801F2C18(void) {
     MESSAGE_REQUEST_CLEAR();
     if (MENU_SELECTION_ARMED()) {
-        D_80146875 = 2;
+        g_SceneState.step_05 = 2;
     } else {
-        D_80146875 = 3;
+        g_SceneState.step_05 = 3;
     }
 }

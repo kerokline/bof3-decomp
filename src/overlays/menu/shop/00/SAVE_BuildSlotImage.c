@@ -62,10 +62,10 @@ NON_MATCHING void SAVE_BuildSlotImage(void) {
     *(ShopStateHeader*)&D_801448D8 = *(ShopStateHeader*)&g_SceneState;
     j                              = 0;
     D_80144948                     = 0;
-    D_801448F8                     = g_ScriptVars;
-    D_801448F9                     = D_80146865;
-    D_801448FA                     = D_80146866;
-    D_801448FB                     = D_80146867;
+    D_801448F8                     = g_ScriptVars[0];
+    D_801448F9                     = g_ScriptVars[1];
+    D_801448FA                     = g_ScriptVars[2];
+    D_801448FB                     = g_ScriptVars[3];
     D_80144900                     = (u32)D_80145EC4;
     D_80144904                     = (u32)D_80145EC8;
     D_801448FC                     = g_GameAreaId;

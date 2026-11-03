@@ -33,7 +33,7 @@ MATCH s8 Area_TestCondition(s32 request) {
         return bit;
     }
     if ((tag & 0xFF00) == 0xFA00) {
-        return ((request & BYTE_MASK) ^ g_SceneState.sbyte) == 0;
+        return ((request & BYTE_MASK) ^ g_SceneRecord.sbyte) == 0;
     }
     if ((tag & 0xFF00) < 0x2000) {
         return SYS_TestFlag(&g_SceneFlagWords[(shifted >> 24) * 8], request & BYTE_MASK);

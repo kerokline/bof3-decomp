@@ -47,8 +47,6 @@ extern u8  D_801F531D[]; /* the record-selector byte at +1 */
 extern u8  D_801F532C[]; /* the "Manillo" text at +0x10 */
 void       Fish_LocationMessage(void);
 
-#define g_SceneState (*(s8*)&g_SceneState)
-
 void func_801F40C4(s16 x, s16 y);
 void Area_Update(void);
 

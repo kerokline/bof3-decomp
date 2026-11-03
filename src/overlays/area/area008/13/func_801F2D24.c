@@ -3,13 +3,13 @@
 MATCH void func_801F2D24(void) {
     volatile Actor* previous;
 
-    if ((WORLD00_AREA008_D_80146867 & 0x80u) != 0u) {
+    if ((g_ScriptVars[3] & 0x80u) != 0u) {
         g_SpadWork->unk_01 = 9;
         return;
     }
-    if (D_80146865 == 1) {
-        D_80146866         = 5;
-        D_80146865         = 2;
+    if (g_ScriptVars[1] == 1) {
+        g_ScriptVars[2]    = 5;
+        g_ScriptVars[1]    = 2;
         g_SpadWork->unk_01 = 6;
         return;
     }

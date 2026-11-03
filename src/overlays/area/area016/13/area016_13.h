@@ -12,7 +12,6 @@
 /* Signed spawn offsets (func_801F42F8) as u16 words: 0x2000 and -0x2000. */
 #define SPAWN_OFFSET_FORWARD 0x2000u
 #define SPAWN_OFFSET_BACK    0xE000u
-#define g_SceneState         (*(s8*)&g_SceneState)
 
 /* One world key row: the key matched against g_GameContextSeed and the mode it
  * selects. */

@@ -3,7 +3,7 @@
 /* func_800C1A08 */
 MATCH void Boss_ChooseBattleEnding(void) {
     if BATTLE_IS_VICTORY () {
-        D_80146875 = 0x14;
+        g_SceneState.step_05 = 0x14;
         func_801DDED8();
     } else {
         g_BattleOptions &= 0xBF;

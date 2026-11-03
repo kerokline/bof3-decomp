@@ -51,7 +51,7 @@ INCLUDE_ASM(func_801F8000);
 INCLUDE_ASM(func_801F8050);
 
 MATCH void func_801F8AA0(void) {
-    SYS_DISPATCH_BYTE(D_801FE2A8, D_80146874);
+    SYS_DISPATCH_BYTE(D_801FE2A8, g_SceneState.state_04);
 }
 
 MATCH void func_801F8ADC(void) {
@@ -118,34 +118,34 @@ INCLUDE_ASM(func_801FD48C);
 
 MATCH void func_801FD4F0(void) {
     Game_SetScriptActive();
-    D_80146865 = 0;
-    D_80146866 = 0;
-    D_80146875 = 0;
-    D_80146874 = 23;
+    g_ScriptVars[1]       = 0;
+    g_ScriptVars[2]       = 0;
+    g_SceneState.step_05  = 0;
+    g_SceneState.state_04 = 23;
 }
 
 MATCH void func_801FD534(void) {
     Game_SetScriptActive();
-    D_80146875 = 5;
-    D_80146865 = 0;
-    D_80146866 = 0;
-    D_80146874 = 23;
+    g_SceneState.step_05  = 5;
+    g_ScriptVars[1]       = 0;
+    g_ScriptVars[2]       = 0;
+    g_SceneState.state_04 = 23;
 }
 
 MATCH void func_801FD57C(void) {
     Game_SetScriptActive();
-    D_80146875 = 2;
-    D_80146865 = 0;
-    D_80146866 = 0;
-    D_80146874 = 23;
+    g_SceneState.step_05  = 2;
+    g_ScriptVars[1]       = 0;
+    g_ScriptVars[2]       = 0;
+    g_SceneState.state_04 = 23;
 }
 
 MATCH void func_801FD5C4(void) {
     Game_SetScriptActive();
-    D_80146875 = 2;
-    D_80146865 = 0;
-    D_80146866 = 0;
-    D_80146874 = 17;
+    g_SceneState.step_05  = 2;
+    g_ScriptVars[1]       = 0;
+    g_ScriptVars[2]       = 0;
+    g_SceneState.state_04 = 17;
 }
 
 INCLUDE_ASM(func_801FD60C);
@@ -157,51 +157,51 @@ INCLUDE_ASM(func_801FD788);
 INCLUDE_ASM(func_801FD84C);
 
 MATCH void func_801FD8F8(void) {
-    g_ScriptVars = 0x64;
+    g_ScriptVars[0] = 0x64;
 }
 
 MATCH void func_801FD90C(void) {
-    g_ScriptVars = 0x66;
+    g_ScriptVars[0] = 0x66;
 }
 
 MATCH void func_801FD920(void) {
-    g_ScriptVars = 0x67;
+    g_ScriptVars[0] = 0x67;
 }
 
 MATCH void func_801FD934(void) {
-    g_ScriptVars = 0x68;
+    g_ScriptVars[0] = 0x68;
 }
 
 MATCH void func_801FD948(void) {
     Game_SetScriptActive();
-    D_80146875   = 40;
-    g_ScriptVars = 0;
-    D_80146865   = 0;
-    D_80146866   = 0;
-    D_80146867   = 0;
-    D_80146874   = 9;
+    g_SceneState.step_05  = 40;
+    g_ScriptVars[0]       = 0;
+    g_ScriptVars[1]       = 0;
+    g_ScriptVars[2]       = 0;
+    g_ScriptVars[3]       = 0;
+    g_SceneState.state_04 = 9;
 }
 
 MATCH void func_801FD9A0(void) {
     Game_SetScriptActive();
-    D_80146865 = 0;
-    D_80146866 = 0;
-    D_80146875 = 0;
-    D_80146874 = 17;
+    g_ScriptVars[1]       = 0;
+    g_ScriptVars[2]       = 0;
+    g_SceneState.step_05  = 0;
+    g_SceneState.state_04 = 17;
 }
 
 MATCH void func_801FD9E4(void) {
     Game_SetScriptActive();
-    D_80146875 = 5;
-    D_80146865 = 0;
-    D_80146866 = 0;
-    D_80146874 = 17;
+    g_SceneState.step_05  = 5;
+    g_ScriptVars[1]       = 0;
+    g_ScriptVars[2]       = 0;
+    g_SceneState.state_04 = 17;
 }
 
 MATCH void func_801FDA2C(void) {
     Game_SetScriptActive();
-    D_80146875 = 0xF;
-    D_80146874 = 0xB;
+    g_SceneState.step_05  = 0xF;
+    g_SceneState.state_04 = 0xB;
 }
 
 MATCH s32 func_801FDA64(void) {

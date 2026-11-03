@@ -2,8 +2,8 @@
 
 MATCH void func_801F2F94(void) {
     if (D_80144F5A[0] == 4) {
-        D_80146865 = 0;
+        g_ScriptVars[1] = 0;
         return;
     }
-    D_80146865 = 1;
+    g_ScriptVars[1] = 1;
 }

@@ -8,7 +8,7 @@ MATCH void func_801F3054(void) {
         D_801448EC = 0x1E;
     } else if (D_801490C7 == 2) {
         Game_SetScriptActive();
-        D_80146874 = 1;
-        D_80146875 = 0x14;
+        g_SceneState.state_04 = 1;
+        g_SceneState.step_05  = 0x14;
     }
 }

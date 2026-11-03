@@ -37,6 +37,10 @@ extern u32          SCENA16_D_80145EC8;
 extern volatile u16 SCENA16_D_80146258;
 extern u32          SCENA16_D_80146864;
 extern u8           SCENA16_D_80146866;
+/* Kept as separate symbols: g_SceneState.* shares one base register here, which
+ * retail does not. */
+extern s8           D_80146874;
+extern u8           D_80146875;
 extern volatile u8  SCENA16_D_80146867;
 extern u32          SCENA16_D_8014686C;
 extern volatile u8  SCENA16_D_80146874;

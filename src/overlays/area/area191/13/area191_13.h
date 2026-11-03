@@ -8,7 +8,6 @@
 #include "work/area_spad.h"
 
 /* The scenario state byte and its flag word. */
-#define g_SceneState (*(s8*)&g_SceneState)
 
 /* The area flags, state word and adjacent counter this pass updates. */
 extern u8 D_80144F56;

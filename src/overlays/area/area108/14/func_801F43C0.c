@@ -3,6 +3,6 @@
 MATCH void func_801F43C0(void) {
     u8* state;
 
-    state = &D_80146865;
+    state = &g_ScriptVars[1];
     *state &= 0xF3;
 }

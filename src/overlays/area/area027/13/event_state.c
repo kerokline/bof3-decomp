@@ -14,7 +14,7 @@ MATCH void func_801F394C(void) {
             D_801448EC = 2;
             break;
         case 2:
-            if (D_80146867 == 0x10) {
+            if (g_ScriptVars[3] == 0x10) {
                 D_801448EE = 16;
                 D_801448EC = 3;
             }
@@ -26,12 +26,12 @@ MATCH void func_801F394C(void) {
             if (TIMER_EXPIRED(*timer)) {
                 Game_RequestAreaChange(27, 0x260000u, 0x380000u, 144);
                 D_801448EC = 4;
-                flag       = &D_80146867;
+                flag       = &g_ScriptVars[3];
                 (*flag)++;
             }
         } break;
         case 4: {
-            u8* flag = &D_80146867;
+            u8* flag = &g_ScriptVars[3];
 
             if (*flag == 0x31) {
                 *flag = 0;

@@ -9,9 +9,7 @@
 
 /* Game-overlay state bytes the area request handlers reset. */
 /* The scenario state byte the request writes. */
-#define g_ScriptVars (*(s8*)&g_ScriptVars)
 /* The scenario progress byte. */
-#define g_SceneState (*(s8*)&g_SceneState)
 
 /* The work pointer the drawing pass reads its position from. */
 

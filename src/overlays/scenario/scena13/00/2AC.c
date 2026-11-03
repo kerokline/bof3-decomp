@@ -38,7 +38,7 @@ INCLUDE_ASM(func_801F72A0);
 INCLUDE_ASM(func_801F735C);
 
 MATCH void func_801F7444(void) {
-    if (g_ScriptVars == 0x35) {
+    if (g_ScriptVars[0] == 0x35) {
         Actor_Clear();
     }
     func_801F7484();
@@ -126,7 +126,7 @@ INCLUDE_ASM(func_801F7D50);
 INCLUDE_ASM(func_801F7DBC);
 
 MATCH void func_801F8474(void) {
-    SYS_DISPATCH_BYTE(D_801FBF54, D_80146874);
+    SYS_DISPATCH_BYTE(D_801FBF54, g_SceneState.state_04);
 }
 
 MATCH void func_801F84B0(void) {
@@ -184,14 +184,14 @@ MATCH void func_801FB390(void* entity) {
 
 MATCH void func_801FB3A4(void) {
     Game_SetScriptActive();
-    D_80146874 = 3;
-    D_80146875 = 5;
+    g_SceneState.state_04 = 3;
+    g_SceneState.step_05  = 5;
 }
 
 MATCH void func_801FB3DC(void) {
     Game_SetScriptActive();
-    D_80146874 = 6;
-    D_80146875 = 0x19;
+    g_SceneState.state_04 = 6;
+    g_SceneState.step_05  = 0x19;
 }
 
 INCLUDE_ASM(func_801FB414);

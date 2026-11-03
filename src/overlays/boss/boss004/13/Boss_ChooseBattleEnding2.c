@@ -6,11 +6,11 @@ MATCH void Boss_ChooseBattleEnding2(void) {
         g_BattlePartyOrder = 8;
         g_BattleOptions |= 0x80;
         func_801DDF28();
-        D_80146875 = 0x32;
+        g_SceneState.step_05 = 0x32;
     } else {
         u8* step;
 
-        step = &D_80146875;
+        step = &g_SceneState.step_05;
         (*step)++;
         func_801DDF28();
     }

@@ -20,10 +20,17 @@
 #define g_PartyX                 (*(u32*)&g_PartyX)
 #define g_PartyY                 ((u32*)&g_PartyY)
 
-#define g_ScriptVars             (*(SceneRequest*)&g_ScriptVars)
+#define g_ScriptVarsReq          (*(SceneRequest*)&g_ScriptVars)
+/* Kept as separate symbols: the retail code loads each from its own base, and the
+ * members g_ScriptVars[n] and g_SceneState.* share one base register here. */
+extern s8 D_80146874;
+extern u8 D_80146875;
+extern u8 D_80146865;
+extern u8 D_80146866;
+extern u8 D_80146867;
 
-#define g_AreaScrollTargetY      ((u32*)&g_AreaScrollTargetY)
-#define g_AreaLoads              ((void**)g_AreaLoads)
+#define g_AreaScrollTargetY ((u32*)&g_AreaScrollTargetY)
+#define g_AreaLoads         ((void**)g_AreaLoads)
 
 /* One row of the sample table at D_80147BD8: twelve sample offsets and three
  * weights per 0x28-byte record. */

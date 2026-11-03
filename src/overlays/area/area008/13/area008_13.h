@@ -30,7 +30,6 @@ extern volatile u8  D_801F53F4;
 extern u8           D_801F53F5;
 extern u8           D_801F53F6;
 extern u8           D_801F53F7;
-extern u8           WORLD00_AREA008_D_80146867;
 extern char         WORLD00_AREA008_D_801F2C04[];
 extern char         WORLD00_AREA008_D_801F2C10[];
 extern Callback     g_AreaWorkStates[10];
@@ -75,11 +74,11 @@ void func_801F461C(void);
 /* Select the work mode from the area flag bytes: mode 9 when bit 7 is set,
  * else mode 5 when the second byte is 3. */
 static inline void FieldSelectDrawMode(void) {
-    if ((WORLD00_AREA008_D_80146867 & 0x80u) != 0u) {
+    if ((g_ScriptVars[3] & 0x80u) != 0u) {
         g_SpadWork->unk_01 = 9;
         return;
     }
-    if (D_80146866 == 3) {
+    if (g_ScriptVars[2] == 3) {
         g_SpadWork->unk_01 = 5;
     }
 }
@@ -91,17 +90,17 @@ static inline void FieldActivateActor(void) {
     Actor* e;
     s32    idx;
 
-    if ((WORLD00_AREA008_D_80146867 & 0x80u) != 0u) {
+    if ((g_ScriptVars[3] & 0x80u) != 0u) {
         g_SpadWork->unk_01 = 0x0E;
         return;
     }
     s = &g_Actors[g_SpadWork->unk_0B];
     s->flags_00 |= 0x40;
-    s          = g_SpadWork;
-    idx        = s->unk_0B;
-    D_80146866 = 3;
-    e          = &g_Actors[idx];
-    g_SpadWork = e;
+    s               = g_SpadWork;
+    idx             = s->unk_0B;
+    g_ScriptVars[2] = 3;
+    e               = &g_Actors[idx];
+    g_SpadWork      = e;
     Actor_SelectScript(1);
     s->unk_01  = 1;
     g_SpadWork = s;

@@ -158,7 +158,7 @@ MATCH void func_801F2C48(void) {
 MATCH void func_801F2C80(void) {
     u16 next;
 
-    if (g_ScriptVars == 0x19) {
+    if (g_ScriptVars[0] == 0x19) {
         g_SpadWork->unk_01 += 1u;
         return;
     }

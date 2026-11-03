@@ -29,7 +29,7 @@ MATCH void Fish_LocationMessage(void) {
                         break;
                     }
                 }
-                Message_StartAreaMessage((s16)D_801F4FC4[index][g_SceneState]);
+                Message_StartAreaMessage((s16)D_801F4FC4[index][g_SceneState.scenario_id]);
             } else {
                 at  = pos;
                 row = D_801F4DA0;

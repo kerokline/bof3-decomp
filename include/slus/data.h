@@ -87,11 +87,7 @@ extern volatile u8 g_BattleTargetSelector;
 extern u8          g_EmiStreamFlags;
 /* D_8014686C */
 extern u32*        g_SceneFlags; /* 0x8014686C */
-extern u8          D_80146865;
-extern u8          D_80146867;
 extern u8          D_80146871;
-extern s8          D_80146874;
-extern u8          D_80146875;
 extern u8          D_8014688E[];
 extern u8          D_801468BC[];
 extern u8          D_801468C0[];

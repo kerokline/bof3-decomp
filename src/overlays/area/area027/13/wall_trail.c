@@ -558,7 +558,7 @@ MATCH void func_801F3650(void) {
         default:
             return;
     }
-    g_ScriptVars = value;
+    g_ScriptVars[0] = value;
 }
 
 MATCH void func_801F3690(void) {
@@ -575,7 +575,7 @@ MATCH void func_801F3690(void) {
         default:
             return;
     }
-    g_ScriptVars = value;
+    g_ScriptVars[0] = value;
 }
 
 MATCH void func_801F36D0(void) {
@@ -592,7 +592,7 @@ MATCH void func_801F36D0(void) {
         default:
             return;
     }
-    g_ScriptVars = value;
+    g_ScriptVars[0] = value;
 }
 
 /* Original sets no mode argument (etc/game/00 revision ignores it); declared
@@ -634,7 +634,7 @@ MATCH void func_801F37E4(void) {
             D_801448EC = 2;
             break;
         case 2:
-            if (D_80146867 == 0x20) {
+            if (g_ScriptVars[3] == 0x20) {
                 D_801448EE = 16;
                 D_801448EC = 3;
             }
@@ -646,12 +646,12 @@ MATCH void func_801F37E4(void) {
             if (TIMER_EXPIRED(*timer)) {
                 Game_RequestAreaChange(27, 0x4B0000u, 0x380000u, 143);
                 D_801448EC = 4;
-                flag       = &D_80146867;
+                flag       = &g_ScriptVars[3];
                 (*flag)++;
             }
         } break;
         case 4: {
-            u8* flag = &D_80146867;
+            u8* flag = &g_ScriptVars[3];
 
             if (*flag == 0x31) {
                 *flag = 0;

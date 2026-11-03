@@ -8,10 +8,8 @@
 #include "work/area_spad.h"
 
 /* The frame counter and game-overlay record pointer. */
-#define g_ScriptVars (*(s8*)&g_ScriptVars)
 
 /* The scenario progress byte. */
-#define g_SceneState (*(s8*)&g_SceneState)
 
 /* The work-record pointer stored in the scratchpad. */
 

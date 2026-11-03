@@ -7,17 +7,17 @@ MATCH void func_801F33F0(void) {
     u8     step;
 
     s          = g_SpadWork;
-    flag       = &WORLD00_AREA008_D_80146867;
+    flag       = &g_ScriptVars[3];
     step       = *flag;
     e          = &g_Actors[((u8*)s)[0x0B]];
     g_SpadWork = (Actor*)e;
     if ((step & 0x80u) != 0u) {
         s->unk_01 = 0x0E;
-    } else if (D_80146865 == 1) {
+    } else if (g_ScriptVars[1] == 1) {
         u8 next = (u8)(step + 1);
 
-        D_80146865 = 2;
-        *flag      = next;
+        g_ScriptVars[1] = 2;
+        *flag           = next;
         SND_PlayCue(EMI_CUE_ID(2, 13));
         if (((Actor*)g_SpadWork)->unk_58 < 5u) {
             D_80146876[0] = 0xFF;

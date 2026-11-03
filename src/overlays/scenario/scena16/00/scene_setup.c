@@ -262,15 +262,15 @@ MATCH void func_801F7230(void) {
             Game_SetScriptActive();
             Party_HideBattlers();
             UI_SetMode(1u);
-            D_80146867 = 1u;
-            D_80146876 = 0u;
-            D_80146875 = (u8)(D_80146875 + 1u);
+            g_ScriptVars[3] = 1u;
+            D_80146876      = 0u;
+            D_80146875      = (u8)(D_80146875 + 1u);
             break;
 
         case 4: {
             u8* next;
 
-            if (D_80146867 == 0x54u) {
+            if (g_ScriptVars[3] == 0x54u) {
                 UI_SetMode(0u);
                 next  = &D_80146875;
                 *next = (u8)(*next + 1u);
@@ -362,7 +362,7 @@ MATCH void func_801F7230(void) {
         }
 
         case 11:
-            if (D_80146867 == 0x60u) {
+            if (g_ScriptVars[3] == 0x60u) {
                 Game_RequestAreaChange(0x1Fu, 0x70000u, 0x140000u, 0u);
                 SCENA16_D_80143F1D = 0xFFu;
                 SND_FadeOutBgm(6u, 0x50, 0x40);
@@ -545,7 +545,7 @@ MATCH void func_801F7CC4(void) {
             break;
 
         case 2:
-            if (g_ScriptVars != 3u) {
+            if (g_ScriptVars[0] != 3u) {
                 return;
             }
             Message_StartAreaMessage(2u);
@@ -560,7 +560,7 @@ MATCH void func_801F7CC4(void) {
             break;
 
         case 3:
-            if (g_GameStateIndex != GAME_REQUEST_MESSAGE && g_ScriptVars == 4u) {
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE && g_ScriptVars[0] == 4u) {
                 D_80146876 = 0x130u;
                 D_80146875 = (u8)(D_80146875 + 1u);
             }
@@ -600,7 +600,7 @@ MATCH void func_801F7CC4(void) {
         }
 
         case 5:
-            if (g_ScriptVars != 5u) {
+            if (g_ScriptVars[0] != 5u) {
                 return;
             }
             object_index  = Actor_FindFreeSlot();
@@ -618,7 +618,7 @@ MATCH void func_801F7CC4(void) {
             break;
 
         case 6:
-            if (g_ScriptVars != 8u) {
+            if (g_ScriptVars[0] != 8u) {
                 break;
             }
             object_index  = Actor_FindFreeSlot();
@@ -650,7 +650,7 @@ MATCH void func_801F7CC4(void) {
         }
 
         case 8:
-            if (g_ScriptVars == 0x0Bu) {
+            if (g_ScriptVars[0] == 0x0Bu) {
                 UI_SetMode(0u);
                 D_80146876 = 0u;
                 D_80146875 = (u8)(D_80146875 + 1u);

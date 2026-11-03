@@ -52,7 +52,7 @@ MATCH s32 func_801AC33C(s32 ease_in, s32 arg1) {
         slot  = (u32)(-(((s32)g_CurrentActor - (s32)D_80147A58) * 0xD79435E5)) >> 3;
         if ((((pos_x ^ (pos_x + g_SpadWork->unk_0C)) & 0x8000) != 0) ||
             ((pos_y = g_SpadWork->y.fixed, (((pos_y ^ (pos_y + delta)) & 0x8000)) != 0))) {
-            func_801A3080(g_CurrentActor, g_SpadWork->direction_08 & 7, g_SpadWork, g_CurrentActor);
+            func_801A3080(g_CurrentActor, g_SpadWork->direction_08 & 7);
         }
         idx   = (s32)(slot << 24) >> 20;
         old_a = D_80147CB9[idx];

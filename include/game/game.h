@@ -275,6 +275,8 @@ void        func_80199440(void);
 void        Actor_DispatchAll(void);
 void        func_801A0514(void);
 void        func_801A3A08(void);
+/* Kept (): retail callers load $a0 in the jal delay slot (`addiu a0,s0,116`; `move a0,s4` in Actor_StepMovement) and the
+ * callee never reads it; with (void) that instruction is dropped. */
 void        func_801A3D1C();
 void        func_801A4D54(u8* script);
 /* func_801A7704 */

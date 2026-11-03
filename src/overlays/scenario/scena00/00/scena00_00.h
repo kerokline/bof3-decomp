@@ -351,7 +351,7 @@ void func_801F882C(void);
 void func_801F8930(void);
 void func_801F89F0(void);
 void func_801F8AB8(void);
-void func_801F8BCC();
+void func_801F8BCC(void);
 void func_801F8D70(void);
 void func_801F8D90(void);
 void func_801F913C(void);

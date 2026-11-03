@@ -17,7 +17,7 @@ MATCH s32 func_801B6258(void) {
     ((s32 (*)(s32))func_801B4494)(0x30);
     cur  = func_801B4150();
     prev = cur;
-    if ((prev != -1) || (g_SpadWork->direction_08 = saved, cur = func_801B4150(cur), (s8)cur != prev)) {
+    if ((prev != -1) || (g_SpadWork->direction_08 = saved, cur = func_801B4150(), (s8)cur != prev)) {
         func_801B60DC(cur & BYTE_MASK);
         return 1;
     }

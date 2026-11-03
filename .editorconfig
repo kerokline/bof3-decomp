@@ -5,26 +5,33 @@ charset = utf-8
 end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
-max_line_length = off
 
-[*.md]
-trim_trailing_whitespace = false
-
+# Match .clang-format.
 [*.{c,h}]
 indent_style = space
-indent_size = 2
-tab_width = 8
+indent_size = 4
+max_line_length = 120
 
-[*.{asm,s}]
-indent_style = tab
-indent_size = 8
-tab_width = 8
+# Split and authored assembly use spaces.
+[*.{s,inc}]
+indent_style = space
+indent_size = 4
 
 [*.py]
 indent_style = space
 indent_size = 4
-tab_width = 4
 
-[*.{yml,yaml,toml}]
+[*.{yml,yaml,toml,json}]
 indent_style = space
 indent_size = 2
+
+[meson.build]
+indent_style = space
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+# Scripts mix tabs and spaces; keep each file as it is.
+[*.sh]
+indent_style = unset

@@ -9,14 +9,13 @@ Prints what is missing and what to do when the media is absent.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import os
-import re
 import shutil
 import subprocess
 import sys
 from pathlib import Path
 
+from bof3.core import disc
 from bof3.core.io import write_json
 from bof3.core.paths import BUILD
 from bof3.emi.catalog import load_catalog, materialize_reviewed_targets
@@ -24,53 +23,27 @@ from bof3.resolve import load_target_manifests
 
 ROOT = Path(__file__).resolve().parents[1]
 MEDIA = ROOT / "inputs/external"
-#: The Redump US disc: SHA-1 of track 1 and track 2.
-TRACK_SHA1 = (
-    "5745d9dde965ed0ec673ba071deb762355fa3e1a",
-    "d9f92af296360772e62caa4cb276de3fa74f5538",
-)
 MISSING = f"""setup: retail media is missing. The build reads your own copy of the US disc.
 setup: dump your own disc and put the two-track CUE/BIN set (Redump, 'Breath of Fire III (USA)') in {MEDIA}/,
 setup: then run tools/setup.sh again.
 setup: until then the disc-free checks work: meson setup build/meson && meson compile -C build/meson check-tree include-asm"""
 
 
-def disc_set() -> tuple[Path, list[Path]] | None:
-    """Return the cue sheet and bins of the shallowest complete disc set."""
-    found = []
-    for cue in sorted(MEDIA.rglob("*.cue")):
-        text = cue.read_text(encoding="utf-8", errors="ignore")
-        bins = [
-            (cue.parent / name).resolve()
-            for name in re.findall(r'^\s*FILE\s+"([^"]+)"', text, re.I | re.M)
-        ]
-        if bins and all(path.is_file() for path in bins):
-            found.append((len(cue.relative_to(MEDIA).parts), cue, bins))
-    return min(found, key=lambda item: item[:2])[1:] if found else None
-
-
 def find_media() -> tuple[Path, list[Path]]:
     """Locate the disc set."""
-    found = disc_set()
+    found = disc.disc_set(MEDIA)
     if found is None:
         sys.exit(MISSING)
     return found
 
 
-def check_tracks(bins: list[Path]) -> None:
-    """Refuse a disc dump that is not the pinned US release."""
-    if len(bins) != len(TRACK_SHA1):
-        sys.exit(f"setup: expected a two-track disc, the cue names {len(bins)} file(s)")
-    for number, (path, wanted) in enumerate(zip(bins, TRACK_SHA1), 1):
-        digest = hashlib.sha1()
-        with path.open("rb") as stream:
-            for chunk in iter(lambda: stream.read(1 << 20), b""):
-                digest.update(chunk)
-        if digest.hexdigest() != wanted:
-            sys.exit(
-                f"setup: {path.name} (track {number}) is not the US disc dump "
-                f"(SHA-1 {digest.hexdigest()}, expected {wanted})"
-            )
+def refuse(problems: list[str], what: str) -> None:
+    """Stop with one line per mismatch."""
+    if problems:
+        lines = "\n".join(f"setup:   {line}" for line in problems)
+        sys.exit(
+            f"setup: {what} differs from {disc.MANIFEST} ({len(problems)}):\n{lines}"
+        )
 
 
 def extractor() -> str:
@@ -101,21 +74,23 @@ def main(argv: list[str] | None = None) -> int:
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     ).parse_args(argv)
     manifests = load_target_manifests(ROOT)
-    disc = ROOT / BUILD / "disc"
+    extracted = ROOT / BUILD / "disc"
     catalog_path = ROOT / BUILD / "catalog/emi.json"
     if catalog_path.is_file() and all(
         (ROOT / manifest.binary).is_file() for manifest in manifests.values()
     ):
         print("payloads: current")
         return 0
+    expected = disc.load_manifest(ROOT)
     cue, bins = find_media()
-    check_tracks(bins)
+    refuse(disc.verify_tracks(expected, bins), "the disc dump")
     cli = extractor()
     subprocess.run(
-        [cli, "disc", "extract", "-i", str(cue), "-o", str(disc)], check=True
+        [cli, "disc", "extract", "-i", str(cue), "-o", str(extracted)], check=True
     )
-    for archive in sorted(disc.rglob("*.EMI")):
-        out = disc / archive.relative_to(disc).with_suffix("")
+    refuse(disc.verify_files(expected, extracted), "the extracted disc")
+    for archive in sorted(extracted.rglob("*.EMI")):
+        out = extracted / archive.relative_to(extracted).with_suffix("")
         out.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run(
             [cli, "emi", "extract", "--quiet", "-J", "-o", str(out), str(archive)],
@@ -127,7 +102,8 @@ def main(argv: list[str] | None = None) -> int:
     for manifest in manifests.values():
         if manifest.kind == "executable" and not (ROOT / manifest.binary).is_file():
             (ROOT / manifest.binary).parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(disc / manifest.disc_id, ROOT / manifest.binary)
+            shutil.copy2(extracted / manifest.disc_id, ROOT / manifest.binary)
+    refuse(disc.verify_images(ROOT), "the code images")
     # Fresh payloads are split inputs; drop the caches.
     shutil.rmtree(ROOT / BUILD / ".cache", ignore_errors=True)
     print(f"payloads: {len(manifests)} targets")

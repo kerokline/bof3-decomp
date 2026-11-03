@@ -166,6 +166,9 @@ def explain(flags: dict[str, str]) -> int:
 def main() -> int:
     """Resolve every image (``--all``) or one (``--target``, with ``--output``)."""
     argv = sys.argv[1:]
+    if not argv or argv[0] in ("-h", "--help"):
+        print(__doc__)
+        return 0 if argv else 2
     if "--all" in argv:
         split = argv.index("--all")
         flags = dict(zip(argv[:split:2], argv[1:split:2], strict=False))

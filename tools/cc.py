@@ -161,6 +161,9 @@ def compile_one(plan, env, tmp, build_dir):
 
 
 def main(argv):
+    if not argv or argv[0] in ("-h", "--help"):
+        print(__doc__)
+        return 0 if argv else 2
     build_dir = None
     empty = False
     while argv and argv[0] in ("--build-dir", "--empty-on-failure"):

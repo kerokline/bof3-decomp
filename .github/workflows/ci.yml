@@ -50,8 +50,9 @@ jobs:
           git update-ref refs/heads/main refs/remotes/origin/main
       - name: Shell syntax
         run: git ls-files 'tools/*.sh' 'bin/*' | xargs -n 1 sh -n
+      # Warnings and errors fail; the info notes flag intended word splitting and A && B || C chains.
       - name: Shell lint
-        run: git ls-files 'tools/*.sh' | xargs shellcheck
+        run: git ls-files 'tools/*.sh' | xargs shellcheck --severity=warning
       # dprint/check above covers Markdown, TOML and JSON; DPRINT=true skips the second run.
       # format.sh --check also runs `ruff check` on tools/ (ruff is pinned in pyproject.toml).
       - name: Format and lint

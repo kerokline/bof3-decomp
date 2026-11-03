@@ -10,6 +10,7 @@
 /* D_80149322 */
 extern s16               g_AreaTileOriginY;
 extern BattleResultRings D_801EEC40;
+extern BattleHandlerTable3 D_801EEC50;
 extern void*             D_801F28B4;
 
 void GFX_FreePaletteFadeTarget(void* target);

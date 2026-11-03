@@ -335,6 +335,7 @@ g_BMagicEffectFuncs = { addr = 0x801F0400, source = "the module dispatcher index
 D_801F1054 = { addr = 0x801F1054, source = "func_801EF340 loads this word as the task-work pointer" }
 
 ["emi/bmagic/magic064/03"]
+D_801EEC50 = { addr = 0x801EEC50, type = "BattleHandlerTable3", size = 0x0c, source = "copied to the stack by func_801EF7F8, which indexes it with the spad step byte at offset 2" }
 BMagic_RunStep = { addr = 0x801EEC7C, type = "func", source = "runs the callback D_801EEC00.steps selects with the scratchpad step byte in the bmagic effect module" }
 g_BMagicEffectFuncs = { addr = 0x801F1394, source = "the module dispatcher indexes it with the shared spad step byte" }
 

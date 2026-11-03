@@ -20,7 +20,6 @@
 #define g_PartyX                 (*(u32*)&g_PartyX)
 #define g_PartyY                 ((u32*)&g_PartyY)
 
-#define g_ScriptVarsReq          (*(SceneRequest*)&g_ScriptVars)
 /* g_ScriptVars[2] in func_801FA7D8: retail loads every access through its own `lui $r, %hi(D_80146866)`; the array
  * member shares one %hi across the accesses and the function grows by 12 bytes (an absolute address and a local
  * pointer also move bytes). */
@@ -147,17 +146,6 @@ typedef union AreaScroll {
 ASSERT_SIZE(AreaScroll, 4);
 ASSERT_OFFSET(AreaScroll, raw, 0x00);
 ASSERT_OFFSET(AreaScroll, half, 0x00);
-
-/* The scenario request cell: the step machine stores and steps it as a byte,
- * while the frontend reset clears the whole word. */
-typedef union SceneRequest {
-    u32 word;
-    u8  byte;
-} SceneRequest;
-
-ASSERT_SIZE(SceneRequest, 4);
-ASSERT_OFFSET(SceneRequest, word, 0x00);
-ASSERT_OFFSET(SceneRequest, byte, 0x00);
 
 /* The payload prologue at 0x801F6C00: the type-0 EMI loader compares the
  * first word with the archive TOC's cached first word

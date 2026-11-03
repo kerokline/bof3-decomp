@@ -138,7 +138,7 @@ INCLUDE_ASM(func_801FA010);
 
 MATCH void func_801FA074(void) {
     Game_SetScriptActive();
-    D_80146876            = 0xA;
+    g_SceneState.timer_06 = 0xA;
     g_SceneState.state_04 = 2;
     g_SceneState.step_05  = 0;
 }

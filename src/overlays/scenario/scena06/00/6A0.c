@@ -81,9 +81,25 @@ MATCH void func_801FCDD0(void* entity) {
 MATCH void func_801FCE10(void) {
 }
 
-INCLUDE_ASM(func_801FCE18);
+MATCH void func_801FCE18(void) {
+    Game_SetScriptActive();
+    g_ScriptVars = 0;
+    D_80146865   = 0;
+    D_80146866   = 0;
+    D_80146867   = 0;
+    D_80146875   = 0;
+    D_80146874   = 1;
+}
 
-INCLUDE_ASM(func_801FCE6C);
+MATCH void func_801FCE6C(void) {
+    Game_SetScriptActive();
+    g_ScriptVars = 0;
+    D_80146865   = 0;
+    D_80146866   = 0;
+    D_80146867   = 0;
+    D_80146875   = 0;
+    D_80146874   = 2;
+}
 
 INCLUDE_ASM(func_801FCEC0);
 
@@ -93,17 +109,65 @@ MATCH void func_801FCF98(void) {
     SYS_SetFlag(g_SceneFlags, 0xCU);
 }
 
-INCLUDE_ASM(func_801FCFC0);
+MATCH void func_801FCFC0(void) {
+    Game_SetScriptActive();
+    g_ScriptVars = 0;
+    D_80146865   = 0;
+    D_80146866   = 0;
+    D_80146867   = 0;
+    D_80146875   = 0;
+    D_80146874   = 4;
+}
 
-INCLUDE_ASM(func_801FD014);
+MATCH void func_801FD014(void) {
+    Game_SetScriptActive();
+    D_80146875   = 20;
+    g_ScriptVars = 0;
+    D_80146865   = 0;
+    D_80146866   = 0;
+    D_80146867   = 0;
+    D_80146874   = 4;
+}
 
-INCLUDE_ASM(func_801FD06C);
+MATCH void func_801FD06C(void) {
+    Game_SetScriptActive();
+    g_ScriptVars = 1;
+    D_80146865   = 0;
+    D_80146866   = 0;
+    D_80146867   = 0;
+    D_80146875   = 0;
+    D_80146874   = 6;
+}
 
-INCLUDE_ASM(func_801FD0C4);
+MATCH void func_801FD0C4(void) {
+    Game_SetScriptActive();
+    D_80146875   = 20;
+    g_ScriptVars = 0;
+    D_80146865   = 0;
+    D_80146866   = 0;
+    D_80146867   = 0;
+    D_80146874   = 6;
+}
 
-INCLUDE_ASM(func_801FD11C);
+MATCH void func_801FD11C(void) {
+    Game_SetScriptActive();
+    g_ScriptVars = 0;
+    D_80146865   = 0;
+    D_80146866   = 0;
+    D_80146867   = 0;
+    D_80146875   = 0;
+    D_80146874   = 10;
+}
 
-INCLUDE_ASM(func_801FD170);
+MATCH void func_801FD170(void) {
+    Game_SetScriptActive();
+    D_80146875   = 10;
+    g_ScriptVars = 0;
+    D_80146865   = 0;
+    D_80146866   = 0;
+    D_80146867   = 0;
+    D_80146874   = 14;
+}
 
 INCLUDE_ASM(func_801FD1C8);
 

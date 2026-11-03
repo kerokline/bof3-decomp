@@ -130,9 +130,21 @@ INCLUDE_ASM(func_801FD084);
 MATCH void func_801FD0C4(void) {
 }
 
-INCLUDE_ASM(func_801FD0CC);
+MATCH void func_801FD0CC(void) {
+    Game_SetScriptActive();
+    D_80146875 = 7;
+    D_80146865 = 0;
+    D_80146866 = 0;
+    D_80146874 = 11;
+}
 
-INCLUDE_ASM(func_801FD114);
+MATCH void func_801FD114(void) {
+    Game_SetScriptActive();
+    D_80146875 = 2;
+    D_80146865 = 0;
+    D_80146866 = 0;
+    D_80146874 = 11;
+}
 
 MATCH void func_801FD15C(void) {
 }
@@ -170,13 +182,38 @@ MATCH void func_801FD2E0(void) {
     D_80146874   = 7;
 }
 
-INCLUDE_ASM(func_801FD330);
+MATCH void func_801FD330(void) {
+    Game_SetScriptActive();
+    D_80146865 = 0;
+    D_80146866 = 0;
+    D_80146875 = 0;
+    D_80146874 = 11;
+}
 
-INCLUDE_ASM(func_801FD374);
+MATCH void func_801FD374(void) {
+    Game_SetScriptActive();
+    D_80146875 = 5;
+    D_80146865 = 0;
+    D_80146866 = 0;
+    D_80146874 = 11;
+}
 
-INCLUDE_ASM(func_801FD3BC);
+MATCH void func_801FD3BC(void) {
+    Game_SetScriptActive();
+    g_ScriptVars = 20;
+    D_80146875   = 20;
+    D_80146865   = 0;
+    D_80146866   = 0;
+    D_80146874   = 2;
+}
 
-INCLUDE_ASM(func_801FD40C);
+MATCH void func_801FD40C(void) {
+    Game_SetScriptActive();
+    D_80146865 = 0;
+    D_80146866 = 0;
+    D_80146875 = 0;
+    D_80146874 = 15;
+}
 
 MATCH void func_801FD450(void) {
     Game_SetScriptActive();
@@ -185,7 +222,15 @@ MATCH void func_801FD450(void) {
     SND_PlayCue(EMI_CUE_ID(1, 6));
 }
 
-INCLUDE_ASM(func_801FD490);
+MATCH void func_801FD490(void) {
+    Game_SetScriptActive();
+    g_ScriptVars = 0;
+    D_80146865   = 0;
+    D_80146866   = 0;
+    D_80146867   = 0;
+    D_80146875   = 0;
+    D_80146874   = 18;
+}
 
 MATCH void func_801FD4E4(void) {
 }
@@ -211,9 +256,26 @@ MATCH void func_801FD574(void) {
     D_80146874 = 0x17;
 }
 
-INCLUDE_ASM(func_801FD5A8);
+MATCH void func_801FD5A8(void) {
+    Game_SetScriptActive();
+    g_ScriptVars = 0;
+    D_80146865   = 0;
+    D_80146866   = 0;
+    D_80146867   = 0;
+    D_80146875   = 0;
+    D_80146874   = 25;
+}
 
-INCLUDE_ASM(func_801FD5FC);
+MATCH void func_801FD5FC(void) {
+    Game_SetScriptActive();
+    D_80146875   = 10;
+    g_ScriptVars = 0;
+    D_80146865   = 0;
+    D_80146866   = 0;
+    D_80146867   = 0;
+    D_80146874   = 25;
+    SND_PlayCue(0x106);
+}
 
 MATCH void func_801FD65C(void) {
     SYS_SetFlag(g_SceneFlags, 0x31U);

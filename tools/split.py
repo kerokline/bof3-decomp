@@ -20,10 +20,10 @@ from __future__ import annotations
 
 import os
 import re
+import shutil
 import sys
 from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass
-import shutil
 from pathlib import Path
 
 from bof3.core.io import repo_layout

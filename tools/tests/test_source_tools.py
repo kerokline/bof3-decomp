@@ -6,9 +6,9 @@ from pathlib import Path
 from bof3.source import ctext, decls, index
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import shapes  # noqa: E402
-import typeloss  # noqa: E402
-import values  # noqa: E402
+import shapes
+import typeloss
+import values
 
 
 def test_opcode_tokens_ignore_registers_and_immediates() -> None:

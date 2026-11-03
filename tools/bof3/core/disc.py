@@ -115,7 +115,7 @@ def verify_images(root: Path) -> list[str]:
     from bof3.resolve import load_target_manifests
 
     problems = []
-    for target, manifest in sorted(load_target_manifests(root).items()):
+    for _target, manifest in sorted(load_target_manifests(root).items()):
         wanted = re.search(r"^sha1:\s*(\w+)", (root / manifest.splat).read_text(), re.M)
         path = root / manifest.binary
         if wanted is None:

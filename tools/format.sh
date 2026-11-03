@@ -44,4 +44,5 @@ done
 find src include -name '*.[ch]' ! -path 'include/psyq/*' ! -name 'D_*.c' ! -name 'data*.c' ! -name '*_Data.c' -print0 |
 	xargs -0 -P "$(nproc)" -n 200 "$clang_format" $mode
 "$ruff" format -q ${check:+--check} tools
+[ -z "$check" ] || "$ruff" check -q tools
 if [ -n "$check" ]; then "$dprint" check; else "$dprint" fmt; fi

@@ -32,6 +32,13 @@ testpaths = ["tools/tests"]
 
 [tool.ruff]
 target-version = "py312"
+# The tools run from tools/, so its modules are first-party.
+src = ["tools"]
+
+[tool.ruff.lint]
+# Real defects and import order. The pinned ruff's default set is F and a few E; these add bugbear,
+# pyupgrade, an explicit subprocess `check`, context-managed files and unused `noqa`.
+select = ["E4", "E7", "E9", "F", "B", "I", "UP", "PLW1510", "SIM115", "RUF100"]
 
 [tool.ruff.format]
 quote-style = "double"

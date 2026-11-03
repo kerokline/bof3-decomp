@@ -3,12 +3,11 @@ __pycache__/
 *.pyc
 *.pyo
 .pytest_cache/
+.ruff_cache/
 .venv/
 .uv-cache/
 dist/
 *.egg-info/
-
-# Installed compiler variant binaries (archive downloads already ignored)
 
 # Editor / IDE
 *.swp
@@ -16,6 +15,7 @@ dist/
 *~
 .vscode/
 .idea/
+.DS_Store
 
 # Derived outputs (regenerable) and agent drafts
 /build/

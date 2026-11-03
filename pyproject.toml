@@ -2,7 +2,10 @@
 name = "rebof3"
 version = "0.1.0"
 license = "CC0-1.0"
-description = "Local BOF3 PSX reverse-engineering tools"
+description = "Build and analysis tools for the bof3-decomp matching decompilation of Breath of Fire III"
+readme = "README.md"
+authors = [{ name = "raulcorreia7" }]
+keywords = ["decompilation", "playstation", "breath-of-fire"]
 requires-python = ">=3.12"
 dependencies = [
   "PyYAML>=6.0",
@@ -10,6 +13,10 @@ dependencies = [
   "splat64[mips]==0.41.1",
   "spimdisasm==1.42.4",
 ]
+
+[project.urls]
+Homepage = "https://github.com/raulcorreia7/bof3-decomp"
+Issues = "https://github.com/raulcorreia7/bof3-decomp/issues"
 
 [dependency-groups]
 dev = ["pytest>=8.0", "ruff==0.15.11"]

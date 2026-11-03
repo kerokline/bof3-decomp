@@ -638,7 +638,8 @@ void    func_80197C94(void);
 void    func_80197E54(void);
 void    func_80197EFC(void);
 void    func_80197F48(void);
-void    func_80198170(void);
+/* func_80198170 */
+void    Game_RunCameraLookState(void);
 void    func_801981B4(void);
 void    func_801981D4(void);
 /* func_80198234 */

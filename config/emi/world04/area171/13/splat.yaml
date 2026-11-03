@@ -1,0 +1,38 @@
+sha1: dfa71548b377ea030d294e386e9f0abab75e6dc8
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0x5C, c, func_801F2C5C]
+      - [0xA0, c, func_801F2CA0]
+      - [0x21C, c, func_801F2E1C]
+      - [0x300, c, func_801F2F00]
+      - [0x35C, c, func_801F2F5C]
+      - [0x400, c, func_801F3000]
+      - [0x470, c, func_801F3070]
+      - [0x7D8, c, func_801F33D8]
+      - [0x8F8, c, func_801F34F8]
+      - [0x958, c, func_801F3558]
+      - [0xA50, c, func_801F3650]
+      - [0xB64, c, func_801F3764]
+      - [0xB9C, c, func_801F379C]
+      - [0xC68, c, func_801F3868]
+      - [0xF4C, c, func_801F3B4C]
+      - [0x10F0, c, func_801F3CF0]
+      - [0x12BC, c, func_801F3EBC]
+      - [0x1324, c, func_801F3F24]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x135C
+    vram: 0x801F3F5C
+    align: 1
+    subalign: 1
+    subsegments:
+      - [0x135C, .data, D_801F3F5C]
+  - [0x1592]

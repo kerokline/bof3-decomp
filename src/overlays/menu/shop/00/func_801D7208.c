@@ -1,0 +1,32 @@
+#include "shop_00.h"
+
+/* Source record block of the row copy. */
+
+MATCH void func_801D7208(void) {
+    MenuListRow* row;
+    u8*          first;
+    u8           i;
+    u8           j;
+    s32          offset;
+
+    first                       = &g_SaveSlots[0].source_index;
+    g_SaveSlots[2].source_index = 0xFF;
+    g_SaveSlots[1].source_index = 0xFF;
+    *first                      = 0xFF;
+    row                         = g_SaveSlots;
+    for (j = 0; j < BATTLE_PARTY_SLOT_COUNT; j++) {
+        i = 0;
+        if (g_SaveSlotCount != 0) {
+            do {
+                offset = i * 24;
+                if ((&D_8018E9A1)[offset] - '0' == j) {
+                    CardAccessFile(1, (s32)&D_8018E990[offset], 1, 0x1C, 0xEA0);
+                    *(MenuListRowWords*)row = *(MenuListRowWords*)0x800C26A0;
+                    row->source_index       = i;
+                }
+                i++;
+            } while (i < g_SaveSlotCount);
+        }
+        row++;
+    }
+}

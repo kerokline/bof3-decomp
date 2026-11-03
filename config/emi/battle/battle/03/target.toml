@@ -1,0 +1,265 @@
+[[matching.section_placements]]
+function = 0x801DEFE4
+section = ".rodata"
+address = 0x801D0CA0
+size = 0x18
+
+[[matching.section_placements]]
+function = 0x801E5CA4
+section = ".rodata"
+address = 0x801D0F0C
+size = 0x14
+
+[[matching.section_placements]]
+function = 0x801D5024
+section = ".rodata"
+address = 0x801D0C2C
+size = 0x38
+
+# Byte-identical disc entries that reuse this target's sources (see docs/toolchain.md#copy-targets).
+
+[[copies]]
+disc_id = "BIN/BATTLE/BATTLE2.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS001.EMI#0"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS002.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS004.EMI#0"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS007.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS008.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS012.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS013.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS014.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS015.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS017.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS018.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS019.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS020.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS021.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS022.EMI#0"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS023.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS024.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS025.EMI#0"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS027.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS028.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS029.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS030.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS031.EMI#0"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS032.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS033.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS034.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS035.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS036.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS037.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS038.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS040.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS042.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS046.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS047.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS049.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS050.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS051.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS052.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS054.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS055.EMI#3"
+payload_sha256 = "f25ef137618bc024a6aec98c2c4d9a571c6f23884762fb4567406e6552b383c1"
+load_address = 0x801d0c00
+size = 118224

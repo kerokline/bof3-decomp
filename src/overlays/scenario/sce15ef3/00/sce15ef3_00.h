@@ -1,0 +1,19 @@
+#ifndef OVERLAY_SCENARIO_SCE15EF3_00_H
+#define OVERLAY_SCENARIO_SCE15EF3_00_H
+
+/* The scenario/sce15ef3/00 overlay's local declarations. Only this image
+ * includes the file. */
+
+#include "overlays/scenario/scenario.h"
+
+extern u32      D_80145EC4;
+extern u32      D_801D0C00;
+extern Callback D_801D27CC[];
+extern Callback D_801D27D8[];
+extern Callback D_801D27EC[];
+extern Callback D_801D2800[];
+extern Callback D_801D280C[];
+
+extern Callback D_801D27C0[];
+
+#endif

@@ -1,0 +1,31 @@
+/* Draw one 16x8 icon cell from the fixed D8 atlas row. One definition shared
+ * by the shop, start, Bate and Shisu overlays; each overlay includes this file
+ * where the function sits.
+ */
+/* func_801D2520 (sisyou), func_801D4564 (bate), func_801D550C (shisu), func_801DA00C (shop), func_801DD504 (start) */
+MATCH void Menu_DrawIcon(u16 sprite_x, u16 sprite_y, u8 icon_column, u8 shade_mode) {
+    SPRT* sprt;
+    s32   tpage;
+    s32   u;
+
+    tpage = getTPage(0, 1, 960, 0);
+    GFX_SET_DRAW_MODE(tpage);
+    GFX_AddPrim(1, 0xC);
+    sprt       = (SPRT*)g_GfxPrimCursor;
+    sprt->w    = 16;
+    sprt->h    = 8;
+    sprt->clut = 0x7800;
+    if ((shade_mode & BYTE_MASK) == 0) {
+        sprt->r0 = sprt->g0 = sprt->b0 = 0x80;
+    } else {
+        sprt->r0 = sprt->g0 = sprt->b0 = 0x10;
+    }
+    sprt->v0 = 216;
+    u        = (icon_column & BYTE_MASK) << 4;
+    sprt->u0 = u;
+    sprt->x0 = sprite_x;
+    sprt->y0 = sprite_y;
+    SetSprt(sprt);
+    PSX_SET_SEMI_TRANSPARENT(sprt);
+    GFX_AddPrim(1, 0x14);
+}

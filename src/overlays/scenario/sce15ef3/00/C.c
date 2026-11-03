@@ -1,0 +1,169 @@
+#include "sce15ef3_00.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+MATCH void func_801D0C0C(void) {
+    /* FAKE: retail reads the handler record from entry $v0; the pin is the
+       entry-register residual (identical bytes to the unpinned 84.46%). */
+    MATCH_REG(u8*, entity, "v0");
+
+    D_801D27C0[entity[1]]();
+}
+
+MATCH void func_801D0C48(void) {
+    u8* work;
+
+    work                   = (u8*)g_SpadWork;
+    FIELD(s32, work, 0x34) = D_80145EC4;
+    FIELD(s32, work, 0x38) = D_80145EC8;
+    FIELD(s32, work, 0x3C) = D_80145ECC;
+    func_801D16DC();
+    func_801D19A0();
+    work    = (u8*)g_SpadWork;
+    work[9] = 0x78;
+    work    = (u8*)g_SpadWork;
+    work[1]++;
+}
+
+INCLUDE_ASM(func_801D0CC4);
+
+MATCH void func_801D0D18(void) {
+    Actor_Clear();
+}
+
+MATCH void func_801D0D38(void) {
+    SYS_DISPATCH_TASK(D_801D27CC, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801D0D7C);
+
+INCLUDE_ASM(func_801D0DAC);
+
+INCLUDE_ASM(func_801D0E38);
+
+MATCH void func_801D0EAC(void) {
+    SYS_DISPATCH_TASK(D_801D27D8, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801D0EF0);
+
+INCLUDE_ASM(func_801D0F94);
+
+MATCH void func_801D1008(void) {
+    Scene_AdvanceActorStep();
+}
+
+MATCH void func_801D1028(void) {
+    Scene_AdvanceActorStep();
+}
+
+MATCH void func_801D1048(void) {
+    Actor_Clear();
+}
+
+MATCH void func_801D1068(void) {
+    SYS_DISPATCH_TASK(D_801D27EC, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801D10AC);
+
+INCLUDE_ASM(func_801D11C8);
+
+INCLUDE_ASM(func_801D1250);
+
+INCLUDE_ASM(func_801D12E0);
+
+INCLUDE_ASM(func_801D1370);
+
+MATCH void func_801D13DC(void) {
+    SYS_DISPATCH_TASK(D_801D2800, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801D1420);
+
+INCLUDE_ASM(func_801D1460);
+
+INCLUDE_ASM(func_801D14DC);
+
+MATCH void func_801D1588(void) {
+    SYS_DISPATCH_TASK(D_801D280C, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801D15CC);
+
+INCLUDE_ASM(func_801D1614);
+
+MATCH void func_801D16BC(void) {
+    Actor_Clear();
+}
+
+MATCH void func_801D16DC(void) {
+    s32   var_a0_6;
+    s8*   var_a1_5;
+    void* var_v1_8;
+
+    var_a1_5 = (s8*)AREA_WORK_WINDOW;
+    var_a0_6 = 0;
+    var_v1_8 = (void*)(AREA_WORK_WINDOW + 2);
+    do {
+        *var_a1_5                    = 0;
+        *(s8*)((u8*)(var_v1_8) + -1) = 0;
+        *(s8*)(var_v1_8)             = 0;
+        var_v1_8 += 0x18;
+        var_a0_6 += 1;
+        var_a1_5 += 0x18;
+    } while ((u32)(var_a0_6 & HALF_MASK) < 0x100U);
+}
+
+MATCH u8* func_801D171C(void) {
+    u8* p;
+    u16 i;
+
+    p = MEM_PTR(u8, 0x800E4800);
+    for (i = 0; i < 256; i++) {
+        if (p[0] == 0) {
+            return p;
+        }
+        p += 0x18;
+    }
+    return NULL;
+}
+
+INCLUDE_ASM(func_801D1758);
+
+INCLUDE_ASM(func_801D18CC);
+
+INCLUDE_ASM(func_801D19A0);
+
+INCLUDE_ASM(func_801D1A60);
+
+INCLUDE_ASM(func_801D1BAC);
+
+INCLUDE_ASM(func_801D1D20);
+
+INCLUDE_ASM(func_801D1FF8);
+
+INCLUDE_ASM(func_801D230C);
+
+INCLUDE_ASM(func_801D23AC);
+
+INCLUDE_ASM(func_801D2424);
+
+MATCH void func_801D25C0(void) {
+    s32 var_v1_6;
+    s8* var_a0_5;
+
+    var_a0_5 = (s8*)(AREA_WORK_WINDOW + 0x18A0);
+    var_v1_6 = 0;
+    do {
+        *var_a0_5 = 0;
+        var_v1_6 += 1;
+        var_a0_5 += 6;
+    } while ((u32)(var_v1_6 & BYTE_MASK) < 0x10U);
+}
+
+INCLUDE_ASM(func_801D25EC);
+
+INCLUDE_ASM(func_801D2634);

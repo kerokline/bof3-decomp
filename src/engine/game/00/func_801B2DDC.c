@@ -1,0 +1,56 @@
+#include "game_00.h"
+
+/* Plain scratchpad cell read; emits a fresh absolute load per use. */
+#define WORK_PTR (*SP_PTR(Actor*, 0x44u))
+
+MATCH void func_801B2DDC(void) {
+    Actor  rec;
+    Actor* state;
+    Actor* work;
+    void*  sel;
+    void*  base;
+    u32*   list;
+    u32    entry;
+    s16    value;
+    u8     kind;
+    u16    result;
+
+    sel = func_801B5C54();
+    if (g_GameRequestFlags & 1) {
+        func_801B5BDC(WORK_PTR->direction_08);
+    } else {
+        work = WORK_PTR;
+        Actor_RequestScript((u8)((work->direction_08 >> 1) + 0x10));
+    }
+    value = FIELD(s16, sel, 4u);
+    if (((value & 0x8000) != 0) && ((kind = FIELD(u8, sel, 6u)) != GAME_NONE)) {
+        switch (kind) {
+            case 0:
+                Resource_RequestArea(value & 0xFFF);
+                break;
+            case 1:
+                Message_StartAreaMessage(value & 0xFFF);
+                break;
+            case 2:
+                FIELD(u8, &rec, 0x7Au) = 0xFF;
+                base                   = g_AreaLoads[LOHU(g_GameAreaId)];
+                list                   = FIELD(u32*, base, 4u);
+                entry                  = list[FIELD(u16, sel, 4u) & 0xFFF];
+                g_CurrentActor         = &rec;
+                func_801A3F3C((u8*)entry);
+                result = FIELD(u16, &rec, 0x7Cu);
+                if (result != 0xFFFF) {
+                    Message_StartAreaMessage(result & 0xFFF);
+                }
+                g_GameState->kind_11E  = g_CurrentActor->callback_index;
+                state                  = WORK_PTR;
+                g_GameState->value_120 = FIELD(u16, sel, 4u);
+                state->state_02++;
+        }
+        WORK_PTR->state_02++;
+    } else {
+        Resource_RequestArea(0);
+    }
+    g_GameStateIndex = 2;
+    WORK_PTR->state_02++;
+}

@@ -1,0 +1,5 @@
+#include "battle_15.h"
+
+MATCH u8 func_800B0058(void) {
+    BATTLE_BATTLER_STEP_RULE(D_800B6C74, D_800B6C68, MEM_PTR(u8, 0x800E40CFu));
+}

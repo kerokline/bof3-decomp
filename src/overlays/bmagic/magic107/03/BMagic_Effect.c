@@ -1,0 +1,78 @@
+#include "magic107_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+MATCH void func_801EEC04(void) {
+    Callback table[2] = {func_801EEC5C, func_801EED40};
+
+    table[SP_REF(u8*, 0x44)[1]]();
+}
+
+INCLUDE_ASM(func_801EEC5C);
+
+#include "overlays/bmagic/Effect_PlayOnIdleTick.h"
+
+INCLUDE_ASM(func_801EEDA0);
+
+INCLUDE_ASM(func_801EEE50);
+
+MATCH void func_801EEEA0(void) {
+    g_SpadWork->unk_09 += 1;
+    g_SpadWork->unk_0A += 1;
+    if (g_SpadWork->unk_09 == 0x20) {
+        g_SpadWork->step_01 = g_SpadWork->step_01 + 1;
+    }
+}
+
+INCLUDE_ASM(func_801EEF0C);
+
+MATCH void func_801EEF5C(void) {
+    PartyBattler* active;
+
+    g_SpadWork->unk_09 = g_SpadWork->unk_09 + 1;
+    g_SpadWork->unk_0A = g_SpadWork->unk_0A - 1;
+    if (g_SpadWork->unk_0A == 0) {
+        active         = BATTLE_ACTIVE_WORK;
+        active->unk_0B = 255;
+        func_801E5988();
+    }
+}
+
+INCLUDE_ASM(func_801EEFD4);
+
+INCLUDE_ASM(func_801EF0E4);
+
+INCLUDE_ASM(func_801EF290);
+
+INCLUDE_ASM(func_801EF544);
+
+MATCH void func_801EFA18(void) {
+    SVECTOR pos;
+    SVECTOR rot;
+    MATRIX  matrix;
+    long    flags;
+
+    PushMatrix();
+    rot.vx = 0;
+    rot.vy = 0;
+    rot.vz = 0;
+    if ((g_SpadWork->unk_08 & 1) != 0) {
+        rot.vz = 1024;
+    }
+    pos.vx = (g_SpadWork->coord_x_34.raw >> 9) - 0x4000;
+    pos.vy = (g_SpadWork->coord_y_38.raw >> 9) - 0x4000;
+    pos.vz = -g_SpadWork->word_3C.half.span_3E / 2;
+    RotTrans(&pos, &matrix.t, &flags);
+    RotMatrix(&rot, &matrix);
+    MulMatrix2((MATRIX*)g_CameraMatrix, &matrix);
+    SetRotMatrix(&matrix);
+    SetTransMatrix(&matrix);
+}
+
+INCLUDE_ASM(func_801EFAE0);
+
+INCLUDE_ASM(func_801EFEA8);
+
+INCLUDE_ASM(func_801F01AC);

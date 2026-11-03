@@ -1,0 +1,12 @@
+[[matching.section_placements]]
+function = 0x801F9BE4
+section = ".rodata"
+address = 0x801F6C08
+size = 0x1B8
+
+[[regions]]
+role = "pad"
+name = "zero_tail"
+offset = 0x5E8C
+size = 0x10E4
+fill = 0

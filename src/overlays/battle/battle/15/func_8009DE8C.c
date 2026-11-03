@@ -1,0 +1,29 @@
+#include "battle_15.h"
+
+/* Active battle-selection record head (0x80146394). */
+
+MATCH void func_8009DE8C(void) {
+    BattleSelectionContext* ctx;
+    u32                     sel;
+    u16                     value;
+    u32                     row_off;
+    s64                     negated;
+
+    ctx = (BattleSelectionContext*)&g_BattleTarget;
+    sel = ctx->sel;
+    if (BATTLER_IS_PLAYER(sel)) {
+        ((s16*)g_BattleTargetRecord)[2] = -g_BattlePartyBattlers[sel].stats.max_hp;
+    } else {
+        value = ENEMY_COMBATANT(sel).cell_A0.max_hp;
+        if ((u16)value == 0xFFFFu) {
+            ((s16*)g_BattleTargetRecord)[2] = -1;
+            row_off                         = (ctx->sel - 3u) * BATTLE_ENEMY_STRIDE;
+            D_801EB72C[row_off] |= 4u;
+            return;
+        }
+        /* Negation materialized first, matching the original's evaluation order. */
+        /* FAKE: scheduler rows j-target/negu/tail need s64 temp;
+         * plain/s32/s16/order/hi-lo ladders miss. */
+        negated = (((s16*)g_BattleTargetRecord)[2] = -value);
+    }
+}

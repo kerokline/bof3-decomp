@@ -1,0 +1,24 @@
+sha1: 46d12af918a938368b06a5091400871e192f140a
+symbol_owners:
+  - emi/world00/area026/13
+segments:
+  - name: data
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: main
+    type: code
+    start: 0x4
+    vram: 0x801F2C04
+    align: 1
+    subalign: 1
+    subsegments:
+      - [0x4, c, spin_effect]
+      - [0x7EC, .rodata, spin_effect]
+      - [0x81C, .data, spin_effect]
+      - [0x20E4, .data, world_tail_byte]
+  - [0x20E5]

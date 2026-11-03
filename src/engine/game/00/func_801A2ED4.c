@@ -1,0 +1,66 @@
+#include "game_00.h"
+
+#define WORK SP_REF(Actor*, 0x44u)
+
+MATCH u8 func_801A2ED4(Actor* entity, u8 route_step) {
+    u32 target_x;
+    u32 target_y;
+    u8  best;
+    u8  i;
+    u8  route;
+    /* FAKE: retail keeps the x coordinate in a0. */
+    MATCH_REG(s32, wx, "a0");
+    /* FAKE: retail keeps the y coordinate in v0. */
+    MATCH_REG(s32, wy, "v0");
+    const s32* px;
+    s32*       py;
+    s32        dx;
+    s32        dy;
+    u32        dist;
+
+    target_x = D_80145EC4 + D_80145E9C * D_80145E99;
+    target_y = D_80145EC8 + D_80145EA0 * D_80145E99;
+    if ((WORK->direction_08 & 1) == 0) {
+        WORK->direction_08++;
+    }
+    best = 0xFF;
+    if ((route_step & BYTE_MASK) == 0u) {
+        entity->unk_88 = 0x01000000u;
+    } else {
+        entity->unk_88 = 0u;
+    }
+    for (i = 0; i < 4; i++) {
+        if ((func_801A1AE4(entity) & BYTE_MASK) == 0) {
+            route = WORK->direction_08;
+            wx    = WORK->x.fixed;
+            wy    = WORK->y.fixed;
+            route &= 7;
+            px = &g_FacingSteps[route].x;
+            py = &D_80181B98[route * 2];
+            dx = wx + *px;
+            dy = wy + *py;
+            /* FAKE: retail forms the y sum before the x subtraction. */
+            MATCH_FAKE_USE(dy);
+            dx -= (s32)target_x;
+            if (dx < 0) {
+                dx = -dx;
+            }
+            dy -= (s32)target_y;
+            if (dy < 0) {
+                dy = -dy;
+            }
+            dist = (u32)(dx + dy);
+            if ((route_step & BYTE_MASK) != 0u) {
+                if (entity->unk_88 < dist) {
+                    entity->unk_88 = dist;
+                    best           = WORK->direction_08;
+                }
+            } else if (dist < entity->unk_88) {
+                entity->unk_88 = dist;
+                best           = WORK->direction_08;
+            }
+        }
+        WORK->direction_08 = (WORK->direction_08 + 2) & 7;
+    }
+    return best;
+}

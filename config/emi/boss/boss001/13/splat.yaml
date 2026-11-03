@@ -1,0 +1,64 @@
+sha1: 3973d3d529ea185f2d643d3d536d4b1a83cc3289
+symbol_owners:
+  - exe/slus_004_22
+  - emi/battle/battle/03
+  - emi/boss/boss001/13
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x800C1800
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, bin, D_800C1800]
+      - [0x20, c, func_800C1820]
+      - [0x64, c, func_800C1864]
+      - [0xBC, c, func_800C18BC]
+      - [0x100, c, func_800C1900]
+      - [0x180, c, func_800C1980]
+      - [0x1C4, c, func_800C19C4]
+      - [0x208, c, func_800C1A08]
+      - [0x2D0, c, func_800C1AD0]
+      - [0x2F0, c, func_800C1AF0]
+      - [0x328, c, func_800C1B28]
+      - [0x330, c, func_800C1B30]
+      - [0x338, c, func_800C1B38]
+      - [0x340, c, func_800C1B40]
+      - [0x384, c, func_800C1B84]
+      - [0x3DC, c, func_800C1BDC]
+      - [0x420, c, func_800C1C20]
+      - [0x4A0, c, func_800C1CA0]
+      - [0x4E4, c, func_800C1CE4]
+      - [0x524, c, func_800C1D24]
+      - [0x5E0, c, func_800C1DE0]
+      - [0x600, c, func_800C1E00]
+      - [0x638, c, func_800C1E38]
+      - [0x640, c, func_800C1E40]
+      - [0x648, c, func_800C1E48]
+      - [0x650, c, Boss_InstallBattleHooks]
+      - [0x688, c, Boss_HandleBattleEvent]
+      - [0x7F8, c, Boss_ChooseBattleEnding]
+      - [0x860, c, Boss_EndBattle]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x97C
+    vram: 0x800C217C
+    align: 4
+    subsegments:
+      - [0x97C, bin, D_800C217C]
+      - [0x988, bin, D_800C2188]
+      - [0x994, bin, D_800C2194]
+      - [0x9A0, bin, D_800C21A0]
+      - [0x9AC, bin, D_800C21AC]
+      - [0x9B4, bin, D_800C21B4]
+      - [0x9BC, bin, D_800C21BC]
+      - [0x9EC, bin, D_800C21EC]
+      - [0xA04, bin, D_800C2204]
+      - [0xA10, bin, D_800C2210]
+      - [0xA1C, bin, D_800C221C]
+      - [0xA4C, bin, D_800C224C]
+      - [0xA64, bin, D_800C2264]
+      - [0xA70, bin, D_800C2270]
+  - [0xA7C]

@@ -1,0 +1,20 @@
+#include "area068_13.h"
+
+MATCH void func_801F386C(void) {
+    s32 sel;
+    u8  value;
+
+    sel              = D_801490C7;
+    g_MessageRequest = D_801F4D68[sel];
+    switch (sel) {
+        case 0:
+            g_ScriptVars = 0;
+            break;
+        case 1:
+            value        = 0xFF;
+            g_ScriptVars = value;
+            break;
+        default:
+            break;
+    }
+}

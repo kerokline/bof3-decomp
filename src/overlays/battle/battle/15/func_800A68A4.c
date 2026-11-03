@@ -1,0 +1,62 @@
+#include "battle_15.h"
+
+MATCH void func_800A68A4(void) {
+    volatile u8* battler;
+    u8           i;
+    u8           slot;
+    u8           index;
+    u32          flags;
+
+    i = 0;
+    {
+        /* The loop's pointer must die before the first call, or the address is
+         * held in s1 from entry. */
+        volatile u8* loop_battler = &g_BattleActingBattler;
+        for (; i < 8; i++) {
+            g_BattlePartyBattlers[*loop_battler].unk_12C[i] = 0;
+        }
+    }
+    battler = &g_BattleActingBattler;
+    g_BattlePartyBattlers[*battler].flags_124.volatile_value &=
+        ~(COMBATANT_FLAG_REPRISAL | COMBATANT_FLAG_DAMAGE_IMMUNE);
+    g_BattlePartyBattlers[*battler].flags_128.volatile_value &= 0xFFFB84FF;
+    func_800A9BD8(*battler);
+    index                                                 = *battler;
+    flags                                                 = g_BattlePartyBattlers[index].flags_128.volatile_value;
+    D_800B6F58                                            = 0;
+    D_800B6F5C                                            = 0;
+    g_BattlePartyBattlers[index].flags_128.volatile_value = flags | 2;
+    slot                                                  = func_800A6C2C();
+    if (slot != GAME_NONE) {
+        func_800A7C14(slot);
+        D_800B6F58 = slot + 4;
+        if ((u8)(slot + 4) == 8) {
+            g_BattlePartyBattlers[*battler].flags_128.value |= 0x10000;
+        }
+        if (D_800B6F58 == 7) {
+            g_BattlePartyBattlers[*battler].flags_128.value |= 0x20000;
+        }
+        if (D_800B6F58 == 4) {
+            g_BattlePartyBattlers[*battler].flags_128.value |= 0x20000;
+        }
+    } else {
+        func_800A6E14(0xFF);
+    }
+    i = 5;
+    for (; i != 0; i--) {
+        g_BattleTargetRows[i].slot_00 = g_BattleTargetRows[i - 1].slot_00;
+        g_BattleTargetRows[i].slot_01 = g_BattleTargetRows[i - 1].slot_01;
+        g_BattleTargetRows[i].slot_02 = g_BattleTargetRows[i - 1].slot_02;
+        g_BattleTargetRows[i].gate_03 = g_BattleTargetRows[i - 1].gate_03;
+    }
+    for (i = 0; i < g_BattleGeneCount[0]; i++) {
+        FIELD(u8, &g_BattleTargetRows, i) = D_801463C4[i];
+    }
+    for (; i < BATTLE_PARTY_SLOT_COUNT; i++) {
+        FIELD(u8, &g_BattleTargetRows, i) = 0xFF;
+    }
+    g_BattleTargetRows[0].gate_03 = (D_800B6F5C << 5) + (D_800B6F58 & 0x1F);
+    g_DragonForm                  = D_800B6F58;
+    D_801463B9                    = D_800B6F5C;
+    func_800A9BD8(g_BattleActingBattler);
+}

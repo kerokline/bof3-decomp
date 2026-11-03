@@ -1,0 +1,18 @@
+#ifndef OVERLAY_BMAGIC_MAGIC110_03_H
+#define OVERLAY_BMAGIC_MAGIC110_03_H
+
+/* The bmagic/magic110/03 overlay. Only this image includes the file. */
+
+#include "overlays/bmagic/bmagic.h"
+
+extern BmagicEffectFuncs D_801EEC04;
+
+extern Callback D_801F049C[];
+void            func_801F0138(void);
+void            func_801F01E8(void);
+
+extern Callback D_801F048C[];
+void            func_801EFA48(void);
+void            func_801EFC98(void);
+
+#endif

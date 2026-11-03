@@ -1,0 +1,26 @@
+#include "battle_03.h"
+
+/* when local-work flag 0x2000 is clear, drops the 0x70 and 0x200
+ * status bits, clears the active battler's pending bit, and restarts the local
+ * presentation at substate 2.
+ */
+MATCH void func_801E13B8(void) {
+    PartyBattler*          work;
+    volatile PartyBattler* cell;
+    u32                    flags;
+    u32                    masked;
+
+    work  = g_GameState;
+    flags = work->flags_124.value;
+    if ((flags & 0x2000u) == 0u) {
+        cell   = g_SpadWork;
+        masked = flags & ~0x70u;
+        masked &= ~0x200u;
+        work->flags_124.value = masked;
+        Battle_ClearSlotPending(cell->slot);
+        g_SpadWork->step_01 = 2;
+        g_SpadWork->unk_02  = 0;
+        g_SpadWork->unk_03  = 0;
+        g_SpadWork->unk_04  = 0;
+    }
+}

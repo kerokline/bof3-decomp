@@ -1,0 +1,19 @@
+#ifndef OVERLAY_WORLD03_AREA139_13_H
+#define OVERLAY_WORLD03_AREA139_13_H
+
+/* The world03/area139/13 overlay: one file per split function
+ * and its data. Only this image includes the file. */
+
+#include "overlays/area/world03.h"
+#include "work/area_spad.h"
+
+/* The scratchpad work pointer; the dispatch entry bytes select a handler. */
+#define g_CurrentActor ((u8*)g_CurrentActor)
+
+/* The party position in 16.16 fixed point. */
+extern s32      D_80145EC4;
+/* The state handler tables the dispatchers index. */
+extern Callback D_801F4430[];
+extern Callback D_801F4448[];
+
+#endif

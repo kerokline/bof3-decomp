@@ -1,0 +1,56 @@
+sha1: 4ffa1b1464b98a0b90624f49e76b8d6783e3ea14
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0xF8, c, func_801F2CF8]
+      - [0x13C, c, func_801F2D3C]
+      - [0x180, c, func_801F2D80]
+      - [0x348, c, func_801F2F48]
+      - [0x380, c, func_801F2F80]
+      - [0x3A0, c, func_801F2FA0]
+      - [0x5DC, c, func_801F31DC]
+      - [0x994, c, func_801F3594]
+      - [0xA98, c, func_801F3698]
+      - [0xB74, c, func_801F3774]
+      - [0xC38, c, func_801F3838]
+      - [0xC8C, c, func_801F388C]
+      - [0xD94, c, func_801F3994]
+      - [0xFE8, c, func_801F3BE8]
+      - [0x102C, c, func_801F3C2C]
+      - [0x11E8, c, Actor_AdvanceWhenPartyNear]
+      - [0x1328, c, Actor_SlideScreenX]
+      - [0x1384, c, func_801F3F84]
+      - [0x1480, c, func_801F4080]
+      - [0x14F0, c, Area_Update]
+      - [0x18F8, c, func_801F44F8]
+      - [0x193C, c, func_801F453C]
+      - [0x1974, c, func_801F4574]
+      - [0x19E4, c, func_801F45E4]
+      - [0x1A40, c, func_801F4640]
+      - [0x1D50, c, func_801F4950]
+      - [0x1DA4, c, func_801F49A4]
+      - [0x1DF8, c, func_801F49F8]
+      - [0x1E4C, c, func_801F4A4C]
+      - [0x1E7C, c, func_801F4A7C]
+      - [0x1E9C, c, func_801F4A9C]
+      - [0x1EBC, c, func_801F4ABC]
+      - [0x1F58, c, func_801F4B58]
+      - [0x27A4, c, func_801F53A4]
+      - [0x2A98, c, func_801F5698]
+      - [0x2AE0, c, func_801F56E0]
+      - [0x2B08, c, func_801F5708]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x2BBC
+    vram: 0x801F57BC
+    align: 4
+    subsegments:
+      - [0x2BBC, .data, D_801F57BC]
+  - [0x38C8]

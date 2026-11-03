@@ -1,0 +1,65 @@
+#include "magic125_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+INCLUDE_ASM(func_801EEC04);
+
+INCLUDE_ASM(func_801EED04);
+
+#include "overlays/bmagic/Effect_PlayOnZeroTick.h"
+
+MATCH void func_801EEEC0(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+INCLUDE_ASM(func_801EEF04);
+
+INCLUDE_ASM(func_801EEFF8);
+
+INCLUDE_ASM(func_801EF0F8);
+
+INCLUDE_ASM(func_801EF148);
+
+#include "overlays/bmagic/Effect_SetActorMatrix.h"
+
+INCLUDE_ASM(func_801EF258);
+
+INCLUDE_ASM(func_801EF508);
+
+MATCH void func_801EF808(void) {
+    SYS_DISPATCH_BYTE(D_801F05EC, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0 && g_SpadWork->unk_02 != 0) {
+        Effect_SetActorMatrix();
+        func_801EF508();
+        PopMatrix();
+    }
+}
+
+INCLUDE_ASM(func_801EF890);
+
+INCLUDE_ASM(func_801EF960);
+
+INCLUDE_ASM(func_801EFAB0);
+
+MATCH void func_801EFB48(void) {
+    SYS_DISPATCH_TASK((g_BMagicEffectFuncs + 8), 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EFB8C);
+
+INCLUDE_ASM(func_801EFCE4);
+
+INCLUDE_ASM(func_801EFE8C);
+
+INCLUDE_ASM(func_801EFFC8);
+
+INCLUDE_ASM(func_801F020C);
+
+INCLUDE_ASM(func_801F0524);
+
+/* func_801F0588 */
+MATCH void Actor_Clear(void) {
+    Bmagic_ResetLocalWork();
+}

@@ -1,0 +1,3 @@
+#include "area067_14.h"
+
+INCLUDE_ASM(func_801F2E98);

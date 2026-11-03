@@ -1,0 +1,74 @@
+#include "shop_00.h"
+
+MATCH void func_801DFDF4(void) {
+    s8*  toggle;
+    u16* pad;
+    s32  side;
+    u8   ff;
+    u8   count;
+    u8   tbl;
+    u8   tbl2;
+    /* FAKE: pin keeps the shared constant 2 in the retail v1 home. */
+    MATCH_REG(u8, two, "v1");
+
+    toggle     = &D_8014865B;
+    pad        = &g_InputPressed;
+    D_80148340 = 0x36;
+    D_80148624 = 1;
+    side       = 1 - *toggle;
+    D_80148628 = (u16)D_80148334 + (side << 5) + 0xDE;
+    D_8014862A = (u16)D_80148336 + 5;
+    if (*pad & (PADLright | PADLleft)) {
+        SND_PlayCue(EMI_CUE_ID(1, 1));
+        *toggle ^= 1;
+    }
+    if (*pad & D_80145AC2) {
+        if (*toggle != 0) {
+            SND_PlayCue(EMI_CUE_ID(1, 4));
+            SND_PlayCue(EMI_CUE_ID(1, 2));
+            D_801E625C = 0;
+            Party_RemoveItem(0, 0x58, 1, 0);
+            two         = 2;
+            D_80148379  = 7;
+            D_8014837A  = 0xD;
+            D_8014837B  = two;
+            *D_80148378 = 1;
+            tbl         = D_801E6264[D_801E625C];
+            D_8014839F  = two;
+            /* FAKE: do-while(0) scope steers regalloc */
+            do {
+                count      = D_80148652;
+                D_8014837C = -0x96;
+            } while (0);
+            /* FAKE: do-while(0) scope steers regalloc */
+            do {
+                D_8014837E = 0x74;
+                D_8014839E = 0xC;
+                ff         = 0xFF;
+                D_8014839D = 7;
+                D_8014839C = 1;
+                D_80148382 = tbl;
+            } while (0);
+            tbl2 = D_801E6264[D_801E625C];
+            /* FAKE: do-while(0) scope steers the tail block's scheduling. */
+            do {
+                count++;
+                D_801483A8 = ff;
+                D_801483A0 = BATTLE_PARTY_STRIDE;
+                D_801483A7 = 0;
+                D_801483A9 = 0;
+                D_801483A2 = 0x3E;
+                D_80148652 = count;
+                D_801483A6 = tbl2;
+            } while (0);
+            return;
+        }
+        SND_PlayCue(EMI_CUE_ID(1, 6));
+        D_80148651 -= 1;
+        return;
+    }
+    if (*pad & D_80145AC4) {
+        SND_PlayCue(EMI_CUE_ID(1, 6));
+        D_80148651 -= 1;
+    }
+}

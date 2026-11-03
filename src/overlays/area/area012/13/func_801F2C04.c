@@ -1,0 +1,7 @@
+#include "area012_13.h"
+
+MATCH void func_801F2C04(void) {
+    if (!SYS_TestFlag(g_SceneFlags, 0xE)) {
+        g_ScriptState->cursor -= 2;
+    }
+}

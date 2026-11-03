@@ -1,0 +1,16 @@
+bof3-decomp is released under CC0 1.0 Universal (see LICENSE). Contributors dedicate
+their own work to the public domain under CC0, to the extent they own the rights.
+
+Breath of Fire III, its code, data and marks belong to Capcom. This project
+claims no rights over them. The source holds decompiled C code and data tables
+(item names, parameters, raw byte gaps) recovered from the retail game, and
+hand-written assembly. It holds no disc image, executable, audio, graphics or
+other media, and no object file. Users supply their own disc and build the
+images from it.
+
+The PsyQ 3.7 headers in `include/psyq/` belong to Sony Computer Entertainment.
+They are included unmodified for interoperability. SDK objects and libraries
+are never committed.
+
+Each `third_party/` submodule keeps its own license and terms. See
+`third_party/README.md` for the tools, downloads and references.

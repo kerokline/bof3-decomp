@@ -1,0 +1,184 @@
+#include "scena01_00.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+INCLUDE_ASM(func_801F71C0);
+
+INCLUDE_ASM(func_801F729C);
+
+MATCH void func_801F73B8(void) {
+    SYS_DISPATCH_TASK(D_801FE26C, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801F73FC);
+
+INCLUDE_ASM(func_801F7480);
+
+INCLUDE_ASM(func_801F752C);
+
+INCLUDE_ASM(func_801F75C8);
+
+MATCH void func_801F7644(void) {
+    if (!(func_801F7C54() & BYTE_MASK)) {
+        Actor_Clear();
+    }
+}
+
+INCLUDE_ASM(func_801F7678);
+
+INCLUDE_ASM(func_801F7A24);
+
+#include "shared/Area_ClearWorkColumn.h"
+
+INCLUDE_ASM(func_801F7AE4);
+
+INCLUDE_ASM(func_801F7C54);
+
+INCLUDE_ASM(func_801F7D04);
+
+INCLUDE_ASM(func_801F7DCC);
+
+INCLUDE_ASM(func_801F7EDC);
+
+MATCH void func_801F7FC4(void) {
+    SYS_DISPATCH_BYTE(D_801FE29C, D_80146872);
+}
+
+INCLUDE_ASM(func_801F8000);
+
+INCLUDE_ASM(func_801F8050);
+
+MATCH void func_801F8AA0(void) {
+    SYS_DISPATCH_BYTE(D_801FE2A8, D_80146874);
+}
+
+MATCH void func_801F8ADC(void) {
+}
+
+INCLUDE_ASM(func_801F8AE4);
+
+INCLUDE_ASM(func_801F8C0C);
+
+INCLUDE_ASM(func_801F8F34);
+
+MATCH void func_801F986C(void) {
+}
+
+INCLUDE_ASM(func_801F9874);
+
+INCLUDE_ASM(func_801F9AA0);
+
+MATCH void func_801FA244(void) {
+}
+
+INCLUDE_ASM(func_801FA24C);
+
+INCLUDE_ASM(func_801FA844);
+
+INCLUDE_ASM(func_801FB218);
+
+INCLUDE_ASM(func_801FB5BC);
+
+INCLUDE_ASM(func_801FBB1C);
+
+INCLUDE_ASM(func_801FBF30);
+
+INCLUDE_ASM(func_801FC488);
+
+INCLUDE_ASM(func_801FC6B4);
+
+MATCH void func_801FC890(void) {
+}
+
+INCLUDE_ASM(func_801FC898);
+
+INCLUDE_ASM(func_801FCC24);
+
+MATCH void func_801FCCF4(void) {
+}
+
+INCLUDE_ASM(func_801FCCFC);
+
+INCLUDE_ASM(func_801FCD9C);
+
+INCLUDE_ASM(func_801FCE30);
+
+INCLUDE_ASM(func_801FCEC0);
+
+INCLUDE_ASM(func_801FD28C);
+
+INCLUDE_ASM(func_801FD444);
+
+MATCH void func_801FD484(void) {
+}
+
+INCLUDE_ASM(func_801FD48C);
+
+INCLUDE_ASM(func_801FD4F0);
+
+INCLUDE_ASM(func_801FD534);
+
+INCLUDE_ASM(func_801FD57C);
+
+INCLUDE_ASM(func_801FD5C4);
+
+INCLUDE_ASM(func_801FD60C);
+
+INCLUDE_ASM(func_801FD6CC);
+
+INCLUDE_ASM(func_801FD788);
+
+INCLUDE_ASM(func_801FD84C);
+
+MATCH void func_801FD8F8(void) {
+    g_ScriptVars = 0x64;
+}
+
+MATCH void func_801FD90C(void) {
+    g_ScriptVars = 0x66;
+}
+
+MATCH void func_801FD920(void) {
+    g_ScriptVars = 0x67;
+}
+
+MATCH void func_801FD934(void) {
+    g_ScriptVars = 0x68;
+}
+
+INCLUDE_ASM(func_801FD948);
+
+INCLUDE_ASM(func_801FD9A0);
+
+INCLUDE_ASM(func_801FD9E4);
+
+MATCH void func_801FDA2C(void) {
+    Game_SetScriptActive();
+    D_80146875 = 0xF;
+    D_80146874 = 0xB;
+}
+
+MATCH s32 func_801FDA64(void) {
+    return 0;
+}
+
+INCLUDE_ASM(func_801FDA6C);
+
+INCLUDE_ASM(func_801FE03C);
+
+INCLUDE_ASM(func_801FE0A4);
+
+INCLUDE_ASM(func_801FE10C);
+
+INCLUDE_ASM(func_801FE1B0);
+
+MATCH void func_801FE224(void) {
+    Party_JoinMember(4);
+}
+
+MATCH void func_801FE244(void) {
+    func_801C1ABC(4);
+    func_801C1630();
+}

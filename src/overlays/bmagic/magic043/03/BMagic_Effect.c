@@ -1,0 +1,46 @@
+#include "magic043_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+INCLUDE_ASM(func_801EEC18);
+
+INCLUDE_ASM(func_801EED30);
+
+INCLUDE_ASM(func_801EEEF0);
+
+INCLUDE_ASM(func_801EEF98);
+
+INCLUDE_ASM(func_801EF0B4);
+
+#include "overlays/bmagic/Effect_PlayOnZeroTick.h"
+
+MATCH void func_801EF360(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+MATCH void func_801EF3A4(void) {
+    SYS_DISPATCH_BYTE(D_801EFC8C, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0 && g_SpadWork->unk_02 != 0) {
+        func_801EF72C();
+        func_801EF7F8();
+        PopMatrix();
+    }
+}
+
+INCLUDE_ASM(func_801EF42C);
+
+INCLUDE_ASM(func_801EF55C);
+
+INCLUDE_ASM(func_801EF5E0);
+
+INCLUDE_ASM(func_801EF64C);
+
+/* Follows BMAGIC_PROJECT_ACTOR_MATRIX (bmagic.h), but rot.vx starts at 0x400 and a halfword
+ * table indexed by the work byte at +0x08 feeds the rotation. */
+INCLUDE_ASM(func_801EF72C);
+
+INCLUDE_ASM(func_801EF7F8);
+
+INCLUDE_ASM(func_801EFC24);

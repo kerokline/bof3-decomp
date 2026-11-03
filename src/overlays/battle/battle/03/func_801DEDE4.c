@@ -1,0 +1,19 @@
+#include "battle_03.h"
+
+/* returns ready immediately when the local work flags allow it;
+ * otherwise delegates to the first EXE-side readiness helper.
+ */
+MATCH u8 func_801DEDE4(void) {
+    volatile PartyBattler* battle_work   = g_GameState;
+    volatile u8*           battle_global = (u8*)(EFFECT_BANK_80140000);
+
+    if (HAS_STATUS(*battle_work, STATUS_PARALYZED)) {
+        return 1u;
+    }
+
+    if ((battle_global[0x63CEu] != 0u) && ((battle_work->flags_128.value & COMBATANT_FLAG_SUPPRESSION_EXEMPT) == 0u)) {
+        return 1u;
+    }
+
+    return func_8014D978();
+}

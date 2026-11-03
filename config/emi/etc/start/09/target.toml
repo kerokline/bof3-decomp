@@ -1,0 +1,5 @@
+[[copies]]
+disc_id = "BIN/ETC/SHOP.EMI#8"
+payload_sha256 = "6e7b93d4fd75586413b5ab3a6785d7b2492d8d1b566a3a6d79941bb656131a4d"
+load_address = 0x801eec00
+size = 5268

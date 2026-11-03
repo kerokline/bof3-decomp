@@ -1,0 +1,12 @@
+sha1: e7a11211f40add99999996f84927b89fc3924a6b
+symbol_owners:
+  - emi/etc/bate/03
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x80033A00
+    align: 4
+    subsegments:
+      - [0x0, bin, asset_clut]
+  - [0x200]

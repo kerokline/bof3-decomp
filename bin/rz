@@ -1,0 +1,39 @@
+#!/bin/sh
+# Read retail bytes through a saved Rizin project, or use raw mapping for loose bytes.
+set -eu
+root=$(cd "$(dirname "$0")/.." && pwd)
+usage() {
+    echo "usage: bin/rz <target> [<cmd> ...] | bin/rz raw <target>" >&2
+    exit 2
+}
+[ "$#" -ge 1 ] || usage
+[ -x "$root/toolchains/rizin/bin/rizin" ] || {
+    echo "bin/rz: rizin is missing; install it as docs/toolchain.md#matching-aids says" >&2
+    exit 127
+}
+if [ "$1" = raw ]; then
+    [ "$#" -eq 2 ] || usage
+    target=$2
+    if [ "${target%%/*}" = exe ]; then
+        exec "$root/toolchains/rizin/bin/rizin" -q0 -N -a mips -b 32 -E little \
+            -e asm.cpu=r3000a -e str.encoding=ascii -e scr.color=0 \
+            "$root/build/bin/$target.bin"
+    fi
+    load=$(PYTHONPATH="$root/tools" "$root/.venv/bin/python" -c 'import sys; from pathlib import Path; from bof3.resolve import load_target_manifests; print(hex(load_target_manifests(Path(sys.argv[1]))[sys.argv[2]].load_address))' "$root" "$target")
+    exec "$root/toolchains/rizin/bin/rizin" -q0 -N -a mips -b 32 -E little \
+        -e asm.cpu=r3000a -e str.encoding=ascii -e scr.color=0 \
+        -m "$load" "$root/build/bin/$target.bin"
+fi
+target=$1
+shift
+flat=$(printf '%s' "$target" | tr / +)
+project="build/meson/rz+$flat.rzdb"
+out=$(meson compile -C "$root/build/meson" "rz+$flat.rzdb" 2>&1) || {
+    printf '%s\n' "$out" >&2
+    exit 1
+}
+for cmd; do
+    set -- "$@" -c "$cmd"
+    shift
+done
+exec "$root/toolchains/rizin/bin/rizin" -q -p "$root/$project" "$@"

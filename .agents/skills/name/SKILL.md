@@ -1,0 +1,32 @@
+---
+name: name
+description: Name a bof3-decomp function, global, type, member or constant from cross-reference evidence, or keep the address name and report the missing fact. Use for a rename, a member name, a constant or a naming review.
+---
+
+# Name from meaning
+
+Input: the symbols and the task's `writes` list, the paths it lets you change ([rule 1](../../../AGENTS.md#standing-rules)). A name comes from what the thing means in the game,
+found through its users. Rules: [names](../../../docs/conventions.md#names).
+
+1. Find every user across all images ([users of a symbol](../../../docs/toolchain.md#every-user-of-a-symbol)).
+2. Read what the users do: loop bounds, strides, compares, copies, calls to functions that already
+   have names. Search `rg -n 'NAME|0xADDR' config include src` for an existing name.
+3. Rank the evidence ([order](../../../docs/conventions.md#evidence)): disc labels, retail text and
+   data, reference notes, visible code behavior. A count, an offset match, a type or a tool's output
+   is not evidence ([evidence](../../../docs/conventions.md#evidence)).
+4. Pick the form: [register](../../../docs/conventions.md#register), [prefix](../../../docs/conventions.md#tags),
+   [verb](../../../docs/conventions.md#functions), [selector](../../../docs/conventions.md#variables-parameters-and-members),
+   [table](../../../docs/conventions.md#tables). Adjacent symbols read through one base are one record:
+   name the record once, then its members by role.
+5. Record the evidence where the name lives: the `config/symbols.toml` row's `source`, or a short comment beside
+   a member, type or constant. Rename every tracked user in one commit
+   ([recipe](../../../docs/conventions.md#rename-steps)). A function name goes to every copy with
+   equal bytes ([shared bodies](../../../docs/conventions.md#shared-bodies)); a parameter name goes to
+   the definition and every prototype.
+6. Gate: `check-<image>` for each touched image, then `check`. Run the
+   [quality pass](../review/SKILL.md#quality-pass).
+
+Unknown keeps the address name (`func_<ADDR>`, `D_<ADDR>`, `unk_<OFF>`).
+
+Report: `named` (old, new, the users that prove it) or `kept` (the address name and the fact that
+would promote it: `needs: name <ADDR> <fact>`). Last line `READY <sha>` or `BLOCKED <reason>`.

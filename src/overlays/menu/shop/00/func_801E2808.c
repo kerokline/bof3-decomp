@@ -1,0 +1,17 @@
+#include "shop_00.h"
+
+/* File-local declarations: the shared fill-style byte, the panel state handler
+ * table and the icon draw helpers owned by this target or the executable. */
+
+#define ICON_CURSOR ((s16)g_MenuPanelTaskCurrent->unk_10)
+
+MATCH void func_801E2808(void) {
+    D_801E5DB4[g_MenuPanelTaskCurrent->state]();
+    Menu_DrawHeaderBar(g_MenuPanelTaskCurrent->x, g_MenuPanelTaskCurrent->y, 0x118, 0x13, D_80144952);
+    if (ICON_CURSOR != 0) {
+        WinDrawCueText((s16)(g_MenuPanelTaskCurrent->x + 7), (s16)(g_MenuPanelTaskCurrent->y + 3), (u16)ICON_CURSOR);
+        if (ICON_CURSOR == 0x36 || (u16)(ICON_CURSOR - 0x49) < 2 || ICON_CURSOR == 0x52) {
+            WinDrawCueText((s16)(g_MenuPanelTaskCurrent->x + 7), (s16)(g_MenuPanelTaskCurrent->y + 3), 0xF);
+        }
+    }
+}

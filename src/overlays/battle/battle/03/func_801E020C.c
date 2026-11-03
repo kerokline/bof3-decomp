@@ -1,0 +1,56 @@
+#include "battle_03.h"
+
+/* Non-volatile alias for g_BattleActionType: the volatile symbol makes every
+ * byte comparison materialize an `andi`, which retail does not carry, and a
+ * distinct symbol keeps the second sample a real load.
+ * FAKE: non-volatile alias of g_BattleActionType; the volatile symbol scores 87.01%.
+ */
+
+/* runs the queued step: while not retreating and the enemy's spin flag is set it clears the gate and arms
+ * the retreat; otherwise it re-arms the gate from the kind and flag records and reseeds the step and tint fields.
+ */
+MATCH void func_801E020C(void) {
+    PartyBattler* work;
+
+    func_801DEE4C();
+    work = g_SpadWork;
+    if ((work->unk_02 != 3) && (HAS_STATUS(*g_GameState, STATUS_KO))) {
+        /* FAKE: half pointer; the direct global scores 97.37%. */
+        u16* half;
+        half = &g_BattleState;
+        *half &= ~BATTLE_STATE_REPRISAL_PENDING;
+        g_SpadWork->step_01 = 6;
+        g_SpadWork->unk_02  = 4;
+    } else {
+        /* FAKE: half pointer; the direct global scores 82.24%. */
+        u16* half;
+        half = &g_BattleState;
+        if ((*half & BATTLE_STATE_REPRISAL_PENDING) == 0) {
+            if ((g_BattleTargetSelector & BATTLE_TARGET_BOTH_SIDES) == 0) {
+                if (g_BattleActionType_nv == 1) {
+                    if ((func_801DD448() & BYTE_MASK) != 0) {
+                        *half |= BATTLE_STATE_REPRISAL_PENDING;
+                    }
+                }
+                if ((g_BattleActionType_nv == 4) && ((D_801CA71C[g_BattleActionId].mask & 0x800) != 0) &&
+                    ((func_801DD448() & BYTE_MASK) != 0) && ((D_801CA718[g_BattleActionId][0] & 0x10) == 0)) {
+                    g_BattleState |= BATTLE_STATE_REPRISAL_PENDING;
+                }
+            }
+        } else {
+            *half = (*half & ~BATTLE_STATE_REPRISAL_PENDING) | BATTLE_STATE_REPRISAL_DONE;
+        }
+        Battle_ClearSlotPending(g_SpadWork->slot);
+        g_GameState->flags_124.value &= ~0x70;
+        if ((func_801E0E0C() & BYTE_MASK) != 0) {
+            /* FAKE: flag pointer; the direct store scores 97.37%. */
+            volatile u8* flag;
+            flag = &g_BattleResult;
+            *flag |= 1;
+        }
+        g_GameState->flags_124.value &= ~0x200;
+        g_SpadWork->step_01 = 2;
+        g_SpadWork->unk_02  = 0;
+    }
+    g_SpadWork->unk_03 = 0;
+}

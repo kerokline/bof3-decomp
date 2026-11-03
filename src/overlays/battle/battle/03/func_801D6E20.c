@@ -1,0 +1,11 @@
+#include "battle_03.h"
+
+MATCH void func_801D6E20(void) {
+    if ((g_BattleOptions & BATTLE_OPT_KEEP_BGM) == 0u) {
+        SND_StopAllSequences();
+        SND_PlaySequence(0, 2, 0x64, 0x64);
+    }
+    func_801D9484();
+    func_801DE60C(0, 2, 0, 0, 0xFF, Resource_Resolve(0x11));
+    g_BattleSubStep += 1u;
+}

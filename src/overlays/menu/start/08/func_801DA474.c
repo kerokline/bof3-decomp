@@ -1,0 +1,128 @@
+#include "start_08.h"
+
+extern s8 D_80148658;
+
+/* nonmatching unmeasured: tried the first draft cleaned to compiling C; best score 75.25%. resume: a lever or header fix that
+ * closes the first mismatch. */
+#ifdef NON_MATCHING
+NON_MATCHING void func_801DA474(void) {
+    s32          val0;
+    s16          val1;
+    s32          tmp0;
+    s32          tmp1;
+    s8           tmp2;
+    s8           tmp3;
+    s8           val2;
+    s8           val3;
+    u8*          val4;
+    s32          input_bits;
+    u8           tmp4;
+    u8           tmp5;
+    volatile u8* flag;
+
+    val4 = &D_80144953;
+    val4 = &D_80144953;
+    Menu_DrawClutStrip(*val4);
+    flag       = &D_801485DC;
+    *flag      = 0;
+    D_80148600 = 0;
+    tmp1       = (D_80148658 * 8) + (D_80148659 * 0x10);
+    D_801485E0 = FIELD(u16, &D_801EC548, tmp1);
+    D_801485E2 = FIELD(u16, &D_801EC54A, tmp1);
+    *flag      = 1;
+    D_801485E7 = 1;
+    D_801485E6 = FIELD(s32, &D_801EC54C, tmp1);
+    if ((s8)D_8014865D != 0x7F) {
+        tmp0       = ((s8)D_8014865A * 8) + ((s8)D_8014865D * 0x10);
+        D_80148604 = FIELD(u16, &D_801EC548, tmp0);
+        D_80148600 = 1;
+        D_80148606 = FIELD(u16, &D_801EC54A, tmp0);
+        D_8014860B = 0;
+        D_8014860A = FIELD(s32, &D_801EC54C, tmp0);
+    }
+    if (D_801ED69C == GAME_NONE) {
+        val1 = 0x60;
+    } else {
+        TEXT_SetVariable(0U, 5U, (g_CharSlot[D_801ED69C] * 0xA4) + (&D_80144953 + 0x15));
+        val1 = 0x61;
+    }
+    D_801484CC = val1;
+    input_bits = INPUT_GetRepeatedButtons(g_InputPressed & INPUT_DIRECTIONAL);
+    tmp4       = Party_CountOrder(0U);
+    if ((input_bits & (PADLright | PADLleft)) && (D_801484EA != 0)) {
+        D_80148658 = (u8)D_80148658 ^ 1;
+    }
+    if (D_80148658 == 0) {
+        val2 = tmp4 - 1;
+        if (((tmp4 & BYTE_MASK) - 1) < D_80148659) {
+            goto block_12; /* retail branch */
+        }
+    } else {
+        val2 = D_801484EA - 1;
+        if ((D_801484EA - 1) < D_80148659) {
+        block_12:
+            D_80148659 = val2;
+        }
+    }
+    if (input_bits & PADLup) {
+        tmp2       = (u8)D_80148659 - 1;
+        D_80148659 = tmp2;
+        if (tmp2 & 0x80) {
+            val3 = tmp4 - 1;
+            if (D_80148658 != 0) {
+                val3 = D_801484EA - 1;
+            }
+            D_80148659 = val3;
+        }
+    } else if (input_bits & PADLdown) {
+        tmp3       = (u8)D_80148659 + 1;
+        D_80148659 = tmp3;
+        if (D_80148658 == 0) {
+            if (((tmp4 & BYTE_MASK) - 1) < tmp3) {
+                goto block_23; /* retail branch */
+            }
+        } else if ((D_801484EA - 1) < tmp3) {
+        block_23:
+            D_80148659 = 0;
+        }
+    }
+    if (((u8)D_80148658 != (u8)D_80148658) || ((u8)D_80148659 != (u8)D_80148659)) {
+        SND_PlayCue(EMI_CUE_ID(1, 0));
+    }
+    if (D_80145AC2 & g_InputPressed) {
+        val4 = &D_8014865A;
+        val4 = &D_8014865A;
+        if ((s8)D_8014865A == 0x7F) {
+            SND_PlayCue(EMI_CUE_ID(1, 3));
+            D_8014865A = (u8)D_80148658;
+            D_8014865D = (u8)D_80148659;
+            return;
+        }
+        tmp5       = func_801DB04C();
+        D_801ED69C = tmp5;
+        val0       = 0x107;
+        if ((tmp5 & BYTE_MASK) == GAME_NONE) {
+            val0 = 0x103;
+        }
+        SND_PlayCue(val0);
+        D_8014865A = 0x7F;
+        D_8014865D = 0x7F;
+        return;
+    }
+    if (D_80145AC4 & g_InputPressed) {
+        SND_PlayCue(EMI_CUE_ID(1, 6));
+        if ((s8)D_8014865A != 0x7F) {
+            D_8014865A = 0x7F;
+            D_8014865D = 0x7F;
+            return;
+        }
+        D_80148654 = 5;
+        D_801485DC = 0;
+        D_80148600 = 0;
+        D_801484E3 = 1;
+        D_80148652 += 1;
+    }
+}
+#else
+INCLUDE_ASM(func_801DA474);
+#endif

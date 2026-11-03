@@ -1,0 +1,196 @@
+#include "scena10_00.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+MATCH void func_801F6F70(void) {
+    /* FAKE: retail reads the handler record from entry $v0; the pin is the
+       entry-register residual (identical bytes to the unpinned 84.46%). */
+    MATCH_REG(u8*, entity, "v0");
+
+    D_801FE80C[entity[1]]();
+}
+
+INCLUDE_ASM(func_801F6FAC);
+
+INCLUDE_ASM(func_801F7068);
+
+INCLUDE_ASM(func_801F719C);
+
+INCLUDE_ASM(func_801F73EC);
+
+MATCH void func_801F74F8(void) {
+    Actor_Clear();
+}
+
+MATCH void func_801F7518(void) {
+    SYS_DISPATCH_TASK(D_801FE820, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801F755C);
+
+INCLUDE_ASM(func_801F7590);
+
+INCLUDE_ASM(func_801F7758);
+
+INCLUDE_ASM(func_801F781C);
+
+INCLUDE_ASM(func_801F79E8);
+
+INCLUDE_ASM(func_801F7AD4);
+
+INCLUDE_ASM(func_801F7C34);
+
+INCLUDE_ASM(func_801F7DDC);
+
+MATCH void func_801F7F50(void) {
+    SYS_DISPATCH_BYTE(D_801FE8F4, D_80146872);
+}
+
+MATCH void func_801F7F8C(void) {
+    D_80146872 = 1;
+}
+
+INCLUDE_ASM(func_801F7FA0);
+
+INCLUDE_ASM(func_801F8550);
+
+MATCH void func_801F8694(void) {
+    SYS_DISPATCH_BYTE(D_801FE900, D_80146874);
+}
+
+MATCH void func_801F86D0(void) {
+}
+
+INCLUDE_ASM(func_801F86D8);
+
+INCLUDE_ASM(func_801F8C00);
+
+INCLUDE_ASM(func_801F95B8);
+
+INCLUDE_ASM(func_801F9FC4);
+
+INCLUDE_ASM(func_801FA010);
+
+INCLUDE_ASM(func_801FA5EC);
+
+INCLUDE_ASM(func_801FA644);
+
+INCLUDE_ASM(func_801FA6BC);
+
+INCLUDE_ASM(func_801FA98C);
+
+INCLUDE_ASM(func_801FC220);
+
+INCLUDE_ASM(func_801FC280);
+
+INCLUDE_ASM(func_801FC830);
+
+INCLUDE_ASM(func_801FC8A0);
+
+INCLUDE_ASM(func_801FC900);
+
+INCLUDE_ASM(func_801FCD80);
+
+INCLUDE_ASM(func_801FD278);
+
+INCLUDE_ASM(func_801FD31C);
+
+INCLUDE_ASM(func_801FD3C0);
+
+MATCH void func_801FD464(void* entity) {
+    SceneFunc handler;
+    u8        index;
+
+    index   = ((Actor*)entity)->callback_index;
+    handler = D_801FE97C[index];
+    handler(entity, g_SceneFlags);
+}
+
+MATCH void func_801FD4A4(void) {
+    Game_SetScriptActive();
+    func_801BE1B0(1);
+}
+
+MATCH void func_801FD4CC(void) {
+    Game_SetScriptActive();
+    func_801BE1B0(4);
+}
+
+MATCH void func_801FD4F4(void) {
+    Game_SetScriptActive();
+    D_80146874 = 2;
+    D_80146875 = 0;
+}
+
+MATCH void func_801FD528(void) {
+    Game_SetScriptActive();
+    D_80146874   = 3;
+    D_80146875   = 0xA;
+    g_ScriptVars = 0xA;
+}
+
+INCLUDE_ASM(func_801FD568);
+
+INCLUDE_ASM(func_801FD5C0);
+
+INCLUDE_ASM(func_801FD734);
+
+INCLUDE_ASM(func_801FD814);
+
+INCLUDE_ASM(func_801FD95C);
+
+INCLUDE_ASM(func_801FD9B4);
+
+INCLUDE_ASM(func_801FDA0C);
+
+MATCH void func_801FDA74(void) {
+    SYS_SetFlag(g_SceneFlags, 0x19U);
+}
+
+MATCH void func_801FDA9C(void) {
+    Game_SetScriptActive();
+    D_80146874 = 0xA;
+    D_80146875 = 1;
+}
+
+MATCH void func_801FDAD4(void) {
+    *SP_REF(s8*, 0x44) = 0;
+    Game_SetScriptActive();
+    D_80146874 = 0xD;
+    D_80146875 = 5;
+}
+
+INCLUDE_ASM(func_801FDB14);
+
+INCLUDE_ASM(func_801FE00C);
+
+INCLUDE_ASM(func_801FE2B0);
+
+INCLUDE_ASM(func_801FE314);
+
+INCLUDE_ASM(func_801FE360);
+
+MATCH void func_801FE3F8(void) {
+    Party_JoinMember(8);
+}
+
+MATCH void func_801FE418(void) {
+    Party_JoinMember(5);
+}
+
+INCLUDE_ASM(func_801FE438);
+
+INCLUDE_ASM(func_801FE4F0);
+
+INCLUDE_ASM(func_801FE5B0);
+
+MATCH void func_801FE614(void) {
+    func_801C1ABC(5);
+    func_801C1630();
+}
+
+INCLUDE_ASM(func_801FE63C);
+
+INCLUDE_ASM(func_801FE6F4);

@@ -1,0 +1,118 @@
+#include "magic060_00.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+MATCH void func_801EEC34(void) {
+    BattleHandlerTable5 handlers;
+
+    handlers = D_801EEC04;
+    SYS_DISPATCH_TASK(handlers.handlers, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EECA4);
+
+INCLUDE_ASM(func_801EED68);
+
+INCLUDE_ASM(func_801EEE00);
+
+INCLUDE_ASM(func_801EEE84);
+
+INCLUDE_ASM(func_801EEF04);
+
+INCLUDE_ASM(func_801EEF50);
+
+INCLUDE_ASM(func_801EF0B8);
+
+INCLUDE_ASM(func_801EF118);
+
+INCLUDE_ASM(func_801EF174);
+
+INCLUDE_ASM(func_801EF2DC);
+
+INCLUDE_ASM(func_801EF470);
+
+INCLUDE_ASM(func_801EF590);
+
+INCLUDE_ASM(func_801EF76C);
+
+INCLUDE_ASM(func_801EF924);
+
+INCLUDE_ASM(func_801EFB00);
+
+INCLUDE_ASM(func_801EFCE8);
+
+MATCH void func_801EFF44(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+MATCH void func_801EFF88(void) {
+    SYS_DISPATCH_BYTE(D_801F0BBC, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0 && g_SpadWork->unk_02 != 0) {
+        func_801F012C();
+    }
+}
+
+MATCH void func_801F0000(void) {
+    g_SpadWork->unk_09 = 0;
+    Bmagic_NextStep();
+}
+
+INCLUDE_ASM(func_801F0030);
+
+MATCH void func_801F0090(void) {
+    PartyBattler* work;
+
+    work = (PartyBattler*)D_801EB4E0;
+    if (work->unk_0B == 0x83) {
+        g_SpadWork->unk_02++;
+    }
+}
+
+#include "overlays/bmagic/Effect_TickOnTimerZero.h"
+
+INCLUDE_ASM(func_801F012C);
+
+MATCH void func_801F0254(void) {
+    SYS_DISPATCH_BYTE(D_801F0BCC, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0 && g_SpadWork->unk_02 != 0) {
+        func_801F0428();
+    }
+}
+
+INCLUDE_ASM(func_801F02CC);
+
+INCLUDE_ASM(func_801F031C);
+
+MATCH void func_801F037C(void) {
+    PartyBattler* work;
+
+    work = (PartyBattler*)D_801EB4E0;
+    if (work->unk_0B == 0x83) {
+        g_SpadWork->unk_02++;
+    }
+}
+
+MATCH void func_801F03BC(void) {
+    PartyBattler* active;
+
+    g_SpadWork->unk_09 = g_SpadWork->unk_09 - 2;
+    if (g_SpadWork->unk_09 == 0) {
+        active         = BATTLE_ACTIVE_WORK;
+        active->unk_0B = active->unk_0B - 1;
+        func_801E5988();
+    }
+}
+
+INCLUDE_ASM(func_801F0428);
+
+MATCH void func_801F07E8(void) {
+    SYS_DISPATCH_TASK(g_BMagicEffectFuncs + 11, 2, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801F082C);
+
+INCLUDE_ASM(func_801F08B8);
+
+INCLUDE_ASM(func_801F09E0);

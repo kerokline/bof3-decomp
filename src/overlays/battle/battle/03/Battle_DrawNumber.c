@@ -1,0 +1,29 @@
+#include "battle_03.h"
+
+/* renders the formatted capture count as a row of digit sprites,
+ * advancing eight pixels per glyph and skipping blanks.
+ */
+/* func_801D9684 */
+MATCH void Battle_DrawNumber(s16 x, s16 y, u8 palette, u16 value) {
+    u8    i;
+    SPRT* prim;
+
+    i = 0;
+    sprintf((s8*)g_UiFormatBuffer, &D_801D0C78, value);
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 0, GetTPage(0, 0, 960, 0) & HALF_MASK, NULL);
+    GFX_AddPrim(1, 0xC);
+    do {
+        if (g_UiFormatBuffer[i] != ' ') {
+            g_UiFormatBuffer[i] -= '0';
+            prim       = (SPRT*)g_GfxPrimCursor;
+            prim->clut = GetClut(palette * 16, 480);
+            PSX_SET_NEUTRAL_RGB(prim);
+            setXY0(prim, x, y);
+            setUV0(prim, (g_UiFormatBuffer[i] * 8) - 80, 208);
+            setWH(prim, 8, 8);
+            SetSprt(prim);
+            GFX_AddPrim(1, 0x14);
+        }
+        x += 8;
+    } while (g_UiFormatBuffer[++i] != 0);
+}

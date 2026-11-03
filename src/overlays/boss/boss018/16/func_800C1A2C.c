@@ -1,0 +1,19 @@
+#include "boss018_16.h"
+
+MATCH void func_800C1A2C(void) {
+    EnemyBattler* work;
+
+    if (SYS_TestFlag(g_SceneFlags, 0x36) != 0) {
+        g_BattleCurrentEnemy->hp_94 = D_801FD700;
+        g_BattleCurrentEnemy->ap    = D_801FD6FE;
+    } else {
+        SYS_SetFlag(g_SceneFlags, 0x36);
+    }
+    work         = g_BattleCurrentEnemy;
+    work->script = D_800C2C44;
+    work->unk_E4 = func_800C1B18;
+    work->unk_E8 = D_800C2C94;
+    ACTOR_SET_STEP(1);
+    Actor_RequestScript(2);
+    func_8014D978();
+}

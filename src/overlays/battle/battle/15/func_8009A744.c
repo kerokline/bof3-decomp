@@ -1,0 +1,77 @@
+#include "battle_15.h"
+
+extern u8 D_80145F20[];
+
+/* Applies the battle selection: hands the six chosen slots to the sound queue, mirrors the battler work rows
+ * and effect vectors, and resets the effect slots. */
+/* nonmatching unmeasured: tried the register allocation of the table bases: retail holds the row base in s0 and the
+ * slot counter in s1, and the D_800B6F50/D_800B44B0 tables are indexed through at; the pinned form reaches 54.80%
+ * (pure-C best 46.40%) and the residual is a same-size regalloc difference at +0x24. resume: a spelling that keeps the
+ * row base and the slot counter in retail's s0 and s1 without a pin. */
+#ifdef NON_MATCHING
+NON_MATCHING void func_8009A744(void) {
+    u8* slots[6];
+    /* FAKE: the base record pointer and the slot counter take retail's s0 and s1 homes (pure-C best 46.40%). */
+    MATCH_REG(u8*, base, "s0");
+    u8* row;
+    u8* cell;
+    u8  value;
+    /* FAKE: the slot counter takes retail's s1 home (pure-C best 46.40%). */
+    MATCH_REG(u8, i, "s1");
+    u8 j;
+
+    base     = &g_Characters[MEM_PTR(u8, g_CharSlot)[MEM_PTR(u8, PARTY_ORDER_BATTLE)[D_801485C4]]];
+    slots[0] = base + 0xE;
+    slots[1] = base + 0xF;
+    slots[2] = base + 0x10;
+    slots[3] = base + 0x11;
+    slots[4] = base + 0x12;
+    slots[5] = base + 0x13;
+    for (i = 0; i < 6; i++) {
+        value = s_BattleEquipment[i];
+        if (value != 0) {
+            if (value != *slots[i]) {
+                Party_RemoveItem(D_800B44B0[i], value, 1, 0);
+                Party_AddItem(D_800B44B0[i], *slots[i], 1, 0);
+                *slots[i] = s_BattleEquipment[i];
+            }
+        }
+    }
+    Char_RebuildStats(base);
+    if (g_BattlePartyCount != 0) {
+        i = 0;
+        do {
+            cell      = &g_Characters[D_80145FCC[i * BATTLE_PARTY_STRIDE]];
+            row       = D_80145F04 + i * BATTLE_PARTY_STRIDE;
+            row[0x0E] = cell[0x0E];
+            row[0x0F] = cell[0x0F];
+            row[0x10] = cell[0x10];
+            row[0x11] = cell[0x11];
+            row[0x12] = cell[0x12];
+            row[0x13] = cell[0x13];
+            memcpy(&row[0x3C], &cell[0x1C], 0x10);
+            memcpy(&row[0x4C], &cell[0x2C], 0x10);
+            i++;
+        } while ((u8)i < g_BattlePartyCount);
+    }
+    func_800AAA74();
+    j = 0;
+    do {
+        row = D_80145F20 + j * BATTLE_PARTY_STRIDE;
+        if (ACTOR_IN_USE(g_BattlePartyBattlers[j])) {
+            memcpy(&row[0x00], &row[0x20], 0x20);
+        }
+        j++;
+    } while (j < 3);
+    func_800A4458();
+    if (g_BattlePartyCount != 0) {
+        i = 0;
+        do {
+            func_800A9BD8(i);
+            i++;
+        } while ((u8)i < g_BattlePartyCount);
+    }
+}
+#else
+INCLUDE_ASM(func_8009A744);
+#endif

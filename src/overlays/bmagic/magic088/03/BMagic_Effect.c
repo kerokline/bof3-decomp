@@ -1,0 +1,83 @@
+#include "magic088_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+INCLUDE_ASM(func_801EEC20);
+
+INCLUDE_ASM(func_801EECA4);
+
+INCLUDE_ASM(func_801EEEF4);
+
+INCLUDE_ASM(func_801EEFA0);
+
+MATCH void func_801EF070(void) {
+    PartyBattler* work;
+
+    work = g_SpadWork;
+    if (work->unk_0B < 2) {
+        work->step_01++;
+    }
+}
+
+INCLUDE_ASM(func_801EF0A8);
+
+INCLUDE_ASM(func_801EF1AC);
+
+#include "overlays/bmagic/Effect_StartOnZeroTick.h"
+
+INCLUDE_ASM(func_801EF34C);
+
+#include "overlays/bmagic/Effect_SetActorMatrix.h"
+
+MATCH void func_801EF4E0(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+MATCH void func_801EF524(void) {
+    SYS_DISPATCH_BYTE(D_801F0030, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0) {
+        Effect_SetActorMatrix();
+        func_801EF68C();
+        PopMatrix();
+    }
+}
+
+#include "overlays/bmagic/Effect_CountUpAndStep.h"
+
+#include "overlays/bmagic/Effect_StepWhileTickUnderTwo.h"
+
+#include "overlays/bmagic/Effect_TickOnTimerZero.h"
+
+INCLUDE_ASM(func_801EF68C);
+
+MATCH void func_801EF900(void) {
+    SYS_DISPATCH_BYTE(D_801F005C, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0 && g_SpadWork->unk_02 != 0) {
+        Effect_SetActorMatrix();
+        func_801EFAE8();
+        func_801EFB34();
+        PopMatrix();
+    }
+}
+
+#include "overlays/bmagic/Effect_CountDownTimerStep.h"
+
+MATCH void func_801EF9DC(void) {
+    u8 timer;
+
+    timer              = g_SpadWork->unk_09 + 1;
+    g_SpadWork->unk_09 = timer;
+    if (timer == 32) {
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    }
+}
+
+INCLUDE_ASM(func_801EFA2C);
+
+INCLUDE_ASM(func_801EFA94);
+
+INCLUDE_ASM(func_801EFAE8);
+
+INCLUDE_ASM(func_801EFB34);

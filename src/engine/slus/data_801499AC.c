@@ -1,0 +1,25 @@
+#include "slus.h"
+
+const u32 g_UiLocalModeFuncs[21] = {
+    (u32)func_8014EDF0,
+    (u32)func_8014EE18,
+    (u32)func_8014EE40,
+    (u32)func_8014EE68,
+    (u32)func_8014EE90,
+    (u32)func_8014EEB8,
+    (u32)func_8014EEE0,
+    (u32)func_8014EF08,
+    (u32)func_8014EF30,
+    (u32)func_8014EF58,
+    (u32)func_8014EF80,
+    (u32)func_8014F024,
+    (u32)func_8014F16C,
+    (u32)func_8014F1AC,
+    (u32)func_8014F1D4,
+    (u32)func_8014F1FC,
+    (u32)func_8014F224,
+    (u32)func_8014F24C,
+    (u32)func_8014F2F0,
+    (u32)func_8014F438,
+    (u32)func_8014F460,
+};

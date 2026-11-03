@@ -1,0 +1,28 @@
+# Readable names an image links against.
+#
+# Retail keeps the main executable and the base game overlay in RAM while a
+# scene overlay runs, so overlay code names their globals. A readable name
+# resolves against the image that owns its row in `config/symbols.toml`, in this
+# order: the target's own table, then the resident images below, then the owners
+# its `splat.yaml` names. Engine code and tool config stay generic; the resident
+# list is the BoF3 memory map.
+#
+# `visible_to` names the targets that link against the resident image: a target
+# kind (`emi`, `executable`) or one target id (`exe/slus_004_22`). A standalone
+# binary links only its own table.
+schema = "bof3.link/v1"
+
+[[resident]]
+target = "exe/slus_004_22"
+visible_to = ["emi"]
+# The main executable loads at 0x80096800 and is never unloaded. Scene overlays
+# call it; the logo player is a separate binary and does not link against it.
+
+[[resident]]
+target = "emi/etc/game/00"
+visible_to = ["emi", "exe/slus_004_22"]
+# GAME.EMI slot 0, loaded at 0x80195800. Its record tables (items, weapons,
+# armor, accessories, vital items and abilities) start at 0x801C8964, below the
+# 0x801D0C00 scene overlays that read them: battle, shop, start, master menu and
+# the item code. The executable's item-reference dispatch (`Item_GetRecord`)
+# reads the same copies.

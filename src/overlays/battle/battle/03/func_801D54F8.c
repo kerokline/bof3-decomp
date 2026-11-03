@@ -1,0 +1,38 @@
+#include "battle_03.h"
+
+MATCH u8 func_801D54F8(void) {
+    u8 index;
+    u8 count;
+    u8 last_index;
+
+    count      = 0u;
+    last_index = 0u;
+    for (index = 0u; index < BATTLE_PARTY_SLOT_COUNT; index++) {
+        if ((func_801D64C4(index) == 0u) && (HAS_STATUS(g_BattlePartyBattlers[index], 0x800u)) &&
+            (g_BattlePartyBattlers[index].counter_137 == 5u)) {
+            last_index = index;
+            count += 1u;
+            g_BattlePartyBattlers[index].counter_137             = 0u;
+            g_BattlePartyBattlers[index].stats.current_hp        = g_BattlePartyBattlers[index].stats.max_hp;
+            g_BattlePartyBattlers[index].stats.current_ap        = g_BattlePartyBattlers[index].stats.max_ap;
+            g_BattlePartyBattlers[index].stats.current_willpower = g_BattlePartyBattlers[index].stats.willpower;
+            func_800A36F0(index, 0x8FFu);
+        }
+    }
+
+    if (count != 0u) {
+        u32 event_id;
+
+        func_801D9484();
+        event_id = 0x2Cu;
+        if (count == 1u) {
+            Battle_SetTextPartyName(last_index);
+            event_id = 0x2Bu;
+        }
+        event_id = Resource_Resolve(event_id);
+        func_801DE560(2u, 0u, 0u, 0x2Du, event_id);
+        return true;
+    }
+
+    return false;
+}

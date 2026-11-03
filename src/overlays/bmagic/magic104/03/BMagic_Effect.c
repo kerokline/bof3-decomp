@@ -1,0 +1,69 @@
+#include "magic104_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+MATCH void func_801EEC14(void) {
+    MagicTaskFuncs handlers;
+
+    handlers = D_801EEC04;
+    SYS_DISPATCH_TASK(handlers.handlers, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EEC80);
+
+INCLUDE_ASM(func_801EEE7C);
+
+INCLUDE_ASM(func_801EEEC0);
+
+MATCH void func_801EF03C(void) {
+    if (g_SpadWork->unk_0B == 7) {
+        func_800A9820(g_BattleTargetSelector);
+        g_BattleState |= BATTLE_STATE_EFFECT_PLAYING;
+        func_801E5988();
+    }
+}
+
+MATCH void func_801EF09C(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+INCLUDE_ASM(func_801EF0E0);
+
+INCLUDE_ASM(func_801EF178);
+
+INCLUDE_ASM(func_801EF21C);
+
+INCLUDE_ASM(func_801EF27C);
+
+MATCH void func_801EF2F8(void) {
+    PartyBattler* work;
+    PartyBattler* active;
+
+    work         = g_SpadWork;
+    work->unk_0A = work->unk_0A + 1;
+    work         = g_SpadWork;
+    work->unk_09 = work->unk_09 + 1;
+    if (work->unk_09 == 0x18) {
+        active         = BATTLE_ACTIVE_WORK;
+        active->unk_0B = g_SpadWork->unk_0B;
+        func_801E5988();
+    }
+}
+
+INCLUDE_ASM(func_801EF370);
+
+INCLUDE_ASM(func_801EFA54);
+
+INCLUDE_ASM(func_801EFB2C);
+
+INCLUDE_ASM(func_801EFE34);
+
+INCLUDE_ASM(func_801F020C);
+
+INCLUDE_ASM(func_801F02F4);
+
+INCLUDE_ASM(func_801F034C);
+
+INCLUDE_ASM(func_801F03C4);

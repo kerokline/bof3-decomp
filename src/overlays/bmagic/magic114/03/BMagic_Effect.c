@@ -1,0 +1,73 @@
+#include "magic114_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+INCLUDE_ASM(func_801EEC44);
+
+INCLUDE_ASM(func_801EEDA0);
+
+INCLUDE_ASM(func_801EEE84);
+
+INCLUDE_ASM(func_801EEEE4);
+
+INCLUDE_ASM(func_801EEF44);
+
+INCLUDE_ASM(func_801EEFFC);
+
+INCLUDE_ASM(func_801EF060);
+
+#include "overlays/bmagic/Effect_CountDownAndPlay.h"
+
+INCLUDE_ASM(func_801EF128);
+
+INCLUDE_ASM(func_801EF280);
+
+/* Follows BMAGIC_PROJECT_ACTOR_MATRIX (bmagic.h), but the rotation derives from the work byte
+ * at +0x0A masked to 0x1F and a second global. */
+INCLUDE_ASM(func_801EF6A8);
+
+MATCH void func_801EF774(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+MATCH void func_801EF7B8(void) {
+    SYS_DISPATCH_TASK((g_BMagicEffectFuncs + 3), 2, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EF7FC);
+
+INCLUDE_ASM(func_801EF8C0);
+
+INCLUDE_ASM(func_801EFA80);
+
+INCLUDE_ASM(func_801EFDD8);
+
+INCLUDE_ASM(func_801EFE70);
+
+INCLUDE_ASM(func_801EFF1C);
+
+INCLUDE_ASM(func_801EFFB0);
+
+INCLUDE_ASM(func_801F0004);
+
+INCLUDE_ASM(func_801F04D4);
+
+INCLUDE_ASM(func_801F093C);
+
+INCLUDE_ASM(func_801F0D08);
+
+INCLUDE_ASM(func_801F0D6C);
+
+MATCH void func_801F0E4C(void) {
+    if (func_8014DAEC() & BYTE_MASK) {
+        func_801E5988();
+        return;
+    }
+    func_8014D290();
+}
+
+INCLUDE_ASM(func_801F0E90);
+
+INCLUDE_ASM(func_801F0FBC);

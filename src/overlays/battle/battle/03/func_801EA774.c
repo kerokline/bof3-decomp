@@ -1,0 +1,15 @@
+#include "battle_03.h"
+
+MATCH void func_801EA774(void) {
+    MenuPanelTask* panel = g_MenuPanelTaskCurrent;
+    s16            state = (s16)panel->y;
+
+    if (state == -0x16) {
+        u8* gate = &g_BattleEventFlags;
+
+        *gate &= ~D_801EB4DC->unk_01;
+        func_80158E20();
+    } else {
+        panel->y = state - 8;
+    }
+}

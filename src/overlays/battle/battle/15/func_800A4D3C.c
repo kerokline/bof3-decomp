@@ -1,0 +1,89 @@
+#include "battle_15.h"
+
+MATCH void func_800A4D3C(void) {
+    /* FAKE: retail keeps the cursor pair base in a2 for every access; cse folds the +2 word into
+     * g_BattleTargetCursorCol+2. */
+    MATCH_FAKE_PIN(u16*, cursor_words, "a2");
+    u16* padp;
+    u8*  state;
+    u16  pad;
+    s32  input;
+    s16  cursor_col;
+    s16  cursor_row;
+    u16  cursor_total;
+
+    if (D_801485BC != 0x5B) {
+        return;
+    }
+    padp  = &g_InputPressed;
+    input = INPUT_REPEATED(*padp, (PADLup | PADLdown | PADL1 | PADR1));
+    pad   = *padp;
+    if (pad & D_80145AC4) {
+        SND_PlayCue(EMI_CUE_ID(1, 6));
+        state = (u8*)&g_BattleUiState;
+        *state += 1;
+        return;
+    }
+    if (pad & D_80145AC2) {
+        if (func_800A4FD8() & BYTE_MASK) {
+            SND_PlayCue(EMI_CUE_ID(1, 4));
+            g_BattleUiState = 5;
+            return;
+        }
+        SND_PlayCue(EMI_CUE_ID(1, 7));
+    }
+    if (g_InputPressed & PADRleft) {
+        if (g_BattleTargetRows[g_BattleTargetCursorCol + D_801485CA].gate_03 != GAME_NONE) {
+            SND_PlayCue(EMI_CUE_ID(1, 4));
+            g_BattleUiStep  = 6;
+            g_BattleUiState = 0;
+            return;
+        }
+        SND_PlayCue(EMI_CUE_ID(1, 7));
+    }
+    cursor_words = (u16*)&g_BattleTargetCursorCol;
+    /* FAKE: hides the constant base from cse so the row word stays 2(a2). */
+    MATCH_FAKE_OPAQUE(cursor_words);
+    cursor_col   = cursor_words[0];
+    cursor_row   = cursor_words[1];
+    cursor_total = cursor_col + cursor_row;
+
+    if (input & PADLup) {
+        if ((s16)cursor_col + (s16)cursor_row > 0) {
+            if ((s16)cursor_col == 0) {
+                cursor_words[1] = cursor_row - 1;
+            }
+            if ((s16)cursor_col > 0) {
+                cursor_words[0] = cursor_col - 1;
+            }
+        }
+    } else if (input & 4) {
+        if ((s16)cursor_row >= 3) {
+            cursor_words[1] = cursor_row - 3;
+        } else if ((s16)cursor_row == 0) {
+            cursor_words[0] = 0;
+        } else {
+            cursor_words[1] = 0;
+        }
+    } else if (input & PADLdown) {
+        if ((s16)cursor_col + (s16)cursor_row < 5) {
+            if ((s16)cursor_col == 2) {
+                cursor_words[1] = cursor_row + 1;
+            }
+            if ((s16)cursor_col < 2) {
+                cursor_words[0] = cursor_col + 1;
+            }
+        }
+    } else if (input & 8) {
+        if ((s16)cursor_row == 3) {
+            cursor_words[0] = 2;
+        } else if ((s16)cursor_row + (s16)cursor_col + 3 < 4) {
+            cursor_words[1] = cursor_row + 3;
+        } else {
+            cursor_words[1] = 3;
+        }
+    }
+    if (*(s16*)&g_BattleTargetCursorCol + D_801485CA != cursor_total) {
+        SND_PlayCue(EMI_CUE_ID(1, 1));
+    }
+}

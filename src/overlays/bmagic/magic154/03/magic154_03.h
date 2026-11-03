@@ -1,0 +1,10 @@
+#ifndef OVERLAY_BMAGIC_MAGIC154_03_H
+#define OVERLAY_BMAGIC_MAGIC154_03_H
+
+/* The bmagic/magic154/03 overlay. Only this image includes the file. */
+
+#include "overlays/bmagic/bmagic.h"
+
+extern BattleResultRings D_801EEC04;
+
+#endif

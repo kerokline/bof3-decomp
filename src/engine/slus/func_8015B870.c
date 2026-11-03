@@ -1,0 +1,43 @@
+#include "engine/slus/slus.h"
+
+/* returns the game-state word that `kind` selects: the scenario state for kinds 0 and 14, then route,
+ * map-record, flag and counter globals in kind order, the staged scratchpad word at 0x58 for kind 10, overlay words
+ * for 11-13 and 0xFF otherwise.
+ */
+MATCH s32 func_8015B870(u32 kind) {
+    switch (kind & BYTE_MASK) {
+        case 0:
+        case 14:
+            return g_SceneState.sbyte;
+        case 1:
+            return g_GameAreaId;
+        case 2:
+            return *g_SceneFlags;
+        case 3:
+            return g_ScriptVars[0];
+        case 4:
+            return D_80146865;
+        case 5:
+            return D_80146866;
+        case 6:
+            return D_80146867;
+        case 7:
+            /* FAKE: retail reads D_80146874 as RecordKey. */
+            return (*(RecordKey*)&D_80146874).sbyte;
+        case 8:
+            return D_80143F03;
+        case 9:
+            return D_80146871 & 1;
+        case 10:
+            return g_SpadWork->unk_58;
+        case 11:
+            return D_80145F09;
+        case 12:
+            /* FAKE: retail reads g_SceneEventFlags as u32. */
+            return (*(u32*)g_SceneEventFlags);
+        case 13:
+            return 1;
+        default:
+            return 0xFF;
+    }
+}

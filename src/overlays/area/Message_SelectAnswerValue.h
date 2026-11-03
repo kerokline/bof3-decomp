@@ -1,0 +1,20 @@
+/* Reset the message request, then store the value the menu selection picks in
+ * g_ScriptVars. One source for the world area overlays; each member passes its
+ * reset sentinel and two state values. Every change here must verify every
+ * member address. */
+static inline void World_SelectAnswerValue(u16 reset, u8 state0, u8 state1) {
+    u8 value;
+
+    g_MessageRequest = reset;
+    switch (D_801490C7) {
+        case 0:
+            value = state0;
+            break;
+        case 1:
+            value = state1;
+            break;
+        default:
+            return;
+    }
+    g_ScriptVars = value;
+}

@@ -1,0 +1,37 @@
+sha1: e3c94ee01969e242b77482ec8c11e978c3c5d0f3
+symbol_owners:
+  - exe/slus_004_22
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801EEC00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, bin, D_801EEC00]
+      - [0xC, c, func_801EEC0C]
+      - [0x40, c, func_801EEC40]
+      - [0x7C, c, func_801EEC7C]
+      - [0x2B8, c, func_801EEEB8]
+      - [0x310, c, func_801EEF10]
+      - [0x4A8, c, Battle_RunGameOver]
+      - [0x580, c, func_801EF180]
+      - [0x718, c, func_801EF318]
+      - [0x7B4, c, func_801EF3B4]
+      - [0x87C, c, func_801EF47C]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x9F8
+    vram: 0x801EF5F8
+    align: 4
+    subsegments:
+      - [0x9F8, bin, D_801EF5F8]
+      - [0xA0C, bin, D_801EF60C]
+      - [0xA10, bin, D_801EF610]
+      - [0xA14, bin, D_801EF614]
+      - [0xA18, bin, D_801EF618]
+      - [0xA1C, bin, D_801EF61C]
+      - [0xA20, bin, D_801EF620]
+  - [0xA54]

@@ -1,0 +1,33 @@
+#include "battle_15.h"
+
+/* Enemy work halfword pair at +0x84 (stride 0x118, indexed by slot - 3). */
+
+/* doubles the two selected enemy-row halfwords and clamps them to
+ * 0xFFFF; it re-reads the selector before storing the second result.
+ */
+MATCH void func_800A07D0(void) {
+    BattleSelectionContext* ctx;
+    s32                     first_doubled;
+    s32                     second_doubled;
+    u16                     first;
+    u16                     second;
+    u32                     index;
+
+    func_800A3F28();
+    ctx           = (BattleSelectionContext*)&g_BattleTarget;
+    index         = ctx->sel - 3u;
+    first         = D_801EB6B4[index][0];
+    second        = D_801EB6B4[index][1];
+    first_doubled = first * 2;
+    first         = first_doubled;
+    if (first_doubled > 0xFFFF) {
+        first = 0xFFFF;
+    }
+    second_doubled = second * 2;
+    second         = second_doubled;
+    if (second_doubled > 0xFFFF) {
+        second = 0xFFFF;
+    }
+    D_801EB6B4[index][0]         = first;
+    D_801EB6B4[ctx->sel - 3u][1] = second;
+}

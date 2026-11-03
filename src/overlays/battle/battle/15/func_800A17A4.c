@@ -1,0 +1,29 @@
+#include "battle_15.h"
+
+/* gcc 2.7.2 treats a union member as an aggregate access, so the slot byte
+ * is reloaded after each row store, as in retail. */
+#define ACTIVE_BATTLER (((BattleSelectionContext*)&g_BattleTarget)->sel)
+
+/* clears the active battler's eight status bytes and its status flag bits, then
+ * passes that battler to func_800A9BD8.
+ */
+MATCH void func_800A17A4(void) {
+    u8 i;
+
+    func_800A3F28();
+    if (BATTLER_IS_PLAYER(ACTIVE_BATTLER)) {
+        for (i = 0; i < 8; i++) {
+            D_80145FB4[ACTIVE_BATTLER].pad_08[i] = 0;
+        }
+        D_80145FB4[ACTIVE_BATTLER].flags_00 &= ~(COMBATANT_FLAG_REPRISAL | COMBATANT_FLAG_DAMAGE_IMMUNE);
+        D_80145FB8[ACTIVE_BATTLER].flags &= 0xFFFBC43F;
+        func_800A9BD8(ACTIVE_BATTLER);
+    } else {
+        for (i = 0; i < 8; i++) {
+            D_801EB730[ACTIVE_BATTLER - 3].pad_08[i] = 0;
+        }
+        D_801EB730[ACTIVE_BATTLER - 3].flags_00 &= ~(COMBATANT_FLAG_REPRISAL | COMBATANT_FLAG_DAMAGE_IMMUNE);
+        D_801EB730[ACTIVE_BATTLER - 3].flags_04 &= 0xFFFBC43F;
+        func_800A9BD8(ACTIVE_BATTLER);
+    }
+}

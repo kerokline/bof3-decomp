@@ -1,0 +1,16 @@
+#include "engine/slus/slus.h"
+
+/*
+ * arms the current callback slot with a countdown and forces one
+ * scheduler switch through thread id `0xFF000000`.
+ */
+
+/* func_8014B87C */
+MATCH void CallbackWait(u16 countdown) {
+    CallbackSlot* slot;
+
+    slot            = g_CallbackSlot;
+    slot->countdown = countdown;
+    slot->state     = CALLBACK_SLOT_YIELD;
+    ChangeTh(CALLBACK_FORCE_SWITCH);
+}

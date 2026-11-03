@@ -1,0 +1,65 @@
+#include "magic020_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+MATCH void func_801EEC48(void) {
+    BattleHandlerTable6 handlers = D_801EEC04;
+
+    SYS_DISPATCH_TASK(handlers.handlers, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EECC0);
+
+INCLUDE_ASM(func_801EF0F8);
+
+INCLUDE_ASM(func_801EF234);
+
+INCLUDE_ASM(func_801EF2A8);
+
+#include "shared/Effect_StartPlaying.h"
+
+#include "shared/Effect_PlayOnce.h"
+
+MATCH void func_801EF398(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+INCLUDE_ASM(func_801EF3DC);
+
+INCLUDE_ASM(func_801EF498);
+
+INCLUDE_ASM(func_801EF518);
+
+INCLUDE_ASM(func_801EF5A4);
+
+INCLUDE_ASM(func_801EF608);
+
+INCLUDE_ASM(func_801EF678);
+
+INCLUDE_ASM(func_801EF720);
+
+INCLUDE_ASM(func_801EF7D0);
+
+MATCH void func_801EF874(void) {
+    func_801E5988();
+}
+
+INCLUDE_ASM(func_801EF894);
+
+INCLUDE_ASM(func_801EF928);
+
+INCLUDE_ASM(func_801EFA70);
+
+MATCH void func_801EFAD4(void) {
+    func_801E5988();
+}
+
+INCLUDE_ASM(func_801EFAF4);
+
+INCLUDE_ASM(func_801EFBA0);
+
+INCLUDE_ASM(func_801EFD10);
+
+INCLUDE_ASM(func_801EFD88);

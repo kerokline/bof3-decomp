@@ -1,0 +1,98 @@
+sha1: 9194f952f747f67935b44048690ee954d50f4daa
+segments:
+  - name: data
+    type: code
+    start: 0x0
+    vram: 0x801EEC00
+    align: 4
+    section_order: [.data, .rodata]
+    subsegments:
+      - [0x0, .data, D_801EEC00]
+      - [0xC, .rodata, func_801F08D8]
+  # Placement: a source shared with the earlier segment must claim its sections first.
+  - name: main
+    type: code
+    start: 0x44
+    vram: 0x801EEC44
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x44, .data, D_801EEC44_Data]
+      - [0xA4, c, Fairy_VillageInit]
+      - [0x1F8, c, Fairy_VillageQueueRooms]
+      - [0x2F0, c, func_801EEEF0]
+      - [0x510, c, func_801EF110]
+      - [0x614, c, func_801EF214]
+      - [0x798, c, func_801EF398]
+      - [0x92C, c, func_801EF52C]
+      - [0xB84, c, func_801EF784]
+      - [0xE50, c, func_801EFA50]
+      - [0x12A8, c, func_801EFEA8]
+      - [0x14D4, c, Fairy_JoinVillage]
+      - [0x15F4, c, func_801F01F4]
+      - [0x16E4, c, Fairy_VillageCountFairies]
+      - [0x1720, c, func_801F0320]
+      - [0x17D0, c, func_801F03D0]
+      - [0x1934, c, Fairy_VillageBuildJobs]
+      - [0x1B18, c, func_801F0718]
+      - [0x1CD8, c, func_801F08D8]
+  # Placement: .text resumes after another section in the retail bytes; one segment would group both .text runs.
+  - name: text
+    type: code
+    start: 0x1FF4
+    vram: 0x801F0BF4
+    align: 4
+    section_order: [.text, .data, .rodata, .bss]
+    subsegments:
+      - [0x1FF4, c, func_801F0BF4]
+      - [0x206C, c, func_801F0C6C]
+      - [0x213C, c, func_801F0D3C]
+      - [0x221C, c, func_801F0E1C]
+      - [0x22C8, c, func_801F0EC8]
+      - [0x2308, c, func_801F0F08]
+      - [0x23BC, c, func_801F0FBC]
+      - [0x2464, c, func_801F1064]
+      - [0x2510, c, func_801F1110]
+      - [0x2604, c, func_801F1204]
+      - [0x2654, c, func_801F1254]
+      - [0x2694, c, func_801F1294]
+      - [0x26C8, c, func_801F12C8]
+      - [0x2718, c, Fairy_ShowPlayRecordMessage]
+      - [0x27B8, c, func_801F13B8]
+      - [0x2844, c, func_801F1444]
+      - [0x2884, c, func_801F1484]
+      - [0x28C4, c, func_801F14C4]
+      - [0x28F8, c, func_801F14F8]
+      - [0x2938, c, func_801F1538]
+      - [0x2978, c, func_801F1578]
+      - [0x29B8, c, func_801F15B8]
+      - [0x29F8, c, func_801F15F8]
+      - [0x2A38, c, func_801F1638]
+      - [0x2A84, c, func_801F1684]
+      - [0x2ABC, c, func_801F16BC]
+      - [0x2AF8, c, func_801F16F8]
+      - [0x2B70, c, func_801F1770]
+      - [0x2BA4, c, func_801F17A4]
+      - [0x2C24, c, func_801F1824]
+      - [0x2C74, c, func_801F1874]
+      - [0x2CBC, c, func_801F18BC]
+      - [0x2CF8, c, Fairy_GrantGift]
+      - [0x2EFC, c, func_801F1AFC]
+      - [0x2F30, c, func_801F1B30]
+      - [0x2F8C, c, func_801F1B8C]
+      - [0x2FC8, c, Fairy_RollExploreReward]
+      - [0x3274, c, func_801F1E74]
+      - [0x32B0, c, func_801F1EB0]
+      - [0x3310, c, func_801F1F10]
+      - [0x334C, c, func_801F1F4C]
+      - [0x339C, c, func_801F1F9C]
+      - [0x33D8, c, func_801F1FD8]
+      - [0x3420, c, func_801F2020]
+      - [0x345C, c, func_801F205C]
+      - [0x362C, c, func_801F222C]
+      - [0x368C, c, func_801F228C]
+      - [0x36C8, c, func_801F22C8]
+      - [0x375C, c, func_801F235C]
+      - [0x37A4, c, func_801F23A4]
+      - [0x38FC, .data, D_801F24FC_Data]
+  - [0x3D50]

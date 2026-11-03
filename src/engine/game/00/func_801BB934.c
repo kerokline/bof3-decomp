@@ -1,0 +1,16 @@
+#include "game_00.h"
+
+MATCH bool func_801BB934(s32 first_index, s32 second_index, s8 route_value, s32 expected_value) {
+    s32 expected;
+
+    expected = expected_value & BYTE_MASK;
+    if (((u8*)&D_1F800000)[first_index & BYTE_MASK] == expected) {
+        if (((u8*)&D_1F800000)[second_index & BYTE_MASK] == expected) {
+            return true;
+        }
+        FIELD(s8, SP_REF(void*, 0x44u), 8) = route_value;
+    } else if (((u8*)&D_1F800000)[second_index & BYTE_MASK] == expected) {
+        FIELD(s8, SP_REF(void*, 0x44u), 8) = (s8)(route_value ^ 4);
+    }
+    return false;
+}

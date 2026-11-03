@@ -1,0 +1,58 @@
+sha1: 0599f28de0ba49b4369f007e292038e314ff087d
+symbol_owners:
+  - exe/slus_004_22
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801EEC00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, bin, D_801EEC00]
+      - [0x60, c, func_801EEC60]
+      - [0x94, c, func_801EEC94]
+      - [0xD0, c, func_801EECD0]
+      - [0x1A8, c, func_801EEDA8]
+      - [0x24C, c, func_801EEE4C]
+      - [0x2E0, c, func_801EEEE0]
+      - [0x314, c, func_801EEF14]
+      - [0x3CC, c, func_801EEFCC]
+      - [0x418, c, func_801EF018]
+      - [0x454, c, func_801EF054]
+      - [0x540, c, func_801EF140]
+      - [0x70C, c, func_801EF30C]
+      - [0x748, c, func_801EF348]
+      - [0xAC0, c, func_801EF6C0]
+      - [0xB7C, c, func_801EF77C]
+      - [0xBB4, c, func_801EF7B4]
+      - [0xC70, c, Battle_GrantQueuedItems]
+      - [0xD28, c, func_801EF928]
+      - [0x1198, c, func_801EFD98]
+      - [0x1210, c, func_801EFE10]
+      - [0x125C, c, func_801EFE5C]
+      - [0x179C, c, func_801F039C]
+      - [0x1A50, c, func_801F0650]
+      - [0x1B68, c, func_801F0768]
+      - [0x1BC0, c, func_801F07C0]
+      - [0x1BE0, c, func_801F07E0]
+      - [0x1D7C, c, func_801F097C]
+      - [0x1DD4, c, func_801F09D4]
+      - [0x1DF4, c, func_801F09F4]
+      - [0x1E74, c, func_801F0A74]
+      - [0x1FB0, c, func_801F0BB0]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x2098
+    vram: 0x801F0C98
+    align: 4
+    subsegments:
+      - [0x2098, bin, D_801F0C98]
+      - [0x20A4, bin, D_801F0CA4]
+      - [0x20B8, bin, D_801F0CB8]
+      - [0x20C0, bin, D_801F0CC0]
+      - [0x20D0, bin, D_801F0CD0]
+      - [0x20D4, bin, D_801F0CD4]
+  - [0x20E0, bin, D_801F0CE0]
+  - [0x20E1]

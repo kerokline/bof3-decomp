@@ -1,0 +1,38 @@
+#include "battle_03.h"
+
+MATCH u8 func_801D57AC(void) {
+    u8 index;
+    u8 count;
+    u8 last_index;
+
+    count      = 0u;
+    last_index = 0u;
+    for (index = 3u; index < 11u; index++) {
+        if ((func_801D64C4(index) == 0u) && ((ENEMY_COMBATANT(index).status_82 & STATUS_SLEEPING) != 0u)) {
+            if (func_801DDCB4(index) != 0u) {
+                last_index                    = index;
+                ENEMY_COMBATANT(index).unk_FD = 0u;
+                ENEMY_COMBATANT(index).status_82 &= 0xFFBFu;
+                count += 1u;
+            } else {
+                ENEMY_COMBATANT(index).unk_FD += 1u;
+            }
+        }
+    }
+
+    if (count != 0u) {
+        u32 event_id;
+
+        func_801D9484();
+        event_id = 0x27u;
+        if (count == 1u) {
+            Battle_SetTextEnemyName(last_index);
+            event_id = 0x25u;
+        }
+        event_id = Resource_Resolve(event_id);
+        func_801DE560(2u, 0u, 0u, 0x2Du, event_id);
+        return true;
+    }
+
+    return false;
+}

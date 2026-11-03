@@ -1,0 +1,21 @@
+#ifndef OVERLAY_WORLD04_AREA172_13_H
+#define OVERLAY_WORLD04_AREA172_13_H
+
+/* The world04/area172/13 overlay: one file per split function
+ * and its data. Only this image includes the file. */
+
+#include "overlays/area/world04.h"
+#include "work/area_spad.h"
+
+/* The scratchpad cell holding this mode's work pointer. */
+
+/* The payload's first words: the per-state handler pointers. */
+extern u8 D_801F507C[];
+
+/* The overlay's flag word. */
+
+extern void Area_SetCellCode(s16 column, s16 row, u8 code);
+extern void func_801F2DF4(s32 arg0);
+void        func_801F4E8C(s32 x, s32 y);
+
+#endif

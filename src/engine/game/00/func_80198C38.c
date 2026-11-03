@@ -1,0 +1,12 @@
+#include "game_00.h"
+
+MATCH void func_80198C38(u8 wait_steps) {
+    do {
+        CallbackWait(1);
+        if (WINDOW_EFFECT_IDLE() && wait_steps == 0) {
+            CallbackWait(1);
+            break;
+        }
+        func_80199368();
+    } while (WINDOW_EFFECT_BUSY());
+}

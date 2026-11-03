@@ -1,0 +1,14 @@
+#include "area189_13.h"
+
+MATCH void func_801F53E4(void) {
+    Actor* work;
+
+    g_GameState->mode_12B.u8_value = 1;
+    work                           = g_SpadWork;
+    if (work->unk_09 == 0) {
+        func_801F5600();
+    } else {
+        work->unk_09 = work->unk_09 - 1;
+        func_801F559C();
+    }
+}

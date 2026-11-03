@@ -1,0 +1,52 @@
+sha1: 502a3ad37f82b8bc1359c76a5d83ebe6476c27e1
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0x38, c, Fish_LocationMessage]
+      - [0x7C, c, func_801F2C7C]
+      - [0xE0, c, func_801F2CE0]
+      - [0x1B4, c, func_801F2DB4]
+      - [0x210, c, func_801F2E10]
+      - [0x440, c, func_801F3040]
+      - [0x7E0, c, func_801F33E0]
+      - [0x824, c, func_801F3424]
+      - [0x9F8, c, Actor_AdvanceWhenPartyNear]
+      - [0xB38, c, Actor_SlideScreenX]
+      - [0xB94, c, Actor_AdvanceWhenPartyAway]
+      - [0xCA4, c, func_801F38A4]
+      - [0xD14, c, Area_Update]
+      - [0x116C, c, func_801F3D6C]
+      - [0x11B0, c, func_801F3DB0]
+      - [0x1218, c, func_801F3E18]
+      - [0x1354, c, func_801F3F54]
+      - [0x13BC, c, func_801F3FBC]
+      - [0x14D8, c, func_801F40D8]
+      - [0x1558, c, func_801F4158]
+      - [0x18B0, c, func_801F44B0]
+      - [0x18F4, c, func_801F44F4]
+      - [0x1A34, c, func_801F4634]
+      - [0x1AF8, c, func_801F46F8]
+      - [0x1B64, c, func_801F4764]
+      - [0x1C08, c, Message_ClearRequest]
+      - [0x1C48, c, func_801F4848]
+      - [0x1CB4, c, func_801F48B4]
+      - [0x1D20, c, func_801F4920]
+      - [0x1D80, c, func_801F4980]
+      - [0x1DD4, c, func_801F49D4]
+      - [0x1E0C, c, func_801F4A0C]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x1F2C
+    vram: 0x801F4B2C
+    align: 1
+    subalign: 1
+    subsegments:
+      - [0x1F2C, .data, D_801F4B2C]
+  - [0x239E]

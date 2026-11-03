@@ -1,0 +1,20 @@
+#include "battle_15.h"
+
+MATCH u8 func_800AB68C(u8 excluded_slot) {
+    u8  choices[8];
+    u8  count;
+    u8  slot;
+    s32 random_value;
+
+    count = 0u;
+    for (slot = 0u; slot < BATTLE_PARTY_SLOT_COUNT; slot++) {
+        if ((Battle_SlotIsBlocked(slot) == 0u) && (excluded_slot != slot)) {
+            choices[count] = slot;
+            count += 1u;
+        }
+    }
+
+    random_value = rand();
+
+    return choices[random_value % count];
+}

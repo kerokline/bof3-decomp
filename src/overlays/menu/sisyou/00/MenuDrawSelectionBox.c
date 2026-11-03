@@ -1,0 +1,56 @@
+#include "sisyou_00.h"
+
+MATCH void MenuDrawSelectionBox(s32 x, s32 y, s32 width, s32 height, u8 color, u8 mask) {
+    LINE_F3* line3;
+    LINE_F4* line4;
+    u8       rgb[3];
+    u32      shade;
+    u8       bit;
+    u8       i;
+    s32      x_corner;
+    s32      y_corner;
+    s32      y_bottom;
+
+    if (color != 0) {
+        shade = (((g_FrameCount & 8) ? (g_FrameCount & 6) : (~g_FrameCount & 6)) << 5) | 0x3F;
+    } else {
+        shade = 0xFF;
+    }
+    bit = 1;
+    for (i = 0; i < BATTLE_PARTY_SLOT_COUNT; i++) {
+        if (mask & bit) {
+            rgb[i] = shade;
+        } else {
+            rgb[i] = 0;
+        }
+        bit <<= 1;
+    }
+
+    line3 = (LINE_F3*)g_GfxPrimCursor;
+    SetLineF3(line3);
+    x_corner  = x + 4;
+    y_bottom  = y + height - 1;
+    y_corner  = y + 4;
+    line3->x0 = x_corner;
+    line3->y0 = y;
+    line3->x1 = x;
+    line3->y1 = y_corner;
+    line3->x2 = x;
+    line3->y2 = y_bottom;
+    setRGB0(line3, rgb[2], rgb[1], rgb[0]);
+    GFX_AddPrim(1, 0x18);
+
+    line4 = (LINE_F4*)g_GfxPrimCursor;
+    SetLineF4(line4);
+    /* DIAG(1): the original stores the quad corners x0,y0,x3,y3,y1,y2,x2,x1;
+     * the scheduler preserves statement order here, so spell that order. */
+    line4->x0 = x_corner;
+    line4->y0 = y;
+    line4->x3 = x;
+    line4->y3 = y_bottom;
+    line4->y1 = y;
+    line4->y2 = y_bottom;
+    line4->x1 = (line4->x2 = x + width - 1);
+    setRGB0(line4, rgb[2], rgb[1], rgb[0]);
+    GFX_AddPrim(1, 0x1C);
+}

@@ -1,0 +1,42 @@
+#include "game_00.h"
+
+MATCH s32 func_801C7498(s32 from_x, s32 from_y, s32 to_x, s32 to_y, u8 reach_x, u8 reach_y) {
+    s32 combined_limit;
+    s32 half_extent_x;
+    s32 delta_x;
+    s32 half_extent_y;
+    s32 combined_limit_y;
+    s32 delta_y;
+
+    half_extent_x  = (reach_x + 1) << 0xF;
+    half_extent_y  = (reach_y + 1) << 0xF;
+    delta_x        = from_x - to_x;
+    combined_limit = half_extent_x + half_extent_y;
+    if (delta_x > 0) {
+        if (delta_x < combined_limit) {
+            goto check_y; /* x axis within reach, test y next */
+        }
+        goto outside_reach; /* the x axis is out of reach */
+    }
+    if ((to_x - from_x) < combined_limit) {
+        goto check_y; /* the x axis is within reach, test y next */
+    }
+    goto outside_reach; /* the x axis is out of reach */
+check_y:
+    delta_y          = from_y - to_y;
+    combined_limit_y = half_extent_x + half_extent_y;
+    if (delta_y > 0) {
+        if (delta_y < combined_limit_y) {
+            goto within_reach; /* both axes within reach */
+        }
+        goto outside_reach; /* the y axis is out of reach */
+    }
+    if ((to_y - from_y) < combined_limit_y) {
+        goto within_reach; /* both axes are within reach */
+    }
+    goto outside_reach; /* the y axis is out of reach */
+within_reach:
+    return 0;
+outside_reach:
+    return 1;
+}

@@ -1,0 +1,39 @@
+#include "battle_15.h"
+
+MATCH void func_80097844(void) {
+    u16 held;
+    s32 trigger;
+    u8* message;
+    u8* entry;
+
+    held = g_InputPressed;
+    if ((held & D_80145AC4) != 0u) {
+        g_BattleUiState = 4u;
+        return;
+    }
+    if ((held & D_80145AC2) != 0u) {
+        g_BattleUiState = 3u;
+        return;
+    }
+    /* FAKE: plain read of the message-slot selector: the volatile qualifier
+     * makes the scheduler fill the branch delay slot and shifts the call. */
+    message = (u8*)&D_80148656;
+    trigger = INPUT_REPEATED(held, INPUT_DIRECTIONAL);
+    entry   = Party_GetAbilities(message[0], D_8014857B, 1);
+    if ((D_801CA718[entry[D_8014857C] * 0x14] & 0x80u) != 0u && (trigger & (PADLup | PADLdown)) != 0) {
+        D_801EB4D8[0] = Battle_FindSelectableSlotForward(0);
+        *(u8*)&g_BattleUiState += 1u;
+        SND_PlayCue(EMI_CUE_ID(1, 1));
+        return;
+    }
+    if ((trigger & PADLright) != 0) {
+        D_801EB4D8[0] = Battle_FindSelectableSlotForward(
+            func_801DD7D8(g_BattleEnemyCount + 2, 3, ((s8*)D_801EB4D8)[0] + 1) & BYTE_MASK);
+        SND_PlayCue(EMI_CUE_ID(1, 1));
+    }
+    if ((trigger & PADLleft) != 0) {
+        D_801EB4D8[0] = Battle_FindSelectableSlotBackward(
+            func_801DD7D8(g_BattleEnemyCount + 2, 3, ((s8*)D_801EB4D8)[0] - 1) & BYTE_MASK);
+        SND_PlayCue(EMI_CUE_ID(1, 1));
+    }
+}

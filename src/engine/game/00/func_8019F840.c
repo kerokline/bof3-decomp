@@ -1,0 +1,43 @@
+#include "game_00.h"
+
+/* The battle slot byte views are volatile so the selection loop keeps the
+ * per-byte symbol addressing instead of a strength-reduced pointer. */
+
+MATCH void func_8019F840(void) {
+    s32 i;
+    s32 offset;
+    /* FAKE: unused frame, 8 bytes. */
+    STACK_PADS(u8, 8);
+
+    if (!(g_AreaWalkFlags & AREA_WALK_STEP_ACTIVE)) {
+        if (LOHU(g_GameAreaId) == 0x31) {
+            func_801F2DCC();
+        } else if (LOHU(g_GameAreaId) == 0x75) {
+            func_801F41D8();
+        } else if (LOHU(g_GameAreaId) == 0x76) {
+            func_801F4CD0();
+        } else if (LOHU(g_GameAreaId) == 0xA9) {
+            func_801F3628();
+        } else if (LOHU(g_GameAreaId) == 0xAB) {
+            func_801F3868();
+        }
+        if ((s16)g_PartySize > 0) {
+            i      = 0;
+            offset = 0;
+            do {
+                if ((g_SpadWork->unk_0B >> i) & 1) {
+                    D_80145E91[offset] = 1;
+                    if (i != 0) {
+                        D_80145E92[offset] = 1;
+                    } else {
+                        D_80145E92[offset] = 2;
+                    }
+                    D_80145E93[offset] = 0;
+                    D_80145E94[offset] = 0;
+                }
+                i++;
+                offset = i * BATTLE_PARTY_STRIDE;
+            } while (i < (s32)g_PartySize);
+        }
+    }
+}

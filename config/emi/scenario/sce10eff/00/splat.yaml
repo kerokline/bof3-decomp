@@ -1,0 +1,23 @@
+sha1: dd7b26475dc7e5968b9f4e4b4011167a3e664b3e
+segments:
+  - name: data
+    type: code
+    start: 0x0
+    vram: 0x801D0C00
+    align: 4
+    subsegments:
+      - [0x0, .data, D_801D0C00]
+      - [0x4, .data, 10]
+  # Placement: a source shared with the earlier segment must claim its sections first.
+  - name: main
+    type: code
+    start: 0x10
+    vram: 0x801D0C10
+    align: 4
+    section_order: [.text, .data, .rodata, .bss]
+    subsegments:
+      - [0x10, c, 10]
+      - [0x12FC, c, 12FC]
+      - [0x1350, c, 1350]
+      - [0x1B08, .data, 1350]
+  - [0x1B48]

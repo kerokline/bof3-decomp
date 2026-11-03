@@ -1,0 +1,19 @@
+#include "commu00_00.h"
+
+/* FAKE: holds the state cell address in a local pointer so it stays in a
+ * callee-saved register across the request call, as the original does. */
+MATCH void func_801F16F8(void) {
+    u8* state;
+    s8* variant;
+
+    state = &g_GameStateIndex;
+    if (*state != 2) {
+        if (g_MessageRequest == 0xF9) {
+            variant = &D_801448EC;
+            *variant += 1;
+        } else {
+            Message_StartAreaMessage(0xF8);
+            *state = 2;
+        }
+    }
+}

@@ -1,0 +1,322 @@
+#include "shop_00.h"
+
+void (*D_801E5DB4[3])() = {
+    func_801E2800,
+    func_801E2948,
+    func_801E2988,
+};
+
+Callback D_801E5DC0[3] = {
+    func_801E2800,
+    func_801E2A30,
+    func_801E2A70,
+};
+
+Callback D_801E5DCC[3] = {
+    func_801E2800,
+    func_801E2B14,
+    func_801E2B54,
+};
+
+u16 D_801E5DD8[2] = { 0x0070, 0x0000 };
+
+Callback D_801E5DDC[5] = {
+    func_801E2800,
+    func_801E2C9C,
+    func_801E2CDC,
+    func_801E2D1C,
+    func_801E2D5C,
+};
+
+Callback D_801E5DF0[3] = {
+    func_801E2800,
+    func_801E2E30,
+    func_801E2E70,
+};
+
+Callback D_801E5DFC[4] = {
+    func_801E2800,
+    func_801E31C4,
+    func_801E3204,
+    func_801E3244,
+};
+
+u8 D_801E5E0C[0x10] = {
+    0x06, 0x08, 0x0A, 0x09, 0x0B, 0x0C, 0x06, 0x06, 0x06, 0x06, 0x14, 0x15,
+    0x16, 0x00, 0x00, 0x00,
+};
+
+u8 D_801E5E1C[0x10] = {
+    0x06, 0x08, 0x0A, 0x09, 0x0B, 0x0C, 0x06, 0x06, 0x06, 0x06, 0x14, 0x15,
+    0x16, 0x00, 0x00, 0x00,
+};
+
+Callback D_801E5E2C[3] = {
+    func_801E2800,
+    func_801E3774,
+    func_801E37B4,
+};
+
+u8 D_801E5E38[0x10] = {
+    0x06, 0x08, 0x0A, 0x09, 0x0B, 0x0C, 0x06, 0x06, 0x06, 0x06, 0x14, 0x15,
+    0x16, 0x00, 0x00, 0x00,
+};
+
+Callback D_801E5E48[5] = {
+    func_801E2800,
+    func_801E3BF8,
+    func_801E3C38,
+    func_801E3C78,
+    func_801E3CB8,
+};
+
+Callback D_801E5E5C[5] = {
+    func_801E2800,
+    func_801E3D4C,
+    func_801E3D8C,
+    func_801E3DCC,
+    func_801E3E0C,
+};
+
+Callback D_801E5E70[3] = {
+    func_801E2800,
+    func_801E3EB4,
+    func_801E3EF4,
+};
+
+u8 D_801E5E7C[0x24] = {
+    0x00, 0x00, 0x0B, 0x01, 0x00, 0x0C, 0x04, 0x00, 0x01, 0x05, 0x00, 0x01,
+    0x06, 0x00, 0x01, 0x07, 0x00, 0x01, 0x08, 0x00, 0x01, 0x09, 0x00, 0x01,
+    0x0A, 0x00, 0x09, 0x0C, 0x00, 0x0A, 0x0D, 0x00, 0x03, 0x00, 0x00, 0xFF,
+};
+
+u8 D_801E5EA0[0xC] = {
+    0x00, 0x00, 0x04, 0x0D, 0x00, 0x08, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00,
+};
+
+u8 D_801E5EAC[0x30] = {
+    0x00, 0x00, 0x05, 0x01, 0x00, 0x06, 0x02, 0x00, 0x06, 0x03, 0x00, 0x06,
+    0x04, 0x00, 0x06, 0x05, 0x00, 0x06, 0x06, 0x00, 0x06, 0x07, 0x00, 0x06,
+    0x08, 0x00, 0x06, 0x09, 0x00, 0x06, 0x0A, 0x00, 0x06, 0x0B, 0x00, 0x06,
+    0x0C, 0x00, 0x06, 0x0D, 0x00, 0x07, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00,
+};
+
+char D_801E5EDC[] = "SORT";
+
+char D_801E5EE4[] = "LOOK";
+
+char D_801E5EEC[] = "High" T_SP "AP";
+
+char D_801E5EF4[] = "Low" T_SP "AP";
+
+u32 D_801E5EFC[4] = {
+    (u32)&D_801E5EDC[0],
+    (u32)&D_801E5EE4[0],
+    (u32)&D_801E5EEC[0],
+    (u32)&D_801E5EF4[0],
+};
+
+static struct {
+    u8 count;
+    u8 indices[7];
+} __attribute__((packed)) sShopLabelData = {
+    3,
+    { 1, 2, 3, 0, 0, 0, 0 },
+};
+
+Callback D_801E5F14[4] = {
+    func_801E2800,
+    func_801E4278,
+    func_801E42B8,
+    func_801E42F8,
+};
+
+Callback D_801E5F24[3] = {
+    func_801E2800,
+    func_801E438C,
+    func_801E43CC,
+};
+
+Callback D_801E5F30[3] = {
+    func_801E2800,
+    func_801E4460,
+    func_801E44A0,
+};
+
+Callback D_801E5F3C[3] = {
+    func_801E2800,
+    func_801E4540,
+    func_801E4580,
+};
+
+u32 D_801E5F48[3] = {
+    0x010B0000, 0x00021400, 0xFF00000C,
+};
+
+u32 D_801E5F54[3] = {
+    0x0C09000A, 0x000D0A00, 0xFF000015,
+};
+
+char D_801E5F60[] = "MSTR";
+
+u32 D_801E5F68 = 0x00000084;
+
+u8 D_801E5F6C[0x8] = {
+    0xAA, 0x27, 0x03, 0x14, 0xFF, 0x00, 0x00, 0x00,
+};
+
+u8 D_801E5F74[0x8] = {
+    0xC4, 0xA3, 0xAC, 0xCB, 0xFF, 0x00, 0x00, 0x00,
+};
+
+u8 D_801E5F7C[0x4] = {
+    0x3A, 0x24, 0xB9, 0xFF,
+};
+
+u8 D_801E5F80[0x4] = {
+    0xA6, 0xAD, 0xD8, 0xFF,
+};
+
+u8 D_801E5F84[0x4] = {
+    0x0F, 0x1A, 0x99, 0xFF,
+};
+
+u8 D_801E5F88[0x4] = {
+    0x0A, 0xA4, 0xA5, 0xFF,
+};
+
+u8 D_801E5F8C[0x4] = {
+    0x8C, 0x29, 0x3F, 0xFF,
+};
+
+u8 D_801E5F90[0x4] = {
+    0xB3, 0xCF, 0xA9, 0xFF,
+};
+
+u8 D_801E5F94[0x4] = {
+    0xBC, 0x06, 0x28, 0xFF,
+};
+
+u8 D_801E5F98[0x8] = {
+    0xC3, 0xC6, 0xC9, 0xCE, 0x3E, 0xFF, 0x00, 0x00,
+};
+
+u8 D_801E5FA0[0x4] = {
+    0x9A, 0x9D, 0xFF, 0x00,
+};
+
+u8 D_801E5FA4[0x4] = {
+    0xFF, 0x00, 0x00, 0x00,
+};
+
+u8 D_801E5FA8[0x4] = {
+    0xFF, 0x00, 0x00, 0x00,
+};
+
+u8 D_801E5FAC[0x4] = {
+    0xFF, 0x00, 0x00, 0x00,
+};
+
+u8 D_801E5FB0[0x4] = {
+    0xFF, 0x00, 0x00, 0x00,
+};
+
+u8 D_801E5FB4[0x8] = {
+    0x2A, 0x9C, 0x2B, 0x13, 0xFF, 0x00, 0x00, 0x00,
+};
+
+u8 D_801E5FBC[0x4] = {
+    0x9E, 0xAB, 0x26, 0xFF,
+};
+
+u8 *D_801E5FC0[17] = {
+    D_801E5F6C,
+    D_801E5F74,
+    D_801E5F7C,
+    D_801E5F80,
+    D_801E5F84,
+    D_801E5F88,
+    D_801E5F8C,
+    D_801E5F90,
+    D_801E5F94,
+    D_801E5F98,
+    D_801E5FA0,
+    D_801E5FA4,
+    D_801E5FA8,
+    D_801E5FAC,
+    D_801E5FB0,
+    D_801E5FB4,
+    D_801E5FBC,
+};
+
+u32 unk_801E6004[2] = { 0xA4120A13, 0x00000000 };
+
+u8 D_801E600C[0x30] = {
+    0x78, 0x00, 0xB0, 0x02, 0x28, 0x30, 0xF0, 0x02, 0x50, 0x00, 0x20, 0x02,
+    0xA0, 0x00, 0xC0, 0x02, 0xC8, 0x00, 0xD0, 0x02, 0x28, 0x00, 0x00, 0x02,
+    0x50, 0x30, 0xD0, 0x01, 0x00, 0x00, 0x10, 0x02, 0x78, 0x30, 0xE0, 0x01,
+    0x78, 0x00, 0xB0, 0x02, 0x00, 0x30, 0xE0, 0x02, 0xA0, 0x30, 0xF0, 0x01,
+};
+
+static struct {
+    u8 D_801E603C;
+    u8 pad_01[3];
+    u8 D_801E6040;
+    u8 pad_05[3];
+    s8 D_801E6044;
+    u8 pad_09[3];
+    u8 D_801E6048;
+    u8 pad_0D[3];
+    u8 D_801E604C;
+    u8 pad_11[3];
+    u8 D_801E6050;
+    u8 pad_15[3];
+    u8 D_801E6054;
+    u8 pad_19[3];
+    u8 D_801E6058;
+    u8 pad_1D[3];
+    s32 D_801E605C;
+    s32 D_801E6060;
+    u16 D_801E6064;
+    u16 unk_2A[3];
+    u8 D_801E606C;
+    u8 unk_31[7];
+    u8 g_SaveSlotFirst;
+    u8 pad_39[3];
+    u8 g_SaveSlotCount;
+    u8 pad_3D[3];
+    u8 D_801E607C;
+    u8 pad_41[3];
+    u8 D_801E6080;
+    u8 unk_45[7];
+    u8 D_801E6088;
+    u8 pad_4D[3];
+    u8 D_801E608C;
+    u8 unk_51[7];
+    u8 D_801E6094;
+    u8 pad_59[3];
+} __attribute__((packed)) sShopState = { 0 };
+
+/* D_801E6098 */
+MenuListRow g_SaveSlots[3] = { 0 };
+
+static struct {
+    u8 D_801E60EC;
+    u8 pad_01[3];
+    u8 D_801E60F0;
+    u8 pad_05[3];
+    u8 D_801E60F4;
+    u8 pad_09[3];
+    u8 D_801E60F8;
+    u8 pad_0D[3];
+    u8 D_801E60FC;
+    u8 pad_11[3];
+    s16 D_801E6100[4];
+    u8 D_801E6108;
+    u8 pad_1D[3];
+    u8 D_801E610C;
+    u8 pad_21[3];
+    u8 D_801E6110;
+    u8 pad_25[3];
+    u32 D_801E6114[12];
+} __attribute__((packed)) sShopTail = { 0 };

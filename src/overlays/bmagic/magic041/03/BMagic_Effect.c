@@ -1,0 +1,81 @@
+#include "magic041_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+MATCH void func_801EEC38(void) {
+    BattleHandlerTable6 handlers = D_801EEC04;
+
+    SYS_DISPATCH_TASK(handlers.handlers, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EECB0);
+
+INCLUDE_ASM(func_801EEE14);
+
+INCLUDE_ASM(func_801EEEB4);
+
+MATCH void func_801EEFC4(void) {
+    PartyBattler* work;
+
+    work = SP_REF(PartyBattler*, 0x44u);
+    if (work->unk_0B == 1) {
+        work->step_01 = work->step_01 + 1;
+    }
+}
+
+INCLUDE_ASM(func_801EEFF8);
+
+#include "overlays/bmagic/Effect_PlayOnZeroTick.h"
+
+MATCH void func_801EF190(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+INCLUDE_ASM(func_801EF1D4);
+
+INCLUDE_ASM(func_801EF27C);
+
+MATCH void func_801EF308(void) {
+    u8 timer;
+
+    timer              = g_SpadWork->unk_0A + 4;
+    g_SpadWork->unk_0A = timer;
+    if (timer == 32) {
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    }
+}
+
+MATCH void func_801EF358(void) {
+    PartyBattler* work;
+    PartyBattler* active;
+    u8            count;
+
+    work = g_SpadWork;
+    work->unk_09 += 4;
+    work         = g_SpadWork;
+    count        = work->unk_0A - 1;
+    work->unk_0A = count;
+    if (count == 0) {
+        active = BATTLE_ACTIVE_WORK;
+        active->unk_0B--;
+        func_801E5988();
+    }
+}
+
+INCLUDE_ASM(func_801EF3D0);
+
+INCLUDE_ASM(func_801EF484);
+
+#include "overlays/bmagic/Effect_CountUpByTwoAndStep.h"
+
+#include "overlays/bmagic/Effect_NextStepOnLastTick.h"
+
+#include "overlays/bmagic/Effect_TickOnTimerZero.h"
+
+#include "overlays/bmagic/Effect_SetActorMatrix.h"
+
+INCLUDE_ASM(func_801EF670);
+
+INCLUDE_ASM(func_801EFAB8);

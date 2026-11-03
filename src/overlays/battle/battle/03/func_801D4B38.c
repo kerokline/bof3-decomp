@@ -1,0 +1,53 @@
+#include "battle_03.h"
+
+/* Advances battle state, clears the suppression flag on the battler and enemy rows, and updates the scene counter. */
+
+MATCH void func_801D4B38(void) {
+    u8  action;
+    u8  i;
+    u8  slot;
+    u8* state;
+
+    state = (u8*)&D_801463BA;
+    if (*state == 0 && g_BattleActionLock == 0) {
+        action = func_801DB058();
+        switch (action) {
+            case 0:
+                *state = 0;
+                break;
+            case 3:
+                if (g_BattleSurprise == 2) {
+                    *state = 2;
+                    g_BattleSubStep += 1;
+                    return;
+                }
+                *state = 3;
+                g_BattleSubStep += 1;
+                return;
+            case 1:
+                if (g_BattleSurprise == 2) {
+                    *state = 0;
+                    g_BattleSubStep += 1;
+                    break;
+                }
+                *state = 1;
+                g_BattleSubStep += 1;
+                return;
+            case 2:
+                *state = 2;
+                g_BattleSubStep += 1;
+                return;
+        }
+    }
+    for (i = 0; i < 2; i++) {
+        D_80145FB8[i][0] &= 0xFFFF7FFF;
+    }
+    for (slot = 3; slot < 10; slot++) {
+        D_801EB734[slot - 3][0] &= 0xFFFF7FFF;
+    }
+    D_801463BA = 0;
+    D_801463D0 += 1;
+    func_801D4D44();
+    g_BattleSubStep = 0;
+    g_BattleStep += 1;
+}

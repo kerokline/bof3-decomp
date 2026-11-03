@@ -1,0 +1,18 @@
+#include "battle_15.h"
+
+MATCH bool func_800A82A0(u8 selection_id) {
+    u8 count;
+    u8 index;
+
+    count = g_BattleGeneCount[0];
+    index = 0;
+    if (count != 0) {
+        do {
+            if (D_801463C4[index] == selection_id) {
+                return true;
+            }
+            index++;
+        } while (index < count);
+    }
+    return false;
+}

@@ -1,0 +1,22 @@
+#include "game_00.h"
+
+MATCH void func_801A3A08(void) {
+    Actor* work;
+    u16    mode;
+
+    work = g_SpadWork;
+    if (!(work->flags_00 & ACTOR_FLAG_HIDDEN)) {
+        mode = work->unk_06;
+        /* Retail shares one dispatch tail for both mode tests. */
+        if ((u8)mode == 1 || (u32)(mode - 3) < 2)
+            goto dispatch; /* the mode selects the shared dispatch tail */
+    } else if (work->unk_06 == 4) {
+        goto dispatch; /* Retail shares one dispatch tail for both mode tests. */
+    }
+    if ((((Actor*)g_CurrentActor)->unk_94 & 0x7F) != 0x7F) {
+    dispatch:
+        func_801ACE10((s32)D_80145F09);
+    } else {
+        GAME_WORK_AREA_PTR->flags_74 &= ~ACTOR_FLAG_INTERACTION_PENDING;
+    }
+}

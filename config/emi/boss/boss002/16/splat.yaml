@@ -1,0 +1,68 @@
+sha1: 1648a3224678b35682a8ef277841d4b7d99db8f7
+symbol_owners:
+  - exe/slus_004_22
+  - emi/battle/battle/03
+  - emi/boss/boss002/16
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x800C1800
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, bin, D_800C1800]
+      - [0x4, c, func_800C1804]
+      - [0x48, c, func_800C1848]
+      - [0xA0, c, func_800C18A0]
+      - [0xE4, c, func_800C18E4]
+      - [0x11C, c, func_800C191C]
+      - [0x1C8, c, func_800C19C8]
+      - [0x200, c, func_800C1A00]
+      - [0x24C, c, func_800C1A4C]
+      - [0x2A0, c, func_800C1AA0]
+      - [0x2A8, c, func_800C1AA8]
+      - [0x2EC, c, func_800C1AEC]
+      - [0x344, c, func_800C1B44]
+      - [0x388, c, Boss_FinishDefeat]
+      - [0x408, c, func_800C1C08]
+      - [0x440, c, func_800C1C40]
+      - [0x448, c, func_800C1C48]
+      - [0x450, c, func_800C1C50]
+      - [0x458, c, func_800C1C58]
+      - [0x49C, c, func_800C1C9C]
+      - [0x500, c, func_800C1D00]
+      - [0x538, c, func_800C1D38]
+      - [0x540, c, func_800C1D40]
+      - [0x548, c, func_800C1D48]
+      - [0x550, c, Boss_InstallBattleHooks]
+      - [0x588, c, Boss_HandleBattleEvent]
+      - [0x5D4, c, Boss_ChooseBattleEnding]
+      - [0x634, c, Boss_EndBattle]
+      - [0x63C, c, Boss_InstallBattleHooks2]
+      - [0x674, c, Boss_HandleBattleEvent2]
+      - [0x67C, c, Boss_ChooseBattleEnding2]
+      - [0x6E8, c, Boss_EndBattle2]
+      - [0x708, c, Boss_InstallBattleHooks3]
+      - [0x740, c, Boss_HandleBattleEvent3]
+      - [0x748, c, Boss_ChooseBattleEnding3]
+      - [0x794, c, Boss_EndBattle3]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x79C
+    vram: 0x800C1F9C
+    align: 4
+    subsegments:
+      - [0x79C, bin, D_800C1F9C]
+      - [0x7AC, bin, D_800C1FAC]
+      - [0x7B4, bin, D_800C1FB4]
+      - [0x7BC, bin, D_800C1FBC]
+      - [0x7EC, bin, D_800C1FEC]
+      - [0x7F4, bin, D_800C1FF4]
+      - [0x800, bin, D_800C2000]
+      - [0x830, bin, D_800C2030]
+      - [0x848, bin, D_800C2048]
+      - [0x854, bin, D_800C2054]
+      - [0x884, bin, D_800C2084]
+  - [0x890]

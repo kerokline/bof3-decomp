@@ -1,0 +1,34 @@
+[submodule "third_party/decomp-permuter"]
+	path = third_party/decomp-permuter
+	url = https://github.com/simonlindholm/decomp-permuter.git
+[submodule "third_party/maspsx"]
+	path = third_party/maspsx
+	url = https://github.com/mkst/maspsx.git
+	ignore = dirty
+[submodule "third_party/references/bof3-data-doc"]
+	path = third_party/references/bof3-data-doc
+	url = https://github.com/GlitchedDragon-dev/BoF3-Data-Doc.git
+[submodule "third_party/references/vast-violence"]
+	path = third_party/references/vast-violence
+	url = https://github.com/abyssonym/vast_violence.git
+[submodule "third_party/references/bof3-notes"]
+	path = third_party/references/bof3-notes
+	url = https://github.com/glitch-in-the-herring/bof3-notes
+[submodule "third_party/psx_psyq_signatures"]
+	path = third_party/psx_psyq_signatures
+	url = https://github.com/lab313ru/psx_psyq_signatures.git
+[submodule "third_party/asm-differ"]
+	path = third_party/asm-differ
+	url = https://github.com/simonlindholm/asm-differ
+[submodule "third_party/references/bof3-save-editor"]
+	path = third_party/references/bof3-save-editor
+	url = https://github.com/glitch-in-the-herring/bof3-save-editor
+[submodule "third_party/references/bof3-script-editor"]
+	path = third_party/references/bof3-script-editor
+	url = https://github.com/glitch-in-the-herring/bof3-script-editor
+[submodule "third_party/m2c"]
+	path = third_party/m2c
+	url = https://github.com/matt-kempster/m2c
+[submodule "tools/bof3-tools"]
+	path = tools/bof3-tools
+	url = https://github.com/raulcorreia7/bof3-tools.git

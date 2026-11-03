@@ -1,0 +1,41 @@
+sha1: b5b46c19bf166a59f11092141aa938b16ee74106
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0x4, c, func_801F2C04]
+      - [0x48, c, func_801F2C48]
+      - [0x134, c, func_801F2D34]
+      - [0x1E0, c, func_801F2DE0]
+      - [0x27C, c, func_801F2E7C]
+      - [0x350, c, func_801F2F50]
+      - [0x418, c, func_801F3018]
+      - [0x4B0, c, func_801F30B0]
+      - [0x5A0, c, func_801F31A0]
+      - [0x7DC, c, func_801F33DC]
+      - [0x92C, c, func_801F352C]
+      - [0xC34, c, func_801F3834]
+      - [0xC70, c, func_801F3870]
+      - [0xD5C, c, func_801F395C]
+      - [0xF98, c, func_801F3B98]
+      - [0xFF4, c, func_801F3BF4]
+      - [0x1044, c, func_801F3C44]
+      - [0x1094, c, func_801F3C94]
+      - [0x10E4, c, func_801F3CE4]
+      - [0x110C, c, func_801F3D0C]
+      - [0x1134, c, Area_ResetViewOffsetY]
+      - [0x1150, c, Actor_Spawn]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x11AC
+    vram: 0x801F3DAC
+    align: 4
+    subsegments:
+      - [0x11AC, .data, D_801F3DAC]
+  - [0x18AC]

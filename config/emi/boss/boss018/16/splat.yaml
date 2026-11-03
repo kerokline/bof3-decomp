@@ -1,0 +1,92 @@
+sha1: c1e78acc918fe8c90fdf8f7b342869678a2164dc
+symbol_owners:
+  - exe/slus_004_22
+  - emi/battle/battle/03
+  - emi/boss/boss018/16
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x800C1800
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, bin, D_800C1800]
+      - [0x4C, c, func_800C184C]
+      - [0x90, c, func_800C1890]
+      - [0x140, c, func_800C1940]
+      - [0x17C, c, func_800C197C]
+      - [0x1B4, c, func_800C19B4]
+      - [0x1D8, c, func_800C19D8]
+      - [0x1E0, c, func_800C19E0]
+      - [0x1E8, c, func_800C19E8]
+      - [0x22C, c, func_800C1A2C]
+      - [0x2DC, c, func_800C1ADC]
+      - [0x318, c, func_800C1B18]
+      - [0x350, c, func_800C1B50]
+      - [0x374, c, func_800C1B74]
+      - [0x37C, c, func_800C1B7C]
+      - [0x384, c, func_800C1B84]
+      - [0x3C8, c, func_800C1BC8]
+      - [0x46C, c, func_800C1C6C]
+      - [0x4A4, c, func_800C1CA4]
+      - [0x4C8, c, func_800C1CC8]
+      - [0x4D0, c, func_800C1CD0]
+      - [0x4D8, c, func_800C1CD8]
+      - [0x5C4, c, func_800C1DC4]
+      - [0x6E4, c, func_800C1EE4]
+      - [0x728, c, func_800C1F28]
+      - [0x7F8, c, func_800C1FF8]
+      - [0x83C, c, func_800C203C]
+      - [0x864, c, func_800C2064]
+      - [0x86C, c, func_800C206C]
+      - [0x874, c, func_800C2074]
+      - [0x8AC, c, func_800C20AC]
+      - [0x8BC, c, func_800C20BC]
+      - [0x90C, c, func_800C210C]
+      - [0x914, c, Boss_InstallBattleHooks]
+      - [0x94C, c, Boss_HandleBattleEvent]
+      - [0xA58, c, Boss_ChooseBattleEnding]
+      - [0xB78, c, Boss_EndBattle]
+      - [0xBF8, c, Boss_InstallBattleHooks2]
+      - [0xC30, c, Boss_HandleBattleEvent2]
+      - [0xD3C, c, Boss_ChooseBattleEnding2]
+      - [0xE5C, c, Boss_EndBattle2]
+      - [0xEDC, c, Boss_InstallBattleHooks3]
+      - [0xF14, c, Boss_HandleBattleEvent3]
+      - [0x1020, c, Boss_ChooseBattleEnding3]
+      - [0x112C, c, Boss_EndBattle3]
+      - [0x11AC, c, func_800C29AC]
+      - [0x1240, c, func_800C2A40]
+      - [0x12A4, c, func_800C2AA4]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x1438
+    vram: 0x800C2C38
+    align: 4
+    subsegments:
+      - [0x1438, bin, D_800C2C38]
+      - [0x1444, bin, D_800C2C44]
+      - [0x1450, bin, D_800C2C50]
+      - [0x145C, bin, D_800C2C5C]
+      - [0x1468, bin, D_800C2C68]
+      - [0x1474, bin, D_800C2C74]
+      - [0x1480, bin, D_800C2C80]
+      - [0x148C, bin, D_800C2C8C]
+      - [0x1494, bin, D_800C2C94]
+      - [0x149C, bin, D_800C2C9C]
+      - [0x14A4, bin, D_800C2CA4]
+      - [0x14AC, bin, D_800C2CAC]
+      - [0x14DC, bin, D_800C2CDC]
+      - [0x14E8, bin, D_800C2CE8]
+      - [0x1518, bin, D_800C2D18]
+      - [0x1524, bin, D_800C2D24]
+      - [0x1554, bin, D_800C2D54]
+      - [0x1560, bin, D_800C2D60]
+      - [0x1594, bin, D_800C2D94]
+      - [0x15AC, bin, D_800C2DAC]
+      - [0x15B8, bin, D_800C2DB8]
+      - [0x15C4, bin, D_800C2DC5]
+      - [0x15C8, bin, D_800C2DC8]
+  - [0x15D4]

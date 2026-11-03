@@ -1,0 +1,46 @@
+#include "area030_04.h"
+
+/* Draws the AREA030 prompt row, then steps the panel cursor from the
+ * pad pair: right/left wrap the entry index and move the caret, confirm queues
+ * the accept cue and steps the panel state back. */
+MATCH void func_801DD664(void) {
+    u8* panel;
+    u16 index;
+
+    UI_DrawText(0x1D, 0x14, 0, 0xFF, (u8*)(FISHING_TEXT_BANK + D_800100C2));
+
+    panel = &D_80144281;
+    if (*panel != 8) {
+        return;
+    }
+
+    if ((g_InputPressed & PADLright) != 0) {
+        SND_PlayCue(EMI_CUE_ID(1, 2));
+        index      = D_801442BE + 1;
+        D_801442BC = index;
+        if ((u32)(index & HALF_MASK) >= 0x17) {
+            D_801442BC = 0;
+        }
+        D_80144288 = 0;
+        *panel     = (u8)(*panel + 1);
+        return;
+    }
+
+    if ((g_InputPressed & PADLleft) != 0) {
+        SND_PlayCue(EMI_CUE_ID(1, 2));
+        index      = D_801442BE - 1;
+        D_801442BC = index;
+        if ((s16)index < 0) {
+            D_801442BC = 0x16;
+        }
+        D_80144288 = 1;
+        *panel     = (u8)(*panel + 1);
+        return;
+    }
+
+    if ((g_InputPressed & D_80145AC4) != 0) {
+        SND_PlayCue(EMI_CUE_ID(1, 6));
+        FISHING_STATE->flag_04      = 0;
+        FISHING_STATE->sub_index_03 = (u8)(FISHING_STATE->sub_index_03 - 1);
+    }
+}

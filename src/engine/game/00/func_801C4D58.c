@@ -1,0 +1,21 @@
+#include "game_00.h"
+
+MATCH void func_801C4D58(void) {
+    Actor* work;
+    Actor* state;
+    Actor* reload;
+    s32    doubled;
+
+    g_GameState->counter_11C.s8_value = (s8)(FIELD(s32, g_SpadWork, 0x70u) + 2);
+    func_801C2538();
+    work          = g_SpadWork;
+    doubled       = work->unk_09 * 2;
+    work->unk_09  = (u8)(doubled * (FIELD(s32, work, 0x70u) + 1));
+    state         = g_SpadWork;
+    work->vz      = 0;
+    state->unk_0A = (s8)((u8)state->unk_09 >> 1);
+    Actor_RequestScript((g_SpadWork->direction_08 + 8) & BYTE_MASK);
+    func_801C57B4();
+    reload         = g_SpadWork;
+    reload->unk_09 = (u8)(reload->unk_09 - 1);
+}

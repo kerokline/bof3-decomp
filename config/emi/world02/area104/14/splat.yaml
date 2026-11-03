@@ -1,0 +1,78 @@
+sha1: 651ffb708b0f79ecdcb04e515650dd21f47e6607
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0x14, c, func_801F2C14]
+      - [0x28C, c, func_801F2E8C]
+      - [0x30C, c, Message_RunAreaMessage]
+      - [0x3B0, c, func_801F2FB0]
+      - [0x524, c, func_801F3124]
+      - [0x5B0, c, func_801F31B0]
+      - [0x6E8, c, func_801F32E8]
+      - [0x764, c, func_801F3364]
+      - [0x824, c, func_801F3424]
+      - [0x8C4, c, Actor_CenterOnScreen]
+      - [0x8E0, c, func_801F34E0]
+      - [0x924, c, Actor_NextStep]
+      - [0x964, c, func_801F3564]
+      - [0x98C, c, func_801F358C]
+      - [0x9D0, c, Actor_SlideScreenLeft]
+      - [0xA20, c, Actor_SlideScreenX]
+      - [0xA7C, c, Area_Update]
+      - [0xACC, c, func_801F36CC]
+      - [0xB50, c, func_801F3750]
+      - [0xB94, c, Actor_SetScreenBottom]
+      - [0xC14, c, func_801F3814]
+      - [0xCEC, c, func_801F38EC]
+      - [0xDEC, c, func_801F39EC]
+      - [0xE9C, c, Area_DrawHudSprite]
+      - [0xFC4, c, Area_DrawHud]
+      - [0x1390, c, Area_DrawGradientDiamond]
+      - [0x1588, c, func_801F4188]
+      - [0x1638, c, func_801F4238]
+      - [0x19BC, c, func_801F45BC]
+      - [0x1A08, c, func_801F4608]
+      - [0x1E34, c, func_801F4A34]
+      - [0x1EE4, c, func_801F4AE4]
+      - [0x1FB0, c, func_801F4BB0]
+      - [0x2124, c, func_801F4D24]
+      - [0x21E0, c, func_801F4DE0]
+      - [0x223C, c, func_801F4E3C]
+      - [0x2434, c, func_801F5034]
+      - [0x24A8, c, func_801F50A8]
+      - [0x2508, c, Actor_StopMoving]
+      - [0x2540, c, func_801F5140]
+      - [0x25F0, c, func_801F51F0]
+      - [0x2654, c, func_801F5254]
+      - [0x27D4, c, func_801F53D4]
+      - [0x2818, c, func_801F5418]
+      - [0x295C, c, func_801F555C]
+      - [0x2A4C, c, func_801F564C]
+      - [0x2B38, c, func_801F5738]
+      - [0x2B8C, c, func_801F578C]
+      - [0x2CE8, c, func_801F58E8]
+      - [0x2D88, c, func_801F5988]
+      - [0x2EB4, c, func_801F5AB4]
+      - [0x2F24, c, func_801F5B24]
+      - [0x2FB0, c, func_801F5BB0]
+      - [0x324C, c, func_801F5E4C]
+      - [0x34C0, c, func_801F60C0]
+      - [0x3768, c, func_801F6368]
+      - [0x396C, c, func_801F656C]
+      - [0x3AD0, c, func_801F66D0]
+      - [0x3B74, c, func_801F6774]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x3D80
+    vram: 0x801F6980
+    align: 4
+    subsegments:
+      - [0x3D80, .data, D_801F6980]
+  - [0x3F5C]

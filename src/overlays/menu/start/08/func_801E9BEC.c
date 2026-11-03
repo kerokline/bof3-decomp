@@ -1,0 +1,20 @@
+#include "start_08.h"
+
+/* File-local declarations: the panel state handler table and the draw helpers
+ * owned by this target or the executable. */
+
+/* The shared MenuPanelTask view types the icon cursor at 0x10 as unk_10; the
+ * accesses here are signed halfword loads. */
+#define ICON_TASK   ((MenuPanelTask*)g_MenuPanelTaskCurrent)
+#define ICON_CURSOR (*(s16*)&ICON_TASK->unk_10)
+
+MATCH void func_801E9BEC(void) {
+    D_801ED420[ICON_TASK->state]();
+    Menu_DrawHeaderBar(ICON_TASK->x, ICON_TASK->y, 0x118, 0x13, D_80144952);
+    if (ICON_CURSOR != 0) {
+        WinDrawCueText((s16)(ICON_TASK->x + 7), (s16)(ICON_TASK->y + 3), (u16)ICON_CURSOR);
+        if (ICON_CURSOR == 0x1A || ICON_CURSOR == 0x31) {
+            WinDrawCueText((s16)(ICON_TASK->x + 7), (s16)(ICON_TASK->y + 3), 0xF);
+        }
+    }
+}

@@ -1,0 +1,3 @@
+#include "commu00_00.h"
+
+INCLUDE_ASM(func_801EF52C);

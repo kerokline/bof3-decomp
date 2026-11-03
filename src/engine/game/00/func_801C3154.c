@@ -1,0 +1,36 @@
+#include "game_00.h"
+
+/* Source and destination palette banks. Literal addresses keep the
+ * lui+ori codegen the original binary uses for these banks. */
+#define PALETTE_BANK_SRC 0x80033800u
+#define PALETTE_BANK_DST 0x80037800u
+
+MATCH void func_801C3154(void) {
+    volatile Actor* work;
+    u32             base_dst;
+    u32             base_src;
+    u32             page;
+    u32             row;
+    u32             addr_dst;
+    s32             index;
+    s32             off;
+    u8              sel;
+
+    if ((g_GameState->flags_12C.u8_value & 8) != 0) {
+        index    = 1;
+        work     = SCRATCH_WORK;
+        base_dst = PALETTE_BANK_DST;
+        base_src = PALETTE_BANK_SRC;
+        do {
+            off = index << 1;
+            sel = work->unk_27;
+            index += 1;
+            page                            = (sel >> 3) << 9;
+            addr_dst                        = page + base_dst;
+            row                             = (sel & 7) << 6;
+            *(u16*)(off + (row + addr_dst)) = *(const u16*)(off + (row + (page + base_src)));
+        } while (index < 32);
+        g_GfxPalettePending = 1;
+        g_GameState->flags_12C.u8_value &= 0xF7u;
+    }
+}

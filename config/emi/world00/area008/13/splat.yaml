@@ -1,0 +1,71 @@
+sha1: 36803dffa90dc5de61bc195aa2f7465051fabbad
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0x4, .data, D_801F2C04]
+      - [0x18, c, func_801F2C18]
+      - [0x5C, c, func_801F2C5C]
+      - [0x88, c, func_801F2C88]
+      - [0x124, c, func_801F2D24]
+      - [0x21C, c, func_801F2E1C]
+      - [0x324, c, func_801F2F24]
+      - [0x378, c, func_801F2F78]
+      - [0x410, c, func_801F3010]
+      - [0x4B8, c, func_801F30B8]
+      - [0x57C, c, func_801F317C]
+      - [0x5D0, c, func_801F31D0]
+      - [0x644, c, func_801F3244]
+      - [0x688, c, func_801F3288]
+      - [0x6AC, c, func_801F32AC]
+      - [0x744, c, func_801F3344]
+      - [0x7F0, c, func_801F33F0]
+      - [0x8FC, c, func_801F34FC]
+      - [0x97C, c, func_801F357C]
+      - [0xA54, c, func_801F3654]
+      - [0xA5C, c, func_801F365C]
+      - [0xADC, c, func_801F36DC]
+      - [0xBB4, c, func_801F37B4]
+      - [0xBBC, c, func_801F37BC]
+      - [0xC5C, c, func_801F385C]
+      - [0xCDC, c, func_801F38DC]
+      - [0xDB4, c, func_801F39B4]
+      - [0xDBC, c, func_801F39BC]
+      - [0xE64, c, func_801F3A64]
+      - [0xEA8, c, func_801F3AA8]
+      - [0xEE8, c, func_801F3AE8]
+      - [0xFB4, c, func_801F3BB4]
+      - [0x102C, c, func_801F3C2C]
+      - [0x1118, c, func_801F3D18]
+      - [0x1188, c, Menu_DrawHeaderBar]
+      - [0x16D4, c, func_801F42D4]
+      - [0x1734, c, func_801F4334]
+      - [0x177C, c, func_801F437C]
+      - [0x17C8, c, func_801F43C8]
+      - [0x1824, c, func_801F4424]
+      - [0x190C, c, func_801F450C]
+      - [0x1934, c, func_801F4534]
+      - [0x195C, c, func_801F455C]
+      - [0x1978, c, func_801F4578]
+      - [0x19A0, c, func_801F45A0]
+      - [0x19C8, c, Area_ResetViewOffsetY]
+      - [0x19E4, c, func_801F45E4]
+      - [0x1A00, c, func_801F4600]
+      - [0x1A1C, c, func_801F461C]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x1A74
+    vram: 0x801F4674
+    align: 4
+    subsegments:
+      - [0x1A74, .data, world_reload_tables]
+      - [0x1A88, .data, world_mode_handlers]
+      - [0x1AF8, .data, world_script_stream]
+      - [0x27F0, .data, world_request_slots]
+  - [0x27F8]

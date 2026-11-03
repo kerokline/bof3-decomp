@@ -1,0 +1,419 @@
+#include "scena03_00.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+MATCH void func_801F6E78(void) {
+    /* FAKE: retail reads the handler record from entry $v0; the pin is the
+       entry-register residual (identical bytes to the unpinned 84.46%). */
+    MATCH_REG(u8*, entity, "v0");
+
+    D_801FCF24[entity[1]]();
+}
+
+MATCH void func_801F6EB4(void) {
+    u8** slots;
+    u8*  work;
+    u8*  data;
+    u8*  cell;
+    u8   cell4;
+    u32  cell3;
+    s16* scratch;
+
+    slots          = SP_PTR(u8*, 0u);
+    slots[0x11][3] = Actor_FindFree();
+    slots          = SP_PTR(u8*, 0u);
+    if (slots[0x11][3] == GAME_NONE) {
+        return;
+    }
+
+    slots                             = SP_PTR(u8*, 0u);
+    g_Actors[slots[0x11][3]].flags_00 = 1;
+    slots                             = SP_PTR(u8*, 0u);
+    slots[0x11][4]                    = Actor_FindFree();
+    slots                             = SP_PTR(u8*, 0u);
+    if (slots[0x11][4] == GAME_NONE) {
+        slots                             = SP_PTR(u8*, 0u);
+        g_Actors[slots[0x11][3]].flags_00 = 0;
+        return;
+    }
+
+    scratch                           = (s16*)D_1F800000;
+    data                              = (u8*)D_801FCF30;
+    slots                             = SP_PTR(u8*, 0u);
+    g_Actors[slots[0x11][4]].flags_00 = 1;
+    slots                             = SP_PTR(u8*, 0u);
+    work                              = slots[0x11];
+    *scratch                          = work[3];
+    func_801A65A0(data);
+    Actor_BeginScript(0x61, 0xC);
+    *scratch = work[4];
+    func_801A65A0(data);
+    Actor_BeginScript(0x61, 0xC);
+    slots[0x11] = work;
+
+    g_Actors[work[3]].x.fixed += ONE;
+    g_Actors[work[3]].y.fixed -= ONE;
+    g_Actors[work[4]].x.fixed -= ONE;
+    g_Actors[work[4]].y.fixed += ONE;
+    g_Actors[work[3]].flags_00 |= ACTOR_FLAG_SEMI_TRANSPARENT;
+    slots = SP_PTR(u8*, 0u);
+    g_Actors[slots[0x11][4]].flags_00 |= ACTOR_FLAG_SEMI_TRANSPARENT;
+    slots                                     = SP_PTR(u8*, 0u);
+    cell                                      = slots[0x11];
+    cell4                                     = cell[4];
+    cell3                                     = cell[3];
+    FIELD(u8, D_801468E4, cell4 * ACTOR_SIZE) = 0;
+    FIELD(u8, D_801468E4, cell3 * ACTOR_SIZE) = 0;
+    GFX_AllocPaletteFade(&g_Actors[work[3]], 0xF, 0, 0, 1);
+    GFX_AllocPaletteFade(&g_Actors[work[4]], 0, 0, 0xF, 1);
+    slots          = SP_PTR(u8*, 0u);
+    slots[0x11][9] = 4;
+    slots          = SP_PTR(u8*, 0u);
+    slots[0x11][1] = 1;
+}
+
+INCLUDE_ASM(func_801F7260);
+
+#include "shared/Actor_FreePaletteFades.h"
+
+INCLUDE_ASM(func_801F73BC);
+
+MATCH void func_801F7508(void) {
+    SYS_DISPATCH_TASK(D_801FCF50, 1, g_SpadWork);
+}
+
+MATCH void func_801F754C(void) {
+    u8** slots;
+    u8*  work;
+    u8*  data;
+    u8*  cell;
+    u8   cell4;
+    u32  cell3;
+    s16* scratch;
+
+    slots          = SP_PTR(u8*, 0u);
+    slots[0x11][3] = Actor_FindFree();
+    slots          = SP_PTR(u8*, 0u);
+    if (slots[0x11][3] == GAME_NONE) {
+        return;
+    }
+
+    slots                             = SP_PTR(u8*, 0u);
+    g_Actors[slots[0x11][3]].flags_00 = 1;
+    slots                             = SP_PTR(u8*, 0u);
+    slots[0x11][4]                    = Actor_FindFree();
+    slots                             = SP_PTR(u8*, 0u);
+    if (slots[0x11][4] == GAME_NONE) {
+        slots                             = SP_PTR(u8*, 0u);
+        g_Actors[slots[0x11][3]].flags_00 = 0;
+        return;
+    }
+
+    scratch                           = (s16*)D_1F800000;
+    data                              = (u8*)D_801FCF5C;
+    slots                             = SP_PTR(u8*, 0u);
+    g_Actors[slots[0x11][4]].flags_00 = 1;
+    slots                             = SP_PTR(u8*, 0u);
+    work                              = slots[0x11];
+    *scratch                          = work[3];
+    func_801A4D54(data);
+    *scratch = work[4];
+    func_801A4D54(data);
+    slots[0x11] = work;
+
+    g_Actors[work[3]].x.fixed -= ONE;
+    g_Actors[work[3]].y.fixed += ONE;
+    g_Actors[work[4]].x.fixed += ONE;
+    g_Actors[work[4]].y.fixed -= ONE;
+    g_Actors[work[3]].flags_00 |= ACTOR_FLAG_SEMI_TRANSPARENT;
+    slots = SP_PTR(u8*, 0u);
+    g_Actors[slots[0x11][4]].flags_00 |= ACTOR_FLAG_SEMI_TRANSPARENT;
+    slots                                     = SP_PTR(u8*, 0u);
+    cell                                      = slots[0x11];
+    cell4                                     = cell[4];
+    cell3                                     = cell[3];
+    FIELD(u8, D_801468E4, cell4 * ACTOR_SIZE) = 0;
+    FIELD(u8, D_801468E4, cell3 * ACTOR_SIZE) = 0;
+    GFX_AllocPaletteFade(&g_Actors[work[3]], 0xF, 0, 0, 1);
+    GFX_AllocPaletteFade(&g_Actors[work[4]], 0, 0, 0xF, 1);
+    slots          = SP_PTR(u8*, 0u);
+    slots[0x11][9] = 4;
+    slots          = SP_PTR(u8*, 0u);
+    slots[0x11][1] = 1;
+}
+
+MATCH void func_801F78E0(void) {
+    u8* work;
+
+    work = (u8*)g_SpadWork;
+    if (work[9] != 0) {
+        g_Actors[work[11]].flags_00 |= ACTOR_FLAG_HIDDEN;
+        g_SpadWork->unk_09 -= 1;
+    } else {
+        g_Actors[work[11]].flags_00 &= ~ACTOR_FLAG_HIDDEN;
+        g_Actors[g_SpadWork->unk_03].flags_00 = 0;
+        g_Actors[g_SpadWork->unk_04].flags_00 = 0;
+        g_SpadWork->unk_01                    = 2;
+    }
+}
+
+/* @source: read:Actor_FreePaletteFades@0x801F7334 (byte-identical matched twin) */
+MATCH void Actor_FreePaletteFades_801F7A14(void) {
+    u8** slots;
+
+    ACTOR_FREE_PALETTE_FADES();
+}
+
+MATCH void func_801F7A9C(void) {
+    SYS_DISPATCH_TASK(D_801FCF70, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801F7AE0);
+
+INCLUDE_ASM(func_801F7B10);
+
+INCLUDE_ASM(func_801F7BB0);
+
+INCLUDE_ASM(func_801F7C50);
+
+INCLUDE_ASM(func_801F7CE0);
+
+INCLUDE_ASM(func_801F7D80);
+
+MATCH void func_801F7DF0(void) {
+    SYS_DISPATCH_TASK(D_801FCF88, 1, g_SpadWork);
+}
+
+MATCH void func_801F7E34(void) {
+    void* temp_v1_9;
+
+    SND_PlayCue(EMI_CUE_ID(2, 9));
+    temp_v1_9                  = SP_REF(void*, 0x44);
+    FIELD(u8, temp_v1_9, 0x1u) = (u8)(FIELD(u8, temp_v1_9, 0x1u) + 1);
+}
+
+INCLUDE_ASM(func_801F7E6C);
+
+INCLUDE_ASM(func_801F7F84);
+
+INCLUDE_ASM(func_801F7FFC);
+
+INCLUDE_ASM(func_801F8170);
+
+INCLUDE_ASM(func_801F8200);
+
+MATCH void func_801F82E4(void) {
+    SYS_DISPATCH_TASK(D_801FCF94, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801F8328);
+
+INCLUDE_ASM(func_801F8370);
+
+MATCH void func_801F842C(void) {
+    Actor_Clear();
+}
+
+MATCH void func_801F844C(void) {
+    SYS_DISPATCH_TASK(D_801FCFA0, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801F8490);
+
+INCLUDE_ASM(func_801F853C);
+
+MATCH void func_801F85DC(void) {
+    Actor_Clear();
+}
+
+MATCH void func_801F85FC(void) {
+    SYS_DISPATCH_TASK(D_801FCFAC, 1, g_SpadWork);
+}
+
+MATCH void func_801F8640(void) {
+    SVECTOR* vertex;
+    u16*     screen;
+    long     depth;
+    long     flag;
+    long     result;
+    u16      other;
+    u8**     slots;
+    u8*      work;
+    u8*      item;
+
+    vertex                 = D_1F800014;
+    screen                 = D_1F800034;
+    vertex->vx             = (s16)((D_80145EC4 >> 9) - 0x4000);
+    SP_REF(s16, 0x16)      = (s16)((D_80145EC8 >> 9) - 0x4000);
+    SP_REF(s16, 0x18)      = (s16)((-D_80145ECE) / 2);
+    result                 = RotTransPers(vertex, (long*)screen, &depth, &flag);
+    slots                  = SP_PTR(u8*, 0u);
+    work                   = slots[0x11];
+    FIELD(s32, work, 0x60) = result;
+    FIELD(u16, work, 0x2E) = screen[0];
+    other                  = SP_REF(u16, 0x36);
+    work[9]                = 0;
+    slots                  = SP_PTR(u8*, 0u);
+    item                   = slots[0x11];
+    FIELD(u16, work, 0x30) = other;
+    item[1] += 1;
+}
+
+MATCH void func_801F8710(void) {
+    u8**   slots;
+    Actor* work;
+    u8*    chk;
+
+    slots = SP_PTR(u8*, 0u);
+    work  = (Actor*)slots[0x11];
+    GFX_DrawShadedDisc(work->unk_2E, work->unk_30, work->unk_09, 0x80, 0);
+    slots = SP_PTR(u8*, 0u);
+    slots[0x11][9] += 0x0F;
+    slots = SP_PTR(u8*, 0u);
+    chk   = slots[0x11];
+    if (chk[9] >= 0x3D) {
+        chk[9] = 0xFF;
+        slots  = SP_PTR(u8*, 0u);
+        slots[0x11][1] += 1;
+    }
+}
+
+INCLUDE_ASM(func_801F87A4);
+
+MATCH void func_801F885C(void) {
+    u8**   slots;
+    Actor* work;
+    s8*    chk;
+
+    slots = SP_PTR(u8*, 0u);
+    work  = (Actor*)slots[0x11];
+    GFX_DrawShadedDisc(work->unk_2E, work->unk_30, work->unk_09, 0x80, 0);
+    slots = SP_PTR(u8*, 0u);
+    slots[0x11][9] -= 1;
+    slots = SP_PTR(u8*, 0u);
+    chk   = (s8*)slots[0x11];
+    if (chk[9] < 0) {
+        slots = SP_PTR(u8*, 0u);
+        slots[0x11][1] += 1;
+    }
+}
+
+MATCH void func_801F88DC(void) {
+    Actor_Clear();
+}
+
+INCLUDE_ASM(func_801F88FC);
+
+#include "shared/GFX_DrawShadedDisc.h"
+
+MATCH void func_801F8DA8(void) {
+    SYS_DISPATCH_BYTE(D_801FCFD4, D_80146872);
+}
+
+MATCH void func_801F8DE4(void) {
+    D_80146872 = 1;
+    D_80144EA0 = 0;
+}
+
+INCLUDE_ASM(func_801F8E00);
+
+MATCH void func_801F92F4(void) {
+    SYS_DISPATCH_BYTE(D_801FCFE0, D_80146874);
+}
+
+MATCH void func_801F9330(void) {
+}
+
+INCLUDE_ASM(func_801F9338);
+
+INCLUDE_ASM(func_801F97F8);
+
+INCLUDE_ASM(func_801F9880);
+
+INCLUDE_ASM(func_801FA0A4);
+
+INCLUDE_ASM(func_801FA34C);
+
+INCLUDE_ASM(func_801FABA8);
+
+INCLUDE_ASM(func_801FB268);
+
+INCLUDE_ASM(func_801FB8A4);
+
+INCLUDE_ASM(func_801FC1D0);
+
+INCLUDE_ASM(func_801FC3B4);
+
+INCLUDE_ASM(func_801FC410);
+
+MATCH void func_801FC46C(void* entity) {
+    SceneFunc handler;
+    u8        index;
+
+    index   = ((Actor*)entity)->callback_index;
+    handler = D_801FD00C[index];
+    handler(entity, g_SceneFlags);
+}
+
+INCLUDE_ASM(func_801FC4AC);
+
+INCLUDE_ASM(func_801FC4F4);
+
+INCLUDE_ASM(func_801FC520);
+
+INCLUDE_ASM(func_801FC54C);
+
+INCLUDE_ASM(func_801FC578);
+
+INCLUDE_ASM(func_801FC5A4);
+
+INCLUDE_ASM(func_801FC5FC);
+
+MATCH void func_801FC688(void) {
+}
+
+INCLUDE_ASM(func_801FC690);
+
+INCLUDE_ASM(func_801FC6C4);
+
+INCLUDE_ASM(func_801FC704);
+
+INCLUDE_ASM(func_801FC7EC);
+
+INCLUDE_ASM(func_801FC8AC);
+
+INCLUDE_ASM(func_801FC944);
+
+INCLUDE_ASM(func_801FC9DC);
+
+INCLUDE_ASM(func_801FCAB8);
+
+INCLUDE_ASM(func_801FCB4C);
+
+MATCH s32 Scene_ShowMessage(s32 message_index) {
+    Message_StartAreaMessage(message_index & BYTE_MASK);
+    g_GameStateIndex = 2;
+    g_GameFlags |= GAME_FLAG_SCRIPT_ACTIVE;
+    return 1;
+}
+
+INCLUDE_ASM(func_801FCCDC);
+
+INCLUDE_ASM(func_801FCD1C);
+
+INCLUDE_ASM(func_801FCDB4);
+
+INCLUDE_ASM(func_801FCE18);
+
+INCLUDE_ASM(func_801FCE6C);
+
+MATCH void func_801FCEDC(void) {
+    Party_JoinMember(1);
+}
+
+MATCH void func_801FCEFC(void) {
+    func_801C1ABC(1);
+    func_801C1630();
+}

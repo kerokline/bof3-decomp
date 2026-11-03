@@ -1,0 +1,5 @@
+#include "area094_13.h"
+
+MATCH void func_801F2C04(void) {
+    g_MessageRequest = D_801F533C[D_801490C7];
+}

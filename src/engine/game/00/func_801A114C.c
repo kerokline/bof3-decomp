@@ -1,0 +1,66 @@
+#include "game_00.h"
+
+MATCH void func_801A114C(Actor* record) {
+    u8     result;
+    u8     mode;
+    u8     param;
+    u8     saved;
+    u8     timer;
+    Actor* spad_e;
+    Actor* spad_d;
+    Actor* spad_c;
+    Actor* spad_a;
+    Actor* spad_b;
+
+    spad_a = g_SpadWork;
+    saved  = spad_a->direction_08;
+    D_801C83BC[spad_a->state_02](record, 0, 1);
+    spad_b = g_SpadWork;
+    if (spad_b->unk_09 == 0) {
+        mode  = record->unk_78;
+        param = g_RouteSpeedScale[mode];
+        if (record->unk_7B == 0) {
+            if ((mode != 0) && (D_801C83BC[spad_b->state_02](record, param, 2) & BYTE_MASK)) {
+                func_801A2C10(record);
+                if (g_SpadWork->unk_09 != 0) {
+                    timer = (RANDOM_MASK(3)) + 3;
+                    /* Shared timer update after the random reload. */
+                    goto block_7;
+                }
+            }
+        } else {
+            D_801C83BC[spad_b->state_02](record, param, 2);
+            timer = record->unk_7B - 1;
+        block_7:
+            record->unk_7B = timer;
+        }
+        result = func_801A2A04(record);
+        if (((result & BYTE_MASK) != GAME_NONE) && (g_SpadWork->unk_09 != 0) &&
+            (func_801A1A58((Actor*)record) & BYTE_MASK)) {
+            spad_c                   = g_SpadWork;
+            spad_c->unk_03           = (u8)spad_c->unk_01;
+            g_SpadWork->unk_01       = 0xAU;
+            record->unk_79           = result;
+            g_SpadWork->direction_08 = (u8)(saved & 7);
+            spad_d                   = g_SpadWork;
+            spad_d->unk_0A           = 0;
+            spad_d->unk_09           = 0U;
+            func_801A3B7C(record);
+            spad_e = g_SpadWork;
+            if (spad_e->unk_01 != 0xA) {
+                spad_e->direction_08 = saved;
+                /* Shared tail: resume the route and run the step. */
+                goto block_14;
+            }
+        } else {
+            g_SpadWork->unk_09       = 0U;
+            g_SpadWork->direction_08 = saved;
+        block_14:
+            func_801A2AE4(record, saved);
+            goto block_15; /* the two paths share the exit */
+        }
+    } else {
+    block_15:
+        func_801A253C(record);
+    }
+}

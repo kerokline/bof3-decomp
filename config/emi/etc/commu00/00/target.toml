@@ -1,0 +1,73 @@
+[[matching.section_placements]]
+function = 0x801F08D8
+section = ".rodata"
+address = 0x801EEC0C
+size = 0x38
+
+# Byte-identical disc entries that reuse this target's sources (see docs/toolchain.md#copy-targets).
+
+[[copies]]
+disc_id = "BIN/WORLD04/AREA175.EMI#14"
+payload_sha256 = "27e06df900c8809cc941f2086f0126cff1c951039ad6e63d6e3c21c6fd708f7a"
+load_address = 0x801eec00
+size = 15696
+
+[[copies]]
+disc_id = "BIN/WORLD04/AREA176.EMI#14"
+payload_sha256 = "27e06df900c8809cc941f2086f0126cff1c951039ad6e63d6e3c21c6fd708f7a"
+load_address = 0x801eec00
+size = 15696
+
+[[copies]]
+disc_id = "BIN/WORLD04/AREA177.EMI#14"
+payload_sha256 = "27e06df900c8809cc941f2086f0126cff1c951039ad6e63d6e3c21c6fd708f7a"
+load_address = 0x801eec00
+size = 15696
+
+[[copies]]
+disc_id = "BIN/WORLD04/AREA178.EMI#14"
+payload_sha256 = "27e06df900c8809cc941f2086f0126cff1c951039ad6e63d6e3c21c6fd708f7a"
+load_address = 0x801eec00
+size = 15696
+
+[[copies]]
+disc_id = "BIN/WORLD04/AREA179.EMI#14"
+payload_sha256 = "27e06df900c8809cc941f2086f0126cff1c951039ad6e63d6e3c21c6fd708f7a"
+load_address = 0x801eec00
+size = 15696
+
+[[copies]]
+disc_id = "BIN/WORLD04/AREA180.EMI#14"
+payload_sha256 = "27e06df900c8809cc941f2086f0126cff1c951039ad6e63d6e3c21c6fd708f7a"
+load_address = 0x801eec00
+size = 15696
+
+[[copies]]
+disc_id = "BIN/WORLD04/AREA181.EMI#14"
+payload_sha256 = "27e06df900c8809cc941f2086f0126cff1c951039ad6e63d6e3c21c6fd708f7a"
+load_address = 0x801eec00
+size = 15696
+
+[[copies]]
+disc_id = "BIN/WORLD04/AREA182.EMI#14"
+payload_sha256 = "27e06df900c8809cc941f2086f0126cff1c951039ad6e63d6e3c21c6fd708f7a"
+load_address = 0x801eec00
+size = 15696
+
+[[copies]]
+disc_id = "BIN/WORLD04/AREA183.EMI#14"
+payload_sha256 = "27e06df900c8809cc941f2086f0126cff1c951039ad6e63d6e3c21c6fd708f7a"
+load_address = 0x801eec00
+size = 15696
+
+[[copies]]
+disc_id = "BIN/WORLD04/AREA184.EMI#14"
+payload_sha256 = "27e06df900c8809cc941f2086f0126cff1c951039ad6e63d6e3c21c6fd708f7a"
+load_address = 0x801eec00
+size = 15696
+
+[[copies]]
+disc_id = "BIN/WORLD04/AREA185.EMI#14"
+payload_sha256 = "27e06df900c8809cc941f2086f0126cff1c951039ad6e63d6e3c21c6fd708f7a"
+load_address = 0x801eec00
+size = 15696

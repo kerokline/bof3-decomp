@@ -1,0 +1,15 @@
+#include "battle_15.h"
+
+MATCH void func_800B1504(void) {
+    MenuPanelTask* task;
+    s16            x;
+
+    func_800B1728();
+    task = g_MenuPanelTaskCurrent;
+    x    = task->x;
+    if (x >= 347) {
+        func_80158E20();
+    } else {
+        task->x = x + 32;
+    }
+}

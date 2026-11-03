@@ -1,0 +1,83 @@
+#include "battle_15.h"
+
+MATCH void func_800A60DC(void) {
+    /* FAKE: retail keeps the cursor pair base in a2 for all nine accesses; 76.28% in pure C (cse folds the +2 word
+     * into D_801485EC+2). */
+    MATCH_FAKE_PIN(u16*, cursor_words, "a2");
+    u16* pad_state;
+    s32  input;
+    u16  pad;
+    s16  cursor_col;
+    s16  cursor_row;
+    u16  cursor_total;
+    u8   state;
+    u32  resource;
+    resource                                 = Resource_Resolve(0x61);
+    pad_state                                = &g_InputPressed;
+    D_801EB5B4[((D_801EC328 - 1) & 0xF) * 2] = resource;
+    input                                    = INPUT_REPEATED(*pad_state, (PADLup | PADLdown | PADL1 | PADR1));
+    pad                                      = *pad_state;
+
+    if (pad & D_80145AC4) {
+        SND_PlayCue(EMI_CUE_ID(1, 6));
+        g_BattleUiState = 5;
+        return;
+    }
+    if (pad & D_80145AC2) {
+        if ((&D_8014551B)[(*(s16*)&D_801485EC + D_801485EE) * 4] == GAME_NONE) {
+            state = 4;
+        } else {
+            D_801463B4 = 0;
+            state      = 3;
+        }
+        g_BattleUiState = state;
+        SND_PlayCue(EMI_CUE_ID(1, 4));
+    }
+
+    cursor_words = (u16*)&D_801485EC;
+    /* FAKE: hides the constant base from cse so the row word stays 2(a2), pure-C best 76.28%. */
+    MATCH_FAKE_OPAQUE(cursor_words);
+    cursor_col   = cursor_words[0];
+    cursor_row   = cursor_words[1];
+    cursor_total = cursor_col + cursor_row;
+
+    if (input & PADLup) {
+        if ((s16)cursor_col + (s16)cursor_row > 0) {
+            if ((s16)cursor_col == 0) {
+                cursor_words[1] = cursor_row - 1;
+            }
+            if ((s16)cursor_col > 0) {
+                cursor_words[0] = cursor_col - 1;
+            }
+        }
+    } else if (input & 4) {
+        if ((s16)cursor_row >= 3) {
+            cursor_words[1] = cursor_row - 3;
+        } else if ((s16)cursor_row == 0) {
+            cursor_words[0] = 0;
+        } else {
+            cursor_words[1] = 0;
+        }
+    } else if (input & PADLdown) {
+        if ((s16)cursor_col + (s16)cursor_row < 11) {
+            if ((s16)cursor_col == 2) {
+                cursor_words[1] = cursor_row + 1;
+            }
+            if ((s16)cursor_col < 2) {
+                cursor_words[0] = cursor_col + 1;
+            }
+        }
+    } else if (input & 8) {
+        if ((s16)cursor_row == 9) {
+            cursor_words[0] = 2;
+        } else if ((s16)cursor_row + (s16)cursor_col + 3 < 0xA) {
+            cursor_words[1] = cursor_row + 3;
+        } else {
+            cursor_words[1] = 9;
+        }
+    }
+
+    if (*(s16*)&D_801485EC + D_801485EE != cursor_total) {
+        SND_PlayCue(EMI_CUE_ID(1, 1));
+    }
+}

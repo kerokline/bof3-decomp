@@ -1,0 +1,55 @@
+sha1: 6ba55bb1551b0fb2afd78590b287f36572e48f4b
+segments:
+  - name: data
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .rodata]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0x4, .rodata, func_801F31FC]
+  # Placement: a source shared with the earlier segment must claim its sections first.
+  - name: main
+    type: code
+    start: 0x18
+    vram: 0x801F2C18
+    align: 4
+    section_order: [.text, .data, .rodata, .bss]
+    subsegments:
+      - [0x18, c, func_801F2C18]
+      - [0x48, c, func_801F2C48]
+      - [0x94, c, func_801F2C94]
+      - [0xD8, c, func_801F2CD8]
+      - [0x11C, c, func_801F2D1C]
+      - [0x144, c, func_801F2D44]
+      - [0x198, c, func_801F2D98]
+      - [0x1E0, c, func_801F2DE0]
+      - [0x208, c, func_801F2E08]
+      - [0x230, c, func_801F2E30]
+      - [0x274, c, func_801F2E74]
+      - [0x2F8, c, func_801F2EF8]
+      - [0x320, c, func_801F2F20]
+      - [0x348, c, func_801F2F48]
+      - [0x350, c, func_801F2F50]
+      - [0x3B4, c, func_801F2FB4]
+      - [0x3F8, c, func_801F2FF8]
+      - [0x420, c, func_801F3020]
+      - [0x448, c, func_801F3048]
+      - [0x450, c, func_801F3050]
+      - [0x478, c, func_801F3078]
+      - [0x4C4, c, func_801F30C4]
+      - [0x50C, c, func_801F310C]
+      - [0x540, c, func_801F3140]
+      - [0x564, c, func_801F3164]
+      - [0x588, c, func_801F3188]
+      - [0x5D4, c, func_801F31D4]
+      - [0x5FC, c, func_801F31FC]
+      - [0x660, c, func_801F3260]
+      - [0x6D8, c, func_801F32D8]
+      - [0x728, c, func_801F3328]
+      - [0x748, c, func_801F3348]
+      - [0x778, c, func_801F3378]
+      - [0x7E4, c, func_801F33E4]
+      - [0x874, .data, D_801F3474]
+  - [0xBC8]

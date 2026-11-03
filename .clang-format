@@ -1,0 +1,52 @@
+BasedOnStyle: LLVM
+ColumnLimit: 120
+IndentWidth: 4
+ContinuationIndentWidth: 4
+BracedInitializerIndentWidth: 4
+IndentCaseLabels: true
+SortIncludes: Never
+PointerAlignment: Left
+BreakBeforeBraces: Attach
+AlignConsecutiveMacros:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: true
+AlignConsecutiveDeclarations:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+  EnumAssignments: true
+  AlignFunctionDeclarations: true
+  AlignFunctionPointers: true
+  PadOperators: true
+AlignTrailingComments:
+  Kind: Always
+  OverEmptyLines: 0
+AlignConsecutiveBitFields:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+AlignEscapedNewlines: LeftWithLastLine
+AlignArrayOfStructures: None
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AlignConsecutiveShortCaseStatements:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: true
+  AlignCaseColons: false
+SeparateDefinitionBlocks: Always
+MaxEmptyLinesToKeep: 1
+InsertNewlineAtEOF: true
+KeepEmptyLines:
+  AtStartOfBlock: false
+  AtStartOfFile: false
+ReflowComments: false

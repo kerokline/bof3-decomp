@@ -1,0 +1,187 @@
+#include "sisyou_00.h"
+
+/* nonmatching 60.2%: tried raw byte-offset spelling of both texture_window increments (60.18%, no change); frame-slot
+ * delta 0x78 vs 0x70 with identical save set. resume: when a source shape forces all four args to home (retail sw
+ * a0..a3 at 0x18/0x20/0x28/0x30, 8-byte-spaced, with lhu reloads of x/y from the homes) instead of keeping x/y in
+ * callee-saved registers; then re-measure the five opcode and three branch hunks. */
+#ifdef NON_MATCHING
+NON_MATCHING void Menu_DrawHeaderBar(s32 x, s32 y, s32 width, s32 height, u8 window_style) {
+    RECT*     texture_window;
+    POLY_FT4* primitive;
+    s16       left;
+    s16       new_var;
+    s16       top;
+    s16       x_inner;
+    s32       clut_x;
+    s16       bottom_y;
+    u8        bottom_v;
+    s32       width_plus_1;
+    s32       odd_width;
+    s16       half_width;
+    s16       half_inner;
+    u16       odd_width_u16;
+    s16       base_x;
+    s16       edge_x;
+    left              = (u16)x;
+    top               = (u16)y;
+    texture_window    = (RECT*)g_GfxPrimCursor;
+    g_GfxPrimCursor   = (u8*)(texture_window + 1);
+    texture_window->y = 240;
+    texture_window->x = 0;
+    texture_window->w = 16;
+    texture_window->h = 16;
+    if (GetGraphType() != 1) {
+        GetGraphType();
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, 0xF, texture_window);
+    GFX_AddPrim(1, 0xC);
+    primitive = (POLY_FT4*)g_GfxPrimCursor;
+    SetPolyFT4(primitive);
+    PSX_SET_SEMI_TRANSPARENT(primitive);
+    clut_x = (((s32)window_style) << 5) + 0x10;
+    ;
+    primitive->x0 = left;
+    primitive->y0 = top;
+    primitive->y1 = top;
+    primitive->x2 = left;
+    primitive->x1 = (s16)(x + 2);
+    primitive->x3 = (s16)(x + 2);
+    primitive->u0 = 0;
+    primitive->v0 = 0;
+    primitive->v1 = 0;
+    primitive->u2 = 0;
+    primitive->r0 = 0xAC;
+    primitive->g0 = 0xAC;
+    primitive->b0 = 0xAC;
+    bottom_v      = (u8)(height + 1);
+    bottom_y      = (s16)(y + bottom_v);
+    primitive->y2 = bottom_y;
+    primitive->y3 = bottom_y;
+    primitive->u1 = 2;
+    primitive->v2 = bottom_v;
+    primitive->u3 = 2;
+    primitive->v3 = bottom_v;
+    primitive->y0 += 2;
+    primitive->y2 -= 3;
+    primitive->v0 += 2;
+    primitive->v2 -= 3;
+    primitive->clut = GetClut(clut_x, 481);
+    width_plus_1    = width + 1;
+    if (GetGraphType() != 1) {
+        GetGraphType();
+    }
+    primitive->tpage = 0xF;
+    GFX_AddPrim(1, 0x28);
+    half_width = (s16)((((u16)width_plus_1) - 4) >> 1);
+    half_inner = half_width;
+    primitive  = (POLY_FT4*)g_GfxPrimCursor;
+    odd_width  = (width - 3) & 1;
+    SetPolyFT4(primitive);
+    PSX_SET_SEMI_TRANSPARENT(primitive);
+    primitive->x0   = (s16)(x + 2);
+    primitive->y0   = top;
+    primitive->x1   = (s16)(((s16)(x + 2)) + half_width);
+    primitive->y1   = top;
+    primitive->x2   = (s16)(x + 2);
+    primitive->y2   = bottom_y;
+    primitive->x3   = (s16)(((s16)(x + 2)) + half_width);
+    primitive->y3   = bottom_y;
+    primitive->u0   = 0;
+    primitive->v0   = 0;
+    primitive->u1   = (u8)half_inner;
+    primitive->v1   = 0;
+    primitive->u2   = 0;
+    primitive->v2   = bottom_v;
+    primitive->u3   = (u8)half_inner;
+    primitive->v3   = bottom_v;
+    primitive->r0   = 0xAC;
+    primitive->g0   = 0xAC;
+    primitive->b0   = 0xAC;
+    primitive->clut = GetClut(clut_x, 481);
+    if (GetGraphType() != 1) {
+        GetGraphType();
+    }
+    primitive->tpage = 0xF;
+    GFX_AddPrim(1, 0x28);
+    odd_width_u16 = (u16)odd_width;
+    primitive     = (POLY_FT4*)g_GfxPrimCursor;
+    SetPolyFT4(primitive);
+    PSX_SET_SEMI_TRANSPARENT(primitive);
+    primitive->y0   = top;
+    base_x          = (s16)(x + half_width);
+    primitive->x0   = (s16)(base_x + 2);
+    primitive->x1   = (s16)(base_x + ((half_width + odd_width) + 2));
+    primitive->y1   = top;
+    primitive->x2   = (s16)(base_x + 2);
+    primitive->y2   = bottom_y;
+    primitive->x3   = (s16)(base_x + ((half_width + odd_width) + 2));
+    primitive->y3   = bottom_y;
+    primitive->u0   = 0;
+    primitive->v0   = 0;
+    primitive->u1   = (u8)(half_inner + odd_width_u16);
+    primitive->v1   = 0;
+    primitive->u2   = 0;
+    primitive->v2   = bottom_v;
+    primitive->u3   = (u8)(half_inner + odd_width_u16);
+    primitive->v3   = bottom_v;
+    primitive->r0   = 0xAC;
+    primitive->g0   = 0xAC;
+    primitive->b0   = 0xAC;
+    primitive->clut = GetClut(clut_x, 481);
+    if (GetGraphType() != 1) {
+        GetGraphType();
+    }
+    primitive->tpage = 0xF;
+    GFX_AddPrim(1, 0x28);
+    primitive = (POLY_FT4*)g_GfxPrimCursor;
+    SetPolyFT4(primitive);
+    PSX_SET_SEMI_TRANSPARENT(primitive);
+    primitive->y2 = bottom_y;
+    primitive->v2 = bottom_v;
+    edge_x        = (s16)(x + width_plus_1);
+    primitive->x1 = edge_x;
+    new_var       = (s16)(edge_x - 2);
+    primitive->y1 = top;
+    primitive->x3 = edge_x;
+    primitive->x0 = new_var;
+    primitive->x2 = (s16)(edge_x - 2);
+    primitive->y3 = bottom_y;
+    primitive->y0 = top;
+    primitive->u0 = 0;
+    primitive->v0 = 0;
+    primitive->u1 = 2;
+    primitive->v1 = 0;
+    primitive->u2 = 0;
+    primitive->u3 = 2;
+    primitive->v3 = bottom_v;
+    primitive->r0 = 0xAC;
+    primitive->g0 = 0xAC;
+    primitive->b0 = 0xAC;
+    primitive->y1 += 2;
+    primitive->y3 -= 3;
+    primitive->y2--;
+    primitive->v1 += 2;
+    primitive->v2--;
+    primitive->v3 -= 3;
+    primitive->clut = GetClut(clut_x, 481);
+    if (GetGraphType() != 1) {
+        GetGraphType();
+    }
+    primitive->tpage = 0xF;
+    GFX_AddPrim(1, 0x28);
+    texture_window    = (RECT*)g_GfxPrimCursor;
+    g_GfxPrimCursor   = (u8*)(texture_window + 1);
+    texture_window->x = 0;
+    texture_window->y = 0;
+    texture_window->w = 256;
+    texture_window->h = 256;
+    if (GetGraphType() != 1) {
+        GetGraphType();
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, 0xF, texture_window);
+    GFX_AddPrim(1, 0xC);
+    func_801AEBA0((s16)(x + 2), (s16)(y + 2), (s16)(width - 4), (s16)(height - 4), 0);
+}
+#else
+INCLUDE_ASM(Menu_DrawHeaderBar);
+#endif

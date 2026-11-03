@@ -1,0 +1,5 @@
+[[matching.section_placements]]
+function = 0x801F7230
+section = ".rodata"
+address = 0x801F6C04
+size = 0x8C

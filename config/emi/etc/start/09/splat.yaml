@@ -1,0 +1,13 @@
+sha1: 976bd4c58708d3022453c90dc9a85faecd6177b7
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801EEC00
+    align: 4
+    section_order: [.rodata, .text, .data, .bss]
+    subsegments:
+      - [0x0, .rodata, card_names]
+      - [0x30, c, save_card]
+      - [0x1254, bin, asset_save_icons]
+  - [0x1494]

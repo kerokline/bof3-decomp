@@ -1,0 +1,74 @@
+#include "battle_15.h"
+
+/* Row field outside this target's include chain: the enemy action id halfword
+ * at +0x74 of the 0x118-byte rows indexed by (slot - 3). */
+
+/* Non-volatile alias for the selection-kind byte at 0x80146375. Reading it
+ * through the target's volatile g_BattleActionType makes the compiler materialize
+ * the zero-extension of every byte load (`andi rX,rX,0xFF`), which retail does
+ * not carry; this distinct, non-volatile symbol keeps the retail `lbu` shape.
+ * FAKE: non-volatile alias of g_BattleActionType (same idiom as func_8009C8AC).
+ */
+
+/* Non-volatile alias for the result byte at 0x80146384, used by the slot store
+ * only. FAKE: the volatile store keeps retail's `li v0,1` out of the `bnez`
+ * delay slot (pure C best 98.10%, scheduling at +0x168); the alias reaches
+ * 100%.
+ */
+
+/* Enemy row view anchored at the status halfword (+0x82) of the 0x118-byte rows. */
+
+/* answers whether the battler slot may act: with the battle 0x4000
+ *           flag set, the slot unblocked and not the current selection, an
+ *           enemy slot is checked through its action row and action id. The
+ *           result byte g_BattleTargetSelector receives the slot, the current selection, or
+ *           a 0x40/0x80/0xC0 action code.
+ */
+MATCH u8 func_800A9304(u8 slot) {
+    s32 index;
+    u8  action;
+
+    if (!(g_BattleState & BATTLE_STATE_OVER)) {
+        return true;
+    }
+    if (Battle_SlotIsBlocked(D_801463CB)) {
+        return true;
+    }
+    if (D_801463CB == slot) {
+        return true;
+    }
+    if (slot < BATTLE_PARTY_SLOT_COUNT) {
+        /* shared exit: the panel copies the current selection */
+        goto copy_selection;
+    }
+    index = slot - BATTLE_PARTY_SLOT_COUNT;
+    if (D_801EB630[index].unk_AA < 2 || (D_801EB630[index].status_82 & STATUS_CONFUSED) ||
+        (D_801EB630[index].flags_104 & COMBATANT_FLAG_CHARGING)) {
+        if ((*(u8*)&g_BattleActionType) == 4) {
+            action = D_801CA718[D_801EB726[slot - BATTLE_PARTY_SLOT_COUNT][0] * BATTLE_KIND_STRIDE];
+            if (action & 0x10) {
+                if (!(action & 0x80)) {
+                    if (D_801463CB >= BATTLE_PARTY_SLOT_COUNT) {
+                        g_BattleTargetSelector = 0x80;
+                    } else {
+                        g_BattleTargetSelector = 0x40;
+                    }
+                } else {
+                    g_BattleTargetSelector = 0xC0;
+                }
+                return true;
+            }
+            if (!(action & 0x40)) {
+                (*(u8*)&g_BattleTargetSelector) = slot;
+                return true;
+            }
+        }
+        /* shared exit: the panel copies the current selection */
+        goto copy_selection;
+    }
+    return true;
+
+copy_selection:
+    g_BattleTargetSelector = D_801463CB;
+    return false;
+}

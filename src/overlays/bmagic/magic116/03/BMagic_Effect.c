@@ -1,0 +1,61 @@
+#include "magic116_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+MATCH void func_801EEC14(void) {
+    MagicTaskFuncs handlers;
+
+    handlers = D_801EEC04;
+    SYS_DISPATCH_TASK(handlers.handlers, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EEC80);
+
+INCLUDE_ASM(func_801EED2C);
+
+INCLUDE_ASM(func_801EEDB0);
+
+MATCH void func_801EEE34(void) {
+    u16* flags;
+
+    if ((func_801EF118() & BYTE_MASK) == 0) {
+        BATTLE_RAISE_STATE(BATTLE_STATE_EFFECT_PLAYING);
+        func_801E5988();
+    }
+}
+
+INCLUDE_ASM(func_801EEE7C);
+
+MATCH u8* func_801EEFB8(void) {
+    u8* record;
+    u8  index;
+
+    record = D_801EF2A8;
+    for (index = 0; index < 128; index++, record += 0x3C) {
+        if (*record == 0) {
+            return record;
+        }
+    }
+    return NULL;
+}
+
+MATCH void func_801EEFF4(void) {
+    u8* record;
+    u8  index;
+
+    record = D_801EF2A8;
+    index  = 0;
+    do {
+        *record = 0;
+        index++;
+        record += 0x3C;
+    } while (index < 128);
+}
+
+INCLUDE_ASM(func_801EF020);
+
+INCLUDE_ASM(func_801EF118);
+
+INCLUDE_ASM(func_801EF258);

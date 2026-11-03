@@ -1,0 +1,167 @@
+[[matching.section_placements]]
+function = 0x80197378
+section = ".rodata"
+address = 0x80195830
+size = 0x28
+
+[[matching.section_placements]]
+function = 0x80196784
+section = ".rodata"
+address = 0x80195804
+size = 0x14
+
+[[matching.section_placements]]
+function = 0x801968BC
+section = ".rodata"
+address = 0x8019581C
+size = 0x14
+
+[[matching.section_placements]]
+function = 0x801AD734
+section = ".rodata"
+address = 0x80195F5C
+size = 0x20
+
+[[matching.section_placements]]
+function = 0x801ACF2C
+section = ".rodata"
+address = 0x80195EEC
+size = 0x20
+
+[[matching.section_placements]]
+function = 0x801AD4DC
+section = ".rodata"
+address = 0x80195F24
+size = 0x20
+
+[[matching.section_placements]]
+function = 0x801A4400
+section = ".rodata"
+address = 0x80195864
+size = 0x2C
+
+[[matching.section_placements]]
+function = 0x801A44A4
+section = ".rodata"
+address = 0x80195894
+size = 0x2C
+
+[[matching.section_placements]]
+function = 0x801A4844
+section = ".rodata"
+address = 0x80195924
+size = 0x2C
+
+[[matching.section_placements]]
+function = 0x801A4BF8
+section = ".rodata"
+address = 0x80195954
+size = 0x3C
+
+[[matching.section_placements]]
+function = 0x801A7CF0
+section = ".rodata"
+address = 0x80195990
+size = 0x18
+
+[[matching.section_placements]]
+function = 0x801A7E54
+section = ".rodata"
+address = 0x801959A8
+size = 0x30
+
+[[matching.section_placements]]
+function = 0x801A802C
+section = ".rodata"
+address = 0x801959D8
+size = 0x60
+
+[[matching.section_placements]]
+function = 0x801A8728
+section = ".rodata"
+address = 0x80195A38
+size = 0x288
+
+[[matching.section_placements]]
+function = 0x801A8F94
+section = ".rodata"
+address = 0x80195CC0
+size = 0x3C
+
+[[matching.section_placements]]
+function = 0x801A96E4
+section = ".rodata"
+address = 0x80195D00
+size = 0x3C
+
+[[matching.section_placements]]
+function = 0x801A9944
+section = ".rodata"
+address = 0x80195D40
+size = 0x40
+
+[[matching.section_placements]]
+function = 0x801A9DE8
+section = ".rodata"
+address = 0x80195D80
+size = 0x40
+
+[[matching.section_placements]]
+function = 0x801AA470
+section = ".rodata"
+address = 0x80195DC0
+size = 0x40
+
+[[matching.section_placements]]
+function = 0x801AAB00
+section = ".rodata"
+address = 0x80195E00
+size = 0x3C
+
+[[matching.section_placements]]
+function = 0x801AB458
+section = ".rodata"
+address = 0x80195E40
+size = 0x34
+
+[[matching.section_placements]]
+function = 0x801AB8B0
+section = ".rodata"
+address = 0x80195E78
+size = 0x40
+
+[[matching.section_placements]]
+function = 0x801ABA24
+section = ".rodata"
+address = 0x80195EB8
+size = 0x1C
+
+[[matching.section_placements]]
+function = 0x801AF494
+section = ".rodata"
+address = 0x80195F7C
+size = 0x14
+
+[[matching.section_placements]]
+function = 0x801B0E44
+section = ".rodata"
+address = 0x80195F9C
+size = 0x20
+
+[[matching.section_placements]]
+function = 0x801BC4D0
+section = ".rodata"
+address = 0x80195FC0
+size = 0x20
+
+[[matching.section_placements]]
+function = 0x801A4640
+section = ".rodata"
+address = 0x801958C4
+size = 0x2C
+
+[[matching.section_placements]]
+function = 0x801A46E8
+section = ".rodata"
+address = 0x801958F4
+size = 0x2C

@@ -1,0 +1,18 @@
+#include "area008_13.h"
+
+MATCH void func_801F42D4(void) {
+    s8 state;
+
+    state            = D_801490C7;
+    g_MessageRequest = D_801F53F0[state];
+    switch (state) {
+        case 0:
+            g_ScriptVars = 1;
+            break;
+        case 1:
+            g_ScriptVars = 0;
+            break;
+        default:
+            return;
+    }
+}

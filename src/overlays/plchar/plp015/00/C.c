@@ -16,7 +16,7 @@ MATCH void func_801CE72C(void) {
     SYS_DISPATCH_TASK(D_801CFB90, 2, g_SpadWork);
 }
 
-INCLUDE_ASM(func_801CE770);
+#include "overlays/plchar/func_801CE770.h"
 
 INCLUDE_ASM(func_801CEA94);
 

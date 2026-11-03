@@ -1,11 +1,12 @@
 #!/bin/sh
 # Prepare a checkout: Python environment, pinned toolchain, retail payloads.
 #
-#   tools/setup.sh [--dev] [--matching] [--no-payloads]
+#   tools/setup.sh [--dev] [--matching] [--no-payloads] [--no-sdk]
 #
 #   --dev          also install pytest and Ruff
 #   --matching     also install the matching aids and their submodules (implies --dev)
 #   --no-payloads  skip the retail media; the disc-free checks still work
+#   --no-sdk       skip the PsyQ 3.7 library objects; the toolchain and tracked headers remain
 #
 # Safe to run again: every step checks its result first. After it, run
 #   meson setup build/meson && meson compile -C build/meson check
@@ -15,13 +16,15 @@ cd "$(dirname "$0")/.."
 dev=
 matching=
 payloads=1
+sdk=1
 for arg; do
 	case $arg in
 	--dev) dev=1 ;;
 	--matching) dev=1 matching=1 ;;
 	--no-payloads) payloads= ;;
+	--no-sdk) sdk= ;;
 	-h | --help)
-		sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'
+		sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'
 		exit 0
 		;;
 	*)
@@ -41,9 +44,10 @@ BINUTILS_SHA256=228f031a25cf2687d8845fd1421f625bafc211fa27da428e458e80d030a726f8
 
 # Host tools, all checked before anything changes.
 missing=
-for tool in git curl tar sha256sum unzip 7z uv; do
+for tool in git curl tar sha256sum unzip uv; do
 	command -v "$tool" >/dev/null 2>&1 || missing="$missing $tool"
 done
+[ -z "$sdk" ] || command -v 7z >/dev/null 2>&1 || missing="$missing 7z"
 if [ -n "$payloads" ]; then
 	for tool in cargo cc; do
 		command -v "$tool" >/dev/null 2>&1 || missing="$missing $tool"
@@ -122,7 +126,11 @@ if [ ! -x "$binutils/bin/mipsel-none-elf-as" ]; then
 fi
 
 # PsyQ 3.7 library objects.
-sh tools/psyq.sh
+if [ -n "$sdk" ]; then
+	sh tools/psyq.sh
+else
+	step "PsyQ library objects skipped"
+fi
 
 [ -n "$payloads" ] || {
 	step "retail payloads skipped"

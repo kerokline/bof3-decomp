@@ -37,11 +37,12 @@ script is safe to run again; each step checks its result first. It runs:
 2. `uv sync --locked`: the base Python groups, plus pytest and Ruff with `--dev`, plus the matching
    aids with `--matching`.
 3. The pinned GCC 2.7.2 PSX compiler, the object parser and the PSn00b binutils, each checked by
-   SHA-256, and `tools/psyq.sh`, which stages PsyQ 3.7.
+   SHA-256, and `tools/psyq.sh`, which stages PsyQ 3.7 (skipped with `--no-sdk`).
 4. `tools/setup.py`: builds the `tools/bof3-tools` extractor, extracts the disc into `build/disc`,
    unpacks every EMI archive and materializes the targets under `build/`.
 
-`--no-payloads` skips step 4. The build reads the shared `CARGO_TARGET_DIR` when it is set and uses
+`--no-payloads` skips step 4. `--no-sdk` skips `tools/psyq.sh`: no SDK object is downloaded or
+staged, and the tracked `include/psyq/` headers still work. The build reads the shared `CARGO_TARGET_DIR` when it is set and uses
 `build/rust/` otherwise. Editors with clangd work after `meson setup`; `.clangd` reads the compile
 database in `build/meson/emit/`.
 
@@ -53,7 +54,7 @@ BIOS or SDK payload.
 The game is not in this repository. Dump your own US disc (a Redump-verified CUE sheet and two BIN
 tracks); setup checks each track's SHA-1 against the Redump dump and never uploads it.
 
-Without a disc (`tools/setup.sh --dev --no-payloads`) you can edit code and docs, and run `format`,
+Without a disc (`tools/setup.sh --dev --no-payloads --no-sdk`) you can edit code and docs, and run `format`,
 `format-check`, `check-tree`, `include-asm`, `check-headers` and `meson test`. You cannot build an
 image, check bytes, read the split assembly, write the report or use `bin/rz` and `bin/coddog`:
 all of them need the extracted retail data. Matching a function needs the disc.

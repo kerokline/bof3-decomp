@@ -1328,7 +1328,7 @@ merge, and the macro is not a setting to move into a header.
 
 One original source compiled into several overlays, or one helper called with different arguments,
 is written once. An exact twin gets one shared form, chosen by where its members live and what
-differs. Find candidates with the clone finder ([tools](#clone-finder)); a group is a candidate set, not one body.
+differs. Find candidates with `bin/coddog cluster <target>` ([coddog](toolchain.md#coddog)); a group is a candidate set, not one body.
 
 | Members                                                                                | Form                                                                                                                                                                                                                                                                                                                    |
 | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1436,14 +1436,6 @@ splat names an unnamed unit by its uppercase hex offset. When its functions are 
 `git mv` renames it, in one commit with every row that names the file (`splat.yaml`). The source folder of a target is what
 `source_folder` in `tools/bof3/resolve/ids.py` returns.
 
-```text
-disc archive or executable
-  -> output image        one folder per image
-  -> object              one .o per source file
-  -> image link          linker.ld + generated symbol script
-  -> retail payload      byte compare
-```
-
 ### Rename steps
 
 Add the symbol's `config/symbols.toml` row with its `source`, rewrite every tracked user, move the unit file,
@@ -1492,7 +1484,3 @@ A name that cannot be resolved for certain fails the link and names the fix:
 
 - Boss and `battle/15` images read `["emi/battle/battle/03"]` through `symbol_owners` in their
   `splat.yaml`, so battle/03's readable names resolve there.
-
-### Clone finder
-
-`bin/coddog cluster <target>` lists clone groups ([coddog](toolchain.md#coddog)).

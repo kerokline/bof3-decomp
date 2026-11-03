@@ -44,7 +44,7 @@ MATCH void func_801E8DD8(void) {
         g_SpadWork->unk_2E.half = *(u16*)((slot + 0x2Eu)) + offset_x;
         row                     = slot[5];
         row -= 3;
-        offset_y                = *(u8*)((BATTLE_ENCOUNTER_TABLE + 0xCB) + (u32)D_801EB710[row * 0x118] * 0x88u);
+        offset_y                = ENCOUNTER_ENEMIES[D_801EB710[row * 0x118]].height;
         g_SpadWork->unk_30.half = *(u16*)((slot + 0x30u)) - offset_y - 8u;
         g_SpadWork->z           = *(u16*)((slot + 0x32u));
     }

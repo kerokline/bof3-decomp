@@ -8,7 +8,7 @@ MATCH s32 Area_BuildEncounter(u8 work_mode, s32 work_index) {
     MATCH_REG(u8, i, "s2");
     s32             x;
     s32             y;
-    s32             mask;
+    s32             reach;
     u8              kind;
     u8              slot;
     s32             off;
@@ -56,11 +56,11 @@ loop_16:
         x    = *(s32*)(D_80143F2C + (i & BYTE_MASK) * 8);
         y    = *(s32*)(D_80143F30 + (i & BYTE_MASK) * 8);
         if ((kind == 2) || (kind == 6)) {
-            mask = 1;
+            reach = 1;
         } else {
-            mask = 0;
+            reach = 0;
         }
-        if (!(func_801C7064(x, y, mask, 0x20) & BYTE_MASK)) {
+        if (!(func_801C7064(x, y, reach, 0x20) & BYTE_MASK)) {
             goto block_29; /* the scan found its entry */
         }
         i += 1;
@@ -71,10 +71,10 @@ loop_16:
     fields = (u8*)D_801463DC + 8;
 loop_18:
     slot = fields[-7];
-    off  = slot * 0x88;
+    off  = slot * ENEMY_STRIDE;
     if (entry->active != 0) {
-        if (!(func_801C7064(*(s32*)(fields - 4), *(s32*)(fields), MEM(u8, ENCOUNTER_TABLE_BASE + 0xCA + off),
-                            MEM(u8, ENCOUNTER_TABLE_BASE + 0xCB + off)) &
+        if (!(func_801C7064(*(s32*)(fields - 4), *(s32*)(fields), ENCOUNTER_ENEMY_AT(off)->reach,
+                            ENCOUNTER_ENEMY_AT(off)->height) &
               0xFF)) {
             entry->active = 0;
             D_801CD8C4 -= 1;

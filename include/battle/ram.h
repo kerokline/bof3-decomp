@@ -68,8 +68,8 @@
 /* The 0x40-stride action blocks GFX_StagePalette copies an action step into, one
  * per battler slot (index << 6). */
 #define BATTLE_ACTION_BLOCK_TABLE         0x80035600u
-/* The 0x88-stride enemy element rows; +0xCA and +0xCB are the two resistance
- * bytes Area_BuildEncounter and func_801E8DD8 read. */
+/* The encounter block: formations and 0x88-stride enemy records from +0x48 (ENCOUNTER_ENEMIES in game/enemy.h). Block
+ * +0xCA and +0xCB are the reach and height of enemy record +0x82 and +0x83. */
 #define BATTLE_ENCOUNTER_TABLE            0x800E4000u
 
 /* The enemy battler row for a battler slot: enemy slots begin after the party

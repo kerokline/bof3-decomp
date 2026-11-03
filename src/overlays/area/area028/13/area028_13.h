@@ -12,12 +12,12 @@
 
 extern ScreenPoint D_800E4A00;
 
-void  func_801F2C80(void);
-void  func_801F2F5C(void);
-void  func_801F2FB0(void* slot);
-void* func_801F3004(void);
-void  func_801F318C(s16 radius);
-void  func_801F3414(void);
-void  func_801F3424(void);
+void          func_801F2C80(void);
+void          func_801F2F5C(void);
+void          func_801F2FB0(void* slot);
+AreaSlotWork* func_801F3004(void);
+void          func_801F318C(s16 radius);
+void          func_801F3414(void);
+void          func_801F3424(void);
 
 #endif

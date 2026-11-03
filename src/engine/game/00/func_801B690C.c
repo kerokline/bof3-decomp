@@ -9,7 +9,7 @@ MATCH void func_801B690C(void) {
         return;
     }
 
-    entry = (u8*)func_8019A1D4();
+    entry = func_8019A1D4();
     work  = g_SpadWork;
     for (;;) {
         if (work->x.part.integer != entry[0]) {

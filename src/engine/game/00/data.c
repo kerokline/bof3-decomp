@@ -36,7 +36,7 @@ Callback g_GameCampMenuLoad[3] = {(Callback)Game_LoadCampMenu, (Callback)func_80
 /* D_801C7B14 */
 Callback g_GameStates[12] = {
     (Callback)Game_ResetGameState, (Callback)Game_RunAreaLoadState, (Callback)Game_RunFieldState, (Callback)Game_RunMenuState,
-    (Callback)func_801979D4,      (Callback)Game_RunBattleState, (Callback)func_80198170, (Callback)Game_RunShopState,
+    (Callback)func_801979D4,      (Callback)Game_RunBattleState, (Callback)Game_RunCameraLookState, (Callback)Game_RunShopState,
     (Callback)Game_RunFishingState,      (Callback)Game_RunAbilityMenuState, (Callback)Game_RunStatusMenuState, (Callback)Game_RunSceneCameraState};
 
 /* D_801C7B44 */

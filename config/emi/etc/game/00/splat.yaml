@@ -224,7 +224,7 @@ segments:
       - [0x2654, c, func_80197E54]
       - [0x26FC, c, func_80197EFC]
       - [0x2748, c, func_80197F48]
-      - [0x2970, c, func_80198170]
+      - [0x2970, c, Game_RunCameraLookState]
       - [0x29B4, c, func_801981B4]
       - [0x29D4, c, func_801981D4]
       - [0x2A34, c, Game_RunShopState]

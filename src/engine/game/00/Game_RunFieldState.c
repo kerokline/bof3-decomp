@@ -31,7 +31,7 @@ MATCH void Game_RunFieldState(void) {
             g_GameEntrySubstate = 0;
             (*counter)++;
             break;
-        case GAME_REQUEST_LOOK:
+        case GAME_REQUEST_CAMERA_LOOK:
             g_GameEntryState = 6;
             break;
         case GAME_REQUEST_AREA_CHANGE: {

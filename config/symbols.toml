@@ -1189,6 +1189,7 @@ Game_RunAreaLoadState = { addr = 0x801971E8, type = "func", source = "g_GameStat
 Game_RunFieldState = { addr = 0x80197378, type = "func", source = "g_GameStates[2]; its body runs Game_RunScenarioEntry and the area frame and maps g_GameStateIndex to the next g_GameEntryState" }
 Game_RunMenuState = { addr = 0x801975E4, type = "func", source = "g_GameStates[3]; its body runs g_GameEntryHandlers[g_GameEntrySubstate]" }
 Game_RunBattleState = { addr = 0x80197A24, type = "func", source = "g_GameStates[5]; its body runs g_GameModeHandlers[g_GameEntrySubstate]; func_80197378 enters it for g_GameStateIndex 3" }
+Game_RunCameraLookState = { addr = 0x80198170, type = "func", source = "state 6 handler: while the look button is held the D-pad orbits g_AreaCameraAngle, on release it eases back to the default angle and returns to state 2 (func_80198F1C, func_801981D4)" }
 Game_RunShopState = { addr = 0x80198234, type = "func", source = "g_GameStates[7]; its body runs g_GameStateHandlers[g_GameEntrySubstate]; the handlers stream SHOP and run the shop and save screens" }
 Game_LoadShopOverlay = { addr = 0x80198270, type = "func", source = "its body calls EMI_LoaderStreamInitSlot(EMI_SLOT_SHOP) and copies palettes 1 and 2" }
 Game_RunFishingState = { addr = 0x801984AC, type = "func", source = "g_GameStates[8]; its body runs g_GameSubstateHandlers[g_GameEntrySubstate]; Game_RunAreaLoadState enters state 8 when g_GameRequestFlags has bit 3 and the substate 1 and 3 handlers live in the pond area image" }

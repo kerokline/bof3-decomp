@@ -109,15 +109,16 @@ typedef struct PartySlot {
 
 /* 0x1C-byte front-end handler row. Game_FindAreaHandler returns the row whose key
  * byte at +0x18 matches the current world state; the handlers sit at +0, +4,
- * +8, +0x0C and +0x10, and +0x14 points to the four-byte rows (x, y, context seed,
- * context kind) func_801B690C searches for the actor cell. */
+ * +8, +0x0C and +0x10, and +0x14 points to the area's map points, four-byte rows (x, y,
+ * context seed, context kind) that func_801B690C searches for the actor cell; Fish_LocationMessage walks the same
+ * rows. The only reader of the member is func_8019A1D4; the rows are written by the data initialiser only. */
 typedef struct AreaHandler {
     Callback handler_00;
     Callback handler_04;
     Callback handler_08;
     Callback handler_0C;
     Callback handler_10;
-    u8*      cell_rows_14;
+    u8*      map_points_14;
     u8       area_id;
     u8       unk_19[3];
 } AreaHandler;

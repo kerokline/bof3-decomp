@@ -1,6 +1,7 @@
 #include "game_00.h"
 
-MATCH void func_80198170(void) {
+/* func_80198170 */
+MATCH void Game_RunCameraLookState(void) {
     if (g_GameEntrySubstate == 0) {
         func_80198F1C();
     } else {

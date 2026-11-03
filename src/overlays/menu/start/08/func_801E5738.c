@@ -12,7 +12,7 @@ MATCH void func_801E5738(void) {
 
     Menu_DrawClutStrip(D_80144953);
     Menu_DrawHeaderBar(0x14, 0x12, 0x118, 0x13, (s32)D_80144952);
-    UI_DrawText(28, 21, 0, 0xFFU, (u8*)Resource_Resolve(0xAC));
+    UI_DrawText(28, 21, 0, 0xFFU, Resource_GetText(0xAC));
     SAVE_DrawSlots(0x20, 0x30, 1U);
     pressed  = INPUT_REPEATED(g_InputPressed, (PADLup | PADLdown));
     prev_row = g_SaveSlotFirst;

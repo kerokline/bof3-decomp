@@ -1,6 +1,6 @@
 #include "start_08.h"
 
-MATCH u32 func_801D9274(const u8* name, u8 mode) {
+MATCH u8* func_801D9274(const u8* name, u8 mode) {
     s32 resource;
 
     if (mode != 0) {
@@ -27,5 +27,5 @@ MATCH u32 func_801D9274(const u8* name, u8 mode) {
             resource = 0x3A;
             break;
     }
-    return Resource_Resolve(resource);
+    return Resource_GetText(resource);
 }

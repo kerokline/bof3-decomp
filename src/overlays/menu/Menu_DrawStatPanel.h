@@ -51,7 +51,7 @@ MATCH void Menu_DrawStatPanel(u16 panel_x, u16 panel_y, u8 palette_index) {
     UI_DrawGlyphString(x78, y17, 0, g_UiFormatBuffer);
     if (entryp[0x1B] != GAME_NONE) {
         x30 = entryp[0x1B] + 0x111;
-        TEXT_SetVariable(0, 8, (const u8*)Resource_Resolve(x30));
+        TEXT_SetVariable(0, 8, Resource_GetText(x30));
         WinDrawCueText(xb, panel_y + 34, 0x34);
     }
     UI_DrawSpriteRun(panel_x, panel_y, MENU_STAT_GLYPH_0, 0);

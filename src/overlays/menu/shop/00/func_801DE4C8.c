@@ -4,7 +4,7 @@
  * retail if/else call layout for resource selection rebuilt from asm. */
 #ifdef NON_MATCHING
 NON_MATCHING void func_801DE4C8(void) {
-    u32 resource;
+    u8* resource;
     u8  prev_index;
     u8  prev_side;
     u8  buttons;
@@ -13,10 +13,10 @@ NON_MATCHING void func_801DE4C8(void) {
 
     func_801DF6A8();
     if (D_801E6254 == GAME_NONE) {
-        resource = Resource_Resolve(0x60);
+        resource = Resource_GetText(0x60);
     } else {
         TEXT_SetVariable(0, 5, g_Characters[MEM_PTR(u8, g_CharSlot)[D_801E6254]].name);
-        resource = Resource_Resolve(0x61);
+        resource = Resource_GetText(0x61);
     }
     UI_DrawText(26, 20, 0, 0xFF, resource);
     buttons    = INPUT_REPEATED(g_InputPressed, INPUT_DIRECTIONAL);

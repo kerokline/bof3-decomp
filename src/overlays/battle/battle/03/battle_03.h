@@ -652,13 +652,13 @@ u8            func_801DDF50(u16 entry_id, u32 table_kind);
 void          func_801DE1D4(void);
 /* func_801DE43C */
 void          Battle_RunEvents(void);
-void          func_801DE60C(u32 slot, u8 action_kind, u8 arg2, u8 arg3, u8 arg4, u32 payload);
+void          func_801DE60C(u32 slot, u8 action_kind, u8 arg2, u8 arg3, u8 arg4, u8* payload);
 void          func_801DE690(void);
 void          func_801DE7FC(void);
 void          func_801DE804(void);
 u8            func_801DE858(s8 event_kind);
 /* func_801DE8C0 */
-void          BattleStageSelectionRingRecord(s8 slot_index, s8 record_kind, u32 resource_handle);
+void          BattleStageSelectionRingRecord(s8 slot_index, s8 record_kind, u8* text);
 u8            func_801DE92C(void);
 void          Battle_SetTextPartyName(u32 party_slot);
 void          Battle_SetTextEnemyName(u32 enemy_index);

@@ -12,7 +12,7 @@ MATCH void func_80098450(void) {
     s32              trigger;
     u8               old_cursor;
     u32              slot;
-    u32              handle;
+    u8*              handle;
     u32              value;
 
     phase = &g_BattleChoicePanel[3];
@@ -82,7 +82,7 @@ MATCH void func_80098450(void) {
     if (old_cursor != panel->group_cursor) {
         SND_PlayCue(EMI_CUE_ID(1, 0));
     }
-    handle = Resource_Resolve(Item_GetDescription(D_8014857A, D_801C893C[D_8014857A][D_8014857C]) & HALF_MASK);
+    handle = Resource_GetText(Item_GetDescription(D_8014857A, D_801C893C[D_8014857A][D_8014857C]) & HALF_MASK);
     D_801EB5B4[((D_801EC328 - 1) & 0xF) * 2] = handle;
     if (((MenuChoicePanel*)g_BattleChoicePanel)->confirm_gate != 0) {
         return;

@@ -22,6 +22,7 @@ MATCH u8 func_801D54F8(void) {
 
     if (count != 0u) {
         u32 event_id;
+        u8* text;
 
         func_801D9484();
         event_id = 0x2Cu;
@@ -29,8 +30,8 @@ MATCH u8 func_801D54F8(void) {
             Battle_SetTextPartyName(last_index);
             event_id = 0x2Bu;
         }
-        event_id = Resource_Resolve(event_id);
-        func_801DE560(2u, 0u, 0u, 0x2Du, event_id);
+        text = Resource_GetText(event_id);
+        func_801DE560(2u, 0u, 0u, 0x2Du, text);
         return true;
     }
 

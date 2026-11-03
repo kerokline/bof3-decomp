@@ -19,7 +19,7 @@ MATCH void func_801D3A64(void) {
     }
     packed = g_BattleAction->unk_02;
     SYS_CopyString((u8*)&D_80149298, Item_GetRecord(packed >> 8, packed & BYTE_MASK), 0xC);
-    func_801DE560(1, 1, 0, 0x1E, (u32)&D_80149298);
+    func_801DE560(1, 1, 0, 0x1E, (u8*)&D_80149298);
     g_BattleRowCursor    = 0;
     g_BattleMessageState = 1;
     g_BattleUiStep += 1;

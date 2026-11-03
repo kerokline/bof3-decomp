@@ -73,7 +73,7 @@ extern u8*                          D_801EB4D8;
 extern u8                           g_BattleEventSlots[];
 extern u8                           D_801EB5A8;
 extern u8                           D_801EB5B1[];
-extern u32                          D_801EB5B4[];
+extern u8*                          D_801EB5B4[];
 /* Enemy battler work record (stride 0x118 at D_801EB630, indexed by slot - 3). */
 extern EnemyBattler                 D_801EB630[];
 extern u8                           D_801EB631[];
@@ -125,7 +125,7 @@ void        func_801DDAB4(u32 arg0);
 void        func_801DDFEC(u32 battler_index);
 s16         func_801DE0AC(s32 factor_a, s32 factor_b);
 void        Battle_SetSlotPending(u32 slot);
-void        func_801DE560(u8 event_kind, u8 arg1, u8 arg2, u8 arg3, u32 payload);
+void        func_801DE560(u8 event_kind, u8 arg1, u8 arg2, u8 arg3, u8* payload);
 void        func_801E52F0(u16 effect_id);
 /* func_801E590C */
 u32         Battle_AllocEffect(u32 mode, u32 handler_index);

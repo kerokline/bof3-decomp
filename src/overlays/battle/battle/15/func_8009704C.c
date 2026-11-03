@@ -30,7 +30,7 @@ NON_MATCHING void func_8009704C(void) {
     u8*                     entry;
     s32                     trigger;
     s32                     ring_index;
-    u32                     handle;
+    u8*                     handle;
     u8                      kind;
     s32                     cursor;
 
@@ -111,7 +111,7 @@ NON_MATCHING void func_8009704C(void) {
     group                      = (BattleSelectionGroup*)sel;
     entry                      = Party_GetAbilities(message[0], group->index, 1);
     kind                       = entry[group->cursor];
-    handle                     = Resource_Resolve(*(u16*)(D_801CA71E + kind * 0x14));
+    handle                     = Resource_GetText(*(u16*)(D_801CA71E + kind * 0x14));
     ring_index                 = (D_801EC328 - 1) & 0xF;
     D_801EB5B4[ring_index * 2] = handle;
     if (D_80148582 != 0) {

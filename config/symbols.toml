@@ -2999,7 +2999,7 @@ UI_DrawGlyphString = { addr = 0x80150098, type = "func", source = "emits one 8x8
 SYS_CopyString = { addr = 0x801501E4, type = "func", source = "bounded NUL-terminated copy - battle copies item and character names through it" }
 Message_StartAreaMessage = { addr = 0x80150224, type = "func", source = "resolves the area message bank index into the shared handle pair - Fairy_GrantGift/RollReward call it" }
 Resource_RequestArea = { addr = 0x80150284, type = "func", source = "resolves an area resource into the shared handle pair and resets the front-end state" }
-Resource_Resolve = { addr = 0x801502D0, type = "func", source = "resolves a resource id through the loader-written 0x8001A000 table - battle/battle/15 func_8009704C and etc/game/00 func_8019986C read it" }
+Resource_GetText = { addr = 0x801502D0, type = "func", source = "returns the string a resource id selects in the loader-written 0x8001A000 table - every caller passes the result to UI_DrawText, TEXT_SetVariable, strncpy or a message request" }
 UI_ResetMessage = { addr = 0x80150304, type = "func", source = "resets the front-end selection state and requests menu 0 mode 0" }
 UI_UpdateLayout = { addr = 0x801503E0, type = "func", source = "rebuilds the two window cells from D_80148334/D_80148336 and reports the confirm bit" }
 UI_DrawMessageScript = { addr = 0x80150470, type = "func", source = "walks the D_801490AC message script drawing each glyph through func_8014F800" }

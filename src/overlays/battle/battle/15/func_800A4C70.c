@@ -17,7 +17,7 @@ MATCH void func_800A4C70(void) {
         D_801485BE                               = 0x3F;
         g_BattleTargetCursorCol                  = 0;
         D_801485CA                               = 0;
-        D_801EB5B4[((D_801EC328 - 1) & 0xF) * 2] = Resource_Resolve(0x59);
+        D_801EB5B4[((D_801EC328 - 1) & 0xF) * 2] = Resource_GetText(0x59);
         count                                    = g_BattleUiState + 1;
         state                                    = &g_BattleRowCursor;
         *state |= 0x80;

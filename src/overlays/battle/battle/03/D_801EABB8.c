@@ -603,7 +603,7 @@ u8 D_801EB5A8 = 0;
 static u8 s_gap_801EB5AC[8] = {0};
 
 /* 0x801EB5B4 */
-u32 D_801EB5B4[31] = {0};
+u8* D_801EB5B4[31] = {0};
 
 /* 0x801EB630 */
 EnemyBattler D_801EB630[8] = {0};

@@ -39,12 +39,12 @@ MATCH void func_801D409C(void) {
                 for (index = 0; index < 12; index++) {
                     D_801490F8[index] = ability[D_801EB726[*battler - 3][0]].name[index];
                 }
-                BattleStageSelectionRingRecord(1, 0, Resource_Resolve(BATTLE_TEXT_LEARNED));
+                BattleStageSelectionRingRecord(1, 0, Resource_GetText(BATTLE_TEXT_LEARNED));
                 return;
             }
             if (g_BattlePartyBattlers[*state - 1].flags_124.value & 8) {
                 g_BattlePartyBattlers[*state - 1].flags_124.value &= clear_flag;
-                BattleStageSelectionRingRecord(1, 0, Resource_Resolve(BATTLE_TEXT_CANT_LEARN));
+                BattleStageSelectionRingRecord(1, 0, Resource_GetText(BATTLE_TEXT_CANT_LEARN));
                 return;
             }
         } while (g_BattleRowCursor < 3);

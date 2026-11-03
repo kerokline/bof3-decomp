@@ -335,7 +335,7 @@ MATCH void func_801D8508(s16 x, s16 y, u32 flags, u8 row, u8 variant) {
     u16 row_offset;
     u8  color;
     u32 shade;
-    u32 texture;
+    u8* texture;
 
     Menu_DrawFilledPanel(x, y, 7, 4);
     func_801644D8(20, (u16)(x + 7), (u16)(y + 5), 16, 16, 128);
@@ -343,18 +343,18 @@ MATCH void func_801D8508(s16 x, s16 y, u32 flags, u8 row, u8 variant) {
     if (variant == 0) {
         shade = 0x1B;
     }
-    texture = Resource_Resolve(shade);
+    texture = Resource_GetText(shade);
     left    = (s16)(x + 6);
-    UI_DrawText((s16)(x + 42), (s16)(y + 7), 0, 0xFF, (u8*)texture);
+    UI_DrawText((s16)(x + 42), (s16)(y + 7), 0, 0xFF, texture);
 
     color = (flags & 1) ? 0 : 7;
-    UI_DrawText(left, (s16)(y + 25), color, 0xFF, (u8*)Resource_Resolve(0x85));
+    UI_DrawText(left, (s16)(y + 25), color, 0xFF, Resource_GetText(0x85));
     right  = (s16)(x + 94);
     text_y = (s16)(y + 25);
     UI_DrawAsciiString(right, text_y, color, &D_801D0D94);
 
     color = (flags & 2) ? 0 : 7;
-    UI_DrawText(left, (s16)(y + 41), color, 0xFF, (u8*)Resource_Resolve(0x85));
+    UI_DrawText(left, (s16)(y + 41), color, 0xFF, Resource_GetText(0x85));
     text_y = (s16)(y + 41);
     UI_DrawAsciiString(right, text_y, color, &D_801D0D98);
 

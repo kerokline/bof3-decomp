@@ -48,7 +48,7 @@ MATCH void func_800B1728(void) {
             line_y += 0x2D;
             UI_DrawTextString(
                 (s16)(g_MenuPanelTaskCurrent->x + 16), (s16)(g_MenuPanelTaskCurrent->y + line_y), clut, 0xFF,
-                (const u8*)Resource_Resolve(
+                Resource_GetText(
                     ((u8*)&D_800B4C90)[D_80145518[(s16)g_MenuPanelTaskCurrent->unk_12 + row].gate_03 & 0x1F]));
             sprintf((s8*)g_UiFormatBuffer, &D_80096A2C, sum & BYTE_MASK);
             UI_DrawGlyphString((s16)(g_MenuPanelTaskCurrent->x + 88), (s16)(g_MenuPanelTaskCurrent->y + line_y), clut,

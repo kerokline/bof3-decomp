@@ -15,7 +15,7 @@ MATCH void func_8009B9A0(void) {
         } while ((u32)(count & BYTE_MASK) < 8U);
         func_800ACF80();
         func_801D9484();
-        func_801DE560(2u, 0u, 0u, 0x2Du, Resource_Resolve(0x10));
+        func_801DE560(2u, 0u, 0u, 0x2Du, Resource_GetText(0x10));
         cell = &g_BattleUiState;
         cell[0] += 1;
     }

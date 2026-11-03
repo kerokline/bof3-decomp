@@ -1,0 +1,12 @@
+sha1: 2f4e15377b50ac5091fd7815c15c93e7ed80a777
+symbol_owners:
+  - emi/battle/batl_re2/01
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x80036E00
+    align: 4
+    subsegments:
+      - [0x0, bin, asset_clut]
+  - [0x200]

@@ -1,0 +1,5 @@
+[[copies]]
+disc_id = "BIN/BOSS/BOSS046.EMI#16"
+payload_sha256 = "d3b8718e616f389310d46b98a437efdd3dfdd2eba02d6ea4dc9b9fc952243951"
+load_address = 0x800c1800
+size = 956

@@ -1,0 +1,18 @@
+#include "area151_13.h"
+
+MATCH void func_801F3898(void) {
+    Actor* scratch;
+    /* FAKE: value pinned to v0. */
+    MATCH_REG(s32, armed, "v0");
+
+    scratch = (Actor*)g_SpadWork;
+    scratch->unk_30 += 0xA;
+    if (scratch->unk_30 >= 0xF0) {
+        scratch->unk_03 = 0;
+    }
+    if (D_801454F2 == 0 && g_GameStateIndex != 2 && GAME_SCRIPT_ACTIVE() == 0) {
+        armed                        = 1;
+        ((Actor*)g_SpadWork)->unk_03 = armed;
+    }
+    func_801F4034(0x5C, ((Actor*)g_SpadWork)->unk_30);
+}

@@ -1,0 +1,28 @@
+sha1: 28a3b308775437004cae5915dc6285d59c9d1a38
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0x4, c, func_801F2C04]
+      - [0x68, c, func_801F2C68]
+      - [0x70, c, func_801F2C70]
+      - [0x78, c, func_801F2C78]
+      - [0xB8, c, func_801F2CB8]
+      - [0xF8, c, func_801F2CF8]
+      - [0x138, c, func_801F2D38]
+      - [0x178, c, func_801F2D78]
+      - [0x21C, c, Actor_Spawn]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x278
+    vram: 0x801F2E78
+    align: 4
+    subsegments:
+      - [0x278, .data, D_801F2E78]
+  - [0x1588]

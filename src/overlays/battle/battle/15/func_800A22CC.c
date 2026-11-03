@@ -1,0 +1,18 @@
+#include "battle_15.h"
+
+MATCH void func_800A22CC(void) {
+    volatile u8* battler_index_cell;
+    u32          battler_index;
+
+    func_800A3F28();
+    battler_index_cell = &g_BattleActingBattler;
+    battler_index      = LOBU(*battler_index_cell);
+    if (BATTLER_IS_PLAYER(battler_index)) {
+        g_BattlePartyBattlers[battler_index].flags_128.volatile_value |= COMBATANT_FLAG_CHARGING;
+        g_BattlePartyBattlers[*battler_index_cell].counter_136 = 0;
+    } else {
+        ENEMY_COMBATANT(battler_index).flags_104 |= COMBATANT_FLAG_CHARGING;
+        ENEMY_COMBATANT(*battler_index_cell).unk_112 = 0;
+    }
+    func_800A9BD8(g_BattleTarget);
+}

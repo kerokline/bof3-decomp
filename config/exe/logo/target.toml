@@ -1,0 +1,29 @@
+[sdk]
+[sdk.libs]
+LIBAPI = "3.7"
+LIBC = "3.7"
+LIBCD = "3.7"
+LIBETC = "3.7"
+LIBGPU = "3.7"
+LIBGTE = "3.7"
+
+[psyq]
+space = "logo"
+[psyq.libraries.LIBCD]
+members = ["psyq/3.7/libcd/event.o"]
+confidence = "high"
+evidence = ["LOGO.EXE 0x801cfc30 matches CdInit in PsyQ 3.7 libcd.a"]
+[psyq.libraries.LIBETC]
+members = ["psyq/3.7/libetc/intr.o"]
+confidence = "high"
+evidence = ["LOGO.EXE 0x801cf1ec matches StopCallback in PsyQ 3.7 libetc.a"]
+[psyq.libraries.LIBGPU]
+members = ["psyq/3.7/libgpu/sys.o"]
+confidence = "high"
+evidence = ["LOGO.EXE 0x801d4174 matches SetDispMask in PsyQ 3.7 libgpu.a"]
+
+[[matching.section_placements]]
+function = 0x801D04A4
+section = ".rodata"
+address = 0x801CE278
+size = 0x14

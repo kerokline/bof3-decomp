@@ -1,0 +1,48 @@
+#include "shop_00.h"
+
+MATCH void func_801D3014(void) {
+    u8*  stock;
+    s8*  toggle;
+    u16* pad;
+    u32  price;
+    u8*  counter;
+    u32* wallet;
+
+    TEXT_SetVariable(0, 12, Item_GetRecord(D_801E6048, D_801E604C));
+    D_80148340 = 0x52;
+    toggle     = &D_8014865B;
+    D_80148624 = 1;
+    pad        = &g_InputPressed;
+    D_80148628 = (u16)D_80148334 + (1 - *toggle) * 32 + 0xDE;
+    D_8014862A = (u16)D_80148336 + 5;
+    if (*pad & (PADLright | PADLleft)) {
+        SND_PlayCue(EMI_CUE_ID(1, 0));
+        *toggle ^= 1;
+    }
+    if (*pad & D_80145AC2) {
+        if (*toggle != 0) {
+            SND_PlayCue(EMI_CUE_ID(1, 4));
+            wallet  = &g_Zenny;
+            price   = *wallet + D_801E6050 * D_801E6060;
+            *wallet = price;
+            if (price > 0x98967F) {
+                *wallet = 0x98967F;
+            }
+            stock = D_801C8950[D_801E6048] + D_801E6044;
+            *stock -= D_801E6050;
+            if (D_801C8950[D_801E6048][D_801E6044] == 0) {
+                D_801C893C[D_801E6048][D_801E6044] = 0;
+                D_801C8950[D_801E6048][D_801E6044] = 0;
+            }
+        } else {
+            SND_PlayCue(EMI_CUE_ID(1, 6));
+        }
+        counter = &D_80148652;
+        *counter -= 2;
+        return;
+    }
+    if (*pad & D_80145AC4) {
+        SND_PlayCue(EMI_CUE_ID(1, 6));
+        D_80148652 -= 2;
+    }
+}

@@ -1,0 +1,27 @@
+#include "sisyou_00.h"
+
+/* Panel-lock flag owned by the main executable. */
+
+/* Stock count and the two strided per-entry tables (0x140-byte stock records,
+ * 0xA4-byte item records); the 2-D form keeps the original's symbol+index
+ * addressing. */
+
+MATCH void func_801D3798(void) {
+    s32 i;
+
+    if (g_GameStateIndex == 2) {
+        return;
+    }
+    for (i = 0; i < g_PartySize; i++) {
+        if (g_Characters[D_80145FCC.rows[i][0]].master_id == D_801448ED) {
+            break;
+        }
+    }
+    if (i < g_PartySize) {
+        g_MasterSubStep = 0;
+        return;
+    }
+    Message_StartAreaMessage((s16)(D_801D41BC[D_801448ED] + 9));
+    g_GameStateIndex = 2;
+    g_MasterSubStep++;
+}

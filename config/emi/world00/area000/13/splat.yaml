@@ -1,0 +1,16 @@
+sha1: 160af1b18e4d1fa49d5bdfa75b29da5c3b6272da
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0x4, c, func_801F2C04]
+      - [0x4C, c, Message_SelectAnswerValue]
+      - [0x8C, c, func_801F2C8C]
+      - [0xD8, c, func_801F2CD8]
+      - [0x118, c, D_801F2D18]
+  - [0x143C]

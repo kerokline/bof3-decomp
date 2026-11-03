@@ -1,0 +1,12 @@
+#include "game_00.h"
+
+MATCH void func_801C4D1C(void) {
+    u32 route;
+
+    route = g_SpadWork->direction_08;
+    if (route == 7) {
+        Actor_RequestScript(0x3C);
+    } else {
+        Actor_RequestScript(0x3D);
+    }
+}

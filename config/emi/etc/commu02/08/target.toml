@@ -1,0 +1,5 @@
+[[copies]]
+disc_id = "BIN/ETC/COMMU02B.EMI#7"
+payload_sha256 = "c3b427f7db75b5cef294fd5f3e9adca9e1a6cb4657a440a4c6730c8be2a9070c"
+load_address = 0x801d0c00
+size = 42208

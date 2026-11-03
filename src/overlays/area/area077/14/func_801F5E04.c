@@ -1,0 +1,21 @@
+#include "area077_14.h"
+
+MATCH void func_801F5E04(void) {
+    u8  index;
+    s16 y;
+    s16 x;
+    u8  selection;
+    s32 result;
+    u8* work;
+
+    SP_REF(u8*, 0x44u) = (u8*)&g_BattlePartyBattlers[1];
+    index              = D_80144F5A[1];
+    y                  = g_BattlePartyBattlers[1].unk_30.signed_half;
+    x                  = g_BattlePartyBattlers[1].unk_2E.signed_half;
+    selection          = D_801F62EC[index];
+    result             = func_8015CB18(4, 0, selection, x, y);
+    if ((u8)result != GAME_NONE) {
+        work      = (u8*)g_SpadWork;
+        work[0xB] = (s8)result;
+    }
+}

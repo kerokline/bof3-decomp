@@ -1,0 +1,12 @@
+#include "game_00.h"
+
+MATCH void func_801B7E74(void) {
+    u16 next;
+
+    next = g_SpadWork->z.part.integer;
+    next -= 0x10;
+    FIELD(u16, g_SpadWork, 0x3Eu) = next;
+    if ((s16)next < Area_ReadHeight(D_80146264, D_80146268) - 0x200)
+        g_GameStateIndex = 5;
+    func_8014D978();
+}

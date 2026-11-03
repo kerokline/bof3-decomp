@@ -1,0 +1,40 @@
+#include "battle_03.h"
+
+MATCH void func_801D7234(void) {
+    u32          action;
+    u8           unk_02;
+    u8           unk_03;
+    u8           state;
+    u8           flag;
+    u16          template_id;
+    volatile u8* counter;
+
+    if (EMI_LoaderIsReady() != 0) {
+        g_BattleEndHook();
+        if ((g_BattleOptions & BATTLE_OPT_KEEP_BGM) == 0u) {
+            SND_StopAllSequences();
+            action = g_SndBgmId;
+            if (action != 0xFFu) {
+                unk_02 = D_80181EB8[action].sep_slot;
+                state  = g_EmiStreamFlags;
+                /* FAKE: retail loads the state cell before the flags byte. */
+                MATCH_FAKE_BARRIER();
+                flag             = g_BattleResult;
+                D_80146855       = unk_02;
+                unk_03           = D_80181EB8[action].sequence;
+                g_EmiStreamFlags = state | 0x20u;
+                D_80146856       = unk_03;
+                if ((flag & 0x10u) != 0u) {
+                    g_EmiStreamFlags = state | 0x60u;
+                }
+                template_id = D_80181EB8[action].bank_slot;
+                D_801463B0  = template_id;
+                EMI_LoaderStreamInitSlot(template_id);
+            } else {
+                g_BattleResult |= BATTLE_RESULT_NO_BGM;
+            }
+        }
+        counter = &g_BattleSubStep;
+        *counter += 1u;
+    }
+}

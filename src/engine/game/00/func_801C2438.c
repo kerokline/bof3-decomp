@@ -1,0 +1,24 @@
+#include "game_00.h"
+
+MATCH void func_801C2438(void) {
+    Actor* work;
+    u16*   table;
+    u16    value;
+    s32    i;
+    u32    base;
+    u8     field;
+
+    i    = 0;
+    base = GAME_PALETTE_MIRROR;
+    work = g_SpadWork;
+    do {
+        table = (u16*)(i * 2 + (((u32)work->unk_05 << 6) + base));
+        value = *table;
+        i += 1;
+        *table = (u16)(value | 0x8000);
+    } while (i < 31);
+    g_SpadWork->flags_00 |= ACTOR_FLAG_SEMI_TRANSPARENT;
+    field                                                                 = g_SpadWork->unk_05;
+    g_GfxPalettePending                                                   = 1;
+    *(u16*)(MEM_PTR(u8, GAME_PALETTE_MIRROR) + ((u32)field << 6) + 0x3Eu) = 0;
+}

@@ -1,0 +1,7 @@
+#include "area128_13.h"
+
+MATCH void func_801F307C(void) {
+    if (g_GameState->slot_index_79 == 2) {
+        g_ScriptState->cursor = (u16)(g_ScriptState->cursor + 1);
+    }
+}

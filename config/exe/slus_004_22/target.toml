@@ -1,0 +1,209 @@
+# PsyQ 3.7 objects (psyq_lib_3_7) are the retail link's own libraries; the startup objects 2MBYTE.OBJ and NONE3.OBJ do not convert.
+[sdk]
+[sdk.libs]
+LIBAPI = "3.7"
+LIBC = "3.7"
+LIBCARD = "3.7"
+LIBCD = "3.7"
+LIBETC = "3.7"
+LIBGPU = "3.7"
+LIBGTE = "3.7"
+LIBSND = "3.7"
+LIBSPU = "3.7"
+
+[psyq]
+[psyq.libraries.LIBGPU]
+members = ["psyq/3.7/libgpu/ext.o"]
+confidence = "medium"
+evidence = ["PsyQ 3.7 libgpu ext.o: SetDefDispEnv and SetDefDrawEnv reproduce exactly"]
+[psyq.libraries.LIBCD]
+members = ["psyq/3.7/libcd/sys.o"]
+confidence = "high"
+evidence = ["SLUS_004.22 EMI loader call targets and PsyQ 3.7 libcd.a symbols (100% masked)"]
+[psyq.libraries.LIBAPI]
+members = ["psyq/3.7/libapi/a08.o", "psyq/3.7/libapi/a12.o", "psyq/3.7/libapi/a91.o"]
+confidence = "high"
+evidence = ["SLUS_004.22 BIOS-vector call targets match PsyQ 3.7 libapi.a symbols"]
+[psyq.libraries.LIBCARD]
+members = ["psyq/3.7/libcard/a74.o", "psyq/3.7/libcard/c112.o", "psyq/3.7/libcard/patch.o"]
+confidence = "high"
+evidence = ["SLUS_004.22 card-init call targets match PsyQ 3.7 libcard.a symbols (100% masked)"]
+
+[[matching.section_placements]]
+function = 0x801648A0
+section = ".rodata"
+address = 0x80149C90
+size = 0x38
+
+[[matching.section_placements]]
+function = 0x8014CE78
+section = ".rodata"
+address = 0x80149998
+size = 0x14
+
+[[matching.section_placements]]
+function = 0x80150470
+section = ".rodata"
+address = 0x80149A00
+size = 0x5C
+
+[[matching.section_placements]]
+function = 0x8015A344
+section = ".rodata"
+address = 0x80149B78
+size = 0x28
+
+[[matching.section_placements]]
+function = 0x8015B870
+section = ".rodata"
+address = 0x80149C00
+size = 0x3C
+
+[[matching.section_placements]]
+function = 0x8015C264
+section = ".rodata"
+address = 0x801821D0
+size = 0x10
+
+[[matching.section_placements]]
+function = 0x80165760
+section = ".rodata"
+address = 0x80149CE0
+size = 0x104
+
+[[matching.section_placements]]
+function = 0x801658DC
+section = ".rodata"
+address = 0x80149DE8
+size = 0xDC
+
+[[matching.section_placements]]
+function = 0x80165B3C
+section = ".rodata"
+address = 0x80149EC8
+size = 0x5C
+
+[[matching.section_placements]]
+function = 0x80165D48
+section = ".rodata"
+address = 0x80149F28
+size = 0x14
+
+[[matching.section_placements]]
+function = 0x80165EC0
+section = ".rodata"
+address = 0x80149F40
+size = 0x14
+
+[[matching.section_placements]]
+function = 0x80165F68
+section = ".rodata"
+address = 0x80149F58
+size = 0x14
+
+[[matching.section_placements]]
+function = 0x801666C8
+section = ".rodata"
+address = 0x80149F70
+size = 0x14
+
+[[matching.section_placements]]
+function = 0x80166904
+section = ".rodata"
+address = 0x80149F88
+size = 0x14
+
+# func_801691FC dispatches on two adjacent tables at 0x8014A008 and 0x8014A028;
+# the manifest allows one .rodata placement per function, so both are declared
+# as a single contiguous span.
+[[matching.section_placements]]
+function = 0x801691FC
+section = ".rodata"
+address = 0x8014A008
+size = 0x40
+
+# Same for func_8016BD2C: adjacent tables at 0x8014A084 and 0x8014A0A4.
+[[matching.section_placements]]
+function = 0x8016BD2C
+section = ".rodata"
+address = 0x8014A084
+size = 0x40
+
+[[matching.section_placements]]
+function = 0x8016D9CC
+section = ".rodata"
+address = 0x8014A0C4
+size = 0x18
+
+[[matching.section_placements]]
+function = 0x80175C60
+section = ".rodata"
+address = 0x8014A354
+size = 0x14
+
+[[matching.section_placements]]
+function = 0x8017E3F4
+section = ".rodata"
+address = 0x8014A950
+size = 0xB4
+
+[[matching.section_placements]]
+function = 0x80164D2C
+section = ".rodata"
+address = 0x80149CC8
+size = 0x18
+
+# Load reservations: zero-filled windows whose only nonzero bytes are the
+# stamps retail writes at the start (a slot or pad id). The link writes them
+# as fills instead of extracting them from the payload; the bytes are checked
+# against the extracted binary before it links.
+[[regions]]
+role = "slot"
+name = "slot_80096800_main_exe"
+offset = 0x800
+size = 0x2B000
+fill = 0
+words = [[0x0, 0x00000009]]
+
+[[regions]]
+role = "slot"
+name = "slot_800c1800_boss034"
+offset = 0x2B800
+size = 0x33800
+fill = 0
+words = [[0x0, 0x0000000A]]
+
+[[regions]]
+role = "slot"
+name = "slot_800f5000_area030_05"
+offset = 0x5F000
+size = 0x22000
+fill = 0
+words = [[0x0, 0x0000000D]]
+
+[[regions]]
+role = "slot"
+name = "slot_80117000"
+offset = 0x81000
+size = 0x32800
+fill = 0
+words = [[0x0, 0x00000008]]
+
+# Overlay arena: eighteen EMI targets load into this window. Its three nonzero
+# bytes are the last byte of the word at each offset below.
+[[regions]]
+role = "arena"
+name = "overlay_arena"
+offset = 0x13A400
+size = 0x26400
+fill = 0
+words = [[0x800, 0x0000000B], [0x1E800, 0x0000000C], [0x22800, 0x0000000E]]
+
+# Tail pad: zeros with one stamped word at +0x400.
+[[regions]]
+role = "pad"
+name = "tail_pad"
+offset = 0x160800
+size = 0x800
+fill = 0
+words = [[0x400, 0x0000000F]]

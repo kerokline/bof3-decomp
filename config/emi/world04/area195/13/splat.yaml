@@ -1,0 +1,10 @@
+sha1: 2b1455ec93a49fb97b12c83b3162b74816d2d6f8
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+  - [0x164]

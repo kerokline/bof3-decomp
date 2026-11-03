@@ -1,0 +1,22 @@
+#include "battle_15.h"
+
+MATCH void func_8009B9A0(void) {
+    s32          count;
+    u8           index;
+    volatile u8* cell;
+
+    if (g_AreaCameraMoving == 0) {
+        count = 0;
+        Area_AdvanceScroll(Area_SampleHeight(g_AreaScrollTargetX, g_AreaScrollTargetY));
+        do {
+            index = (u8)(count & BYTE_MASK);
+            GFX_FreePaletteFadeTarget(&D_801EB630[index]);
+            count++;
+        } while ((u32)(count & BYTE_MASK) < 8U);
+        func_800ACF80();
+        func_801D9484();
+        func_801DE560(2u, 0u, 0u, 0x2Du, Resource_Resolve(0x10));
+        cell = &g_BattleUiState;
+        cell[0] += 1;
+    }
+}

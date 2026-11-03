@@ -1,0 +1,21 @@
+#!/bin/sh
+# Print the first PATH entry of <name> that runs (`<name> --version` exits 0).
+# A version-manager shim that has no version set is on PATH but fails; this skips it.
+# Exit 0: found. Exit 1: none runs; stderr names each entry that failed.
+set -u
+[ $# -eq 1 ] || {
+    echo "usage: bin/internal/find-tool <name>" >&2
+    exit 2
+}
+name=$1
+IFS=:
+for dir in $PATH; do
+    candidate=${dir:-.}/$name
+    [ -f "$candidate" ] && [ -x "$candidate" ] || continue
+    if "$candidate" --version </dev/null >/dev/null 2>&1; then
+        printf '%s\n' "$candidate"
+        exit 0
+    fi
+    echo "find-tool: skipped $candidate (--version failed)" >&2
+done
+exit 1

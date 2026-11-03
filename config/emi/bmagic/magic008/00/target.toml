@@ -1,0 +1,11 @@
+[[copies]]
+disc_id = "BIN/BMAGIC/MAGIC018.EMI#3"
+payload_sha256 = "d26d80ad78f9ee8de182050f731e5ea21a55c3adc52b59b065d9f1bf2f9b78d9"
+load_address = 0x801eec00
+size = 12316
+
+[[copies]]
+disc_id = "BIN/BMAGIC/MAGIC019.EMI#3"
+payload_sha256 = "d26d80ad78f9ee8de182050f731e5ea21a55c3adc52b59b065d9f1bf2f9b78d9"
+load_address = 0x801eec00
+size = 12316

@@ -1,0 +1,251 @@
+#include "scena02_00.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+MATCH void func_801F71A4(void) {
+    /* Retail takes the handler index from the entry $v0; the uninitialised local reads it. */
+    u32 index;
+
+    /* FAKE: without the block the scheduler hoists the index shift above the
+       ra store (84.46%); the lock restores the retail order (99.85%). */
+    ORDER_LOCK(D_801FE288[index]());
+}
+
+MATCH void func_801F71D8(void) {
+    *D_80144E98      = 0;
+    g_ScriptVarsWord = 0;
+    D_80146872       = 1;
+}
+
+INCLUDE_ASM(func_801F71FC);
+
+MATCH void func_801F7A60(void) {
+    SYS_DISPATCH_BYTE(D_801FE294, D_80146874);
+}
+
+INCLUDE_ASM(func_801F7A9C);
+
+MATCH void func_801F7C30(void) {
+}
+
+INCLUDE_ASM(func_801F7C38);
+
+MATCH void func_801F8068(void) {
+}
+
+INCLUDE_ASM(func_801F8070);
+
+INCLUDE_ASM(func_801F8264);
+
+INCLUDE_ASM(func_801F82F4);
+
+INCLUDE_ASM(func_801F8538);
+
+INCLUDE_ASM(func_801F8740);
+
+INCLUDE_ASM(func_801F8C78);
+
+INCLUDE_ASM(func_801F9134);
+
+INCLUDE_ASM(func_801F936C);
+
+INCLUDE_ASM(func_801F9678);
+
+INCLUDE_ASM(func_801F9800);
+
+INCLUDE_ASM(func_801F9BD0);
+
+INCLUDE_ASM(func_801F9EA4);
+
+INCLUDE_ASM(func_801FA1F0);
+
+INCLUDE_ASM(func_801FA548);
+
+INCLUDE_ASM(func_801FAA68);
+
+INCLUDE_ASM(func_801FAC54);
+
+MATCH void func_801FB0E8(void) {
+}
+
+INCLUDE_ASM(func_801FB0F0);
+
+MATCH void func_801FB2F8(void) {
+}
+
+INCLUDE_ASM(func_801FB300);
+
+INCLUDE_ASM(func_801FB36C);
+
+INCLUDE_ASM(func_801FB6C4);
+
+INCLUDE_ASM(func_801FB868);
+
+INCLUDE_ASM(func_801FBC6C);
+
+INCLUDE_ASM(func_801FBF24);
+
+INCLUDE_ASM(func_801FBF94);
+
+INCLUDE_ASM(func_801FC044);
+
+INCLUDE_ASM(func_801FC0F4);
+
+INCLUDE_ASM(func_801FC1A4);
+
+INCLUDE_ASM(func_801FC25C);
+
+INCLUDE_ASM(func_801FC308);
+
+INCLUDE_ASM(func_801FC3B4);
+
+INCLUDE_ASM(func_801FC46C);
+
+INCLUDE_ASM(func_801FC518);
+
+INCLUDE_ASM(func_801FC5D0);
+
+INCLUDE_ASM(func_801FC688);
+
+INCLUDE_ASM(func_801FC734);
+
+INCLUDE_ASM(func_801FC7E4);
+
+INCLUDE_ASM(func_801FC9CC);
+
+INCLUDE_ASM(func_801FCB54);
+
+INCLUDE_ASM(func_801FCB94);
+
+INCLUDE_ASM(func_801FCBDC);
+
+INCLUDE_ASM(func_801FCD14);
+
+INCLUDE_ASM(func_801FCECC);
+
+INCLUDE_ASM(func_801FD084);
+
+MATCH void func_801FD0C4(void) {
+}
+
+INCLUDE_ASM(func_801FD0CC);
+
+INCLUDE_ASM(func_801FD114);
+
+MATCH void func_801FD15C(void) {
+}
+
+INCLUDE_ASM(func_801FD164);
+
+INCLUDE_ASM(func_801FD1DC);
+
+MATCH void func_801FD254(void) {
+    D_80146865 = 1;
+}
+
+MATCH void func_801FD268(void) {
+    D_80146866 = 1;
+}
+
+MATCH void func_801FD27C(void) {
+    D_80146865 = 1;
+}
+
+MATCH void func_801FD290(void) {
+    SYS_SetFlag(g_SceneFlags, 0xDU);
+}
+
+MATCH void func_801FD2B8(void) {
+    SYS_SetFlag(g_SceneFlags, 0xEU);
+}
+
+MATCH void func_801FD2E0(void) {
+    Game_SetScriptActive();
+    g_ScriptVars = 1;
+    D_80146865   = 0;
+    D_80146866   = 0;
+    D_80146875   = 0;
+    D_80146874   = 7;
+}
+
+INCLUDE_ASM(func_801FD330);
+
+INCLUDE_ASM(func_801FD374);
+
+INCLUDE_ASM(func_801FD3BC);
+
+INCLUDE_ASM(func_801FD40C);
+
+MATCH void func_801FD450(void) {
+    Game_SetScriptActive();
+    D_80146875 = 0xF;
+    D_80146874 = 0x10;
+    SND_PlayCue(EMI_CUE_ID(1, 6));
+}
+
+INCLUDE_ASM(func_801FD490);
+
+MATCH void func_801FD4E4(void) {
+}
+
+MATCH void func_801FD4EC(void) {
+    Game_SetScriptActive();
+    D_80146875 = 0x1e;
+    D_80146865 = 0;
+    D_80146866 = 0;
+    D_80146867 = 0;
+    D_80146874 = 2;
+}
+
+MATCH void func_801FD53C(void) {
+    Game_SetScriptActive();
+    D_80146875 = 0xA;
+    D_80146874 = 0x1B;
+}
+
+MATCH void func_801FD574(void) {
+    Game_SetScriptActive();
+    D_80146875 = 0;
+    D_80146874 = 0x17;
+}
+
+INCLUDE_ASM(func_801FD5A8);
+
+INCLUDE_ASM(func_801FD5FC);
+
+MATCH void func_801FD65C(void) {
+    SYS_SetFlag(g_SceneFlags, 0x31U);
+}
+
+MATCH void func_801FD684(void) {
+    Game_SetScriptActive();
+    D_80146875 = 0x19;
+    D_80146874 = 0x1A;
+}
+
+MATCH void func_801FD6BC(void) {
+    Game_SetScriptActive();
+    D_80146875 = 5;
+    D_80146874 = 0x1B;
+}
+
+MATCH s32 func_801FD6F4(void) {
+    return 0;
+}
+
+INCLUDE_ASM(func_801FD6FC);
+
+INCLUDE_ASM(func_801FD780);
+
+MATCH void func_801FE178(void) {
+    Party_JoinMember(4);
+}
+
+MATCH void func_801FE198(void) {
+    func_801C1ABC(4);
+    func_801C1630();
+}
+
+INCLUDE_ASM(func_801FE1C0);

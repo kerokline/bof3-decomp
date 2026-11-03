@@ -1,0 +1,30 @@
+[[matching.section_placements]]
+function = 0x801D639C
+section = ".rodata"
+address = 0x801D0C1C
+size = 0x18
+
+[[matching.section_placements]]
+function = 0x801D9274
+section = ".rodata"
+address = 0x801D0C34
+size = 0x18
+
+[[matching.section_placements]]
+function = 0x801E1C20
+section = ".rodata"
+address = 0x801D0DC8
+size = 0x18
+
+[[matching.section_placements]]
+function = 0x801E5C68
+section = ".rodata"
+address = 0x801D0EE0
+size = 0x20
+
+# Byte-identical disc entries that reuse this target's sources (see docs/toolchain.md#copy-targets).
+[[copies]]
+disc_id = "BIN/ETC/STATUS.EMI#0"
+payload_sha256 = "a47d32865283a01ce87b2f2f8cb19d3305525659b95a8feb4f307eddf63a8cb1"
+load_address = 0x801d0c00
+size = 117986

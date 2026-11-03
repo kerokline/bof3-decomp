@@ -1,0 +1,68 @@
+#!/bin/sh
+# coddog for this repository; it never waits on a prompt.
+#
+#   bin/coddog cluster <target> [-t 0.985] [-m 5]   duplicate groups in one image
+#   bin/coddog match <target> <func> [-t 0.985]      functions like <func> in its image
+#   bin/coddog submatch <target> <func> <window>     shared chunks of <func> in its image
+#   bin/coddog twins <target>                        <target> against every image
+#   bin/coddog twins all [dir]                       every image against every image, in
+#                                                    parallel, one file per image (build/coddog)
+#   bin/coddog compare <target> <target> [-t] [-m]   two images
+#
+# Each run writes its own manifest in a temporary folder and runs coddog without a terminal, so
+# runs never share a decomp.yaml and coddog's version picker cannot block.
+set -eu
+
+root=$(cd "$(dirname "$0")/.." && pwd)
+coddog=$("$root/bin/internal/find-tool" coddog) || {
+    cat >&2 <<'MSG'
+bin/coddog: no working coddog on PATH (a skipped entry above is a shim with no version set).
+Install the pinned release, and put ~/.local/bin ahead of any shim directory on PATH:
+  mkdir -p ~/.local/bin && curl -fL https://github.com/ethteck/coddog/releases/download/0.6.3/coddog-cli-x86_64-unknown-linux-gnu.tar.xz | tar xJ --strip-components=1 -C ~/.local/bin coddog-cli-x86_64-unknown-linux-gnu/coddog
+MSG
+    exit 127
+}
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+
+usage() {
+    sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//' >&2
+    exit 2
+}
+manifest() { "$root/.venv/bin/python" "$root/tools/decomp_yaml.py" "$@"; }
+run() { setsid -w "$coddog" "$@" </dev/null; }
+slug() { printf '%s' "$1" | tr / _; }
+
+[ $# -ge 2 ] || usage
+cmd=$1
+target=$2
+shift 2
+
+case $cmd in
+cluster | match | submatch)
+    manifest --target "$target" --output "$tmp/decomp.yaml"
+    cd "$tmp"
+    run "$cmd" "$@"
+    ;;
+twins)
+    manifest --output "$tmp/all.yaml"
+    if [ "$target" != all ]; then
+        run compare-n --sort-by similarity "$tmp/all.yaml" "$(slug "$target")" "$tmp/all.yaml"
+        exit
+    fi
+    out=${1:-$root/build/coddog}
+    mkdir -p "$out"
+    grep -oP '^  - name: \K\S+' "$tmp/all.yaml" |
+        xargs -P"$(nproc)" -I{} sh -c 'setsid -w "$0" compare-n --sort-by similarity "$1" {} "$1" \
+            </dev/null >"$2/{}.txt"' "$coddog" "$tmp/all.yaml" "$out"
+    echo "$out: $(ls "$out" | wc -l) images"
+    ;;
+compare)
+    [ $# -ge 1 ] || usage
+    other=$1
+    shift
+    manifest --output "$tmp/all.yaml"
+    run compare2 --sort-by similarity "$@" "$tmp/all.yaml" "$(slug "$target")" "$tmp/all.yaml" "$(slug "$other")"
+    ;;
+*) usage ;;
+esac

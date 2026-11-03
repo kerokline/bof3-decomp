@@ -1,0 +1,23 @@
+sha1: 65b68a97b029cd8f4c93c1721597a5701a81d018
+symbol_owners:
+  - exe/slus_004_22
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801EEC00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, bin, D_801EEC00]
+      - [0x4, c, BMagic_Effect]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x524
+    vram: 0x801EF124
+    align: 4
+    subsegments:
+      - [0x524, bin, D_801EF124]
+      - [0x53C, bin, D_801EF13C]
+  - [0x558]

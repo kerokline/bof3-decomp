@@ -1,0 +1,11 @@
+[[copies]]
+disc_id = "BIN/BOSS/BOSS019.EMI#16"
+payload_sha256 = "edd09dbb1c762c73cfcaceb1113c39ec9dc0320e8e963b2baf533e9f0c535a93"
+load_address = 0x800c1800
+size = 5588
+
+[[copies]]
+disc_id = "BIN/BOSS/BOSS020.EMI#16"
+payload_sha256 = "edd09dbb1c762c73cfcaceb1113c39ec9dc0320e8e963b2baf533e9f0c535a93"
+load_address = 0x800c1800
+size = 5588

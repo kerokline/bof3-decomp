@@ -1,0 +1,53 @@
+#include "scena19_00.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+MATCH void func_801F6C0C(void) {
+    /* Retail takes the handler index from the entry $v0; the uninitialised local reads it. */
+    u32 index;
+
+    /* FAKE: without the block the scheduler hoists the index shift above the
+       ra store (84.46%); the lock restores the retail order (99.85%). */
+    ORDER_LOCK(D_801F6DD0[index]());
+}
+
+MATCH void func_801F6C40(void) {
+    D_80146872 = 1;
+}
+
+MATCH void func_801F6C54(void) {
+    D_80146872 = 2;
+}
+
+MATCH void func_801F6C68(void) {
+    SYS_DISPATCH_BYTE(D_801F6DDC, D_80146874);
+}
+
+INCLUDE_ASM(func_801F6CA4);
+
+MATCH void func_801F6D10(void* entity) {
+    SceneFunc handler;
+    u8        index;
+
+    index   = ((Actor*)entity)->callback_index;
+    handler = D_801F6DE0[index];
+    handler(entity, g_SceneFlags);
+}
+
+MATCH void func_801F6D50(void) {
+}
+
+MATCH s32 func_801F6D58(void) {
+    return 0;
+}
+
+MATCH s32 func_801F6D60(void) {
+    return 0;
+}
+
+INCLUDE_ASM(func_801F6D68);
+
+MATCH void func_801F6DB4(void) {
+}

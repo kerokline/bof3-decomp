@@ -1,0 +1,4 @@
+#include "boss004_13.h"
+
+/* func_800C1C44 */
+INCLUDE_ASM(Boss_HandleBattleEvent);

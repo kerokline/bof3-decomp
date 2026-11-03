@@ -1,0 +1,39 @@
+#include "game_00.h"
+
+MATCH void func_801ACCD8(void) {
+    s8     tuneA;
+    s8     tuneB;
+    s8     tuneC;
+    Actor* spad;
+    Actor* spad2;
+    Actor* spad3;
+    Actor* spad4;
+
+    spad  = g_SpadWork;
+    tuneA = spad->tint.signed_bytes.unk_5D;
+    if (tuneA < -0x40) {
+        spad->tint.signed_bytes.unk_5D = (s8)(tuneA + 4);
+    }
+    spad2 = g_SpadWork;
+    tuneB = spad2->tint.signed_bytes.unk_5E;
+    if (tuneB < -0x40) {
+        spad2->tint.signed_bytes.unk_5E = (s8)(tuneB + 4);
+    }
+    tuneC = g_SpadWork->tint.signed_bytes.unk_5F;
+    if (tuneC < -0x40) {
+        g_SpadWork->tint.signed_bytes.unk_5F = (s8)(tuneC + 4);
+    }
+    if ((g_SpadWork->tint.word & ~0xFF) == 0xC0C0C000) {
+        GFX_FreePaletteFade(g_CurrentActor->unk_93);
+        spad3                           = g_SpadWork;
+        *(u8*)(spad3)                   = (u8)(*(u8*)(spad3) & 0xDF);
+        g_SpadWork->tint.bytes.flags    = 0;
+        spad4                           = g_SpadWork;
+        spad4->tint.signed_bytes.unk_5F = 0;
+        spad4->tint.signed_bytes.unk_5E = 0;
+        spad4->tint.signed_bytes.unk_5D = 0;
+        g_SpadWork->unk_04              = 0;
+        return;
+    }
+    g_CurrentActor->unk_7E = (u16)(g_CurrentActor->unk_7E - 1);
+}

@@ -1,0 +1,30 @@
+#include "game_00.h"
+
+MATCH s32 func_8019DAA0(s32* spawn_record, s16 spawn_offset, u8 spawn_count) {
+    u16 screen[2];
+    u16 size[2];
+    /* FAKE: retail reserves frame bytes above size[] that no statement uses. */
+    STACK_PADS(u8, 12);
+    POLY_FT4* primitive;
+
+    primitive = (POLY_FT4*)g_GfxPrimCursor;
+
+    SetPolyFT4(primitive);
+    PSX_SET_SEMI_TRANSPARENT(primitive);
+
+    Area_ProjectPoint(spawn_record, (long*)screen);
+    size[0] = spawn_offset;
+    size[1] = spawn_offset;
+    func_801AFFD8(spawn_record, size, size);
+
+    setXY4(primitive, screen[0] - ((s16)size[0] >> 1), screen[1] - ((s16)size[1] >> 1),
+           (screen[0] - ((s16)size[0] >> 1)) + size[0], screen[1] - ((s16)size[1] >> 1),
+           screen[0] - ((s16)size[0] >> 1), (screen[1] - ((s16)size[1] >> 1)) + size[1],
+           (screen[0] - ((s16)size[0] >> 1)) + size[0], (screen[1] - ((s16)size[1] >> 1)) + size[1]);
+    setUV4(primitive, 224u, 48u, 255u, 48u, 224u, 79u, 255u, 79u);
+    primitive->clut  = GetClut(160, 483);
+    primitive->tpage = GetTPage(0, 1, 704, 256);
+    setRGB0(primitive, spawn_count, spawn_count, spawn_count);
+
+    Area_AddCellPrim(spawn_record[0], spawn_record[1], 2, 0x28);
+}

@@ -1,0 +1,89 @@
+#include "engine/slus/slus.h"
+
+/* draws the textured quads in part_list: builds the local position
+ * and rotation vectors, then per 0x18-byte part pushes the GTE
+ * matrix, rotates the part, emits a POLY_FT4 with four packed texture
+ * coordinates and appends it with the part's draw mode.
+ */
+/* func_80157358 */
+MATCH void Area_DrawParts(u8* part_list, s32 x, s32 y) {
+    SVECTOR   pos;
+    SVECTOR   rot;
+    SVECTOR   part_rotation;
+    SVECTOR   uv[4];
+    MATRIX    matrix;
+    long      flag;
+    long      p;
+    POLY_FT4* prim;
+    s32       scale;
+    s32       part_word_offset;
+    s32       vertex_index;
+    u32       packed_uv;
+    u32       shifted_uv;
+    u32*      part_words;
+    SVECTOR*  vertex;
+    s32       coordinate;
+    s32       signed_coordinate;
+    s32       draw_mode;
+
+    if ((Area_TestCondition(*(s16*)part_list) << 24) == 0) {
+        return;
+    }
+    pos.vx = ((x - 0x80) << 7) + FIELD(s8, part_list, 7) * 2;
+    pos.vy = ((y - 0x80) << 7) + FIELD(s8, part_list, 6) * 2;
+    pos.vz = *(s32*)(part_list + 4);
+    scale  = (g_FrameCount & 0xFFF) * 4;
+    rot.vx = ((*(u32*)(part_list + 8) >> 0x14) & 0x3FF) * scale;
+    rot.vy = ((*(u32*)(part_list + 8) >> 0xA) & 0x3FF) * scale;
+    rot.vz = (*(u32*)(part_list + 8) & 0x3FF) * scale;
+    for (part_word_offset = 3; part_word_offset != (FIELD(u8, part_list, 0x2u)); part_word_offset += 6) {
+        PushMatrix();
+        part_rotation.vx = (rot.vx + ((((u32*)part_list)[part_word_offset] >> 0x12) & 0xFFC)) & ANGLE_MASK;
+        part_rotation.vy = (rot.vy + ((((u32*)part_list)[part_word_offset] >> 8) & 0xFFC)) & ANGLE_MASK;
+        part_rotation.vz = (rot.vz + ((((u32*)part_list)[part_word_offset] & 0x3FF) * 4)) & ANGLE_MASK;
+        RotTrans(&pos, (VECTOR*)matrix.t, &flag);
+        RotMatrix(&part_rotation, &matrix);
+        MulMatrix2((MATRIX*)g_CameraMatrix, &matrix);
+        SetRotMatrix(&matrix);
+        SetTransMatrix(&matrix);
+        prim = (POLY_FT4*)g_GfxPrimCursor;
+        SetPolyFT4(prim);
+        SetShadeTex(prim, 0);
+        part_words = ((u32*)part_list) + part_word_offset;
+        for (vertex_index = 0; vertex_index < 4; vertex_index++) {
+            vertex     = &uv[vertex_index];
+            packed_uv  = part_words[1 + vertex_index];
+            coordinate = (s32)(packed_uv >> 0x14);
+            vertex->vx = coordinate;
+            if (coordinate & 0x200) {
+                signed_coordinate = coordinate | (~0x3FF);
+                vertex->vx        = signed_coordinate;
+            }
+            packed_uv  = part_words[1 + vertex_index];
+            shifted_uv = packed_uv >> 0xA;
+            coordinate = (s32)(shifted_uv & 0x3FF);
+            vertex->vy = coordinate;
+            if (shifted_uv & 0x200) {
+                signed_coordinate = coordinate | (~0x3FF);
+                vertex->vy        = signed_coordinate;
+            }
+            packed_uv  = part_words[1 + vertex_index];
+            coordinate = (s32)(packed_uv & 0x3FF);
+            vertex->vz = coordinate;
+            if (packed_uv & 0x200) {
+                signed_coordinate = coordinate | (~0x3FF);
+                vertex->vz        = signed_coordinate;
+            }
+        }
+
+        RotTransPers4(&uv[1], &uv[2], &uv[3], &uv[0], (long*)(&prim->x1), (long*)(&prim->x2), (long*)(&prim->x3),
+                      (long*)(&prim->x0), &p, &flag);
+        func_80155560(((u32*)part_list)[part_word_offset + 5], prim, 1);
+        draw_mode = 6;
+        if ((((u32*)part_list)[part_word_offset + 5] & 0x40000000) == 0) {
+            draw_mode = g_AreaDrawMode;
+        }
+        GFX_AddPrim(draw_mode, sizeof(*prim));
+        PopMatrix();
+    }
+}

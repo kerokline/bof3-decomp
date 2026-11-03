@@ -1,0 +1,25 @@
+#ifndef OVERLAY_WORLD01_AREA049_13_H
+#define OVERLAY_WORLD01_AREA049_13_H
+
+/* The world01/area049/13 overlay's local declarations. Only this image
+ * includes the file. */
+
+#include "overlays/area/world01.h"
+#include "overlays/scenario/scenario.h"
+
+void Area_SetCellCode(s16 column, s16 row, u8 code);
+
+/* The work-window byte offset and row stride this overlay scans. */
+#define SCRATCH_ROW_OFFSET 0x00
+#define SCRATCH_ROW_STRIDE 0x28
+
+extern u32      D_80117000;
+extern Callback D_8011818C[];
+extern Callback D_8011819C[];
+extern Callback D_801181AC[];
+extern Callback D_801181B4[];
+
+void func_80117900(void);
+s32  func_80117410();
+
+#endif

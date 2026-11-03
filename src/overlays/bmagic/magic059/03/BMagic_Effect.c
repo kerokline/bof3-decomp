@@ -1,0 +1,106 @@
+#include "magic059_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+INCLUDE_ASM(func_801EEC04);
+
+INCLUDE_ASM(func_801EED0C);
+
+INCLUDE_ASM(func_801EF118);
+
+MATCH void func_801EF1E0(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+INCLUDE_ASM(func_801EF224);
+
+MATCH void func_801EF4C4(void) {
+    u8* work;
+
+    ((u8*)g_SpadWork)[0x09] = 0;
+    ((u8*)g_SpadWork)[0x0A] = 0;
+    work                    = (u8*)g_SpadWork;
+    work[2] += 1;
+}
+
+MATCH void func_801EF504(void) {
+    PartyBattler* work;
+
+    work = g_SpadWork;
+    work->unk_09++;
+    work = g_SpadWork;
+    work->unk_0A += 2;
+    if (work->unk_0A == 32) {
+        work = g_SpadWork;
+        work->unk_02++;
+    }
+}
+
+INCLUDE_ASM(func_801EF570);
+
+#include "overlays/bmagic/Effect_CountDownTimer.h"
+
+/* Follows BMAGIC_PROJECT_ACTOR_MATRIX (bmagic.h), but it first copies the +0x34, +0x38 and
+ * +0x3E fields into a second record through a reloaded pointer. */
+INCLUDE_ASM(func_801EF638);
+
+INCLUDE_ASM(func_801EF70C);
+
+MATCH void func_801EFE48(void) {
+    SYS_DISPATCH_TASK(g_BMagicEffectFuncs + 5, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EFE8C);
+
+INCLUDE_ASM(func_801F0018);
+
+MATCH void func_801F0070(void) {
+    PartyBattler* work;
+
+    work = g_SpadWork;
+    work->unk_09++;
+    work = g_SpadWork;
+    work->unk_0A++;
+    if (work->unk_0A == 32) {
+        work = g_SpadWork;
+        work->unk_02++;
+    }
+}
+
+MATCH void func_801F00DC(void) {
+    u8 timer;
+
+    timer              = g_SpadWork->unk_09 + 1;
+    g_SpadWork->unk_09 = timer;
+    if (timer == 160) {
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    }
+}
+
+MATCH void func_801F012C(void) {
+    PartyBattler* work;
+    u8            count;
+
+    work = g_SpadWork;
+    work->unk_09++;
+    work         = g_SpadWork;
+    count        = work->unk_0A - 1;
+    work->unk_0A = count;
+    if (count == 0) {
+        BATTLE_ACTIVE_WORK->unk_0B--;
+        Actor_Clear();
+    }
+}
+
+INCLUDE_ASM(func_801F01A4);
+
+INCLUDE_ASM(func_801F0490);
+
+/* func_801F04F4 */
+MATCH void Actor_Clear(void) {
+    Bmagic_ResetLocalWork();
+}
+
+INCLUDE_ASM(func_801F0544);

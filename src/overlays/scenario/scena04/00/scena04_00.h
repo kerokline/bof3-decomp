@@ -1,0 +1,20 @@
+#ifndef OVERLAY_SCENARIO_SCENA04_00_H
+#define OVERLAY_SCENARIO_SCENA04_00_H
+
+/* The scenario/scena04/00 overlay's local declarations. Only this image
+ * includes the file. */
+
+#include "overlays/scenario/scenario.h"
+
+extern s8        D_80144EA8;
+extern u32       D_801F6C00;
+extern Callback  D_801FA198[];
+extern Callback  D_801FA1E4[];
+extern s8        D_801FA220[];
+extern Callback  D_801FA204[];
+extern Callback  D_801FA210[];
+extern SceneFunc D_801FA224[];
+
+extern Callback D_801FA180[];
+
+#endif

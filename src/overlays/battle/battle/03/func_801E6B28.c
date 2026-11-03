@@ -1,0 +1,18 @@
+#include "battle_03.h"
+
+MATCH void func_801E6B28(void) {
+    volatile u8* global;
+    u32          kind;
+
+    Area_FindSceneRecord(0x18);
+    g_SpadWork->unk_24 = 0x80;
+    g_SpadWork->unk_2A = 0;
+    global             = (u8*)(EFFECT_BANK_80140000);
+    kind               = *(u16*)(((u32) * (u32*)((global + 0x6380u)) + 2u));
+    if ((D_801CA71C[kind].mask & 0x200u) != 0u) {
+        Actor_SelectScript(0);
+    } else {
+        Actor_SelectScript(2);
+    }
+    g_SpadWork->step_01 += 1;
+}

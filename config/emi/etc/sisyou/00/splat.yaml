@@ -1,0 +1,67 @@
+sha1: 4b2966f7fb129ed097fad383f3930175afa7260c
+segments:
+  - name: data
+    type: code
+    start: 0x0
+    vram: 0x801D0C00
+    align: 4
+    subsegments:
+      - [0x0, .data, D_801D0C00]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: main
+    type: code
+    start: 0x18
+    vram: 0x801D0C18
+    align: 1
+    subalign: 1
+    section_order: [.text, .data, .rodata, .bss]
+    subsegments:
+      - [0x18, c, Master_ResetPanel]
+      - [0x48, c, func_801D0C48]
+      - [0x88, c, func_801D0C88]
+      - [0x1D4, c, func_801D0DD4]
+      - [0x4AC, c, func_801D10AC]
+      - [0x6FC, c, func_801D12FC]
+      - [0x844, c, Menu_DrawStatPanel]
+      - [0xB7C, c, Master_DrawPartyRow]
+      - [0xF28, c, Menu_DrawExperienceLine]
+      - [0x1044, c, Char_GetExpForLevel]
+      - [0x10C0, c, MenuDrawSelectionBox]
+      - [0x1254, c, Menu_DrawHeaderBar]
+      - [0x17A0, c, Menu_DrawPortrait]
+      - [0x1920, c, Menu_DrawIcon]
+      - [0x19D8, c, Master_DispatchMenu]
+      - [0x1A14, c, func_801D2614]
+      - [0x1A88, c, func_801D2688]
+      - [0x1AC4, c, func_801D26C4]
+      - [0x1B38, c, func_801D2738]
+      - [0x1B8C, c, func_801D278C]
+      - [0x1BC8, c, func_801D27C8]
+      - [0x1C2C, c, func_801D282C]
+      - [0x1CB0, c, func_801D28B0]
+      - [0x1DC8, c, func_801D29C8]
+      - [0x1E4C, c, func_801D2A4C]
+      - [0x1F64, c, func_801D2B64]
+      - [0x1FE8, c, func_801D2BE8]
+      - [0x2024, c, func_801D2C24]
+      - [0x2064, c, func_801D2C64]
+      - [0x20A4, c, func_801D2CA4]
+      - [0x24C4, c, func_801D30C4]
+      - [0x2548, c, func_801D3148]
+      - [0x2658, c, func_801D3258]
+      - [0x26D4, c, func_801D32D4]
+      - [0x2710, c, func_801D3310]
+      - [0x2750, c, func_801D3350]
+      - [0x2790, c, func_801D3390]
+      - [0x2B14, c, func_801D3714]
+      - [0x2B98, c, func_801D3798]
+      - [0x2CA8, c, func_801D38A8]
+      - [0x2D24, c, func_801D3924]
+      - [0x2D60, c, func_801D3960]
+      - [0x2DCC, c, func_801D39CC]
+      - [0x2E24, c, func_801D3A24]
+      - [0x3270, c, func_801D3E70]
+      - [0x32D0, c, Master_ApplyMaster]
+      - [0x3358, .data, D_801D3F58_Data]
+      - [0x3688, .data, D_801D4288]
+  - [0x368B]

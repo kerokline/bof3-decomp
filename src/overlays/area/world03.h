@@ -1,0 +1,36 @@
+#ifndef WORLD03_FAMILY_H
+#define WORLD03_FAMILY_H
+
+/* Declarations shared by two or more world03 images; an image header that
+ * reads one includes this file. */
+
+#include "overlays/area/area.h"
+#include "overlays/area/Message_ShowParty.h"
+#include "overlays/area/WorldAreaRequest.h"
+
+extern u16 D_80146876;
+
+/* The work origin offset, step and threshold this overlay advances. */
+#define AREA_ORIGIN_OFFSET       0x2E
+#define ACTOR_SCREEN_X_STEP      0x10
+#define ACTOR_SCREEN_X_THRESHOLD 0x10
+
+/* The work-window byte offset and row stride this overlay clears. */
+#define SCRATCH_COLUMN_OFFSET    0
+#define SCRATCH_COLUMN_STRIDE    0x28
+
+/* The global state byte the area update gates on. */
+
+/* The scenario state byte the request writes. */
+/* The actor-record byte the copy reads. */
+/* The battle record rows whose first byte is a slot tag. */
+extern u8 D_80145F09[][BATTLE_PARTY_STRIDE];
+/* The selection byte that arms the area request. */
+extern s8 D_801490C7;
+
+/* The overlay's frame update; the bounds checks and origin step run it. */
+/* func_801F30D4 (area158), func_801F30D4 (area160), func_801F30D4 (area161), func_801F30D4 (area162), func_801F30D4 (area163), func_801F30D4 (area164), func_801F30D4 (area165), func_801F30D4 (area166), func_801F30E8 (area169), func_801F3108 (area157), func_801F313C (area147), func_801F31AC (area148), func_801F31BC (area167), func_801F347C (area152), func_801F34EC (area033), func_801F3528 (area151), func_801F35B8 (area016), func_801F35B8 (area045), func_801F35BC (area115), func_801F35D0 (area121), func_801F35EC (area087), func_801F35F0 (area065), func_801F367C (area104), func_801F3914 (area168), func_801F3958 (area174), func_801F3F84 (area139), func_801F40F0 (area170), func_801F411C (area088), func_801F45E0 (area173) */
+void Area_Update();
+
+/* The world-overlay position resolver used by the origin handlers. */
+#endif

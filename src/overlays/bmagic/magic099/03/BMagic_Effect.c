@@ -1,0 +1,244 @@
+#include "magic099_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+MATCH void func_801EEC18(void) {
+    BattleHandlerTable5 handlers;
+
+    handlers = D_801EEC04;
+    SYS_DISPATCH_TASK(handlers.handlers, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EEC88);
+
+INCLUDE_ASM(func_801EEE70);
+
+INCLUDE_ASM(func_801EEF98);
+
+INCLUDE_ASM(func_801EEFDC);
+
+INCLUDE_ASM(func_801EF0EC);
+
+MATCH void func_801EF16C(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+MATCH void func_801EF1B0(void) {
+    SVECTOR pos;
+    SVECTOR rot;
+    MATRIX  matrix;
+    long    flags;
+
+    PushMatrix();
+    rot.vx = 0;
+    rot.vy = 0;
+    rot.vz = 512;
+    pos.vx = (g_SpadWork->coord_x_34.raw >> 9) - 0x4000;
+    pos.vy = (g_SpadWork->coord_y_38.raw >> 9) - 0x4000;
+    pos.vz = -g_SpadWork->word_3C.half.span_3E / 2;
+    RotTrans(&pos, &matrix.t, &flags);
+    RotMatrix(&rot, &matrix);
+    MulMatrix2((MATRIX*)g_CameraMatrix, &matrix);
+    SetRotMatrix(&matrix);
+    SetTransMatrix(&matrix);
+}
+
+MATCH void func_801EF264(void) {
+    D_801F09A0[g_SpadWork->unk_02]();
+    func_800AF764();
+    if (g_SpadWork->unk_02 != 0) {
+        func_801EF1B0();
+        func_801EF8F0(0x60, 0x20, 7);
+        PopMatrix();
+    }
+}
+
+INCLUDE_ASM(func_801EF2EC);
+
+MATCH void func_801EF374(void) {
+    BattleEffectTimerStep();
+}
+
+MATCH void func_801EF3E4(void) {
+    PartyBattler* work;
+
+    /* A store through the pointer may alias the cell, so each step reloads
+     * it. */
+    work = g_SpadWork;
+    work->unk_0B++;
+    work = g_SpadWork;
+    work->unk_09--;
+    if (work->unk_09 == 0) {
+        work = g_SpadWork;
+        work->unk_02++;
+    }
+}
+
+MATCH void func_801EF44C(void) {
+    PartyBattler* work;
+    PartyBattler* active;
+    u8            count;
+
+    work = g_SpadWork;
+    work->unk_0B++;
+    work         = g_SpadWork;
+    count        = work->unk_0A - 1;
+    work->unk_0A = count;
+    if (count == 0) {
+        active = BATTLE_ACTIVE_WORK;
+        active->unk_0B++;
+        func_801E5988();
+    }
+}
+
+MATCH void func_801EF4C4(void) {
+    PartyBattler* work;
+
+    work = g_SpadWork;
+    D_801F09B0[work->unk_02]();
+    func_800AF764();
+    if (g_SpadWork->flags_00 != 0) {
+        func_801EF1B0();
+        func_801EF8F0(0x20, 0x50, 0xF);
+        func_801F070C();
+        PopMatrix();
+    }
+}
+
+INCLUDE_ASM(func_801EF554);
+
+MATCH void func_801EF654(void) {
+    BattleEffectTimerStep();
+}
+
+MATCH void func_801EF6C4(void) {
+    MagicOrbitProjectionStep(0x28);
+}
+
+MATCH void func_801EF7D8(void) {
+    PartyBattler* work;
+    s32           counter;
+    s32           angle;
+    s32*          angle_cell;
+    s32           velocity;
+
+    g_SpadWork->unk_0B++;
+
+    work                   = g_SpadWork;
+    counter                = work->unk_0C + 1;
+    VOL(s32, work->unk_0C) = counter;
+    angle                  = (counter & 0x7F) << 5;
+    angle_cell             = &D_1F800004;
+    *angle_cell            = angle;
+    D_1F800000             = 0x28;
+
+    velocity             = rcos(angle) * D_1F800000;
+    work                 = g_SpadWork;
+    work->coord_x_34.raw = BATTLE_ACTIVE_WORK->coord_x_34.raw + velocity;
+
+    velocity                   = rsin(*angle_cell) * D_1F800000;
+    g_SpadWork->coord_y_38.raw = BATTLE_ACTIVE_WORK->coord_y_38.raw + velocity;
+
+    if (--g_SpadWork->unk_0A == 0) {
+        BATTLE_ACTIVE_WORK->unk_0B++;
+        func_801E5988();
+    }
+}
+
+INCLUDE_ASM(func_801EF8F0);
+
+MATCH void func_801F0008(void) {
+    D_801F09C0[g_SpadWork->unk_02]();
+    func_800AF764();
+    if (g_SpadWork->unk_02 != 0) {
+        func_801EF1B0();
+        func_801F043C();
+        func_801F070C();
+        PopMatrix();
+    }
+}
+
+MATCH void func_801F0090(void) {
+    PartyBattler* work;
+    s32           counter;
+    s32           angle;
+    s32*          angle_cell;
+    s32           velocity;
+
+    g_SpadWork->unk_0B = (u8)(RANDOM_MASK(0xF));
+    g_SpadWork->unk_09 = 0;
+    g_SpadWork->unk_0A = 0;
+
+    work                   = g_SpadWork;
+    counter                = (work->unk_03 << 5) + 0x10;
+    angle                  = (counter & 0x7F) << 5;
+    VOL(s32, work->unk_0C) = counter;
+    angle_cell             = &D_1F800004;
+    *angle_cell            = angle;
+    D_1F800000             = 0x18;
+
+    velocity                   = rcos(angle) * D_1F800000;
+    g_SpadWork->coord_x_34.raw = BATTLE_ACTIVE_WORK->coord_x_34.raw + velocity;
+
+    velocity                   = rsin(*angle_cell) * D_1F800000;
+    g_SpadWork->coord_y_38.raw = BATTLE_ACTIVE_WORK->coord_y_38.raw + velocity;
+
+    g_SpadWork->word_3C.half.span_3E = (u16)BATTLE_ACTIVE_WORK->word_3C.half.span_3E;
+    g_SpadWork->unk_02++;
+}
+
+MATCH void func_801F01AC(void) {
+    PartyBattler* work;
+
+    work = g_SpadWork;
+    if (work->unk_0A < 16) {
+        work->unk_0A += 2;
+    } else {
+        work->unk_09 = 60;
+        work         = g_SpadWork;
+        work->unk_02++;
+    }
+}
+
+MATCH void func_801F0200(void) {
+    MagicOrbitProjectionStep(0x10);
+}
+
+MATCH void func_801F0314(void) {
+    PartyBattler* work;
+    PartyBattler* scratch;
+    s32           counter;
+    s32           angle;
+    s32*          angle_cell;
+    s32           velocity;
+
+    g_SpadWork->unk_0B++;
+
+    work                   = g_SpadWork;
+    counter                = work->unk_0C + 1;
+    VOL(s32, work->unk_0C) = counter;
+    angle                  = (counter & 0x7F) << 5;
+    angle_cell             = &D_1F800004;
+    *angle_cell            = angle;
+    D_1F800000             = 0x18;
+
+    velocity             = rcos(angle) * D_1F800000;
+    work                 = g_SpadWork;
+    work->coord_x_34.raw = BATTLE_ACTIVE_WORK->coord_x_34.raw + velocity;
+
+    velocity                = rsin(*angle_cell) * D_1F800000;
+    scratch                 = g_SpadWork;
+    scratch->coord_y_38.raw = BATTLE_ACTIVE_WORK->coord_y_38.raw + velocity;
+    scratch->unk_0A -= 2;
+
+    if (g_SpadWork->unk_0A == 0) {
+        BATTLE_ACTIVE_WORK->unk_0B++;
+        func_801E5988();
+    }
+}
+
+INCLUDE_ASM(func_801F043C);
+
+INCLUDE_ASM(func_801F070C);

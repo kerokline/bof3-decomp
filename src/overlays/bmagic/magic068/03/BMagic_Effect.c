@@ -1,0 +1,53 @@
+#include "magic068_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+MATCH void func_801EEC18(void) {
+    BattleHandlerTable5 handlers;
+
+    handlers = D_801EEC04;
+    SYS_DISPATCH_TASK(handlers.handlers, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EEC88);
+
+INCLUDE_ASM(func_801EED50);
+
+MATCH void func_801EF44C(void) {
+    u8 timer;
+
+    timer              = g_SpadWork->unk_0A - 1;
+    g_SpadWork->unk_0A = timer;
+    if (timer == 0) {
+        g_SpadWork->unk_0A  = 0x3E;
+        g_SpadWork->step_01 = g_SpadWork->step_01 + 1;
+    }
+}
+
+INCLUDE_ASM(func_801EF4A8);
+
+INCLUDE_ASM(func_801EF4EC);
+
+INCLUDE_ASM(func_801EF55C);
+
+MATCH void func_801EF73C(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+MATCH void func_801EF780(void) {
+    SYS_DISPATCH_TASK(g_BMagicEffectFuncs + 1, 2, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EF7C4);
+
+INCLUDE_ASM(func_801EF884);
+
+INCLUDE_ASM(func_801EF908);
+
+INCLUDE_ASM(func_801EF9D0);
+
+INCLUDE_ASM(func_801EFA48);
+
+#include "overlays/bmagic/Effect_SetActorMatrix.h"

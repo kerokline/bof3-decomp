@@ -1,0 +1,64 @@
+sha1: 36261e7ef80d1a3080d60851dd6e1be0cf427fe9
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0x4, c, func_801F2C04]
+      - [0x48, c, func_801F2C48]
+      - [0xA8, c, func_801F2CA8]
+      - [0x168, c, func_801F2D68]
+      - [0x228, c, func_801F2E28]
+      - [0x25C, c, func_801F2E5C]
+      - [0x288, c, func_801F2E88]
+      - [0x2C4, c, func_801F2EC4]
+      - [0x3EC, c, func_801F2FEC]
+      - [0x720, c, func_801F3320]
+      - [0x778, c, func_801F3378]
+      - [0x84C, c, func_801F344C]
+      - [0x890, c, func_801F3490]
+      - [0xA3C, c, Actor_AdvanceWhenPartyNear]
+      - [0xB7C, c, Actor_SlideScreenX]
+      - [0xBD8, c, Actor_AdvanceWhenPartyAway]
+      - [0xCE8, c, func_801F38E8]
+      - [0xD58, c, Area_Update]
+      - [0x108C, c, func_801F3C8C]
+      - [0x10E4, c, func_801F3CE4]
+      - [0x1140, c, func_801F3D40]
+      - [0x1178, c, func_801F3D78]
+      - [0x1268, c, func_801F3E68]
+      - [0x134C, c, func_801F3F4C]
+      - [0x13FC, c, func_801F3FFC]
+      - [0x1500, c, func_801F4100]
+      - [0x15A8, c, func_801F41A8]
+      - [0x1678, c, func_801F4278]
+      - [0x17FC, c, func_801F43FC]
+      - [0x1994, c, func_801F4594]
+      - [0x1A88, c, func_801F4688]
+      - [0x1C10, c, func_801F4810]
+      - [0x1CEC, c, func_801F48EC]
+      - [0x1DC8, c, func_801F49C8]
+      - [0x1E5C, c, func_801F4A5C]
+      - [0x1EB4, c, func_801F4AB4]
+      - [0x1F0C, c, func_801F4B0C]
+      - [0x2068, c, func_801F4C68]
+      - [0x211C, c, func_801F4D1C]
+      - [0x2154, c, func_801F4D54]
+      - [0x2190, c, func_801F4D90]
+      - [0x2328, c, func_801F4F28]
+      - [0x236C, c, func_801F4F6C]
+      - [0x239C, c, func_801F4F9C]
+      - [0x23A4, c, func_801F4FA4]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x23AC
+    vram: 0x801F4FAC
+    align: 4
+    subsegments:
+      - [0x23AC, .data, D_801F4FAC]
+  - [0x3B64]

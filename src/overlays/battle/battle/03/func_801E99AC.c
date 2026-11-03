@@ -1,0 +1,42 @@
+#include "battle_03.h"
+
+/* One entry per 0x118-byte enemy record. */
+extern u8 D_801EB713[][280];
+extern s8 D_801EAEA4;
+
+/* positions the panel task from the selected enemy row's base and
+ * value offsets, draws it, then drops the panel when the active selection slot
+ * disagrees with the panel's row.
+ */
+MATCH void func_801E99AC(void) {
+    BattlePanelTask* panel;
+    u8               row;
+    s32              base;
+    u8               kind;
+    s32              adj;
+    u16              y;
+    u8               slot;
+
+    panel         = BATTLE_PANEL_TASK;
+    row           = panel->cell_0A.slot - 3;
+    base          = D_801EB65E[row][0] + D_801EB712[row * 280];
+    kind          = D_801EB638[row][0];
+    adj           = ((kind == 0) || (kind == 3)) ? D_801EAEA4 : D_801EAEA6;
+    panel->x.half = base + adj;
+    /* FAKE: retail keeps the second row scan after the x store. */
+    MATCH_BARRIER();
+    y                         = D_801EB660[row][0] + (s8)D_801EB713[row][0] + 0xC;
+    BATTLE_PANEL_TASK->y.half = y;
+    func_801D8690((s16)BATTLE_PANEL_TASK->x.half, (s16)y, BATTLE_PANEL_TASK->cell_0A.slot);
+    if (g_BattleSelectionLatch != 0) {
+        slot = *D_801EB4D8;
+        if ((slot & 0xC0) == 0) {
+            if (slot == BATTLE_PANEL_TASK->cell_0A.slot) {
+                return;
+            }
+        } else if ((slot & 0x40) != 0) {
+            return;
+        }
+    }
+    func_801EA1A4();
+}

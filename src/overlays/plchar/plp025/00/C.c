@@ -1,0 +1,81 @@
+#include "plp025_00.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+MATCH void func_801CE404(void) {
+    D_801CFFA8[((u8*)g_SpadWork)[2]]();
+}
+
+INCLUDE_ASM(func_801CE448);
+
+INCLUDE_ASM(func_801CE628);
+
+MATCH void func_801CE72C(void) {
+    SYS_DISPATCH_TASK(D_801CFFB4, 2, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801CE770);
+
+INCLUDE_ASM(func_801CEA94);
+
+#include "overlays/plchar/Char_AdvanceScript.h"
+
+INCLUDE_ASM(func_801CED1C);
+
+#include "overlays/plchar/Char_SpawnActor.h"
+
+#include "overlays/plchar/Char_ProbeFacingCell.h"
+
+MATCH void func_801CF12C(void) {
+    SYS_DISPATCH_TASK(D_801CFFC0, 2, g_SpadWork);
+}
+
+#include "overlays/plchar/Char_StartTurn.h"
+
+MATCH void Char_RunStepScript(void) {
+    CHAR_RUN_STEP_SCRIPT(CHARACTER_FACING_AWAY, CHARACTER_FACING_BACK);
+}
+
+MATCH void func_801CF338(void) {
+    SYS_DISPATCH_TASK(D_801CFFCC, 2, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801CF37C);
+
+INCLUDE_ASM(func_801CF564);
+
+INCLUDE_ASM(func_801CF5D4);
+
+INCLUDE_ASM(func_801CF738);
+
+INCLUDE_ASM(func_801CF808);
+
+MATCH void func_801CF924(void) {
+    SYS_DISPATCH_TASK(D_801CFFD4, 2, g_SpadWork);
+}
+
+MATCH void Char_StartTurn_801CF968(void) {
+    CHAR_START_TURN(CHARACTER_FACING_BACK, CHARACTER_FACING_AWAY);
+}
+
+INCLUDE_ASM(func_801CFA34);
+
+MATCH void func_801CFB30(void) {
+    SYS_DISPATCH_TASK(D_801CFFE0, 2, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801CFB74);
+
+INCLUDE_ASM(func_801CFD40);
+
+INCLUDE_ASM(func_801CFE4C);
+
+MATCH void func_801CFF20(void) {
+    D_801CFFEC[g_SpadWork->unk_2C]();
+}
+
+MATCH void func_801CFF64(void) {
+    D_801CFFF8[g_SpadWork->unk_2C]();
+}

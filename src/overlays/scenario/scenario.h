@@ -1,0 +1,52 @@
+#ifndef SCENARIO_FAMILY_H
+#define SCENARIO_FAMILY_H
+
+/* Declarations shared by two or more scenario images; an image header that
+ * reads one includes this file. */
+
+#include "game.h"
+#include "sys/scene.h"
+#include "gfx/prim.h"
+#include "area/map.h"
+#include "work/actor.h"
+#include "scenario/effect.h"
+#include "scenario/overlay.h"
+#include "scenario/runtime.h"
+#include "sys/cd.h"
+
+#define AREA_WORK_WINDOW      0x800E4800u /* the per-area work window (AreaHandlerRecord.work_08) */
+#define SCRATCH_COLUMN_COUNT  0x80
+#define SCRATCH_COLUMN_OFFSET 0
+#define SCRATCH_COLUMN_STRIDE 0x14
+
+/* The scene context record the entity dispatchers pass to their handler. */
+#define g_SceneFlags          ((void*)g_SceneFlags)
+
+/* Advance the current actor's state byte. */
+static inline void Scene_AdvanceActorState(void) {
+    Actor* actor;
+
+    actor           = SP_REF(Actor*, 0x44);
+    actor->state_02 = (u8)(actor->state_02 + 1);
+}
+
+/* Advance the current actor's step index. */
+static inline void Scene_AdvanceActorStep(void) {
+    Actor* actor;
+
+    actor         = SP_REF(Actor*, 0x44);
+    actor->unk_01 = (u8)(actor->unk_01 + 1);
+}
+
+/* The scenario countdown halfword; the request steps read and step it. */
+extern u16 D_80146876;
+
+void func_801F7484(void);
+void func_801F74EC(void);
+void func_801F7A18(void);
+/* func_801FC8FC */
+void Scene_ClearParty(void);
+
+/* Scene dispatch table indexed by the mode byte at D_80146872. */
+extern s8 D_80146872;
+#endif

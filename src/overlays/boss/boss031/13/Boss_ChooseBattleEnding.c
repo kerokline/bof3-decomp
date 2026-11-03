@@ -1,0 +1,12 @@
+#include "boss031_13.h"
+
+/* func_800C1A08 */
+MATCH void Boss_ChooseBattleEnding(void) {
+    if BATTLE_IS_VICTORY () {
+        D_80146875 = 0x14;
+        func_801DDED8();
+    } else {
+        g_BattleOptions &= 0xBF;
+        func_801DDF00();
+    }
+}

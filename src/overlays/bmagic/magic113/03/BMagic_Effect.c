@@ -1,0 +1,122 @@
+#include "magic113_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+INCLUDE_ASM(func_801EEC24);
+INCLUDE_ASM(func_801EECE0);
+
+INCLUDE_ASM(func_801EEE24);
+
+INCLUDE_ASM(func_801EF000);
+
+INCLUDE_ASM(func_801EF0F0);
+
+INCLUDE_ASM(func_801EF1F8);
+
+INCLUDE_ASM(func_801EF35C);
+
+MATCH void func_801EF3A0(void) {
+    PartyBattler* work;
+
+    work = SP_REF(PartyBattler*, 0x44u);
+    if (work->unk_0B == 0x80) {
+        work->step_01 = (u8)(work->step_01 + 1);
+    }
+}
+
+#include "overlays/bmagic/Effect_CountDownAndPlay.h"
+
+#include "overlays/bmagic/Effect_SetActorMatrix.h"
+
+INCLUDE_ASM(func_801EF4F0);
+
+MATCH void func_801EF75C(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+INCLUDE_ASM(func_801EF7A0);
+
+INCLUDE_ASM(func_801EF844);
+
+MATCH void func_801EF8A4(void) {
+    PartyBattler* active;
+    PartyBattler* work;
+
+    active = BATTLE_ACTIVE_WORK;
+    if (active->unk_0B == 132) {
+        work         = SP_REF(PartyBattler*, 0x44u);
+        work->unk_02 = work->unk_02 + 1;
+    }
+}
+
+MATCH void func_801EF8E4(void) {
+    Effect_CountUpTimer();
+}
+
+INCLUDE_ASM(func_801EF944);
+
+MATCH void func_801EFC28(void) {
+    SYS_DISPATCH_BYTE(D_801F0BC0, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0) {
+        Effect_SetActorMatrix();
+        func_801EFDA0();
+        PopMatrix();
+    }
+}
+
+INCLUDE_ASM(func_801EFCA0);
+
+MATCH void func_801EFD00(void) {
+    PartyBattler* active;
+    PartyBattler* work;
+
+    active = BATTLE_ACTIVE_WORK;
+    if (active->unk_0B == 132) {
+        work         = SP_REF(PartyBattler*, 0x44u);
+        work->unk_02 = work->unk_02 + 1;
+    }
+}
+
+MATCH void func_801EFD40(void) {
+    Effect_CountUpTimer();
+}
+
+INCLUDE_ASM(func_801EFDA0);
+
+MATCH void func_801F0140(void) {
+    SYS_DISPATCH_BYTE(D_801F0BCC, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0) {
+        Effect_SetActorMatrix();
+        func_801F02CC();
+        PopMatrix();
+    }
+}
+
+INCLUDE_ASM(func_801F01B8);
+
+INCLUDE_ASM(func_801F0218);
+
+MATCH void func_801F026C(void) {
+    PartyBattler* work;
+    u8            next;
+
+    work         = g_SpadWork;
+    next         = work->unk_0A + 1;
+    work->unk_0A = next;
+    if (next == 0x10) {
+        BATTLE_ACTIVE_WORK->unk_0B--;
+        func_801E5988();
+    }
+}
+
+INCLUDE_ASM(func_801F02CC);
+
+INCLUDE_ASM(func_801F0764);
+
+#include "overlays/bmagic/Effect_CountDownTimerStep.h"
+
+INCLUDE_ASM(func_801F08B4);
+
+INCLUDE_ASM(func_801F0A80);

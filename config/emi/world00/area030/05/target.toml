@@ -1,0 +1,13 @@
+# Byte-identical disc entries that reuse this target's sources (see docs/toolchain.md#copy-targets).
+
+[[copies]]
+disc_id = "BIN/WORLD02/AREA089.EMI#5"
+payload_sha256 = "9e8a6a98911ad64ea8c22d59ee39ae551f82da004d4e1b73fca8d1ab67ea9145"
+load_address = 0x800f5000
+size = 8784
+
+[[copies]]
+disc_id = "BIN/WORLD03/AREA129.EMI#5"
+payload_sha256 = "9e8a6a98911ad64ea8c22d59ee39ae551f82da004d4e1b73fca8d1ab67ea9145"
+load_address = 0x800f5000
+size = 8784

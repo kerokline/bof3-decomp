@@ -1,0 +1,26 @@
+#include "battle_15.h"
+
+MATCH void func_8009AAE8(void) {
+    s32 bitIndex;
+    s32 record;
+    u8  saveBuf;
+    u32 selectBit;
+
+    saveBuf   = D_801485A1;
+    selectBit = g_CharSlot[D_80144F5D[D_801485C4]];
+    if (((s32)(Item_GetEquipability(D_8014859C, saveBuf) & BYTE_MASK) >> selectBit) & 1) {
+        D_801485C5 = 0;
+        bitIndex   = selectBit & BYTE_MASK;
+    } else {
+        D_801485C5 = 1;
+        bitIndex   = selectBit & BYTE_MASK;
+    }
+    record                             = bitIndex;
+    s_BattleEquipment[0]               = g_Characters[record].weapon;
+    s_BattleEquipment[1]               = g_Characters[record].shield;
+    s_BattleEquipment[2]               = g_Characters[record].helmet;
+    s_BattleEquipment[3]               = g_Characters[record].armor;
+    s_BattleEquipment[4]               = g_Characters[record].accessories[0];
+    s_BattleEquipment[5]               = g_Characters[record].accessories[1];
+    s_BattleEquipment[g_BattleItemRow] = saveBuf;
+}

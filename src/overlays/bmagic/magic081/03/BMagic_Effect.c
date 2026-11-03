@@ -1,0 +1,53 @@
+#include "magic081_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+INCLUDE_ASM(CardAccessFile);
+
+INCLUDE_ASM(func_801EED44);
+
+INCLUDE_ASM(func_801EEE74);
+
+INCLUDE_ASM(func_801EEEDC);
+
+INCLUDE_ASM(func_801EEF88);
+
+MATCH void func_801EF014(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+MATCH void func_801EF058(void) {
+    BattleHandlerTable3 handlers;
+
+    handlers = D_801EEC14;
+    SYS_DISPATCH_TASK(handlers.handlers, 2, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EF0B8);
+
+INCLUDE_ASM(func_801EF18C);
+
+#include "overlays/bmagic/Effect_TickOnZeroTick.h"
+
+INCLUDE_ASM(func_801EF2F0);
+
+MATCH void func_801EF330(void) {
+    MagicTaskFuncs handlers;
+
+    handlers = D_801EEC20;
+    SYS_DISPATCH_TASK(handlers.handlers, 2, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EF39C);
+
+INCLUDE_ASM(func_801EF44C);
+
+INCLUDE_ASM(func_801EF57C);
+
+INCLUDE_ASM(func_801EF614);
+
+INCLUDE_ASM(func_801EF6A0);
+
+INCLUDE_ASM(func_801EFA20);

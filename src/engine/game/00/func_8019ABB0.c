@@ -1,0 +1,17 @@
+#include "game_00.h"
+
+/* K&R call keeps a0 undisturbed; the callee ignores its mode argument. */
+
+MATCH void func_8019ABB0(s32 mode) {
+    u8 index;
+
+    index = Actor_FindFreeSlot(mode) & BYTE_MASK;
+    if (index != GAME_NONE) {
+        g_ActorSlots[index].flags_00 = 1;
+        /* FAKE: block boundary holds the SYS_SetFlag address load between the stores. */
+        ORDER_LOCK((void)0);
+        g_ActorSlots[index].type     = 4;
+        g_ActorSlots[index].layer_09 = mode;
+        SYS_SetFlag(g_SceneEventFlags, 0x1C);
+    }
+}

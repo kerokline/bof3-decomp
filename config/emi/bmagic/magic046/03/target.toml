@@ -1,0 +1,5 @@
+[[copies]]
+disc_id = "BIN/BMAGIC/MAGIC047.EMI#3"
+payload_sha256 = "9307c3d0736f8b5114c39dfd09efae964e528a8934aa41c5e8dd8cfedd0af2dc"
+load_address = 0x801eec00
+size = 10684

@@ -1,0 +1,30 @@
+#include "game_00.h"
+
+MATCH void func_801B6F1C(void) {
+    u8  count;
+    u8  wait;
+    u8  flags;
+    u32 saved;
+
+    count = g_SpadWork->unk_09;
+    if (count != 0) {
+        g_SpadWork->unk_09 = (u8)(count - 1);
+        func_801B0DFC();
+        return;
+    }
+    wait = g_GameState->wait_11F;
+    if (wait == 0) {
+        func_801B6BC8();
+        return;
+    }
+    saved                 = g_SpadWork->vz;
+    g_GameState->wait_11F = (u8)(wait - 1);
+    func_801C24D0();
+    flags = g_GameState->flags_118;
+    if (flags & 0x80) {
+        g_SpadWork->vz = saved;
+    }
+    count              = g_SpadWork->unk_09;
+    g_SpadWork->unk_09 = (u8)(count - 1);
+    func_801B0DFC();
+}

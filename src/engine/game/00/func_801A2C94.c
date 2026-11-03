@@ -1,0 +1,46 @@
+#include "game_00.h"
+
+MATCH u8 func_801A2C94(Actor* actor) {
+    s32    dx;
+    s32    dy;
+    Actor* entity;
+    u8     status;
+    s32    delta;
+    u8     route;
+    Actor* work;
+
+    entity = actor;
+    work   = g_SpadWork;
+    route  = work->direction_08;
+    delta  = work->x.fixed;
+    dx     = D_80145EC4 - delta;
+    if (dx < 0) {
+        dx = -dx;
+    }
+    if ((dx >> 0x10) < entity->stamina_max_8C) {
+        dy    = D_80145EC8;
+        delta = work->y.fixed;
+        dy -= delta;
+        if (dy < 0) {
+            dy = -dy;
+        }
+        if ((dy >> 0x10) < FIELD(s16, entity, 0x8Eu)) {
+            status = func_801A2ED4(entity, 1U);
+            if ((status & BYTE_MASK) == GAME_NONE) {
+                g_SpadWork->unk_09 = 0;
+                return 0xFFU;
+            }
+            if ((route & 7) != (status & BYTE_MASK)) {
+                /* FAKE: basic-block boundary pins handler status. */
+                /* FAKE: ORDER_LOCK keeps this statement in place; without it the match is 93.06%. */
+                ORDER_LOCK(g_SpadWork->direction_08 = status);
+                entity->flags_74 |= ACTOR_FLAG_MOVING;
+            }
+            return g_SpadWork->direction_08;
+        }
+        goto block_11; /* the two records share the exit */
+    }
+block_11:
+    func_801A2C10(entity);
+    return func_801A2A04(entity) & BYTE_MASK;
+}

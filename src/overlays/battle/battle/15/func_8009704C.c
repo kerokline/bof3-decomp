@@ -1,0 +1,160 @@
+#include "battle_15.h"
+
+/* Group index/cursor pair inside the primary battle-selection scratch block. */
+typedef struct BattleSelectionGroup {
+    u8 index;
+    u8 cursor;
+} BattleSelectionGroup;
+
+/* Primary battle-selection scratch block; cursor geometry lives at 0x8014857C.
+ * The block is addressed from its phase byte at 0x80148573. */
+typedef struct BattleSelectionScratch {
+    u8  pad_00[0xC];
+    u8  cursor_index;
+    u8  pad_0D[3];
+    s16 scroll_base;
+    s16 scroll_delta;
+} BattleSelectionScratch;
+
+/* nonmatching unmeasured: tried the store-order lever (82.73% -> 84.24%), the (s32) cast on the pad mask (81.82%,
+ * no change) and the fixed-address base spelling (81.57%, regressed); a 7929-iteration statement search with 190
+ * errors gave no improvement on the base. candidate 77.88%. resume: a register-pair form that puts the 0xf00c pad mask
+ * in the call's delay slot and the scroll arithmetic in the +0x0054 slot. */
+#ifdef NON_MATCHING
+/* FAKE: retail reads D_801454F4 as flat bytes; the owner declares rows. */
+NON_MATCHING void func_8009704C(void) {
+    u8*                     phase;
+    BattleSelectionScratch* sel;
+    BattleSelectionGroup*   group;
+    u8*                     message;
+    u8*                     entry;
+    s32                     trigger;
+    s32                     ring_index;
+    u32                     handle;
+    u8                      kind;
+    s32                     cursor;
+
+    phase = (u8*)&g_BattleChoicePhase;
+    if (*phase != 0) {
+        return;
+    }
+    sel        = (BattleSelectionScratch*)((u8*)&g_BattleChoicePhase - 3);
+    D_801485DC = 1u;
+    D_801485E0 = D_80148574 + 7u;
+    D_801485E2 = D_80148576 + ((D_8014857C - D_80148580) * 13 + 0x1A);
+    trigger    = INPUT_GetRepeatedButtons((s32)(g_InputPressed & (INPUT_DIRECTIONAL | PADL1 | PADR1)));
+    if ((FIELD(u32, D_801EB4D8, 0x10) & 0x20002u) != 2u) {
+        if ((trigger & PADLleft) != 0) {
+            SND_PlayCue(EMI_CUE_ID(1, 1));
+            D_80148579 = 0x32u;
+            cursor     = D_8014857B - 1;
+            D_8014857B = cursor;
+            if ((s8)cursor < 0) {
+                D_8014857B = 3u;
+            }
+        } else if ((trigger & PADLright) != 0) {
+            SND_PlayCue(EMI_CUE_ID(1, 1));
+            D_80148579 = 0x31u;
+            cursor     = D_8014857B + 1;
+            D_8014857B = cursor;
+            if ((u8)cursor >= 4u) {
+                D_8014857B = 0u;
+            }
+        }
+    }
+    cursor = sel->cursor_index;
+    if ((trigger & PADLup) != 0) {
+        if (cursor != 0) {
+            sel->cursor_index = cursor - 1;
+        }
+        if ((s32)sel->cursor_index < sel->scroll_base) {
+            sel->scroll_delta = 0xF0;
+        }
+    } else if ((trigger & PADLdown) != 0) {
+        if (cursor < 9u) {
+            sel->cursor_index = cursor + 1;
+        }
+        if ((s32)sel->cursor_index >= sel->scroll_base + 7) {
+            sel->scroll_delta = 0x10;
+        }
+    } else if ((trigger & 4) != 0) {
+        s16 base = sel->scroll_base;
+
+        if (base == 0) {
+            sel->cursor_index = 0;
+        } else if (base < 7) {
+            sel->cursor_index = cursor - base;
+            sel->scroll_base  = 0;
+        } else {
+            sel->cursor_index = cursor - 7;
+            sel->scroll_base  = (u16)sel->scroll_base - 7;
+        }
+    } else if ((trigger & 8) != 0) {
+        s16 base = sel->scroll_base;
+
+        if (base == 3) {
+            sel->cursor_index = 9;
+        } else if (base >= -3) {
+            sel->cursor_index = cursor - (base - 3);
+            sel->scroll_base  = 3;
+        } else {
+            sel->cursor_index = cursor + 7;
+            sel->scroll_base  = (u16)sel->scroll_base + 7;
+        }
+    }
+    if (cursor != sel->cursor_index) {
+        SND_PlayCue(EMI_CUE_ID(1, 0));
+    }
+    message                    = (u8*)&D_80148656;
+    /* The group index/cursor pair sits 0xB bytes into the same scratch block. */
+    sel                        = (BattleSelectionScratch*)((u8*)sel + 0xB);
+    group                      = (BattleSelectionGroup*)sel;
+    entry                      = Party_GetAbilities(message[0], group->index, 1);
+    kind                       = entry[group->cursor];
+    handle                     = Resource_Resolve(*(u16*)(D_801CA71E + kind * 0x14));
+    ring_index                 = (D_801EC328 - 1) & 0xF;
+    D_801EB5B4[ring_index * 2] = handle;
+    if (D_80148582 != 0) {
+        return;
+    }
+    if ((g_InputPressed & D_80145AC4) != 0u) {
+        g_BattleChoicePhase               = 1u;
+        D_801485DC                        = 0u;
+        D_801EB5B1[ring_index * 8]        = 1u;
+        ((u8*)D_801454F4)[D_8014857A * 3] = group->index;
+        D_801454F5[D_8014857A * 3]        = D_80148580;
+        D_801454F6[D_8014857A * 3]        = group->cursor;
+        SND_PlayCue(EMI_CUE_ID(1, 6));
+        *(volatile u8*)&g_BattleUiStep += 1;
+        return;
+    }
+    if ((g_InputPressed & D_80145AC2) != 0u) {
+        u8* slot;
+
+        if ((func_80097574() & BYTE_MASK) != 0) {
+            SND_PlayCue(EMI_CUE_ID(1, 7));
+            return;
+        }
+        SND_PlayCue(EMI_CUE_ID(1, 3));
+        ((u8*)D_801454F4)[D_8014857A * 3] = group->index;
+        D_801454F5[D_8014857A * 3]        = D_80148580;
+        D_801454F6[D_8014857A * 3]        = group->cursor;
+        entry                             = Party_GetAbilities(message[0], group->index, 1);
+        kind                              = entry[group->cursor];
+        slot                              = D_801EB4D8;
+        *(u16*)(slot + 2)                 = kind;
+        g_BattleChoicePhase               = 1u;
+        D_801485DC                        = 0u;
+        if (*(u16*)(slot + 2) == 0x97u) {
+            g_BattleMessageState = 2u;
+            D_801EB4D8[0]        = g_BattleMessageSlot[5];
+            g_BattleSubStep      = 7u;
+            g_BattleUiStep       = 0u;
+            return;
+        }
+        g_BattleUiStep = 3u;
+    }
+}
+#else
+INCLUDE_ASM(func_8009704C);
+#endif

@@ -1,0 +1,105 @@
+#include "magic003_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+INCLUDE_ASM(func_801EEC28);
+
+INCLUDE_ASM(func_801EED14);
+
+INCLUDE_ASM(func_801EEDAC);
+
+INCLUDE_ASM(func_801EEE28);
+
+INCLUDE_ASM(func_801EEEA4);
+
+INCLUDE_ASM(func_801EEF4C);
+
+MATCH void func_801EF04C(void) {
+    u8 timer;
+
+    timer              = g_SpadWork->unk_09 - 1;
+    g_SpadWork->unk_09 = timer;
+    if (timer == 0) {
+        g_SpadWork->unk_09  = 0x1E;
+        g_SpadWork->step_01 = g_SpadWork->step_01 + 1;
+    }
+}
+
+INCLUDE_ASM(func_801EF0A8);
+
+INCLUDE_ASM(func_801EF12C);
+
+INCLUDE_ASM(func_801EF1FC);
+
+INCLUDE_ASM(func_801EF268);
+
+MATCH void func_801EF2CC(void) {
+    Callback handlers[2] = {func_801EF324, func_801EF708};
+
+    SYS_DISPATCH_TASK(handlers, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EF324);
+
+INCLUDE_ASM(func_801EF3C8);
+
+INCLUDE_ASM(func_801EF478);
+
+INCLUDE_ASM(func_801EF578);
+
+INCLUDE_ASM(func_801EF644);
+
+MATCH void func_801EF6CC(void) {
+    PartyBattler* work;
+    u8            step;
+
+    work = BATTLE_ACTIVE_WORK;
+    step = work->unk_0B;
+    if (step < 2) {
+        work->unk_0B = step - 1;
+        func_801E5988();
+    }
+}
+
+INCLUDE_ASM(func_801EF708);
+
+INCLUDE_ASM(func_801EF7A8);
+
+INCLUDE_ASM(func_801EF918);
+
+INCLUDE_ASM(func_801EF9AC);
+
+INCLUDE_ASM(func_801EF9FC);
+
+MATCH void func_801EFA9C(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+INCLUDE_ASM(func_801EFAE0);
+
+INCLUDE_ASM(func_801EFB8C);
+
+INCLUDE_ASM(func_801EFCF8);
+
+INCLUDE_ASM(func_801EFD4C);
+
+INCLUDE_ASM(func_801EFEC8);
+
+INCLUDE_ASM(func_801F0078);
+
+INCLUDE_ASM(func_801F0164);
+
+INCLUDE_ASM(func_801F03F0);
+
+INCLUDE_ASM(func_801F0550);
+
+INCLUDE_ASM(func_801F07B0);
+
+INCLUDE_ASM(func_801F09C4);
+
+/* func_801F0A28 */
+MATCH void Actor_Clear(void) {
+    Bmagic_ResetLocalWork();
+}

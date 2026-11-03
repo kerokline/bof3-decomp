@@ -1,0 +1,32 @@
+#include "area030_04.h"
+
+/* Advances the menu row counter, passes the row's 0x50-scaled window
+ * position to the row redraw, and on the last row resets the counter and bumps
+ * the state counter selected by the record flag; the frame then redraws the
+ * panel and the address-based cursor. */
+MATCH void func_801DA2A0(void) {
+    u8*  work;
+    u8*  byte_counter;
+    u16* word_counter;
+
+    FISHING_STATE->step_timer_09 = (u8)(FISHING_STATE->step_timer_09 + 1);
+    func_801E1758((s16)(0x6C - (FISHING_STATE->step_timer_09 * 0x50)), 0x56);
+    work = (u8*)g_SpadWork;
+    if (work[9] == 5) {
+        work[9] = 0;
+        work    = (u8*)g_SpadWork;
+        if (work[6] == 0) {
+            word_counter = &g_GameEntrySubstate;
+            *word_counter += 1;
+        } else {
+            byte_counter = &D_8014403D;
+            *byte_counter += 1;
+            work[3] = 0;
+        }
+    }
+    func_801E16DC();
+    if (FISHING_STATE->step_timer_09 != 0) {
+        func_801D9534(0x14, (0x12 - (FISHING_STATE->step_timer_09 * 8)) & 0xFFFE, 0x118, 0x13, 0);
+        UI_DrawText(0x1D, 0x15 - (FISHING_STATE->step_timer_09 * 8), 0, 0xFFU, (u8*)(FISHING_TEXT_BANK + D_80010080));
+    }
+}

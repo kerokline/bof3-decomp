@@ -1,0 +1,18 @@
+#include "area135_14.h"
+
+MATCH void func_801F3004(s32 x, s32 y, s32 width, s32 height) {
+    s16*   rect;
+    s16*   next;
+    Actor* work;
+
+    rect            = (s16*)g_GfxPrimCursor;
+    rect[0]         = (s16)x;
+    rect[1]         = (s16)y;
+    next            = rect + 4;
+    g_GfxPrimCursor = (u8*)next;
+    rect[2]         = (s16)width;
+    rect[3]         = (s16)height;
+    SetTexWindow((DR_TWIN*)next, (RECT*)rect);
+    work = g_SpadWork;
+    Area_AddCellPrim(work->x.fixed, work->y.fixed, 0, 0xC);
+}

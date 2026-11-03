@@ -1,0 +1,37 @@
+sha1: 13697dc2d00dbd5e5389cda67334dd8da9d792ba
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801EEC00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, bin, D_801EEC00]
+      - [0x24, c, BMagic_Effect]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x2FC4
+    vram: 0x801F1BC4
+    align: 4
+    subsegments:
+      - [0x2FC4, bin, D_801F1BC4]
+      - [0x2FD4, bin, D_801F1BD4]
+      - [0x2FF4, bin, D_801F1BF4]
+      - [0x3008, bin, D_801F1C08]
+      - [0x3010, bin, D_801F1C13]
+      - [0x3018, bin, D_801F1C1B]
+      - [0x3024, bin, D_801F1C24]
+      - [0x3030, bin, D_801F1C30]
+      - [0x3038, bin, D_801F1C38]
+      - [0x3048, bin, D_801F1C48]
+      - [0x3054, bin, D_801F1C54]
+      - [0x3074, bin, D_801F1C74]
+      - [0x3094, bin, D_801F1C94]
+      - [0x30A0, bin, D_801F1CA2]
+      - [0x30A4, bin, D_801F1CA7]
+      - [0x30C4, bin, D_801F1CC6]
+      - [0x30C8, bin, D_801F1CC8]
+      - [0x38E0, bin, D_801F24E0]
+  - [0x38E4]

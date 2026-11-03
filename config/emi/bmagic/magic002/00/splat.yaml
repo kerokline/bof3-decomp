@@ -1,0 +1,12 @@
+sha1: a317fc3cd351683ed65fb92077227eaac748f331
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801EEC00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, bin, D_801EEC00]
+      - [0x18, c, BMagic_Effect]
+  - [0x108C]

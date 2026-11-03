@@ -1,0 +1,54 @@
+#include "battle_03.h"
+
+/* scans the first three battle action slots and, per kind mask bit 0x200, clears the slot's 0x8 flag and
+ * appends a selection-ring record (the 0x24 ability name for the flagged kind, else the 0x23 resource); when all are
+ * past it advances the phase byte.
+ */
+MATCH void func_801D409C(void) {
+    u8*                     state;
+    u8*                     battler;
+    const volatile Ability* ability;
+    BattleAction*           action_ref;
+    u16                     mask;
+    u8                      index;
+    int                     clear_flag;
+    u8*                     phase_byte;
+
+    if (D_801EC2E4 != 0) {
+        return;
+    }
+
+    state = &g_BattleRowCursor;
+    if (*state < 3) {
+        clear_flag = ~8;
+        battler    = state + 0x8F;
+        ability    = g_Abilities;
+        do {
+            (*state)++;
+            action_ref = g_BattleAction;
+            mask       = D_801CA71C[action_ref->unk_02].mask;
+            if (mask & 0x200) {
+                if (!(g_BattlePartyBattlers[*state - 1].flags_124.value & 8)) {
+                    continue;
+                }
+                g_BattlePartyBattlers[*state - 1].flags_124.value &= clear_flag;
+                Battle_SetTextPartyName((u8)(*state - 1));
+                for (index = 0; index < 32; index++) {
+                    D_801490F8[index] = 0;
+                }
+                for (index = 0; index < 12; index++) {
+                    D_801490F8[index] = ability[D_801EB726[*battler - 3][0]].name[index];
+                }
+                BattleStageSelectionRingRecord(1, 0, Resource_Resolve(BATTLE_TEXT_LEARNED));
+                return;
+            }
+            if (g_BattlePartyBattlers[*state - 1].flags_124.value & 8) {
+                g_BattlePartyBattlers[*state - 1].flags_124.value &= clear_flag;
+                BattleStageSelectionRingRecord(1, 0, Resource_Resolve(BATTLE_TEXT_CANT_LEARN));
+                return;
+            }
+        } while (g_BattleRowCursor < 3);
+    }
+    phase_byte  = &g_BattleSubStep;
+    *phase_byte = *phase_byte + 1;
+}

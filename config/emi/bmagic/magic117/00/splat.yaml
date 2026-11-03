@@ -1,0 +1,14 @@
+sha1: f6d79941730f33d3fc3cf62fa5be1facbaea73e9
+symbol_owners:
+  - exe/slus_004_22
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801EEC00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, bin, D_801EEC00]
+      - [0x24, c, BMagic_Effect]
+  - [0x78C]

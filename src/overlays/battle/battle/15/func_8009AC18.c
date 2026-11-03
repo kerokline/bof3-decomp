@@ -1,0 +1,83 @@
+#include "battle_15.h"
+
+extern u8 D_80145F20[];
+
+/* Ends the battle selection: hands the chosen slot to the sound request, clears it, then copies the battler
+ * work rows and resets the effect slots. */
+/* nonmatching unmeasured: tried branch@+0xb4: the row-copy loop materializes the D_80145FCC base in a register while
+ * retail indexes the symbol per iteration; object is 120 bytes short on the byte-copy blocks. resume: index
+ * D_80145FCC/D_80145F04 per use and keep the full FIELD copy sequence per row. */
+#ifdef NON_MATCHING
+NON_MATCHING s32 func_8009AC18(void) {
+    u8* slots[6];
+    u8* base;
+    u8* row;
+    u8* cell;
+    u32 i;
+    s32 j;
+
+    base     = &g_Characters[g_CharSlot[D_80144F5D[D_801485C4]]];
+    slots[0] = base + 0xE;
+    slots[1] = base + 0xF;
+    slots[2] = base + 0x10;
+    slots[3] = base + 0x11;
+    slots[4] = base + 0x12;
+    slots[5] = base + 0x13;
+    if ((*slots[g_BattleItemRow] == 0) || (g_BattleItemRow == 0)) {
+        return 0;
+    }
+    Party_AddItem(D_800B44B8[g_BattleItemRow], *slots[g_BattleItemRow], 1, 0);
+    *slots[g_BattleItemRow] = 0;
+    Char_RebuildStats(base);
+    if (g_BattlePartyCount != 0) {
+        i = 0;
+        do {
+            cell                   = &g_Characters[D_80145FCC[i * BATTLE_PARTY_STRIDE]];
+            row                    = D_80145F04 + i * BATTLE_PARTY_STRIDE;
+            FIELD(u8, row, 0xEu)   = FIELD(u8, cell, 0xEu);
+            FIELD(u8, row, 0xFu)   = FIELD(u8, cell, 0xFu);
+            FIELD(u8, row, 0x10u)  = FIELD(u8, cell, 0x10u);
+            FIELD(u8, row, 0x11u)  = FIELD(u8, cell, 0x11u);
+            FIELD(u8, row, 0x12u)  = FIELD(u8, cell, 0x12u);
+            FIELD(u8, row, 0x13u)  = FIELD(u8, cell, 0x13u);
+            FIELD(s32, row, 0x3Cu) = FIELD(s32, cell, 0x1Cu);
+            FIELD(s32, row, 0x40u) = FIELD(s32, cell, 0x20u);
+            FIELD(s32, row, 0x44u) = FIELD(s32, cell, 0x24u);
+            FIELD(s32, row, 0x48u) = FIELD(s32, cell, 0x28u);
+            FIELD(s32, row, 0x4Cu) = FIELD(s32, cell, 0x2Cu);
+            FIELD(s32, row, 0x50u) = FIELD(s32, cell, 0x30u);
+            FIELD(s32, row, 0x54u) = FIELD(s32, cell, 0x34u);
+            FIELD(s32, row, 0x58u) = FIELD(s32, cell, 0x38u);
+            i++;
+        } while ((u8)i < g_BattlePartyCount);
+    }
+    func_800AAA74();
+    j = 0;
+    do {
+        row = D_80145F20 + j * BATTLE_PARTY_STRIDE;
+        if (ACTOR_IN_USE(g_BattlePartyBattlers[j])) {
+            cell                   = row + 0x20;
+            FIELD(s32, row, 0x0u)  = FIELD(s32, cell, 0x0u);
+            FIELD(s32, row, 0x4u)  = FIELD(s32, cell, 0x4u);
+            FIELD(s32, row, 0x8u)  = FIELD(s32, cell, 0x8u);
+            FIELD(s32, row, 0xCu)  = FIELD(s32, cell, 0xCu);
+            FIELD(s32, row, 0x10u) = FIELD(s32, cell, 0x10u);
+            FIELD(s32, row, 0x14u) = FIELD(s32, cell, 0x14u);
+            FIELD(s32, row, 0x18u) = FIELD(s32, cell, 0x18u);
+            FIELD(s32, row, 0x1Cu) = FIELD(s32, cell, 0x1Cu);
+        }
+        j++;
+    } while ((u32)j < 3);
+    func_800A4458();
+    if (g_BattlePartyCount != 0) {
+        i = 0;
+        do {
+            func_800A9BD8(i);
+            i++;
+        } while ((u8)i < g_BattlePartyCount);
+    }
+    return 1;
+}
+#else
+INCLUDE_ASM(func_8009AC18);
+#endif

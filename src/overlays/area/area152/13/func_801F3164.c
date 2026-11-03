@@ -1,0 +1,25 @@
+#include "area152_13.h"
+
+MATCH void func_801F3164(void) {
+    u8* scratch;
+    u8  step;
+
+    Actor_CenterOnScreen();
+    if (g_GameEntryState != 1) {
+        scratch = (u8*)g_SpadWork;
+        step    = scratch[0x0B];
+        if (step == scratch[7] && g_GameStateIndex != 5) {
+            if (step != 1) {
+                goto tail; /* skips the arming stores: run the step only */
+            }
+            if (*(u32*)(scratch + 0x18) == g_GameContextSeed) {
+                goto tail; /* skips the arming stores: run the step only */
+            }
+        }
+        ((u8*)g_SpadWork)[0x48] = 2;
+        ((u8*)g_SpadWork)[9]    = 8;
+        ((u8*)g_SpadWork)[1]    = 4;
+    }
+tail:
+    Area_AddActor();
+}

@@ -1,0 +1,53 @@
+[[copies]]
+disc_id = "BIN/BMAGIC/MAGIC005.EMI#3"
+payload_sha256 = "26f107474c0654c22cc9ee4a927bf0c75cee83bab0117d8c764dbf56d4367e98"
+load_address = 0x801eec00
+size = 4716
+
+[[copies]]
+disc_id = "BIN/BMAGIC/MAGIC029.EMI#3"
+payload_sha256 = "26f107474c0654c22cc9ee4a927bf0c75cee83bab0117d8c764dbf56d4367e98"
+load_address = 0x801eec00
+size = 4716
+
+[[copies]]
+disc_id = "BIN/BMAGIC/MAGIC049.EMI#3"
+payload_sha256 = "26f107474c0654c22cc9ee4a927bf0c75cee83bab0117d8c764dbf56d4367e98"
+load_address = 0x801eec00
+size = 4716
+
+[[copies]]
+disc_id = "BIN/BMAGIC/MAGIC133.EMI#3"
+payload_sha256 = "26f107474c0654c22cc9ee4a927bf0c75cee83bab0117d8c764dbf56d4367e98"
+load_address = 0x801eec00
+size = 4716
+
+[[copies]]
+disc_id = "BIN/BMAGIC/MAGIC134.EMI#3"
+payload_sha256 = "26f107474c0654c22cc9ee4a927bf0c75cee83bab0117d8c764dbf56d4367e98"
+load_address = 0x801eec00
+size = 4716
+
+[[copies]]
+disc_id = "BIN/BMAGIC/MAGIC135.EMI#3"
+payload_sha256 = "26f107474c0654c22cc9ee4a927bf0c75cee83bab0117d8c764dbf56d4367e98"
+load_address = 0x801eec00
+size = 4716
+
+[[copies]]
+disc_id = "BIN/BMAGIC/MAGIC136.EMI#3"
+payload_sha256 = "26f107474c0654c22cc9ee4a927bf0c75cee83bab0117d8c764dbf56d4367e98"
+load_address = 0x801eec00
+size = 4716
+
+[[copies]]
+disc_id = "BIN/BMAGIC/MAGIC156.EMI#3"
+payload_sha256 = "26f107474c0654c22cc9ee4a927bf0c75cee83bab0117d8c764dbf56d4367e98"
+load_address = 0x801eec00
+size = 4716
+
+[[copies]]
+disc_id = "BIN/BMAGIC/MAGIC157.EMI#3"
+payload_sha256 = "26f107474c0654c22cc9ee4a927bf0c75cee83bab0117d8c764dbf56d4367e98"
+load_address = 0x801eec00
+size = 4716

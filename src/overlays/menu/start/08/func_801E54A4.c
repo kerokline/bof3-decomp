@@ -1,0 +1,25 @@
+#include "start_08.h"
+
+MATCH void func_801E54A4(void) {
+    Menu_DrawClutStrip(D_80144953);
+    Menu_DrawHeaderBar(0x14, 0x12, 0x118, 0x13, D_80144952);
+    func_801E14A8(0x62, 0x4C, D_801ED870, LOBU(g_SaveCardPort), 0);
+    CardAccessFile(0, 0, 0, 0, 0);
+    g_SaveSlotFirst = 0;
+    if (g_SaveCardStatus == 0) {
+        g_SaveSlotCount = func_801EFCA8(g_SaveFileNameFormat, 0x10);
+        if (D_8018E990[0] != 0) {
+            func_801E77F0();
+            g_SaveSlotCount = 3;
+            D_801ED7F0      = 0;
+            D_801ED860 += 1;
+            return;
+        }
+        g_SaveCardStatus = 6;
+        /* Join the path where g_SaveCardStatus was already nonzero. */
+        goto queue_cue;
+    }
+queue_cue:
+    SND_PlayCue(EMI_CUE_ID(1, 7));
+    D_801ED860 = 0xD;
+}

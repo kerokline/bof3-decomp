@@ -1,0 +1,39 @@
+#include "game_00.h"
+
+/* Draws the formatted work-record byte as 8x8 digit sprites starting at (x, y). */
+MATCH void func_8019F5B8(s16 x, s16 y, u8 unused, u8 palette) {
+    SPRT* sprt;
+    s32   index;
+    s32   next;
+    u8    ch;
+
+    index = 0;
+    sprintf((s8*)g_UiFormatBuffer, &D_80195860, g_SpadWork->unk_06);
+    if (GetGraphType() != 1) {
+        GetGraphType();
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 0, 0xF, NULL);
+    GFX_AddPrim(g_SpadWork->unk_29, 0xCU);
+    do {
+        ch = g_UiFormatBuffer[index & BYTE_MASK];
+        if (ch != ' ') {
+            g_UiFormatBuffer[index & BYTE_MASK] = ch - '0';
+            sprt                                = (SPRT*)g_GfxPrimCursor;
+            sprt->clut                          = GetClut(palette * 16, 480);
+            sprt->r0                            = 0x80;
+            sprt->g0                            = 0x80;
+            sprt->b0                            = 0x80;
+            sprt->x0                            = x;
+            sprt->y0                            = y;
+            sprt->u0                            = g_UiFormatBuffer[index & BYTE_MASK] * 8 - 80;
+            sprt->v0                            = 208;
+            sprt->w                             = 8;
+            sprt->h                             = 8;
+            SetSprt(sprt);
+            GFX_AddPrim(g_SpadWork->unk_29, 0x14U);
+        }
+        x += 8;
+        next  = index + 1;
+        index = next;
+    } while (g_UiFormatBuffer[next & BYTE_MASK] != 0);
+}

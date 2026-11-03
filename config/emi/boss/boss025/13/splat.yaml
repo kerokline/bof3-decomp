@@ -1,0 +1,83 @@
+sha1: 3ae0fd36284e8d97aecc7ed83ad1ab17869cf90b
+symbol_owners:
+  - exe/slus_004_22
+  - emi/battle/battle/03
+  - emi/boss/boss025/13
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x800C1800
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, bin, D_800C1800]
+      - [0x50, c, func_800C1850]
+      - [0x94, c, func_800C1894]
+      - [0x17C, c, func_800C197C]
+      - [0x1C0, c, func_800C19C0]
+      - [0x268, c, func_800C1A68]
+      - [0x2A0, c, func_800C1AA0]
+      - [0x2F8, c, func_800C1AF8]
+      - [0x300, c, func_800C1B00]
+      - [0x36C, c, func_800C1B6C]
+      - [0x3B0, c, func_800C1BB0]
+      - [0x46C, c, func_800C1C6C]
+      - [0x4B0, c, func_800C1CB0]
+      - [0x52C, c, func_800C1D2C]
+      - [0x564, c, func_800C1D64]
+      - [0x578, c, func_800C1D78]
+      - [0x580, c, func_800C1D80]
+      - [0x588, c, func_800C1D88]
+      - [0x5CC, c, func_800C1DCC]
+      - [0x634, c, func_800C1E34]
+      - [0x6C8, c, func_800C1EC8]
+      - [0x70C, c, func_800C1F0C]
+      - [0x790, c, func_800C1F90]
+      - [0x830, c, func_800C2030]
+      - [0x874, c, func_800C2074]
+      - [0x8F0, c, func_800C20F0]
+      - [0x928, c, func_800C2128]
+      - [0x960, c, func_800C2160]
+      - [0x97C, c, func_800C217C]
+      - [0x984, c, func_800C2184]
+      - [0xA08, c, func_800C2208]
+      - [0xE34, c, func_800C2634]
+      - [0xE80, c, func_800C2680]
+      - [0xF10, c, Boss_InstallBattleHooks2]
+      - [0xF60, c, Boss_HandleBattleEvent2]
+      - [0x1184, c, Boss_ChooseBattleEnding2]
+      - [0x132C, c, Boss_EndBattle2]
+      - [0x1360, c, Boss_InstallBattleHooks]
+      - [0x1398, c, Boss_HandleBattleEvent]
+      - [0x157C, c, Boss_ChooseBattleEnding]
+      - [0x1774, c, Boss_EndBattle]
+      - [0x17F4, c, func_800C2FF4]
+      - [0x1838, c, func_800C3038]
+      - [0x1888, c, func_800C3088]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x1974
+    vram: 0x800C3174
+    align: 4
+    subsegments:
+      - [0x1974, bin, D_800C3174]
+      - [0x1980, bin, D_800C3180]
+      - [0x198C, bin, D_800C318C]
+      - [0x1994, bin, D_800C3194]
+      - [0x199C, bin, D_800C319C]
+      - [0x19CC, bin, D_800C31CC]
+      - [0x19E4, bin, D_800C31E4]
+      - [0x19F0, bin, D_800C31F0]
+      - [0x1A20, bin, D_800C3220]
+      - [0x1A38, bin, D_800C3238]
+      - [0x1A44, bin, D_800C3244]
+      - [0x1A74, bin, D_800C3274]
+      - [0x1A7C, bin, D_800C327C]
+      - [0x1A94, bin, D_800C3294]
+      - [0x1AA0, bin, D_800C32A0]
+      - [0x1AA8, bin, D_800C32A8]
+      - [0x1AB4, bin, D_800C32B4]
+      - [0x1AB8, bin, D_800C32B8]
+  - [0x1ABC]

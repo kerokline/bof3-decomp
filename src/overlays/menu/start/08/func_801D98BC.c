@@ -1,0 +1,59 @@
+#include "start_08.h"
+
+s32 func_801DAC1C(u16);
+
+MATCH void func_801D98BC(void) {
+    u16* pad;
+    s32  prev;
+    u8*  slot;
+    u8*  cursor;
+
+    Menu_DrawClutStrip(D_80144953);
+    D_801484CC = D_801ED68C + 0x1F;
+    if (g_BattlePanelMode == 0) {
+        D_80148624 = 1;
+        D_80148628 = D_801485BC + (D_801ED68C * 0x30);
+        D_8014862A = D_801485BE + 4;
+    } else {
+        D_80148624 = 0;
+    }
+    pad        = &g_InputPressed;
+    D_801485C3 = 0xFF;
+    if (INPUT_REPEATED(*pad, (PADLright | PADLleft)) & (PADLright | PADLleft)) {
+        SND_PlayCue(EMI_CUE_ID(1, 1));
+        D_801ED68C ^= 1;
+    }
+    if (*pad & D_80145AC2) {
+        if (D_801ED68C == 0) {
+            func_801DAC1C(*pad);
+        } else if (g_GameRequestFlags & 1) {
+            func_801DAE14(*pad);
+        } else {
+            SND_PlayCue(EMI_CUE_ID(1, 7));
+            return;
+        }
+        SND_PlayCue(EMI_CUE_ID(1, 2));
+        SND_PlayCue(EMI_CUE_ID(1, 4));
+        D_80148624 = 0;
+        D_80148652 = 0;
+        D_80148654 = 5;
+        D_801485C3 = D_801ED68C;
+        slot       = &D_80148651;
+        prev       = *slot;
+        *slot      = D_801ED68C + (prev + 1);
+        return;
+    }
+    if (*pad & D_80145AC4) {
+        SND_PlayCue(EMI_CUE_ID(1, 2));
+        SND_PlayCue(EMI_CUE_ID(1, 6));
+        D_801484BF        = 1;
+        g_BattlePanelMode = 1;
+        D_80148624        = 0;
+        D_801485DC        = 0;
+        D_80148600        = 0;
+        D_80148652        = 0;
+        D_80148654        = 5;
+        cursor            = &D_80148651;
+        *cursor += 3;
+    }
+}

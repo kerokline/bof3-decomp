@@ -1,0 +1,29 @@
+#include "area152_13.h"
+
+/* Each access reloads the work cell: the stores go through its pointer, which
+ * the compiler must assume may alias the cell. */
+
+MATCH void func_801F44D0(void) {
+    s32 row_offset;
+    s32 map_offset;
+
+    if (g_Characters[CHAR_SLOT_RYU].character_id == CHAR_ID_RYU_PAJAMAS || (D_80146871 & 1)) {
+        Actor_Clear();
+        return;
+    }
+    Game_FindAreaHandler();
+    Area_FindSceneRecord(0x205);
+
+    ((u8*)g_SpadWork)[0x48] = 0;
+    ((u8*)g_SpadWork)[0x24] = 0;
+    ((u8*)g_SpadWork)[0x2A] = 0;
+    ((u8*)g_SpadWork)[0x5D] = 0;
+    ((u8*)g_SpadWork)[0x5E] = 0;
+    ((u8*)g_SpadWork)[0x5F] = 0;
+
+    row_offset = ((u8*)g_SpadWork)[0x0B] * 4;
+    map_offset = *((u8*)D_801F4C3C + 0xD + row_offset) * MEM(u8, 0x80104000);
+    *(g_AreaCellCodes + map_offset + *((u8*)D_801F4C3C + 0xC + row_offset)) = 0xA0;
+    Actor_SelectScript(0);
+    ((u8*)g_SpadWork)[0x01] = 1;
+}

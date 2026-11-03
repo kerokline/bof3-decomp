@@ -1,0 +1,48 @@
+sha1: 70ec42e0e2d11697311c5edcc081d958ecddb989
+symbol_owners:
+  - exe/slus_004_22
+  - emi/battle/battle/03
+  - emi/boss/boss049/16
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x800C1800
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, bin, D_800C1800]
+      - [0x4, c, func_800C1804]
+      - [0x48, c, Boss_InitEnemy2]
+      - [0xAC, c, func_800C18AC]
+      - [0xE4, c, func_800C18E4]
+      - [0xEC, c, func_800C18EC]
+      - [0xF4, c, func_800C18F4]
+      - [0xFC, c, func_800C18FC]
+      - [0x140, c, Boss_InitEnemy3]
+      - [0x1A4, c, func_800C19A4]
+      - [0x1DC, c, func_800C19DC]
+      - [0x1E4, c, func_800C19E4]
+      - [0x1EC, c, func_800C19EC]
+      - [0x1F4, c, Boss_InstallBattleHooks]
+      - [0x22C, c, Boss_HandleBattleEvent]
+      - [0x234, c, Boss_ChooseBattleEnding]
+      - [0x280, c, Boss_EndBattle]
+      - [0x288, c, Boss_InstallBattleHooks2]
+      - [0x2C0, c, Boss_HandleBattleEvent2]
+      - [0x2C8, c, Boss_ChooseBattleEnding2]
+      - [0x314, c, Boss_EndBattle2]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x31C
+    vram: 0x800C1B1C
+    align: 4
+    subsegments:
+      - [0x31C, bin, D_800C1B1C]
+      - [0x328, bin, D_800C1B28]
+      - [0x330, bin, D_800C1B30]
+      - [0x360, bin, D_800C1B60]
+      - [0x36C, bin, D_800C1B6C]
+      - [0x39C, bin, D_800C1B9C]
+  - [0x3A8]

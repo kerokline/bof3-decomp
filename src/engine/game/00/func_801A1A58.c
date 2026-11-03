@@ -1,0 +1,41 @@
+#include "game_00.h"
+
+MATCH s32 func_801A1A58(Actor* actor) {
+    /* FAKE: entity base in a2. */
+    MATCH_REG(Actor*, entity, "a2");
+    /* FAKE: x delta in v0. */
+    MATCH_REG(s32, dx, "v0");
+    s32 dy_sum;
+    /* FAKE: retail resolves the y delta in v1. */
+    MATCH_REG(s32, dy_delta, "v1");
+    s32 bound_x;
+    s32 bound_y;
+    u8  route;
+
+    entity = actor;
+    route  = entity->direction_08;
+    /* FAKE: retail loads the route byte before the coordinate loads. */
+    MATCH_BARRIER();
+    dx = entity->x.fixed;
+    dx += g_FacingSteps[(route & 7)].x;
+    dy_sum = entity->y.fixed;
+    dy_sum += D_80181B98[(route & 7) * 2];
+    dx = (dx >> 16) - FIELD(s16, entity, 0x82u);
+    /* FAKE: retail loads the x bound after the delta. */
+    MATCH_BARRIER();
+    bound_x = FIELD(s16, entity, 0x8Cu);
+    if (dx < 0) {
+        dx = -dx;
+    }
+    /* The comparison result reuses bound_x's register in retail. */
+    bound_x = (bound_x < dx);
+    if (bound_x != 0) {
+        return 0;
+    }
+    dy_delta = (dy_sum >> 16) - FIELD(s16, entity, 0x86u);
+    bound_y  = FIELD(s16, entity, 0x8Eu);
+    if (dy_delta < 0) {
+        dy_delta = -dy_delta;
+    }
+    return bound_y >= dy_delta;
+}

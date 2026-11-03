@@ -1,0 +1,15 @@
+sha1: 2c3f913fb3acdb10627e7a98770d038f122430d7
+symbol_owners:
+  - emi/world00/area032/13
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, marker_work]
+      - [0x4, c, marker_work]
+      - [0x136C, .rodata, marker_work]
+  - [0x1D10]

@@ -1,0 +1,58 @@
+#include "game_00.h"
+
+MATCH void func_801A65A0(u8* script) {
+    s16*   counter = (s16*)&D_1F800000;
+    s16    slot;
+    s32    coord_x;
+    s32    coord_y;
+    s16    dist;
+    Actor* work;
+    Actor* record;
+    s32    slot_off;
+
+    slot = *counter;
+    if (slot < ENTITY_MAX) {
+        g_SpadWork     = (Actor*)&g_Actors[slot];
+        g_CurrentActor = (Actor*)&g_Actors[slot];
+        func_801A4AA8();
+        func_801C1254(script[1], script[0xF]);
+        g_SpadWork->flags_00 = ACTOR_FLAG_IN_USE;
+        do {
+            coord_x  = script[5] << 16;
+            slot_off = *counter * ACTOR_SIZE;
+            work     = g_SpadWork;
+            if (script[4] != 0) {
+                coord_x |= 0x8000;
+            }
+            work->x.fixed           = coord_x;
+            D_80146908[*counter][0] = coord_x;
+            /* FAKE: barrier pins the x store before the y loads. */
+            MATCH_BARRIER();
+            D_8014690C[*counter][0] = work->y.fixed = (script[7] << 16) | (script[6] != 0 ? 0x8000 : 0);
+            /* FAKE: forces the counter re-read before the next shadow store. */
+            MATCH_BARRIER();
+            D_80146910[*counter][0] = 0;
+            dist                    = Area_SampleHeight(work->x.fixed, work->y.fixed);
+            record                  = g_SpadWork;
+            record->z.part.integer  = (u16)dist;
+            record->unk_01          = script[8];
+        } while (0);
+
+        g_SpadWork->state_02                           = script[0xA];
+        g_SpadWork->direction_08                       = script[0] & 0xF;
+        g_SpadWork->unk_06                             = script[0] >> 4;
+        FIELD(u16, &D_80146914, *counter * ACTOR_SIZE) = script[2];
+        FIELD(s16, &D_80146916, *counter * ACTOR_SIZE) = script[3];
+        FIELD(u16, D_80146904, *counter * ACTOR_SIZE)  = (u16)(script[0xD] | (script[0xC] << 8));
+        FIELD(u8, &D_801468FF, *counter * ACTOR_SIZE)  = script[0xE];
+        FIELD(u8, D_80146900, *counter * ACTOR_SIZE)   = script[9];
+        FIELD(u8, D_8014691C, *counter * ACTOR_SIZE)   = 0x7F;
+        func_801A4990((u8*)script + 0xB);
+        g_SpadWork->tint.bytes.unk_5D = 0;
+        g_SpadWork->tint.bytes.unk_5F = 0;
+        g_SpadWork->tint.bytes.unk_5E = 0;
+        g_SpadWork->tint.bytes.flags  = 2;
+        func_801A4914();
+        *counter = (u16)(*counter + 1);
+    }
+}

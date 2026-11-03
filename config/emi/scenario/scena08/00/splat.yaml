@@ -1,0 +1,21 @@
+sha1: 30febc0683fd2ca00eff92837c8f6a98c98f48f1
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F6C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F6C00]
+      - [0x4, bin, D_801F6C04]
+      - [0x350, c, 350]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x7C94
+    vram: 0x801FE894
+    align: 4
+    subsegments:
+      - [0x7C94, bin, D_801FE894]
+  - [0x7E80]

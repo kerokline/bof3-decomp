@@ -1,0 +1,22 @@
+#include "battle_03.h"
+
+/* integrates the local work velocity into its position fields, or
+ * resets the local step when the position passes 0xFFFF, then refreshes the
+ * battle update.
+ */
+MATCH void func_801E3398(void) {
+    PartyBattler* work;
+
+    work = g_SpadWork;
+    if ((s32)work->unk_40 <= 0xFFFF) {
+        work->unk_40 += work->unk_0C;
+        work->unk_44 += work->unk_0C;
+        work->unk_0C += work->unk_18;
+    } else {
+        work->unk_48        = 0;
+        g_SpadWork->step_01 = 3;
+        g_SpadWork->unk_02  = 0;
+        g_SpadWork->unk_03  = 0;
+    }
+    func_801E30F8();
+}

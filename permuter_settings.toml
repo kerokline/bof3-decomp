@@ -1,0 +1,2 @@
+# decomp-permuter takes the folder of this file as the project root.
+# tools/permuter_import.py writes the real settings to work/permute/settings.toml.

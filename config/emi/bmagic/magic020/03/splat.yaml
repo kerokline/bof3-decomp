@@ -1,0 +1,22 @@
+sha1: 01a31e8291a67abfda851264e8511f0ed32f1a87
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801EEC00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, bin, D_801EEC00]
+      - [0x48, c, BMagic_Effect]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x12B8
+    vram: 0x801EFEB8
+    align: 4
+    subsegments:
+      - [0x12B8, bin, D_801EFEB8]
+      - [0x12C4, bin, D_801EFEC4]
+  - [0x12CC, bin, D_801EFECC]
+  - [0x12CD]

@@ -1,0 +1,56 @@
+sha1: 31dfb702e30e858bbc50a18d871be8c76d46733b
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0x4, c, Message_ClearOnCancel]
+      - [0x38, c, Fish_LocationMessage]
+      - [0xD0, c, func_801F2CD0]
+      - [0x118, c, func_801F2D18]
+      - [0x220, c, func_801F2E20]
+      - [0x394, c, func_801F2F94]
+      - [0x420, c, func_801F3020]
+      - [0x558, c, func_801F3158]
+      - [0x5D4, c, func_801F31D4]
+      - [0x694, c, func_801F3294]
+      - [0x734, c, Actor_CenterOnScreen]
+      - [0x750, c, func_801F3350]
+      - [0x794, c, Actor_NextStep]
+      - [0x7D4, c, func_801F33D4]
+      - [0x7FC, c, func_801F33FC]
+      - [0x840, c, Actor_SlideScreenLeft]
+      - [0x890, c, Actor_SlideScreenX]
+      - [0x8EC, c, Area_Update]
+      - [0x93C, c, func_801F353C]
+      - [0x9C0, c, func_801F35C0]
+      - [0xA04, c, Actor_SetScreenBottom]
+      - [0xA84, c, func_801F3684]
+      - [0xB5C, c, func_801F375C]
+      - [0xC5C, c, func_801F385C]
+      - [0xD0C, c, Area_DrawHudSprite]
+      - [0xE34, c, Area_DrawHud]
+      - [0x1200, c, Area_DrawGradientDiamond]
+      - [0x13F8, c, func_801F3FF8]
+      - [0x14AC, c, func_801F40AC]
+      - [0x14F0, c, func_801F40F0]
+      - [0x162C, c, func_801F422C]
+      - [0x185C, c, func_801F445C]
+      - [0x1900, c, func_801F4500]
+      - [0x1944, c, func_801F4544]
+      - [0x1A74, c, func_801F4674]
+      - [0x1A9C, c, func_801F469C]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x20B0
+    vram: 0x801F4CB0
+    align: 1
+    subalign: 1
+    subsegments:
+      - [0x20B0, .data, D_801F4CB0]
+  - [0x2446]

@@ -1,0 +1,19 @@
+#ifndef OVERLAY_WORLD03_AREA141_13_H
+#define OVERLAY_WORLD03_AREA141_13_H
+
+/* The world03/area141/13 overlay: one file per split function
+ * and its data. Only this image includes the file. */
+
+#include "overlays/area/world03.h"
+
+/* The scratchpad work pointer; the dispatch entry bytes select a handler. */
+
+/* The state handler tables the dispatchers index. */
+extern Callback D_801F47E8[];
+extern Callback D_801F4DC4[];
+extern Callback D_801F4DCC[];
+
+/* The game-overlay state bytes the cancel path resets. */
+extern u8 D_801F4E50[];
+
+#endif

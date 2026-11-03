@@ -1,0 +1,85 @@
+#include "battle_15.h"
+
+/* Non-volatile scratchpad work cell (0x1F800044), read/saved/restored around
+ * the update exactly as the loader expects. */
+
+/* Applies the battler's status masks, updates shared defence values when the
+ * magic-defence bit changes, and restores the active work pointer. */
+MATCH u16 func_800A36F0(u8 battler_index, u16 flags) {
+    u16 status;
+    u32 saved_work;
+
+    if (BATTLER_IS_PLAYER(battler_index)) {
+        status = g_BattlePartyBattlers[(u32)battler_index].stats.status;
+    } else {
+        status = ENEMY_COMBATANT((u32)battler_index).status_82;
+    }
+
+    if (flags & STATUS_KO) {
+        status &= ~STATUS_KO;
+    }
+    if (flags & STATUS_POISONED) {
+        status &= ~STATUS_POISONED;
+    }
+    if (flags & 0x1u) {
+        status &= 0xFFFEu;
+    }
+    if (flags & 0x2u) {
+        status &= 0xFFFDu;
+    }
+    if (flags & STATUS_PARALYZED) {
+        status &= ~STATUS_PARALYZED;
+    }
+    if (flags & STATUS_SLEEPING) {
+        status &= ~STATUS_SLEEPING;
+    }
+    if (flags & STATUS_BLIND) {
+        status &= ~STATUS_BLIND;
+    }
+    if (flags & STATUS_SILENCED) {
+        status &= ~STATUS_SILENCED;
+    }
+    if (flags & 0x800u) {
+        status &= 0xF7FFu;
+    }
+
+    if ((flags & STATUS_CONFUSED) && (status & STATUS_CONFUSED)) {
+        u32 slot;
+
+        status &= ~STATUS_CONFUSED;
+        slot = (u32)battler_index;
+        if (BATTLER_IS_PLAYER(battler_index)) {
+            g_BattlePartyBattlers[slot].coord_x_34.raw = g_BattleTemplateStats[slot].defence[0];
+            g_BattlePartyBattlers[slot].coord_y_38.raw = g_BattleTemplateStats[slot].defence[1];
+            g_BattlePartyBattlers[slot].word_3C.word   = g_BattleTemplateStats[slot].defence[2];
+        } else {
+            ENEMY_COMBATANT(slot).coord_x_34   = g_BattleTemplateStats[slot].defence[0];
+            ENEMY_COMBATANT(slot).coord_y_38   = g_BattleTemplateStats[slot].defence[1];
+            ENEMY_COMBATANT(slot).word_3C.word = g_BattleTemplateStats[slot].defence[2];
+        }
+    }
+
+    if (BATTLER_IS_PLAYER(battler_index)) {
+        volatile u8* battler;
+        battler = (u8*)(&g_BattlePartyBattlers[(u32)battler_index]);
+        GFX_FreePaletteFadeTarget(battler);
+        saved_work                                             = g_BattleWorkCell;
+        g_BattlePartyBattlers[(u32)battler_index].stats.status = status;
+        g_BattleWorkCell                                       = (u32)battler;
+        func_801DDAB4(g_BattlePartyBattlers[(u32)battler_index].stats.status);
+    } else {
+        volatile u8* battler;
+        battler = (u8*)(&((volatile BattleEnemyRecord*)g_BattleEnemies)[(u32)battler_index]);
+        GFX_FreePaletteFadeTarget(battler);
+        saved_work                                    = g_BattleWorkCell;
+        ENEMY_COMBATANT((u32)battler_index).status_82 = status;
+        g_BattleWorkCell                              = (u32)battler;
+        func_801DDAB4(ENEMY_COMBATANT((u32)battler_index).status_82);
+    }
+
+    g_BattleWorkCell = saved_work;
+    return status;
+}
+
+/* Local weak bindings (same mechanism as symbols.c) so the diff link step
+ * resolves the semantic names; they do not affect compilation. */

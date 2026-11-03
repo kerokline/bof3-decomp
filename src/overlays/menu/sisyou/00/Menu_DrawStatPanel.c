@@ -1,0 +1,55 @@
+#include "sisyou_00.h"
+
+/* "%3d" format and the stat-label strings in this overlay. */
+
+/* Stat glyph-row templates in this overlay. */
+
+/* func_801D1444 */
+MATCH void Menu_DrawStatPanel(s16 panel_x, s16 panel_y, u8 palette_index) {
+    u8*        base;
+    Character* entryp;
+    s16        xb;
+    s16        x30;
+    s16        x53;
+    s16        x78;
+    s16        y8;
+    s16        y10;
+    s16        y15;
+    s16        y17;
+    u8         i;
+    base = &D_80144952;
+    y15  = panel_x + 5;
+    UI_DrawWindow((s32)((u16)y15), (s32)((u16)(panel_y + 3)), 148, 45, 0, (s32)base[0]);
+    xb     = panel_x + 0xB;
+    y8     = panel_y + 8;
+    entryp = (Character*)(&D_80144952 + 0x16 + palette_index * 0xA4);
+    UI_DrawText(xb, y8, 0, 0xFF, D_801D4038);
+    sprintf((char*)g_UiFormatBuffer, (const char*)D_801D0C04, entryp->power);
+    x30 = panel_x + 0x30;
+    y10 = panel_y + 0xA;
+    UI_DrawGlyphString(x30, y10, 0, g_UiFormatBuffer);
+    y15 = panel_y + 0x15;
+    UI_DrawText(xb, y15, 0, 0xFF, D_801D403C);
+    sprintf((char*)g_UiFormatBuffer, (const char*)D_801D0C04, entryp->defense);
+    y17 = panel_y + 0x17;
+    UI_DrawGlyphString(x30, y17, 0, g_UiFormatBuffer);
+    x53 = panel_x + 0x53;
+    UI_DrawText(x53, y8, 0, 0xFF, D_801D4040);
+    sprintf((char*)g_UiFormatBuffer, (const char*)D_801D0C04, entryp->intellect);
+    x78 = panel_x + 0x78;
+    UI_DrawGlyphString(x78, y10, 0, g_UiFormatBuffer);
+    UI_DrawText(x53, y15, 0, 0xFF, D_801D4044);
+    sprintf((char*)g_UiFormatBuffer, (const char*)D_801D0C04, entryp->agility);
+    UI_DrawGlyphString(x78, y17, 0, g_UiFormatBuffer);
+    if (entryp->master_id != GAME_NONE) {
+        x30 = entryp->master_id + 0x111;
+        TEXT_SetVariable(0, 8, (const u8*)Resource_Resolve(x30));
+        WinDrawCueText(xb, panel_y + 34, 0x34);
+    }
+    UI_DrawSpriteRun(panel_x, panel_y, D_801D3FE8, 0);
+    for (i = 0; i < 16; i++) {
+        UI_DrawSpriteRun(panel_x + (i * 8), panel_y, D_801D4014, 0);
+    }
+
+    UI_DrawSpriteRun(panel_x, panel_y, D_801D4020, 0);
+}

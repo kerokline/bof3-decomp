@@ -1,0 +1,62 @@
+sha1: 7ed07fec0b4ca1674cc0dc37da370bc8dc7a05a2
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0x4, c, func_801F2C04]
+      - [0x48, c, func_801F2C48]
+      - [0x88, c, func_801F2C88]
+      - [0xE0, c, func_801F2CE0]
+      - [0x118, c, func_801F2D18]
+      - [0x16C, c, func_801F2D6C]
+      - [0x1C4, c, func_801F2DC4]
+      - [0x1FC, c, func_801F2DFC]
+      - [0x250, c, func_801F2E50]
+      - [0x298, c, func_801F2E98]
+      - [0x2DC, c, func_801F2EDC]
+      - [0x41C, c, func_801F301C]
+      - [0x514, c, func_801F3114]
+      - [0x570, c, func_801F3170]
+      - [0x610, c, func_801F3210]
+      - [0x698, c, func_801F3298]
+      - [0x724, c, func_801F3324]
+      - [0x98C, c, func_801F358C]
+      - [0x9D0, c, func_801F35D0]
+      - [0xA08, c, func_801F3608]
+      - [0xA9C, c, func_801F369C]
+      - [0xEFC, c, func_801F3AFC]
+      - [0xF40, c, func_801F3B40]
+      - [0xF98, c, func_801F3B98]
+      - [0x1108, c, func_801F3D08]
+      - [0x114C, c, func_801F3D4C]
+      - [0x1190, c, func_801F3D90]
+      - [0x1218, c, func_801F3E18]
+      - [0x1294, c, func_801F3E94]
+      - [0x1304, c, func_801F3F04]
+      - [0x1538, c, func_801F4138]
+      - [0x15B8, c, func_801F41B8]
+      - [0x15E0, c, func_801F41E0]
+      - [0x1608, c, Area_ResetViewOffsetY]
+      - [0x1624, c, func_801F4224]
+      - [0x16A4, c, func_801F42A4]
+      - [0x1724, c, func_801F4324]
+      - [0x17A4, c, func_801F43A4]
+      - [0x1824, c, func_801F4424]
+      - [0x18A4, c, func_801F44A4]
+      - [0x1924, c, func_801F4524]
+      - [0x1954, c, func_801F4554]
+      - [0x1984, c, func_801F4584]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x19C4
+    vram: 0x801F45C4
+    align: 4
+    subsegments:
+      - [0x19C4, .data, D_801F45C4]
+  - [0x2760]

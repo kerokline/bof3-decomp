@@ -1,0 +1,3 @@
+#include "shisu_00.h"
+
+OverlayHeader D_801D0C00 = {ETC_OVERLAY_SHISU};

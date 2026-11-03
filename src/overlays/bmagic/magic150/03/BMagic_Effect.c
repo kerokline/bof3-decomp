@@ -1,0 +1,52 @@
+#include "magic150_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+INCLUDE_ASM(func_801EEC20);
+
+INCLUDE_ASM(func_801EECA4);
+
+INCLUDE_ASM(func_801EED60);
+
+INCLUDE_ASM(func_801EEDCC);
+
+INCLUDE_ASM(func_801EEE24);
+
+INCLUDE_ASM(func_801EEEC4);
+
+INCLUDE_ASM(func_801EEF80);
+
+#include "shared/Effect_StartPlaying.h"
+
+INCLUDE_ASM(func_801EF040);
+
+INCLUDE_ASM(func_801EF254);
+
+INCLUDE_ASM(func_801EF2C0);
+
+INCLUDE_ASM(func_801EF324);
+
+INCLUDE_ASM(func_801EF4E0);
+
+MATCH void func_801EF6B0(void) {
+    u8  i;
+    u8* work;
+
+    D_801EFAF4 = D_801EFAB4;
+    i          = 0;
+    do {
+        work = D_801EFAF4;
+        i++;
+        *(u16*)work = 0;
+        work += 8;
+        D_801EFAF4 = work;
+    } while (i < 8);
+}
+
+INCLUDE_ASM(func_801EF6F8);
+
+INCLUDE_ASM(func_801EF790);
+
+INCLUDE_ASM(func_801EF8EC);

@@ -1,0 +1,25 @@
+sha1: 51a6035e9398b948aae1e6c4eecd5ab4edf46907
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0x38, c, Fish_LocationMessage]
+      - [0xB0, c, Message_SetAnswerMessage]
+      - [0xDC, c, func_801F2CDC]
+      - [0x10C, c, func_801F2D0C]
+      - [0x358, c, func_801F2F58]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x3C0
+    vram: 0x801F2FC0
+    align: 1
+    subalign: 1
+    subsegments:
+      - [0x3C0, .data, D_801F2FC0]
+  - [0xC0E]

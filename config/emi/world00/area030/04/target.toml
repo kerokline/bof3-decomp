@@ -1,0 +1,35 @@
+[[companion_overlays]]
+target = "emi/world00/area030/05"
+disc_id = "BIN/WORLD00/AREA030.EMI#5"
+payload_sha256 = "9e8a6a98911ad64ea8c22d59ee39ae551f82da004d4e1b73fca8d1ab67ea9145"
+load_address = 0x800f5000
+size = 0x2250
+evidence = "0x801E0C28 direct jal in reviewed func_801E0C20 assembly"
+
+[companion_overlays.abi]
+target_address = 0x800f500c
+prototype = "void func_800F500C(void)"
+evidence = "Scoped to 0x801E0C20: no a0-a3 setup or v0-v1 use; companion dispatch stub preserves the call-site ABI."
+
+[[companion_overlays.static_calls]]
+caller_address = 0x801e0c28
+target_address = 0x800f500c
+
+[[matching.section_placements]]
+function = 0x801DECDC
+section = ".rodata"
+address = 0x801D0C1C
+size = 0x14
+# Byte-identical disc entries that reuse this target's sources (see docs/toolchain.md#copy-targets).
+
+[[copies]]
+disc_id = "BIN/WORLD02/AREA089.EMI#4"
+payload_sha256 = "d869b1540648c3fb98fe64cb9ec62a95b4f8082a111cfd15331a102b0d7a7dd2"
+load_address = 0x801d0c00
+size = 75285
+
+[[copies]]
+disc_id = "BIN/WORLD03/AREA129.EMI#4"
+payload_sha256 = "d869b1540648c3fb98fe64cb9ec62a95b4f8082a111cfd15331a102b0d7a7dd2"
+load_address = 0x801d0c00
+size = 75285

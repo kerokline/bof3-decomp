@@ -1,0 +1,23 @@
+#include "game_00.h"
+
+MATCH void func_801AE214(s32 line_x, s32 line_y, s32 line_length, s32 line_mode) {
+    s32      x;
+    s32      y;
+    u8       mode;
+    s32      delta;
+    u8       color;
+    LINE_F2* line;
+
+    line = (LINE_F2*)g_GfxPrimCursor;
+    x    = line_x;
+    y    = line_y;
+    /* FAKE: ORDER_LOCK keeps this statement in place; without it the match is 97.44%. */
+    ORDER_LOCK(delta = line_length; SetLineF2(line); mode = (u8)line_mode; color = 0x28;
+               if (mode == 0) { color = 0x8C; } line->r0 = color; line->g0 = color;);
+    line->b0 = color;
+    line->x0 = x;
+    line->x1 = (s16)(x + delta);
+    line->y1 = y;
+    line->y0 = y;
+    GFX_AddPrim(1U, 0x10U);
+}

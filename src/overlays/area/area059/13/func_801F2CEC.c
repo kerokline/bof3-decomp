@@ -1,0 +1,5 @@
+#include "area059_13.h"
+
+MATCH void func_801F2CEC(void) {
+    WORLD_ARM_ANSWER_MESSAGE(4);
+}

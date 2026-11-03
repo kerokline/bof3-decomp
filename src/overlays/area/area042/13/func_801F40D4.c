@@ -1,0 +1,3 @@
+#include "area042_13.h"
+
+INCLUDE_ASM(func_801F40D4);

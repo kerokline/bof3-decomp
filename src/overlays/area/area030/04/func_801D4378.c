@@ -1,0 +1,37 @@
+#include "area030_04.h"
+
+/* Steps the area panel back one cursor row (unk_09); when it reaches
+ * row 0 it sets the 0x0B mode and moves unk_01 to the next state, or to 4
+ * when bit 0 of unk_07 is set. It then draws the panel frame and rows at the
+ * row offset, the selection mask (1 << unk_06) appearing only in mode 0x0B
+ * once D_80145E93 is at least 3. */
+MATCH void func_801D4378(void) {
+    s32 mask;
+
+    FISHING_STATE->step_timer_09--;
+    if (FISHING_STATE->step_timer_09 == 0) {
+        FISHING_STATE->saved_index_0B = 1;
+        if (!(FISHING_STATE->counter_07 & 1)) {
+            FISHING_STATE->handler_index_01++;
+        } else {
+            FISHING_STATE->handler_index_01 = 4;
+        }
+    }
+    if (FISHING_STATE->saved_index_0B == 0) {
+        func_801D9534(0x14, (0x12 - FISHING_STATE->step_timer_09 * 0x10) & 0xFFFE, 0x118, 0x13, 0);
+        func_801D7C10((u16)(FISHING_STATE->step_timer_09 * 0x2D + 0x58), 0x28, 0);
+    } else {
+        func_801D9534(0x14, 0x12, 0x118, 0x13, 0);
+        mask = 0;
+        if (D_80145E93[0] >= 3) {
+            mask = (1 << FISHING_STATE->cue_index_06) & BYTE_MASK;
+        }
+        func_801D7C10(0x58, 0x28, mask);
+    }
+    func_801D88E0(0x10 - FISHING_STATE->step_timer_09 * 0x2D, 0x40);
+    if (!(FISHING_STATE->counter_07 & 1)) {
+        func_801D7EB0((s16)(FISHING_STATE->step_timer_09 * 0x2D + 0xA4), 0x40);
+    } else {
+        func_801D8364(FISHING_STATE->step_timer_09 * 0x2D + 0xA4, 0x40);
+    }
+}

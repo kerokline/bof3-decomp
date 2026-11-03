@@ -1,0 +1,31 @@
+#include "battle_15.h"
+
+/* Battler element rows: the resistance byte at +0x00 (func_800A30E8) is
+ * followed by the element-slot bytes the 0x1C0 element mask selects. */
+
+MATCH s16 func_800A2EF0(u8 battler_index, u16 element_mask) {
+    s32 value = 0;
+
+    if (BATTLER_IS_PLAYER(battler_index)) {
+        if (element_mask & ELEM_PSIONIC) {
+            value = D_800B495C[g_BattlePartyBattlers[battler_index].stats.resistances[RES_SLOT_PSIONIC]];
+        }
+        if (element_mask & ELEM_STATUS) {
+            value = D_800B495C[g_BattlePartyBattlers[battler_index].stats.resistances[RES_SLOT_PSIONIC + 1]];
+        }
+        if (element_mask & 0x100u) {
+            value = D_800B495C[g_BattlePartyBattlers[battler_index].stats.resistances[RES_SLOT_PSIONIC + 2]];
+        }
+    } else {
+        if (element_mask & ELEM_PSIONIC) {
+            value = D_800B495C[ENEMY_COMBATANT((u32)battler_index).resistances[RES_SLOT_PSIONIC]];
+        }
+        if (element_mask & ELEM_STATUS) {
+            value = D_800B495C[ENEMY_COMBATANT((u32)battler_index).resistances[RES_SLOT_PSIONIC + 1]];
+        }
+        if (element_mask & 0x100u) {
+            value = D_800B495C[ENEMY_COMBATANT((u32)battler_index).resistances[RES_SLOT_PSIONIC + 2]];
+        }
+    }
+    return (s16)value;
+}

@@ -1,0 +1,104 @@
+#include "game_00.h"
+
+MATCH s32 func_801BEE5C(void) {
+    s32 slot;
+    s32 off;
+    u8  count;
+    s32 initial_count;
+    s32 phase2_count;
+    s32 idx;
+    s32 kind;
+    u8  sel;
+    s32 scan;
+    u16 flags;
+    u8* rec;
+    u8* phase2_rec;
+    /* FAKE: pin base to v0 for copy. */
+    MATCH_FAKE_PIN(u8*, phase2_base, "v0");
+    u8*  tbl;
+    u8*  base;
+    u16* source_row;
+    u16* destination_row;
+    s32  neg;
+    /* FAKE: unused frame, 24 bytes. */
+    STACK_PADS(u8, 24);
+
+    slot          = 0;
+    initial_count = g_PartySize;
+    if (initial_count <= 0)
+        goto phase2; /* no active slot to update, stage the idle records */
+    count = initial_count;
+    scan  = 0;
+scan_loop:
+    if ((&D_80145E9B)[scan] != 0)
+        goto found; /* the scan found an active record */
+    slot++;
+    scan += BATTLE_PARTY_STRIDE;
+    if (slot < count)
+        goto scan_loop; /* the next record is still active */
+found:
+    if (slot >= g_PartySize)
+        goto phase2; /* no live record within the capacity */
+    if (g_PartySize == 0)
+        return 0;
+    slot = 0;
+    off  = 0;
+    do {
+        rec         = (u8*)g_BattlePartyBattlers + off;
+        g_GameState = (GameStateRecord*)rec;
+        g_SpadWork  = (Actor*)rec;
+        kind        = rec[0x13C];
+        flags       = g_Characters[kind].status;
+        if ((flags & 0x4000) != 0) {
+            Actor_StageScriptRecord(rec[0x4B], 0, MEM_PTR(u8, 0x800F0800u), 0xA00);
+            g_SpadWork->unk_0B = 0;
+        } else {
+            sel = rec[0x08];
+            if ((sel & BYTE_MASK) == s_RouteIndexByMode[g_BattleScrollDir]) {
+                if (rec[0x0B] != 0) {
+                    Actor_StageScriptRecord((u8)sel, 0, MEM_PTR(u8, 0x800F0800u), 0xA00);
+                    g_SpadWork->unk_0B = 0;
+                }
+            } else {
+                rec[0x08] = (sel + rec[0x0B]) & 7;
+                Actor_StageScriptRecord(g_SpadWork->direction_08, 0, MEM_PTR(u8, 0x800F0800u), 0xA00);
+            }
+            func_8014D978();
+        }
+        off += BATTLE_PARTY_STRIDE;
+    } while (++slot < g_PartySize);
+    return 0;
+phase2:
+    if ((g_BattleOptions & 4) != 0)
+        return 1;
+    phase2_count = g_PartySize;
+    slot         = 0;
+    if (phase2_count <= 0)
+        return 1;
+    tbl = (u8*)GAME_PALETTE_STAGE;
+    neg = -0x40;
+    off = 0;
+    do {
+        idx         = 0;
+        phase2_base = (u8*)g_BattlePartyBattlers + off;
+        phase2_rec  = phase2_base;
+        g_GameState = (GameStateRecord*)phase2_rec;
+        g_SpadWork  = (Actor*)phase2_rec;
+        do {
+            base                 = (u8*)((phase2_rec[0x05] << 6) + (u32)tbl);
+            source_row           = (u16*)base;
+            destination_row      = source_row + 0x60;
+            destination_row[idx] = source_row[idx];
+            idx++;
+        } while (idx < 32);
+        off += BATTLE_PARTY_STRIDE;
+        func_801C2438();
+        g_SpadWork->unk_0B            = 0;
+        g_SpadWork->tint.bytes.unk_5D = neg;
+        g_SpadWork->tint.bytes.unk_5E = neg;
+        g_SpadWork->tint.bytes.unk_5F = neg;
+        g_SpadWork->tint.bytes.flags  = 1;
+        slot++;
+    } while (slot < g_PartySize);
+    return 1;
+}

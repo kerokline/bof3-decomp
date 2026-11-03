@@ -1,0 +1,69 @@
+#include "magic105_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+INCLUDE_ASM(func_801EEC14);
+
+INCLUDE_ASM(func_801EED1C);
+
+#include "overlays/bmagic/Effect_PlayOnZeroTick.h"
+
+MATCH void func_801EEF78(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+INCLUDE_ASM(func_801EEFBC);
+
+INCLUDE_ASM(func_801EF06C);
+
+INCLUDE_ASM(func_801EF124);
+
+MATCH void func_801EF250(void) {
+    u8 timer;
+
+    timer              = g_SpadWork->unk_0A + 1;
+    g_SpadWork->unk_0A = timer;
+    if (timer == 64) {
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    }
+}
+
+#include "overlays/bmagic/Effect_TickOnZeroTick.h"
+
+MATCH void func_801EF2F0(void) {
+    SVECTOR pos;
+    SVECTOR rot;
+    MATRIX  matrix;
+    long    flags;
+
+    PushMatrix();
+    rot.vz = 0;
+    rot.vy = 0;
+    rot.vx = 0;
+    pos.vx = (g_SpadWork->coord_x_34.raw >> 9) - 0x4000;
+    pos.vy = (g_SpadWork->coord_y_38.raw >> 9) - 0x4000;
+    pos.vz = -g_SpadWork->word_3C.half.span_3E / 2;
+    RotTrans(&pos, &matrix.t, &flags);
+    RotMatrix(&rot, &matrix);
+    MulMatrix2((MATRIX*)g_CameraMatrix, &matrix);
+    SetRotMatrix(&matrix);
+    SetTransMatrix(&matrix);
+}
+
+INCLUDE_ASM(func_801EF3A0);
+
+MATCH void func_801EF880(void) {
+    SYS_DISPATCH_TASK((g_BMagicEffectFuncs + 11), 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EF8C4);
+
+INCLUDE_ASM(func_801EF930);
+
+INCLUDE_ASM(func_801EFB68);
+
+INCLUDE_ASM(func_801EFC8C);
+
+INCLUDE_ASM(func_801EFCF0);

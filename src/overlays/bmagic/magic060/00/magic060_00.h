@@ -1,0 +1,16 @@
+#ifndef OVERLAY_BMAGIC_MAGIC060_00_H
+#define OVERLAY_BMAGIC_MAGIC060_00_H
+
+/* The bmagic/magic060/00 overlay. Only this image includes the file. */
+
+#include "overlays/bmagic/bmagic.h"
+
+extern BattleHandlerTable5 D_801EEC04;
+
+extern Callback D_801F0BCC[];
+void            func_801F0428(void);
+
+extern Callback D_801F0BBC[];
+void            func_801F012C(void);
+
+#endif

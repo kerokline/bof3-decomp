@@ -1,0 +1,6 @@
+#include "area119_13.h"
+
+MATCH void func_801F4524(void) {
+    SYS_SetFlag(g_SceneFlags, 0x3C);
+    SND_PlayCue(EMI_CUE_ID(2, 3));
+}

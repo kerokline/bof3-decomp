@@ -1,0 +1,29 @@
+[[matching.section_placements]]
+function = 0x801D3828
+section = ".rodata"
+address = 0x801D0C04
+size = 0x18
+
+[[matching.section_placements]]
+function = 0x801D543C
+section = ".rodata"
+address = 0x801D0C3C
+size = 0x2C
+
+[[matching.section_placements]]
+function = 0x801D5E88
+section = ".rodata"
+address = 0x801D0C7C
+size = 0x18
+
+[[matching.section_placements]]
+function = 0x801DB9F0
+section = ".rodata"
+address = 0x801D0DEC
+size = 0x34
+
+[[matching.section_placements]]
+function = 0x801DD578
+section = ".rodata"
+address = 0x801D0E2C
+size = 0x18

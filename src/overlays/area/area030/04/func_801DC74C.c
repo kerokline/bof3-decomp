@@ -1,0 +1,21 @@
+#include "area030_04.h"
+
+/* Initializes the AREA030 field when the gate halfword is clear:
+ * sets the two world scale words, resets the object records, arms the field
+ * effect, and starts the matching field cue. */
+MATCH void func_801DC74C(void) {
+    if (WINDOW_EFFECT_IDLE()) {
+        CallbackWait(1);
+        g_AreaScrollTargetX = 0xF0000;
+        g_AreaScrollTargetY = 0x3C0000;
+        func_80153DE8();
+        func_801E0A30();
+        UI_SetMode(3);
+        if (g_GameState->slot_index_79 == 0) {
+            Actor_BeginScript(0xA, 2);
+        } else {
+            Actor_SelectScript(0xB);
+        }
+        FISHING_STATE->sub_index_03 = 1;
+    }
+}

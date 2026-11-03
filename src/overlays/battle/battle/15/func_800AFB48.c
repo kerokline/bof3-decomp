@@ -1,0 +1,30 @@
+#include "battle_15.h"
+
+MATCH u32 func_800AFB48(BattleSpriteCellRecord* record) {
+    u8  index;
+    u32 quotient;
+    u32 remainder;
+    u8  base;
+    u32 product;
+    u32 dividend;
+    u32 divisor;
+    u32 i;
+    u32 bank;
+
+    index     = record->bank_index;
+    dividend  = record->cell_value;
+    divisor   = s_BattleCellRowDivisor[index];
+    quotient  = dividend / divisor;
+    remainder = dividend % divisor;
+    base      = quotient;
+    product   = s_BattleCellRowScale[index] * remainder;
+    if (record->flags_24 & 4) {
+        base = quotient + 0x10;
+    }
+    for (i = 0; i < (s_BattleCellRowCount[record->bank_index] << 4); i++) {
+        bank                        = (u32)g_GraphicsPaletteDst + ((base & BYTE_MASK) << 9);
+        *(u16*)(0x80037C00 + i * 2) = *(u16*)(bank + ((product & BYTE_MASK) + i) * 2);
+    }
+    g_GfxPalettePending = 1;
+    return (s_BattleCellRowDivisor[record->bank_index] * 2) & 0xFE;
+}

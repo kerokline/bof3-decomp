@@ -1,0 +1,95 @@
+#include "magic057_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+/* func_801EEC50 */
+#include "overlays/bmagic/BMagic_RunStep.h"
+
+INCLUDE_ASM(func_801EECB0);
+
+MATCH void func_801EED2C(void) {
+    BattleResultRings table;
+
+    table = D_801EEC10;
+    SYS_DISPATCH_TASK(table.handlers, 2, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EED98);
+
+INCLUDE_ASM(func_801EEE50);
+
+INCLUDE_ASM(func_801EEEB0);
+
+INCLUDE_ASM(func_801EEFA4);
+
+INCLUDE_ASM(func_801EEFEC);
+
+MATCH void func_801EF02C(void) {
+    BattleHandlerTable3 handlers;
+
+    handlers = D_801EEC20;
+    SYS_DISPATCH_TASK(handlers.handlers, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EF08C);
+
+INCLUDE_ASM(func_801EF134);
+
+INCLUDE_ASM(func_801EF3C4);
+
+MATCH void func_801EF528(void) {
+    PartyBattler* work;
+
+    work         = (PartyBattler*)D_801EB4E0;
+    work->unk_0A = work->unk_0A + 1;
+    func_801E5988();
+}
+
+MATCH void func_801EF55C(void) {
+    BattleHandlerTable3 handlers;
+
+    handlers = D_801EEC38;
+    SYS_DISPATCH_TASK(handlers.handlers, 2, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EF5BC);
+
+INCLUDE_ASM(func_801EF620);
+
+MATCH void func_801EF7A0(void) {
+    PartyBattler* work;
+
+    work = g_SpadWork;
+    if (work->unk_10 >= -2) {
+        work->unk_10--;
+    } else {
+        work->unk_03++;
+    }
+}
+
+MATCH void func_801EF7E0(void) {
+    PartyBattler* work;
+
+    work = g_SpadWork;
+    if (work->unk_10 < 0) {
+        work->unk_10++;
+    } else {
+        work->unk_03--;
+    }
+}
+
+MATCH void func_801EF81C(void) {
+    func_801E5988();
+}
+
+INCLUDE_ASM(func_801EF83C);
+
+INCLUDE_ASM(func_801EF900);
+
+INCLUDE_ASM(func_801EFA38);
+
+MATCH void func_801EFABC(void) {
+    func_801E5988();
+}

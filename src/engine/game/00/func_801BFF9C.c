@@ -1,0 +1,144 @@
+#include "game_00.h"
+
+MATCH void func_801BFF9C(u32 work_kind, u32 work_index, u32 work_mode) {
+    Character* rec;
+    u8         count;
+    s32        i;
+    s32        id;
+    s32        off;
+    MATCH_FAKE_PIN(u8*, work, "s1"); /* FAKE: work pointer stays in s1. */
+    u8* base;
+    u8* order;
+    u8* dst;
+    MATCH_FAKE_PIN(u8*, feed, "t1"); /* FAKE: record base reloads into t1. */
+    u8* mask;
+    MATCH_FAKE_PIN(u32, addr, "v0"); /* FAKE: work base staged in v0. */
+    u8  kind;
+    s32 koff; /* FAKE: retail scales the record index before the base add. */
+    /* FAKE: retail holds the three arguments in s7/fp/s6. */
+    s32 z;
+    MATCH_FAKE_PIN(s32, c41, "v1"); /* FAKE: 0x410000 materializes in v1. */
+    s32 x;
+    s32 y;
+
+    x = work_kind;
+    y = work_index;
+    z = work_mode;
+    g_GameFlags &= 0xEFFF;
+    if (!(g_AreaWalkFlags & AREA_WALK_MAP_LOADING) &&
+        (((LOBU(g_GameRequestFlags) & 9) != 0) || (LOHU(g_GameAreaId) == 0xBD) || (LOHU(g_GameAreaId) == 0xBB) ||
+         (((LOBU(g_GameRequestFlags) & 0x40) != 0) && (SYS_TestFlag(g_SceneEventFlags, 0x77U) == 0)))) {
+        count = Party_CountOrder(0);
+        for (i = 0; i < (s32)count; i++) {
+            g_Characters[g_CharSlot[D_80144F5A[i]]].status &= ~STATUS_CONFUSED;
+        }
+        for (i = 0; i < (s32)count; i++) {
+            if (g_Characters[g_CharSlot[D_80144F5A[i]]].status & STATUS_POISONED) {
+                D_80145FA8 = 0xA;
+                break;
+            }
+        }
+        g_SpadWork                                       = (Actor*)g_BattlePartyBattlers;
+        g_PartySize                                      = 1;
+        D_80145E95                                       = 0;
+        *(Character*)((u8*)g_BattlePartyBattlers + 0x74) = g_Characters[0];
+        D_80145FCC[0]                                    = 0;
+        VOL(u8, D_80145FBC) &= 0xFE;
+        g_SpadWork->unk_48 = 0;
+        if (LOBU(g_GameRequestFlags) & 1) {
+            if (g_Characters[CHAR_SLOT_RYU].character_id == CHAR_ID_RYU_YOUNG) {
+                id = 0x52;
+                goto set_mode; /* shared mode dispatch */
+            }
+            if (g_Characters[CHAR_SLOT_RYU].character_id == CHAR_ID_RYU_PAJAMAS) {
+                id = 0xCB;
+                goto set_mode; /* shared mode dispatch */
+            }
+            id = 0x27A;
+            if (g_Characters[CHAR_SLOT_RYU].character_id == CHAR_ID_RYU_ADULT) {
+            set_mode:
+                Area_FindSceneRecord(id);
+            }
+            g_SpadWork->flags_24 = 0;
+            g_GameFlags |= 0x1000;
+        } else if (LOBU(g_GameRequestFlags) & 8) {
+            id = 0x1FD;
+            if (D_80145F09 == 0) {
+                id = 0x47;
+            }
+            Area_FindSceneRecord(id);
+            g_SpadWork->unk_2A   = 0;
+            g_SpadWork->flags_24 = 0;
+        } else if (LOBU(g_GameRequestFlags) & 0x40) {
+            func_801C1254((s32)D_80145F09, 0);
+        } else if (LOHU(g_GameAreaId) == 0xBD) {
+            D_80145EBB         = 0;
+            *(s32*)&D_80145F00 = 0;
+        }
+    } else {
+        g_PartySize = Party_CountOrder(0);
+        if (!(g_AreaWalkFlags & AREA_WALK_MAP_LOADING)) {
+            Party_BuildBattlers(0);
+        } else {
+            i = 0;
+            if (i < (s32)g_PartySize) {
+                addr  = (u32)g_BattlePartyBattlers;
+                base  = (u8*)g_Characters;
+                order = base + 0x5F2;        /* party order field follows the records */
+                mask  = (u8*)(addr + 0x12C); /* row flag byte */
+                work  = (u8*)addr;
+                off   = 0;
+                do {
+                    g_SpadWork = (Actor*)work;
+                    *work |= 1;
+                    *mask &= 0xFE;
+                    g_SpadWork->x.fixed = 0;
+                    g_SpadWork->y.fixed = 0;
+                    g_SpadWork->z.fixed = 0;
+                    kind                = g_CharSlot[*order];
+                    feed                = D_80145F04;
+                    dst                 = feed + off;
+                    koff                = (kind & BYTE_MASK) * PARTY_RECORD_STRIDE;
+                    rec                 = (Character*)((u32)koff + (u32)base);
+                    D_80145FCC[off]     = kind;
+                    *(Character*)dst    = *rec;
+                    if (!(g_SpadWork->flags_24 & 1)) {
+                        func_801C1254((s32)*order, i & BYTE_MASK);
+                        MATCH_FAKE_BARRIER(); /* FAKE: keeps order++ past the call. */
+                        order++;
+                    } else {
+                        func_801C1254((s32)*order, i & BYTE_MASK);
+                        order++;
+                        GFX_FreePaletteFadeTarget(g_SpadWork);
+                        g_SpadWork->unk_27 = (u8)(g_SpadWork->unk_05 + 0x78);
+                        GFX_StagePalette((u32)(g_SpadWork->unk_05 << 6) + GAME_PALETTE_STAGE, 0);
+                    }
+                    mask += BATTLE_PARTY_STRIDE;
+                    work += BATTLE_PARTY_STRIDE;
+                    off += BATTLE_PARTY_STRIDE;
+                    i++;
+                } while (i < (s32)g_PartySize);
+            }
+        }
+    }
+    if (!(LOBU(g_GameRequestFlags) & 8)) {
+        if (z & 0x80) {
+            g_AreaScrollTargetX = x;
+            g_AreaScrollTargetY = y;
+            return;
+        }
+        if (!(g_GameFlags & 0x800)) {
+            func_801C0758(x, y, z & BYTE_MASK);
+        } else {
+            func_801C090C(x, y, z & BYTE_MASK);
+        }
+        g_AreaScrollTargetX = D_80145EC4;
+        g_AreaScrollTargetY = D_80145EC8;
+        return;
+    }
+    c41                 = 0x410000;
+    D_80145EC4          = 0xF0000;
+    g_AreaScrollTargetX = 0xF0000;
+    D_80145EC8          = c41;
+    g_AreaScrollTargetY = 0x3C0000;
+}

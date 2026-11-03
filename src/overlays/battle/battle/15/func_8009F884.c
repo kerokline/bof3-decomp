@@ -1,0 +1,28 @@
+#include "battle_15.h"
+
+MATCH void func_8009F884(void) {
+    u8  mode;
+    u16 base;
+    u16 flags;
+    s16 record;
+    u8  battler_index;
+    u8  selection_kind;
+
+    mode = LOBU(g_BattleTarget);
+    if (mode < 3u) {
+        base  = g_BattlePartyBattlers[mode].stats.current_hp;
+        flags = g_BattlePartyBattlers[mode].stats.status;
+    } else {
+        base  = ENEMY_COMBATANT(mode).hp_94;
+        flags = ENEMY_COMBATANT(mode).status_82;
+    }
+    battler_index  = g_BattleActingBattler;
+    selection_kind = g_BattleTarget;
+    /* FAKE: keeps the 2 load in the jal delay slot. */
+    MATCH_FAKE_BARRIER();
+    g_BattleTargetRecord[2] = Battle_CalcDamage(battler_index, selection_kind, 2);
+    record                  = ((s16*)g_BattleTargetRecord)[2];
+    if (record < base && !(flags & STATUS_SLEEPING) && record != 0) {
+        func_800A4238(0x40);
+    }
+}

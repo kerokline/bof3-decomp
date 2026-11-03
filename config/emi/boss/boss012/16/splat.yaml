@@ -1,0 +1,47 @@
+sha1: fd73cf4590d8498ee311c4e28cd5f7b766a58f96
+symbol_owners:
+  - exe/slus_004_22
+  - emi/battle/battle/03
+  - emi/boss/boss012/16
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x800C1800
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, bin, D_800C1800]
+      - [0x4, c, func_800C1804]
+      - [0x48, c, func_800C1848]
+      - [0xB4, c, func_800C18B4]
+      - [0xF8, c, func_800C18F8]
+      - [0x13C, c, func_800C193C]
+      - [0x178, c, func_800C1978]
+      - [0x224, c, func_800C1A24]
+      - [0x290, c, func_800C1A90]
+      - [0x318, c, func_800C1B18]
+      - [0x350, c, func_800C1B50]
+      - [0x358, c, func_800C1B58]
+      - [0x360, c, func_800C1B60]
+      - [0x368, c, Boss_InstallBattleHooks]
+      - [0x3A0, c, Boss_HandleBattleEvent]
+      - [0x3A8, c, Boss_ChooseBattleEnding]
+      - [0x400, c, Boss_EndBattle]
+      - [0x408, c, func_800C1C08]
+      - [0x4D8, c, func_800C1CD8]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x614
+    vram: 0x800C1E14
+    align: 4
+    subsegments:
+      - [0x614, bin, D_800C1E14]
+      - [0x620, bin, D_800C1E20]
+      - [0x664, bin, D_800C1E64]
+      - [0x674, bin, D_800C1E74]
+      - [0x6A4, bin, D_800C1EA4]
+      - [0x6BC, bin, D_800C1EBC]
+      - [0x6CC, bin, D_800C1ECC]
+  - [0x6D8]

@@ -1,0 +1,62 @@
+sha1: 7c412599bba8a401819915d24e8bc1c4c8bf6f19
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0x48, c, func_801F2C48]
+      - [0x8C, c, func_801F2C8C]
+      - [0xF0, c, func_801F2CF0]
+      - [0x128, c, func_801F2D28]
+      - [0x1AC, c, func_801F2DAC]
+      - [0x2F0, c, func_801F2EF0]
+      - [0x3A8, c, func_801F2FA8]
+      - [0x460, c, func_801F3060]
+      - [0x724, c, func_801F3324]
+      - [0x780, c, func_801F3380]
+      - [0x7C4, c, func_801F33C4]
+      - [0x824, c, func_801F3424]
+      - [0x898, c, func_801F3498]
+      - [0x970, c, func_801F3570]
+      - [0xA3C, c, func_801F363C]
+      - [0xB14, c, func_801F3714]
+      - [0xBEC, c, func_801F37EC]
+      - [0xCAC, c, func_801F38AC]
+      - [0xD54, c, func_801F3954]
+      - [0xF94, c, func_801F3B94]
+      - [0xFD8, c, func_801F3BD8]
+      - [0x109C, c, func_801F3C9C]
+      - [0x11C0, c, func_801F3DC0]
+      - [0x124C, c, func_801F3E4C]
+      - [0x1308, c, func_801F3F08]
+      - [0x13BC, c, func_801F3FBC]
+      - [0x1654, c, func_801F4254]
+      - [0x1698, c, func_801F4298]
+      - [0x1774, c, func_801F4374]
+      - [0x1858, c, Actor_SlideScreenX]
+      - [0x18B4, c, func_801F44B4]
+      - [0x1970, c, func_801F4570]
+      - [0x19E0, c, Area_Update]
+      - [0x1CB0, c, func_801F48B0]
+      - [0x1CC4, c, Message_ShowParty]
+      - [0x1D88, c, func_801F4988]
+      - [0x1E4C, c, func_801F4A4C]
+      - [0x1E9C, c, func_801F4A9C]
+      - [0x1EDC, c, func_801F4ADC]
+      - [0x1FB0, c, func_801F4BB0]
+      - [0x2084, c, func_801F4C84]
+      - [0x21F8, c, func_801F4DF8]
+      - [0x2290, c, func_801F4E90]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x22D4
+    vram: 0x801F4ED4
+    align: 4
+    subsegments:
+      - [0x22D4, .data, D_801F4ED4]
+  - [0x2D2C]

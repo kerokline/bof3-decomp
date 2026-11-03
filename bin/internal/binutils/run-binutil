@@ -1,0 +1,18 @@
+#!/bin/sh
+# Launch the psn00b binutils tool named by $0; PSX_<TOOL> overrides the toolchain binary.
+# Usage: bin/internal/binutils/<tool> [args...]
+set -eu
+tool=${0##*/}
+case "$tool" in
+as) override=${PSX_AS:-} ;;
+ld) override=${PSX_LD:-} ;;
+nm) override=${PSX_NM:-} ;;
+objcopy) override=${PSX_OBJCOPY:-} ;;
+objdump) override=${PSX_OBJDUMP:-} ;;
+*)
+	printf 'unknown binutils tool: %s\n' "$tool" >&2
+	exit 2
+	;;
+esac
+ROOT="$(CDPATH='' cd -- "$(dirname "$0")/../../.." && pwd)"
+exec "${override:-${ROOT}/toolchains/psn00b_toolchain/bin/mipsel-none-elf-${tool}}" "$@"

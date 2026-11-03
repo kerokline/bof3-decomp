@@ -1,0 +1,20 @@
+#include "game_00.h"
+
+MATCH void func_801B830C(void) {
+    u8* work;
+    u8  step;
+
+    work = SP_REF(u8*, 0x44u);
+    if (work[9] == 0) {
+        step     = work[10] + 1;
+        work[10] = step;
+        if (step == 3) {
+            g_GameStateIndex = 5;
+        }
+        func_801C24D0();
+    }
+    work    = SP_REF(u8*, 0x44u);
+    work[9] = work[9] - 1;
+    func_801B0DFC();
+    func_8014D978();
+}

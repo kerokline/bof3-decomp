@@ -1,0 +1,22 @@
+#include "battle_03.h"
+
+MATCH void func_801E71EC(void) {
+    u8* field;
+    u32 flags;
+    u8  index;
+
+    if ((g_BattleState & BATTLE_STATE_EFFECT_PLAYING) != 0) {
+        field = &D_801EB4E0->slot;
+        index = *field;
+        if (index < 3) {
+            flags = g_BattlePartyBattlers[index].stats.status & (STATUS_BLIND | STATUS_SILENCED | STATUS_SLEEPING);
+        } else {
+            flags = ENEMY_COMBATANT(index).status_82 & (STATUS_BLIND | STATUS_SILENCED | STATUS_SLEEPING);
+        }
+        if (flags == 0) {
+            g_SpadWork->step_01 = 0;
+            return;
+        }
+        g_SpadWork->step_01 = g_SpadWork->step_01 - 1;
+    }
+}

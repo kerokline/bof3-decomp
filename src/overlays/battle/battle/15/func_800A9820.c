@@ -1,0 +1,36 @@
+#include "battle_15.h"
+
+/* marks battlers as damaged: bit 0x80 of the selector loops over
+ * the three player rows, bit 0x40 over the eleven enemy rows, and a selector
+ * without bits 0xC0 marks only the one indexed battler.
+ */
+MATCH void func_800A9820(u8 selector) {
+    s32 i;
+    u8  index;
+
+    if (selector & 0xC0) {
+        if (selector & 0x80) {
+            for (i = 0; (u32)(i & BYTE_MASK) < BATTLE_PARTY_SLOT_COUNT; i++) {
+                index = i & BYTE_MASK;
+                if ((Battle_SlotIsBlocked(index) & BYTE_MASK) == 0) {
+                    g_BattlePartyBattlers[index].flags_124.value |= COMBATANT_FLAG_DAMAGED;
+                }
+            }
+        }
+        if (selector & 0x40) {
+            for (i = 3; (u32)(i & BYTE_MASK) < COMBATANT_COUNT; i++) {
+                index = i & BYTE_MASK;
+                if ((Battle_SlotIsBlocked(index) & BYTE_MASK) == 0) {
+                    ENEMY_COMBATANT(index).flags_100 |= COMBATANT_FLAG_DAMAGED;
+                }
+            }
+        }
+    } else {
+        index = selector & BYTE_MASK;
+        if (index < 3U) {
+            g_BattlePartyBattlers[index].flags_124.value |= COMBATANT_FLAG_DAMAGED;
+            return;
+        }
+        ENEMY_COMBATANT(index).flags_100 |= COMBATANT_FLAG_DAMAGED;
+    }
+}

@@ -1,0 +1,67 @@
+sha1: b62c6772401dc80bc4317c44064a91299c020adb
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0x4, c, func_801F2C04]
+      - [0x48, c, func_801F2C48]
+      - [0xB0, c, func_801F2CB0]
+      - [0x25C, c, func_801F2E5C]
+      - [0x398, c, func_801F2F98]
+      - [0x3B8, c, func_801F2FB8]
+      - [0x89C, c, func_801F349C]
+      - [0x92C, c, func_801F352C]
+      - [0xAD4, c, func_801F36D4]
+      - [0xB18, c, func_801F3718]
+      - [0xBA0, c, func_801F37A0]
+      - [0xC60, c, func_801F3860]
+      - [0xCDC, c, func_801F38DC]
+      - [0xFD0, c, func_801F3BD0]
+      - [0x1014, c, func_801F3C14]
+      - [0x106C, c, func_801F3C6C]
+      - [0x1168, c, func_801F3D68]
+      - [0x1210, c, func_801F3E10]
+      - [0x12B4, c, func_801F3EB4]
+      - [0x1360, c, func_801F3F60]
+      - [0x1430, c, func_801F4030]
+      - [0x1508, c, func_801F4108]
+      - [0x15EC, c, func_801F41EC]
+      - [0x16E0, c, func_801F42E0]
+      - [0x1774, c, func_801F4374]
+      - [0x17EC, c, func_801F43EC]
+      - [0x18B0, c, func_801F44B0]
+      - [0x197C, c, func_801F457C]
+      - [0x1A5C, c, func_801F465C]
+      - [0x1B8C, c, func_801F478C]
+      - [0x1C2C, c, func_801F482C]
+      - [0x1DA0, c, func_801F49A0]
+      - [0x2270, c, func_801F4E70]
+      - [0x2300, c, func_801F4F00]
+      - [0x2344, c, func_801F4F44]
+      - [0x23D4, c, func_801F4FD4]
+      - [0x247C, c, func_801F507C]
+      - [0x251C, c, func_801F511C]
+      - [0x2574, c, func_801F5174]
+      - [0x27F0, c, func_801F53F0]
+      - [0x2A0C, c, func_801F560C]
+      - [0x2AB0, c, func_801F56B0]
+      - [0x2B38, c, func_801F5738]
+      - [0x2B78, c, func_801F5778]
+      - [0x2BB4, c, func_801F57B4]
+      - [0x2BFC, c, func_801F57FC]
+      - [0x2C34, c, func_801F5834]
+      - [0x2CF4, c, func_801F58F4]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x2D34
+    vram: 0x801F5934
+    align: 4
+    subsegments:
+      - [0x2D34, .data, D_801F5934]
+  - [0x3170]

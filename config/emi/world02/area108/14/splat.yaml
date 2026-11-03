@@ -1,0 +1,75 @@
+sha1: 0585ea5d348f77d3ef9c09b460c0446f2eb440a8
+segments:
+  - name: main
+    type: code
+    start: 0x0
+    vram: 0x801F2C00
+    align: 4
+    section_order: [.data, .text, .rodata, .bss]
+    subsegments:
+      - [0x0, .data, D_801F2C00]
+      - [0x44, c, func_801F2C44]
+      - [0x88, c, func_801F2C88]
+      - [0xC8, c, func_801F2CC8]
+      - [0x118, c, func_801F2D18]
+      - [0x140, c, func_801F2D40]
+      - [0x31C, c, func_801F2F1C]
+      - [0x3C8, c, func_801F2FC8]
+      - [0x434, c, func_801F3034]
+      - [0x4FC, c, func_801F30FC]
+      - [0x598, c, func_801F3198]
+      - [0x61C, c, func_801F321C]
+      - [0x8B8, c, func_801F34B8]
+      - [0x988, c, func_801F3588]
+      - [0xAA4, c, func_801F36A4]
+      - [0xAE8, c, func_801F36E8]
+      - [0xB6C, c, func_801F376C]
+      - [0xC4C, c, func_801F384C]
+      - [0xD20, c, func_801F3920]
+      - [0xE14, c, func_801F3A14]
+      - [0xE6C, c, func_801F3A6C]
+      - [0xF18, c, func_801F3B18]
+      - [0xFA0, c, func_801F3BA0]
+      - [0x1084, c, func_801F3C84]
+      - [0x1190, c, GFX_DrawShadedDisc]
+      - [0x1334, c, func_801F3F34]
+      - [0x13F8, c, func_801F3FF8]
+      - [0x143C, c, func_801F403C]
+      - [0x145C, c, func_801F405C]
+      - [0x1508, c, func_801F4108]
+      - [0x1528, c, func_801F4128]
+      - [0x1560, c, func_801F4160]
+      - [0x1698, c, func_801F4298]
+      - [0x1720, c, Message_ClearRequest]
+      - [0x1760, c, Message_Clear]
+      - [0x17A4, c, func_801F43A4]
+      - [0x17C0, c, func_801F43C0]
+      - [0x17DC, c, func_801F43DC]
+      - [0x17F8, c, func_801F43F8]
+      - [0x1814, c, func_801F4414]
+      - [0x1D18, c, func_801F4918]
+      - [0x1D98, c, func_801F4998]
+      - [0x1E18, c, func_801F4A18]
+      - [0x1E98, c, func_801F4A98]
+      - [0x1F14, c, func_801F4B14]
+      - [0x1F58, c, func_801F4B58]
+      - [0x2028, c, func_801F4C28]
+      - [0x2160, c, func_801F4D60]
+      - [0x21C8, c, func_801F4DC8]
+      - [0x229C, c, func_801F4E9C]
+      - [0x22BC, c, func_801F4EBC]
+      - [0x22E4, c, func_801F4EE4]
+      - [0x230C, c, func_801F4F0C]
+      - [0x2360, c, func_801F4F60]
+      - [0x24F0, c, func_801F50F0]
+      - [0x29F0, c, func_801F55F0]
+      - [0x2AE0, c, func_801F56E0]
+  # Placement: .data resumes after another section in the retail bytes; one segment would group both .data runs.
+  - name: data
+    type: code
+    start: 0x2AE8
+    vram: 0x801F56E8
+    align: 4
+    subsegments:
+      - [0x2AE8, .data, D_801F56E8]
+  - [0x37F0]

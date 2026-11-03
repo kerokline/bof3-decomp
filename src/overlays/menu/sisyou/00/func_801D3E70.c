@@ -1,0 +1,16 @@
+#include "sisyou_00.h"
+
+/* Panel-lock flag owned by the main executable. */
+
+MATCH void func_801D3E70(void) {
+    if (g_GameStateIndex == 2) {
+        return;
+    }
+    g_MasterMenuCursor++;
+    if ((g_MasterMenuCursor & BYTE_MASK) < g_PartySize) {
+        g_MasterSubStep = 1;
+    } else {
+        g_MasterStep    = 2;
+        g_MasterSubStep = 1;
+    }
+}

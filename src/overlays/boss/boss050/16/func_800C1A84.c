@@ -1,0 +1,3 @@
+#include "boss050_16.h"
+
+INCLUDE_ASM(func_800C1A84);

@@ -1,0 +1,57 @@
+#include "magic159_03.h"
+
+#if BOF3_USE_ASM
+__asm__(".include \"include/match/macro.inc\"\n");
+#endif
+
+MATCH void func_801EEC04(void) {
+    Callback handlers[2] = {func_801EEC5C, func_801EED84};
+
+    SYS_DISPATCH_TASK(handlers, 1, g_SpadWork);
+}
+
+INCLUDE_ASM(func_801EEC5C);
+
+#include "overlays/bmagic/Effect_PlayOnZeroTick.h"
+
+MATCH void func_801EEDE4(void) {
+    SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
+}
+
+INCLUDE_ASM(func_801EEE28);
+
+INCLUDE_ASM(func_801EEEC8);
+
+MATCH void func_801EEF58(void) {
+    PartyBattler* work;
+
+    work = g_SpadWork;
+    work->unk_09++;
+    work = g_SpadWork;
+    work->unk_0A += 2;
+    if (work->unk_0A == 16) {
+        work = g_SpadWork;
+        work->unk_02++;
+    }
+}
+
+INCLUDE_ASM(func_801EEFC4);
+
+MATCH void func_801EF014(void) {
+    PartyBattler* work;
+    PartyBattler* active;
+    u8            count;
+
+    work = g_SpadWork;
+    work->unk_09++;
+    work         = g_SpadWork;
+    count        = work->unk_0A - 2;
+    work->unk_0A = count;
+    if (count == 0) {
+        active = BATTLE_ACTIVE_WORK;
+        active->unk_0B--;
+        func_801E5988();
+    }
+}
+
+INCLUDE_ASM(func_801EF08C);

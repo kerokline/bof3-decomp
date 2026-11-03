@@ -204,7 +204,7 @@ segments:
       - [0xBA1E4, c, SYS_CopyString]
       - [0xBA224, c, Message_StartAreaMessage]
       - [0xBA284, c, Resource_RequestArea]
-      - [0xBA2D0, c, Resource_Resolve]
+      - [0xBA2D0, c, Resource_GetText]
       - [0xBA304, c, UI_ResetMessage]
       - [0xBA3E0, c, UI_UpdateLayout]
       - [0xBA470, c, UI_DrawMessageScript]

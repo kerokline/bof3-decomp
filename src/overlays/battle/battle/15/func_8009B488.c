@@ -14,7 +14,7 @@ MATCH void func_8009B488(void) {
 
     index                 = 2;
     g_BattleEventSlots[0] = 0;
-    func_801DE560(1, 0, 0, 0x3C, (u32)&D_801EB082);
+    func_801DE560(1, 0, 0, 0x3C, (u8*)&D_801EB082);
     g_BattleMessageState = 1;
     speed_offset         = g_BattleScrollDir * index;
     g_AreaCameraStep     = 0x20;

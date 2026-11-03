@@ -83,7 +83,7 @@
  * sets when no enemy is left. */
 #define BATTLE_IS_VICTORY()               (g_BattleResult & BATTLE_RESULT_VICTORY)
 
-#define BATTLE_SELECTION_RECORD_HANDLE(i) MEM(volatile u32, 0x801EB5B4u + (u32)(i) * BATTLE_RING_STRIDE)
+#define BATTLE_SELECTION_RECORD_HANDLE(i) MEM(u8* volatile, 0x801EB5B4u + (u32)(i) * BATTLE_RING_STRIDE)
 
 #define BATTLE_ACTIVE_WORK                ((PartyBattler*)D_801EB4E0)
 

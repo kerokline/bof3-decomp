@@ -26,10 +26,10 @@ MATCH void Battle_ReserveStagePanels(void) {
     D_80148332[slot].y_04    = -0x16;
     group                    = &g_BattleSurprise;
     if (*group == 1) {
-        BattleStageSelectionRingRecord(2, 0x30, Resource_Resolve(BATTLE_TEXT_INITIATIVE_PARTY));
+        BattleStageSelectionRingRecord(2, 0x30, Resource_GetText(BATTLE_TEXT_INITIATIVE_PARTY));
     }
     if (*group == 2) {
-        BattleStageSelectionRingRecord(2, 0x30, Resource_Resolve(BATTLE_TEXT_INITIATIVE_OPPONENT));
+        BattleStageSelectionRingRecord(2, 0x30, Resource_GetText(BATTLE_TEXT_INITIATIVE_OPPONENT));
     }
     for (battler = 0; battler < BATTLE_PARTY_SLOT_COUNT; battler++) {
         offset = battler * BATTLE_PARTY_STRIDE;

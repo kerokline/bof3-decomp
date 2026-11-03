@@ -62,9 +62,9 @@ NON_MATCHING void func_801D43EC(void) {
                 flags                         = *(u32*)(D_801EB730 + (index - 3) * 0x118) & 0x8000;
             }
             if (flags != 0) {
-                func_801DE560(1, 0, 0, 0xF, (u32)(&D_801EB08F));
+                func_801DE560(1, 0, 0, 0xF, (u8*)&D_801EB08F);
             } else {
-                func_801DE560(1, 0, 0, 0xF, (u32)(&D_801EB04E));
+                func_801DE560(1, 0, 0, 0xF, (u8*)&D_801EB04E);
             }
             g_BattleMessageState = 1;
             g_BattleStep         = 0;

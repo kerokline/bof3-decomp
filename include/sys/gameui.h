@@ -232,7 +232,7 @@ void             Message_StartAreaMessage(s32 message_index);
 /* func_80150284 */
 extern void      Resource_RequestArea(s32 request_id);
 /* func_801502D0 */
-u32              Resource_Resolve(u32 resource_id);
+u8*              Resource_GetText(u32 resource_id);
 /* func_80158DB8 */
 s32              Menu_ArmPanelTask(u8 menu_id, u8 mode);
 /* func_8015B580 */

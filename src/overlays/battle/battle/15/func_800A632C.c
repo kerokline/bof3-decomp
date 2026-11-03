@@ -3,12 +3,12 @@
 MATCH void func_800A632C(void) {
     s32           decoded;
     u16           pad;
-    u32           value;
+    u8*           value;
     volatile u16* pad_state;
     u8*           page_counter;
     u16*          effect_flag;
 
-    value                                    = Resource_Resolve(0x62);
+    value                                    = Resource_GetText(0x62);
     D_801EB5B4[((D_801EC328 - 1) & 0xF) * 2] = value;
     pad_state                                = &g_InputPressed;
     decoded                                  = INPUT_REPEATED(*pad_state, (PADLright | PADLleft));

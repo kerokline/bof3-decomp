@@ -10,7 +10,7 @@ MATCH void func_801E5078(void) {
 
     Menu_DrawClutStrip(D_80144953);
     Menu_DrawHeaderBar(0x14, 0x12, 0x118, 0x13, (s32)D_80144952);
-    UI_DrawText(28, 21, 0, 0xFFU, (u8*)Resource_Resolve(0xA8));
+    UI_DrawText(28, 21, 0, 0xFFU, Resource_GetText(0xA8));
     g_SaveCardPort = 0;
     CardAccessFile(0, 0, 0, 0, 0);
     port           = 1;

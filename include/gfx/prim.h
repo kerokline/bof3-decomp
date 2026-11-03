@@ -30,7 +30,7 @@
 #define GFX_SET_DRAW_MODE(tpage)     SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 0, (tpage), 0)
 
 /* Draw one cue record's text at (x, y): the resource is the text bank. */
-#define WinDrawCueText(x, y, cue)    UI_DrawText((x), (y), 0, 0xFF, (u8*)Resource_Resolve(cue))
+#define WinDrawCueText(x, y, cue)    UI_DrawText((x), (y), 0, 0xFF, Resource_GetText(cue))
 /* Fixed-address accessor global. */
 #define g_GraphicsPaletteDst         MEM_PTR(volatile u16, 0x80037800u)
 

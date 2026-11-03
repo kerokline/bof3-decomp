@@ -1,6 +1,6 @@
 #include "battle_03.h"
 
-MATCH void func_801DE560(u8 event_kind, u8 arg1, u8 arg2, u8 arg3, u32 payload) {
+MATCH void func_801DE560(u8 event_kind, u8 arg1, u8 arg2, u8 arg3, u8* payload) {
     extern volatile u8  D_801EB4F1[][12];
     extern volatile u8  D_801EB4F0[][12]; /* g_BattleEventSlots: a row view, 1 use (func_801DE560) */
     extern volatile u32 D_801EB4F4[][3];
@@ -20,7 +20,7 @@ MATCH void func_801DE560(u8 event_kind, u8 arg1, u8 arg2, u8 arg3, u32 payload) 
             D_801EB4F3[index][-1] = arg1;
             D_801EB4F3[index][0]  = arg2;
             D_801EB4F8[index][0]  = arg3;
-            D_801EB4F4[index][0]  = payload;
+            D_801EB4F4[index][0]  = (u32)payload;
             D_801EB4FA[index][0]  = 0u;
             return;
         }

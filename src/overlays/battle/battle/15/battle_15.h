@@ -919,7 +919,7 @@ s32  func_801DD7D8(s32 low_bound, s32 high_bound, s32 current);
 /* Multiplies its inputs and divides by 100. */
 s16  func_801DE144(s32 factor_a, s32 factor_b);
 /* func_801DE8C0 */
-void BattleStageSelectionRingRecord(u32 slot_index, u32 record_kind, u32 resource_handle);
+void BattleStageSelectionRingRecord(u32 slot_index, u32 record_kind, u8* text);
 /* PsyQ SDK primitive setup helpers called by this target.
  * SetSprt8 / SetSemiTrans are declared by <libgpu.h> (via common.h);
  * GFX_AddPrim is a game primitive-append helper declared by gfx/prim.h. */

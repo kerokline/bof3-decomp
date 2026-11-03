@@ -12,7 +12,6 @@ from typing import Any, TypeGuard
 
 from bof3.core.paths import BUILD, INPUTS, TOOLCHAINS
 
-
 # Repo-relative top-level directories.
 
 

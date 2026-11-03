@@ -29,7 +29,7 @@ def unit_object(path: Path) -> Path:
     strings = b"\0" + b"\0".join(names) + b"\0"
     starts = [1 + sum(len(name) + 1 for name in names[:i]) for i in range(len(names))]
     symbols = struct.pack("<IIIBBH", 0, 0, 0, 0, 0, 0)
-    for start, value in zip(starts, (0, 0, 8)):
+    for start, value in zip(starts, (0, 0, 8), strict=True):
         symbols += struct.pack("<IIIBBH", start, value, 8, 0x12, 0, 1)
     shstrtab = b"\0.text\0.symtab\0.strtab\0.shstrtab\0"
     bodies = [b"", text, symbols, strings, shstrtab]

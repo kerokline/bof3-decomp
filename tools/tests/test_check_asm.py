@@ -37,7 +37,11 @@ def make_repo(tmp_path: Path) -> Path:
 
 def run(repo: Path) -> subprocess.CompletedProcess:
     return subprocess.run(
-        ["sh", "tools/check_asm.sh", "main"], cwd=repo, capture_output=True, text=True
+        ["sh", "tools/check_asm.sh", "main"],
+        cwd=repo,
+        capture_output=True,
+        text=True,
+        check=False,
     )
 
 

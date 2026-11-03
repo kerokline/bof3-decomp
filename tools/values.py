@@ -110,7 +110,7 @@ def main(argv: list[str] | None = None) -> int:
         if new != text:
             changed += 1
             for number, (a, b) in enumerate(
-                zip(text.splitlines(), new.splitlines()), 1
+                zip(text.splitlines(), new.splitlines(), strict=False), 1
             ):
                 if a != b:
                     print(

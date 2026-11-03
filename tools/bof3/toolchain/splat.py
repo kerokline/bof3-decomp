@@ -14,7 +14,8 @@ import yaml
 from bof3.core.io import write_atomic
 from bof3.core.paths import ASM, BUILD, CONFIG
 from bof3.link.inputs import write_if_changed
-from bof3.link.symbols import load as load_symbols, splat_map
+from bof3.link.symbols import load as load_symbols
+from bof3.link.symbols import splat_map
 from bof3.resolve.layout import read_splat
 
 

@@ -38,8 +38,18 @@ static inline void Scene_AdvanceActorStep(void) {
     actor->unk_01 = (u8)(actor->unk_01 + 1);
 }
 
-/* The scenario countdown halfword; the request steps read and step it. */
-extern u16 D_80146876;
+/* The scenario request cell: the step machine stores and steps it as a byte,
+ * while the frontend reset clears the whole word. */
+typedef union SceneRequest {
+    u32 word;
+    u8  byte;
+} SceneRequest;
+
+ASSERT_SIZE(SceneRequest, 4);
+ASSERT_OFFSET(SceneRequest, word, 0x00);
+ASSERT_OFFSET(SceneRequest, byte, 0x00);
+
+#define g_ScriptVarsReq (*(SceneRequest*)&g_ScriptVars)
 
 void func_801F7484(void);
 void func_801F74EC(void);

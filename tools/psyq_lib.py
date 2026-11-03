@@ -27,6 +27,9 @@ def members(data: bytes) -> Iterator[tuple[str, bytes]]:
 
 def main() -> None:
     """Write each member of LIB to OUTDIR."""
+    if len(sys.argv) != 3:
+        print(__doc__)
+        sys.exit(0 if sys.argv[1:2] in (["-h"], ["--help"]) else 2)
     lib, outdir = Path(sys.argv[1]), Path(sys.argv[2])
     outdir.mkdir(parents=True, exist_ok=True)
     seen: dict[str, int] = {}

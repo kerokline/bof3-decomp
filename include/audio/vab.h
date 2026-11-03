@@ -15,7 +15,7 @@
 #include "types.h"
 
 /* The tone slot's fields, with the names the C record and the specs use
- * (@source: wiki:formats/audio#vagatr-32-bytes-each). The C record is the SDK's
+ * (@source: wiki:formats/audio#vagatr). The C record is the SDK's
  * `VagAtr`, whose members carry the PsyQ spelling.
  *
  * | Offset | C (`VagAtr`) | Spec |

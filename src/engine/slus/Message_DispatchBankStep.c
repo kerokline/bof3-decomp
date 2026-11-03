@@ -1,7 +1,7 @@
 #include "engine/slus/slus.h"
 
 /* copies the handler bank into the local frame, then runs the entry
- * selected by the shared step byte D_801490C4, whose 0x80 base is rebased onto
+ * selected by the shared step byte D_801490BC.step_id, whose 0x80 base is rebased onto
  * the bank's 16 entries.
  */
 /* func_801522F8 */

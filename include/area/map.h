@@ -22,16 +22,17 @@ typedef enum AreaLoadFlags {
 } AreaLoadFlags;
 
 typedef struct AreaLoad {
-    /* 0x00 */ void*     handler; /* passed to Area_RunSetupStream by func_8019FAA0 */
-    /* 0x04 */ u8        pad_04[0x08];
-    /* 0x0C */ u8*       unk_0C;
-    /* 0x10 */ u8        pad_10[0x22];
-    /* 0x32 */ u8        flag_32; /* AreaLoadFlags */
-    u8                   pad_33;
-    /* 0x34 */ Callback* steps;    /* indexed by D_801490C4 in Message_DispatchAnswerStep/func_80151710 */
-    /* 0x38 */ void*     matrix;   /* SetColorMatrix input in func_8019FAA0 */
-    /* 0x3C */ void*     unk_3C;   /* word table func_801ACE10 indexes and calls */
-    /* 0x40 */ Callback  callback; /* called after loading the map in func_8019FAA0 */
+    /* 0x00 */ void* handler; /* passed to Area_RunSetupStream by func_8019FAA0 */
+    /* 0x04 */ u8    pad_04[0x08];
+    /* 0x0C */ u8*   unk_0C;
+    /* 0x10 */ u8    pad_10[0x22];
+    /* 0x32 */ u8    flag_32; /* AreaLoadFlags */
+    u8               pad_33;
+    /* 0x34 */ Callback*
+        steps; /* indexed by D_801490BC.step_id (ids below 0x80) in Message_DispatchAnswerStep/func_80151710 */
+    /* 0x38 */ void*    matrix;   /* SetColorMatrix input in func_8019FAA0 */
+    /* 0x3C */ void*    unk_3C;   /* word table func_801ACE10 indexes and calls */
+    /* 0x40 */ Callback callback; /* called after loading the map in func_8019FAA0 */
 } AreaLoad;
 
 ASSERT_SIZE(AreaLoad, GAME_TABLE_ENTRY_SIZE);

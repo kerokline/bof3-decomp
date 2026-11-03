@@ -45,8 +45,7 @@
 #define CUE_TONE(vab_header) ((VagAtr*)(D_8018B40C + (vab_header)))
 #define ENCOUNTER_ZONE(x0, y0, x1, y1, rate, kind, seed, pick) {(x0), (y0), (x1), (y1), (rate), (kind), (seed), (pick)}
 #define g_GameState                                            ((PartyBattler*)g_GameState)
-#define g_ScriptVars                                           ((u8*)&g_ScriptVars)
-#define g_SceneState                                           (*(RecordKey*)&g_SceneState)
+#define g_SceneRecord                                          (*(RecordKey*)&g_SceneState)
 #define g_CurrentActor                                         ((u8*)g_CurrentActor)
 
 /* Store the row entry the menu selection picks and latch the delay it selects.
@@ -411,8 +410,6 @@ extern u32                         D_80143EA0;
 extern u32                         D_80143EA4;
 /* D_80143F00 */
 extern u16                         g_GameAreaId;
-/* D_80143F02 */
-extern u8                          g_GameRequestFlags;
 extern u8                          D_80143F48[];
 /* D_80143F86 */
 extern s16                         g_ScrollHeight[]; /* low half (+2) of the big-endian 0x80143F84 scroll word */

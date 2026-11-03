@@ -9,8 +9,6 @@
 
 #define g_SceneState (*(struct SceneState*)&g_SceneState)
 
-/* D_80143F02 */
-extern volatile u8   g_GameRequestFlags;
 extern u8            D_80145FCC[][BATTLE_PARTY_STRIDE];
 extern u8            D_80148656;
 extern OverlayHeader D_801D0C00;

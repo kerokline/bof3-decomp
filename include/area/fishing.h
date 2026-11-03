@@ -5,7 +5,7 @@
  *
  * | Table | Address | Record | Rows | Reader |
  * | --- | --- | ---: | ---: | --- |
- * | rod table | `0x801E2748` | 10 bytes | 6 | `emi/world00/area030/04@0x801DDE2C` |
+ * | rod table | `0x801E2748` | 10 bytes | — | `emi/world00/area030/04@0x801DDE2C` |
  * | lure table | `0x801E2720` | 20 bytes | — | `emi/world00/area030/04@0x801DDE2C` |
  * | pond rows | `0x80146888` | 0x98 bytes | 30 | `emi/world00/area030/04@0x801DBBAC`, `@0x801E026C`, `@0x801DE5EC` |
  * | caught-fish bytes | `0x80144FE4` | 1 byte | — | `emi/world00/area030/04@0x801D5048`, `@0x801D4884`, `@0x801DB554` |
@@ -36,6 +36,7 @@
 #define FISHING_CATCH_SAVE_OFFSET          0x90Cu
 
 #define FISHING_RECORD_COUNT               32 /* func_801E0B6C walks all 32 bytes */
+/* [inferred] the six rod accessories, ids 46 to 51; no code bounds the rod selector. */
 #define FISHING_ROD_COUNT                  6
 #define FISHING_ROD_STRIDE                 0x0a
 #define FISHING_LURE_STRIDE                0x14

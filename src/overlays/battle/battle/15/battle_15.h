@@ -15,6 +15,7 @@
 #include <string.h>
 #include "sys/exe.h"
 #include "menu/draw.h"
+#include "menu/clock.h"
 
 /* retail addresses */
 
@@ -514,7 +515,6 @@ extern volatile u8           D_801454FF;
 extern BattleSlot            g_BattleTargetRows[];
 extern BattleSlot            D_80145518[];
 extern u8                    D_8014551B;
-extern volatile s8           D_80145558;
 extern volatile u16          g_InputRepeatButtons;
 /* State byte (+0x01) of each player row (stride 0x140) and enemy row
  * (stride 0x118), indexed by byte offset. */

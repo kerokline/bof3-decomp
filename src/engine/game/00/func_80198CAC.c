@@ -27,7 +27,7 @@ MATCH void func_80198CAC(void) {
                 }
             }
         }
-        timer1 = (GameClock*)&D_80145554;
+        timer1 = &g_GameCelerityTimer;
         if (*(volatile u32*)timer1 != 0u) {
             next                  = timer1->thirtieths_03 - 1;
             timer1->thirtieths_03 = next;
@@ -52,7 +52,7 @@ MATCH void func_80198CAC(void) {
                 }
             }
         }
-        timer2 = (GameClock*)&D_80145558;
+        timer2 = &g_GameBonebreakTimer;
         if (*(volatile u32*)timer2 != 0u) {
             next                  = timer2->thirtieths_03 - 1;
             timer2->thirtieths_03 = next;

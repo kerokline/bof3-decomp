@@ -80,10 +80,12 @@
 #define AREA_PALETTE_ARENA_33A00         0x80033A00u /* +0x200, 512 B; panel colors at +8 */
 #define AREA_PALETTE_ARENA_33C00         0x80033C00u /* +0x400, 512 B, BMAGIC/BATTLE */
 #define AREA_PALETTE_ARENA_33E00         0x80033E00u /* +0x600, 1024-6144 B, 200 archives */
-#define AREA_PALETTE_ARENA_35800                                                        \
-    0x80035800u                                /* +0x2000, 1024-3584 B, no literal    \
+#define AREA_PALETTE_ARENA_35800                         \
+    0x80035800u /* +0x2000, 1024-3584 B, no literal    \
                                         * reader: reached through the base */
-#define AREA_PALETTE_WORK          0x80037800u /* g_GraphicsPaletteDst */
+/* The working copy of the palette banks (g_GraphicsPaletteDst): palette animations and fades write it, and the pending
+ * flag g_GfxPalettePending asks the next frame to upload it. */
+#define AREA_PALETTE_WORK          0x80037800u
 /* The two script banks g_ScriptBank alternates between: the area bank the field
  * uses and the battle bank the battle handler swaps in. */
 #define AREA_SCRIPT_BANK           0x800D3800u

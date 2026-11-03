@@ -3,7 +3,6 @@
 /* Source and destination palette banks. Literal addresses keep the
  * lui+ori codegen the original binary uses for these banks. */
 #define PALETTE_BANK_SRC 0x80033800u
-#define PALETTE_BANK_DST 0x80037800u
 
 MATCH void func_801C3154(void) {
     volatile Actor* work;
@@ -19,7 +18,7 @@ MATCH void func_801C3154(void) {
     if ((g_GameState->flags_12C.u8_value & 8) != 0) {
         index    = 1;
         work     = SCRATCH_WORK;
-        base_dst = PALETTE_BANK_DST;
+        base_dst = AREA_PALETTE_WORK;
         base_src = PALETTE_BANK_SRC;
         do {
             off = index << 1;

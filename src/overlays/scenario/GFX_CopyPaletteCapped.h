@@ -37,7 +37,7 @@ MATCH void GFX_CopyPaletteCapped(u32 intensity) {
         }
         /* The write target is g_GraphicsPaletteDst; the raw base keeps one
          * materialization, which the symbol macro does not reproduce. */
-        scratch      = 0x80037800u;
+        scratch      = AREA_PALETTE_WORK;
         value        = dst_offset + scratch;
         *(u16*)value = (u16)packed;
         scratch      = packed & HALF_MASK;

@@ -18,7 +18,7 @@ MATCH void func_801D51B8(void) {
             D_801E6108 = D_80145AE5 + 0xD1;
             SAVE_BuildSlotImage();
             sprintf((char*)g_UiFormatBuffer, D_801D0C20, g_SaveSlotFirst);
-            if (((SaveProbe)CardAccessFile)(1, (s32)g_UiFormatBuffer, 2, 0x12B0, 0) != -1) {
+            if (((SaveProbe)CardAccessFile)(1, (s32)g_UiFormatBuffer, 2, SAVE_FILE_SIZE, 0) != -1) {
                 func_801D6CE4(g_SaveSlotFirst, name - 0x7A);
                 g_SaveCardStatus = 8;
                 D_80148652       = 0xC;

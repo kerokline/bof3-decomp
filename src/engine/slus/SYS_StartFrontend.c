@@ -27,7 +27,7 @@ MATCH void SYS_StartFrontend(void) {
     SsSetRVol(0x28, 0x28);
     SND_Start();
     clear = &D_801448D8;
-    for (i = 0; i < 4272U; i++)
+    for (i = 0; i < SAVE_BLOCK_SIZE; i++)
         *clear++ = 0;
     j                         = 0;
     dst                       = &g_InputMasks;

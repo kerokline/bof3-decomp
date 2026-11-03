@@ -119,7 +119,7 @@ NON_MATCHING void SAVE_BuildSlotImage(void) {
         dst += 1;
         sum += *src;
         src += 1;
-    } while (count < 4272U);
+    } while (count < SAVE_BLOCK_SIZE);
     if (count < 0x1E00U) {
         do {
             *dst = 0;

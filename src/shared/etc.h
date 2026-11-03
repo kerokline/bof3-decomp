@@ -116,7 +116,7 @@ void        Menu_DrawExperienceLine(u16 x, u16 y, u8 char_id, u8 level, u32 exp)
 void        func_801D2B64(void);
 void        func_801D3310(void);
 /* func_801D4754 */
-extern void Menu_DrawItemRow(s32 x0, s32 y0, s32 index, s32 selection);
+extern void Menu_DrawItemRow(s32 x0, s32 y0, s32 item, s32 selection);
 /* func_801D95F4 */
 void        Menu_DrawEquipment(s32 origin_x, s32 origin_y, s32 index, s32 selection);
 /* func_801DA2F4 */

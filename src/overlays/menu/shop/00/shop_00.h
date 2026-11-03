@@ -14,7 +14,6 @@
  * literal address, so the second read keeps the MEM spelling. */
 #define SHOP_CLOCK_SECONDS_ADDR 0x8014496E
 #define g_SceneFlags            ((u8**)&g_SceneFlags)
-#define g_SceneState            (*(s8*)&g_SceneState)
 #define g_AreaLoads             ((s32**)g_AreaLoads)
 
 /* Draw the cursor icon; on the countdown or an input advance it and report
@@ -122,8 +121,6 @@ extern u8             g_SaveBuffer[];
 extern u8             D_80143BB4;
 /* D_80143F00 */
 extern u16            g_GameAreaId;
-/* D_80143F02 */
-extern u8             g_GameRequestFlags;
 extern u16            g_InputRepeatDelay;
 extern u16            g_InputRepeatButtons;
 extern u16            D_80144948;

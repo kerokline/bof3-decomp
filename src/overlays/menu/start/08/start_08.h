@@ -9,7 +9,6 @@
 /* The save-image buffer the card writer clears and then checksums. */
 #define SAVE_IMAGE_ADDR 0x800C1A00u
 #define g_SceneFlags    ((void*)g_SceneFlags)
-#define g_SceneState    (*(s8*)&g_SceneState)
 
 /* Draw the scene timer sprite and count down; on zero advance the cue counter.
  * A bare statement macro: the member declares `timer` and `count`. Kept: tested
@@ -76,8 +75,6 @@ ASSERT_OFFSET(CampMenuStepCounter, rows, 0);
 
 /* D_80143F00 */
 extern u16             g_GameAreaId;
-/* D_80143F02 */
-extern volatile u8     g_GameRequestFlags;
 extern u8              D_80144F57;
 extern u16             D_80145594[];
 extern s16             D_80145ABE;

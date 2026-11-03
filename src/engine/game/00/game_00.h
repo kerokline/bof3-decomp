@@ -6,7 +6,7 @@
  * includes the file; the data tables are in data.h. */
 
 #define GRAPHICS_PALETTE_PENDING_VOLATILE
-#define SCRIPT_VARS_VOLATILE
+#define GAME_REQUEST_FLAGS_VOLATILE
 #include "shared/etc.h"
 
 #include "shared.h"
@@ -306,8 +306,6 @@ extern s16                      D_800E4D42; /* 0x800E4D42 */
 extern u8                       D_80143BB1;
 /* D_80143F00 */
 extern volatile u16             g_GameAreaId;
-/* D_80143F02 */
-extern volatile u8              g_GameRequestFlags;
 extern volatile u8              D_80143F06; /* 0x80143F06 */
 extern volatile u32             D_80143F08; /* 0x80143F08 */
 extern volatile u32             D_80143F0C; /* 0x80143F0C */

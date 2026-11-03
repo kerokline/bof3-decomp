@@ -26,8 +26,6 @@ typedef struct BateAbilityPanel {
     u8* names;
 } BateAbilityPanel;
 
-/* D_80143F02 */
-extern u8            g_GameRequestFlags;
 extern u8            D_80145FCC[][BATTLE_PARTY_STRIDE];
 extern u8            D_80148656;
 extern u8            D_8018E244;

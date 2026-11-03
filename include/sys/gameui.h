@@ -108,10 +108,17 @@ typedef enum GameRequest {
 
 /* The main state machine index. */
 /* D_80143B90 */
-extern u16          g_GameEntryState;
+extern u16 g_GameEntryState;
 /* The request code, a GameRequest value. */
 /* D_80143BB0 */
-extern u8           g_GameStateIndex;
+extern u8  g_GameStateIndex;
+/* D_80143F02. A unit that reads it as volatile (etc/game/00) defines
+ * GAME_REQUEST_FLAGS_VOLATILE before its first include. */
+#ifdef GAME_REQUEST_FLAGS_VOLATILE
+extern volatile u8 g_GameRequestFlags;
+#else
+extern u8 g_GameRequestFlags;
+#endif
 /* Not volatile: the qualifier changes the generated order in the scena00 drawer. */
 /* D_80143C40 */
 extern u16          g_UiWindowEffectBusy;

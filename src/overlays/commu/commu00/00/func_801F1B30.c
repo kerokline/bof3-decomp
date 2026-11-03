@@ -6,9 +6,9 @@ MATCH void func_801F1B30(void) {
     u8* state;
 
     state = &g_GameStateIndex;
-    if (*state == 0) {
+    if (*state == GAME_REQUEST_IDLE) {
         Message_StartAreaMessage(0x97);
-        *state           = 2;
+        *state           = GAME_REQUEST_MESSAGE;
         FAIRY_EVENT_STEP = FAIRY_EVENT_STEP - 1;
     }
 }

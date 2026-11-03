@@ -5,7 +5,7 @@ MATCH void func_801A7E54(void) {
 
     switch (D_801448EC) {
         case 0:
-            if (g_GameStateIndex != 2) {
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
                 Game_SetScriptActive();
                 D_801448EC = 1;
             }

@@ -8,7 +8,7 @@ __asm__(".include \"include/match/macro.inc\"\n");
  * then the menu panels refresh while the game state is still zero. */
 MATCH void func_801D0C04(void) {
     D_801D1750[D_801F294C]();
-    if (g_GameStateIndex == 0) {
+    if (g_GameStateIndex == GAME_REQUEST_IDLE) {
         Menu_RunPanelTasks();
     }
 }

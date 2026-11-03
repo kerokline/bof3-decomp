@@ -28,7 +28,7 @@ MATCH s32 func_801A17A0(u8* entry_record) {
     } else {
         Resource_RequestArea(mode & 0xFFF);
     }
-    g_GameStateIndex = 2;
+    g_GameStateIndex = GAME_REQUEST_MESSAGE;
 stored:
     work                         = g_SpadWork;
     FIELD(u16, entry_record, 8u) = flags;

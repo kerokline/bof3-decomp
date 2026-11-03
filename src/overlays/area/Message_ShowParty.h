@@ -10,7 +10,7 @@
         for (j = 0; j < g_PartySize; j++) {                                          \
             if (D_80145F09[j][0] == g_PartyMemberMessages[(slot)].tags[i]) {         \
                 Message_StartAreaMessage(g_PartyMemberMessages[(slot)].messages[i]); \
-                g_GameStateIndex = 2;                                                \
+                g_GameStateIndex = GAME_REQUEST_MESSAGE;                             \
                 return;                                                              \
             }                                                                        \
         }                                                                            \

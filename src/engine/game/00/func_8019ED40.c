@@ -1,7 +1,7 @@
 #include "game_00.h"
 
 MATCH void func_8019ED40(void) {
-    if (g_GameStateIndex != 0u) {
+    if (g_GameStateIndex != GAME_REQUEST_IDLE) {
         if (g_SpadWork->unk_0B == 0u) {
             return;
         }

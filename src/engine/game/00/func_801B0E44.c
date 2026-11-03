@@ -34,7 +34,7 @@ NON_MATCHING s32 func_801B0E44(void) {
         SP_REF(s32, 0xC) =
             g_SpadWork->y.fixed + g_FacingOffsets[g_SpadWork->route_index_08].y * divisor * g_SpadWork->unk_09 * 2;
     }
-    if (g_GameStateIndex != 9) {
+    if (g_GameStateIndex != GAME_REQUEST_SCENE_CAMERA) {
         if (Area_IsStepBlocked(SP_REF(s32, 0x8), SP_REF(s32, 0xC)) != 0) {
             result = 0;
             if (g_SpadWork->unk_01 == 2) {
@@ -57,7 +57,7 @@ NON_MATCHING s32 func_801B0E44(void) {
                         } else {
                             Actor_RequestScript(g_SpadWork->route_index_08);
                         }
-                        g_GameStateIndex = 5;
+                        g_GameStateIndex = GAME_REQUEST_AREA_CHANGE;
                     }
                     g_AreaCameraStep = 0;
                     return 4;
@@ -71,7 +71,7 @@ NON_MATCHING s32 func_801B0E44(void) {
                 }
                 if (diff >= 0x81) {
                     if (!(func_801A0048(SP_REF(s16, 0x4), SP_REF(s16, 0x6)) & BYTE_MASK)) {
-                        g_GameStateIndex = 5;
+                        g_GameStateIndex = GAME_REQUEST_AREA_CHANGE;
                     }
                     g_AreaCameraStep = 0;
                     return 1;
@@ -82,7 +82,7 @@ NON_MATCHING s32 func_801B0E44(void) {
             if (func_801A0048(x, y) & BYTE_MASK) {
                 return 0;
             }
-            g_GameStateIndex = 5;
+            g_GameStateIndex = GAME_REQUEST_AREA_CHANGE;
             g_AreaWalkFlags |= 0x20 | AREA_WALK_ENTRY_PENDING;
             return 0;
         case 3:

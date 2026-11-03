@@ -20,7 +20,7 @@ MATCH void func_801BC000(void) {
     Actor* tmp12;
 
     tmp5 = g_SpadWork;
-    if (g_GameStateIndex == 9) {
+    if (g_GameStateIndex == GAME_REQUEST_SCENE_CAMERA) {
         tmp5->unk_01 = 0xE;
         goto block_26; /* retail branch */
     }

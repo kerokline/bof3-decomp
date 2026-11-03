@@ -1,7 +1,7 @@
 #include "game_00.h"
 
 MATCH void func_801AD9C4(void) {
-    if (g_GameStateIndex == 2) {
+    if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
         return;
     }
 

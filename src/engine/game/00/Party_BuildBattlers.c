@@ -7,7 +7,7 @@ MATCH void Party_BuildBattlers(u32 mode) {
     s32        slot_offset;
     u8*        entry_table;
     Character* record_base;
-    if (g_GameStateIndex != 6) {
+    if (g_GameStateIndex != GAME_REQUEST_SHOP) {
         Party_ResetBattlers();
     }
     for (i = 0; i < g_PartySize; i++) {

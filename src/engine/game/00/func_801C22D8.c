@@ -5,7 +5,7 @@ MATCH void func_801C22D8(void) {
     s32    dy;
     Actor* work;
 
-    if (g_GameStateIndex != 9) {
+    if (g_GameStateIndex != GAME_REQUEST_SCENE_CAMERA) {
         g_SpadWork->unk_01 = 1;
         return;
     }

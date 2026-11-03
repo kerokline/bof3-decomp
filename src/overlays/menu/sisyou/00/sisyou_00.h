@@ -211,17 +211,17 @@ void MenuDrawSelectionBox(s32 x, s32 y, s32 width, s32 height, u8 color, u8 mask
 /* Request the active master's message id plus the handler's panel offset. The
  * caller passes the state pointer so its saved register matches the original. */
 static inline void MasterMenuRequestMasterMessage(u8* state, s32 offset) {
-    if (*state == 2) {
+    if (*state == GAME_REQUEST_MESSAGE) {
         return;
     }
     Message_StartAreaMessage((s16)(D_801D41BC[D_801448ED] + offset));
-    *state = 2;
+    *state = GAME_REQUEST_MESSAGE;
     g_MasterSubStep++;
 }
 
 /* Request the active master's panel message once, then latch the UI state. */
 static inline void MasterMenuRunActivePanelMessage(u8* state) {
-    if (*state == 2) {
+    if (*state == GAME_REQUEST_MESSAGE) {
         return;
     }
     Message_StartAreaMessage((s16)(D_801D41BC[D_801448ED] + 4));

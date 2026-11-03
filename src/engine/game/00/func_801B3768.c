@@ -64,6 +64,6 @@ MATCH void func_801B3768(void) {
         }
     }
     work             = g_SpadWork;
-    g_GameStateIndex = 2;
+    g_GameStateIndex = GAME_REQUEST_MESSAGE;
     work->state_02   = (u8)(work->state_02 + 1);
 }

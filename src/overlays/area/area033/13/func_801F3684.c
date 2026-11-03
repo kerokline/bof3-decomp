@@ -12,7 +12,7 @@ MATCH void func_801F3684(void) {
     if (D_801454F2 != 0 && ((u8*)g_SpadWork)[0x0B] != 0) {
         goto force;
     }
-    if (g_GameStateIndex == 2) {
+    if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
         goto force;
     }
     if ((g_GameFlags & GAME_FLAG_SCRIPT_ACTIVE) == 0) {

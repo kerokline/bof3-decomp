@@ -56,7 +56,7 @@ MATCH void func_801976EC(void) {
         Game_RequestAreaChange(D_8014869D, 0x430000, 0x160000, 4u);
         D_8014869D = 0u;
     } else {
-        g_GameStateIndex = 0u;
+        g_GameStateIndex = GAME_REQUEST_IDLE;
     }
     Menu_ResetPanelTasks();
     g_GameEntryState    = 2u;

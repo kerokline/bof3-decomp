@@ -7,7 +7,7 @@ MATCH void func_80198CAC(void) {
     u8         next;
     u8         hours;
 
-    if (g_GameStateIndex != 9) {
+    if (g_GameStateIndex != GAME_REQUEST_SCENE_CAMERA) {
         clock = &g_PlayClock;
         if ((*(volatile u32*)clock & 0xFFFFFFu) != GAME_CLOCK_STOPPED) {
             if (++clock->thirtieths_03 >= GAME_CLOCK_THIRTIETHS_PER_SECOND) {

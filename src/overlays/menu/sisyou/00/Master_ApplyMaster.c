@@ -8,7 +8,7 @@
 MATCH void Master_ApplyMaster(void) {
     u8 value;
 
-    if (g_GameStateIndex == 2) {
+    if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
         return;
     }
     value = D_801D4270[D_801448ED];

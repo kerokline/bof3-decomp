@@ -5,7 +5,7 @@ MATCH void func_801F39EC(void) {
     if (g_SpadWork->unk_30 >= 0xF0) {
         g_SpadWork->unk_03 = 0;
     }
-    if (D_801454F2 == 0 && g_GameStateIndex != 2 && GAME_SCRIPT_ACTIVE() == 0) {
+    if (D_801454F2 == 0 && g_GameStateIndex != GAME_REQUEST_MESSAGE && GAME_SCRIPT_ACTIVE() == 0) {
         g_SpadWork->unk_03 = 1;
     }
     func_801F4188(0x5C, g_SpadWork->unk_30);

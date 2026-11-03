@@ -7,13 +7,13 @@ MATCH void func_801F16F8(void) {
     s8* variant;
 
     state = &g_GameStateIndex;
-    if (*state != 2) {
+    if (*state != GAME_REQUEST_MESSAGE) {
         if (g_MessageRequest == 0xF9) {
             variant = &D_801448EC;
             *variant += 1;
         } else {
             Message_StartAreaMessage(0xF8);
-            *state = 2;
+            *state = GAME_REQUEST_MESSAGE;
         }
     }
 }

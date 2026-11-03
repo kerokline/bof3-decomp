@@ -8,7 +8,7 @@ MATCH void func_801BDAB8(void) {
         off = index * BATTLE_PARTY_STRIDE;
         if ((((u8*)g_BattlePartyBattlers)[off] & 0x40) == 0) {
             g_SpadWork = (Actor*)((u8*)g_BattlePartyBattlers + off);
-            if (g_GameStateIndex == 3) {
+            if (g_GameStateIndex == GAME_REQUEST_BATTLE) {
                 Area_SetDrawMode();
             } else {
                 func_8014D290();

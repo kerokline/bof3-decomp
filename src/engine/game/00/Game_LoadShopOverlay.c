@@ -10,7 +10,7 @@ MATCH void Game_LoadShopOverlay(void) {
         if (work->unk_18 == 9) {
             g_GameEntryState    = 2u;
             g_GameEntrySubstate = 0u;
-            g_GameStateIndex    = 0u;
+            g_GameStateIndex    = GAME_REQUEST_IDLE;
             if (!(work->unk_07 & ACTOR_OPT_ROUTE_LOCKED)) {
                 work->direction_08 = work->unk_79;
                 func_8015BAC4(g_SpadWork->direction_08);

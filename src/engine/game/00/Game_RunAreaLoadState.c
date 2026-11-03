@@ -49,7 +49,7 @@ MATCH void Game_RunAreaLoadState(void) {
     }
 
     final_world_flags = g_AreaWalkFlags;
-    g_GameStateIndex  = 0u;
+    g_GameStateIndex  = GAME_REQUEST_IDLE;
     g_GameEntryState  = 2u;
     g_AreaWalkFlags   = final_world_flags & ~AREA_WALK_ENTRY_PENDING;
 }

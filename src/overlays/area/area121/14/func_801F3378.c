@@ -12,7 +12,7 @@ MATCH void func_801F3378(void) {
     FIELD(s32, work, 0x40) -= 0x2000;
 
     if (check[9] == 0) {
-        if (g_GameStateIndex == 5) {
+        if (g_GameStateIndex == GAME_REQUEST_AREA_CHANGE) {
             Actor_Clear();
             return;
         }

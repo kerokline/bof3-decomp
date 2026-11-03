@@ -3,7 +3,7 @@
 MATCH void func_801981D4(void) {
     func_801990D0();
     if (g_AreaCameraAngle.vx == -682 && g_AreaCameraAngle.vz == ANGLE_45) {
-        g_GameStateIndex    = 0;
+        g_GameStateIndex    = GAME_REQUEST_IDLE;
         g_GameEntryState    = 2;
         g_GameEntrySubstate = 0;
     }

@@ -14,7 +14,7 @@ MATCH void func_801F3768(void) {
     if (D_801454F2 != 0 && g_SpadWork->unk_0B != 0) {
         goto force; /* skips the 0x100 test: force state byte 3 */
     }
-    if (g_GameStateIndex == 2) {
+    if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
         goto force; /* skips the 0x100 test: force state byte 3 */
     }
     if (GAME_SCRIPT_ACTIVE() == 0) {

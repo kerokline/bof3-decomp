@@ -9,7 +9,7 @@ MATCH void func_801A83DC(void) {
             u8* game_state;
             game_state = &g_GameStateIndex;
 
-            if (*game_state != 2) {
+            if (*game_state != GAME_REQUEST_MESSAGE) {
                 /* Dest is the bit buffer at 0x80145548 (ahead of the D_80145554/58
                  * timers); base+offset keeps the s0-reuse addiu, absolute form regresses
                  * bytes. */
@@ -17,7 +17,7 @@ MATCH void func_801A83DC(void) {
                 strncpy((char*)g_TextVariables[0], (char*)Resource_Resolve((u32)(D_801448ED + 0x4172)), 8);
                 D_801490E0 = 0;
                 Resource_RequestArea(0xFA);
-                *game_state = 2;
+                *game_state = GAME_REQUEST_MESSAGE;
                 if (g_SndBgmId != GAME_NONE) {
                     SND_PauseBgm(g_SndBgmId);
                 }
@@ -28,7 +28,7 @@ MATCH void func_801A83DC(void) {
             return;
         }
         case 1:
-            if ((SND_IsXaIdle() & BYTE_MASK) && (g_GameStateIndex != 2)) {
+            if ((SND_IsXaIdle() & BYTE_MASK) && (g_GameStateIndex != GAME_REQUEST_MESSAGE)) {
                 if (g_SndBgmId != GAME_NONE) {
                     SND_ResumeBgm(g_SndBgmId);
                 }

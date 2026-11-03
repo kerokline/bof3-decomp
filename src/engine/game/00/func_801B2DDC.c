@@ -51,6 +51,6 @@ MATCH void func_801B2DDC(void) {
     } else {
         Resource_RequestArea(0);
     }
-    g_GameStateIndex = 2;
+    g_GameStateIndex = GAME_REQUEST_MESSAGE;
     WORK_PTR->state_02++;
 }

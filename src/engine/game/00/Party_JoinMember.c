@@ -26,6 +26,6 @@ MATCH s32 Party_JoinMember(s32 char_id) {
         ORDER_LOCK(g_PartySize += 1);
         return 0;
     }
-    g_GameStateIndex = 6;
+    g_GameStateIndex = GAME_REQUEST_SHOP;
     return 1;
 }

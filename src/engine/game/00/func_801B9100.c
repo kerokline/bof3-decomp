@@ -15,8 +15,8 @@ MATCH void func_801B9100(void) {
     if (distance - (s16)g_SpadWork->z.part.integer >= 0x101) {
         u8* state = &g_GameStateIndex;
 
-        if (*state != 5) {
-            *state = 5;
+        if (*state != GAME_REQUEST_AREA_CHANGE) {
+            *state = GAME_REQUEST_AREA_CHANGE;
             g_AreaWalkFlags |= 0x200;
         }
     }

@@ -1305,7 +1305,7 @@ MATCH void func_801F9BE4(void) {
             }
             SsSetMVol(0, 0);
             Message_StartAreaMessage(0x10);
-            g_GameStateIndex = 2;
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
             SND_PlayBgm(6, 0x5A, 8);
             D_80146876 = 0;
             D_80146875 = 1;
@@ -1318,7 +1318,7 @@ MATCH void func_801F9BE4(void) {
             if (*counter < 124) {
                 *counter = *counter + 1;
             }
-            if (g_GameStateIndex == 2) {
+            if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
                 break;
             }
             SsSetMVol(0x7F, 0x7F);
@@ -1345,12 +1345,12 @@ MATCH void func_801F9BE4(void) {
             }
             g_AreaDrawFlags = 0;
             Message_StartAreaMessage(0x11);
-            g_GameStateIndex = 2;
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
             D_80146875       = 4;
             break;
 
         case 4:
-            if (g_GameStateIndex == 2) {
+            if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
                 break;
             }
             Game_RequestAreaChange(4, 0x440000, 0x80000, 5);
@@ -1470,12 +1470,12 @@ MATCH void func_801FA27C(void) {
                 break;
             }
             Message_StartAreaMessage(1);
-            g_GameStateIndex = 2;
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
             D_80146875       = 1;
             break;
 
         case 1:
-            if (g_GameStateIndex == 2) {
+            if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
                 break;
             }
             D_80146875 = 2;
@@ -1486,7 +1486,7 @@ MATCH void func_801FA27C(void) {
                 break;
             }
             Message_StartAreaMessage(2);
-            g_GameStateIndex = 2;
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
             D_80146875       = 3;
             break;
 
@@ -1495,7 +1495,7 @@ MATCH void func_801FA27C(void) {
                 break;
             }
             Message_StartAreaMessage(3);
-            g_GameStateIndex = 2;
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
             D_80146876       = 0x130;
             D_80146875       = 4;
             break;
@@ -1577,13 +1577,13 @@ MATCH void func_801FA27C(void) {
             }
             g_AreaDrawFlags = 0;
             Message_StartAreaMessage(4);
-            g_GameStateIndex = 2;
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
             SND_FadeOutBgm(2, 0x64, 0x20);
             D_80146875 = 0xA;
             break;
 
         case 10:
-            if (g_GameStateIndex == 2) {
+            if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
                 break;
             }
             Game_RequestAreaChange(0x18, 0x630000, 0xC0000, 3);
@@ -1980,12 +1980,12 @@ MATCH void func_801FB204(void) {
         case 3:
             g_GameFlags |= 0x180;
             Message_StartAreaMessage(0xE);
-            g_GameStateIndex = 2;
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
             D_80146875       = 4;
             break;
 
         case 4:
-            if (g_GameStateIndex != 2) {
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
                 g_ScriptVars.byte = 0x1E;
                 g_AreaDrawFlags   = AREA_DRAW_ALL_FLAGS;
                 UI_SetMode(3);

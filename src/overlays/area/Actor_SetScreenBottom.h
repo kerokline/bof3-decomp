@@ -6,7 +6,7 @@ MATCH void Actor_SetScreenBottom(void) {
     Actor* work;
 
     if (D_801454F2 == 0 || g_SpadWork->unk_0B == 0) {
-        if (g_GameStateIndex != 2 && GAME_SCRIPT_ACTIVE() == 0) {
+        if (g_GameStateIndex != GAME_REQUEST_MESSAGE && GAME_SCRIPT_ACTIVE() == 0) {
             work         = g_SpadWork;
             work->unk_30 = 0xF0;
             work->unk_03++;

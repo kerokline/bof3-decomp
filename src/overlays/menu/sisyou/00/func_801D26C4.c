@@ -9,6 +9,6 @@
 MATCH void func_801D26C4(void) {
     SYS_SetFlag(D_8014554C, D_801448ED);
     Message_StartAreaMessage(((s16*)D_801D41BC)[D_801448ED]);
-    g_GameStateIndex = 2;
+    g_GameStateIndex = GAME_REQUEST_MESSAGE;
     g_MasterSubStep++;
 }

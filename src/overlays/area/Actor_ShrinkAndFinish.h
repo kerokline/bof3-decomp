@@ -18,7 +18,7 @@ MATCH void Actor_ShrinkAndFinish(void) {
     *(s32*)(scratch + 0x40) -= 0x2000;
 
     if (check[0x09] == 0) {
-        if (g_GameStateIndex == 5) {
+        if (g_GameStateIndex == GAME_REQUEST_AREA_CHANGE) {
             Actor_Clear();
             return;
         }

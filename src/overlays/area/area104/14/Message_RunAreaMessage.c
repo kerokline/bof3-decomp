@@ -9,11 +9,11 @@ MATCH void Message_RunAreaMessage(void) {
         case 0:
             Game_SetScriptActive();
             Message_StartAreaMessage(4);
-            g_GameStateIndex = 2;
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
             *state           = (u8)*state + 1;
             return;
         case 1:
-            if (g_GameStateIndex != 2) {
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
                 Game_ClearScriptActive();
                 D_801448EB = 0;
                 *state     = 0;

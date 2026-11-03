@@ -55,7 +55,7 @@ MATCH void func_8019B4A0(void) {
                 g_SpadWork->unk_09 = 0;
                 g_SpadWork->unk_01 = 4;
             }
-        } else if (g_GameStateIndex == 5) {
+        } else if (g_GameStateIndex == GAME_REQUEST_AREA_CHANGE) {
             ((void (*)(s16, s16, s32))Area_SetCellCode)(g_SpadWork->x.part.integer, g_SpadWork->y.part.integer,
                                                         g_SpadWork->unk_0B);
         }

@@ -623,7 +623,7 @@ MATCH void func_801F376C(void) {
 MATCH void func_801F37E4(void) {
     switch (D_801448EC) {
         case 0:
-            if (g_GameStateIndex != 2) {
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
                 Game_SetScriptActive();
                 SYS_SetFlag(g_SceneEventFlags, 1);
                 D_801448EC = 1;

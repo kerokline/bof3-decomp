@@ -91,7 +91,7 @@ NON_MATCHING void func_80167428(void) {
         if (tmp5 < 0) {
             val0 = -val0;
         }
-        if ((val2 > 0x60000) || (val0 > 0x60000) || (g_GameStateIndex == 5)) {
+        if ((val2 > 0x60000) || (val0 > 0x60000) || (g_GameStateIndex == GAME_REQUEST_AREA_CHANGE)) {
             tmp10                    = SP_REF(void*, 0x44);
             FIELD(u8, tmp10, 0x9u)   = 0U;
             FIELD(s32, tmp10, 0xCu)  = 0;
@@ -128,7 +128,7 @@ NON_MATCHING void func_80167428(void) {
         val4                                   = 1;
     }
     FIELD(s8, (SP_REF(void*, 0x44)), 0x1u) = val4;
-    g_GameStateIndex                       = 9;
+    g_GameStateIndex                       = GAME_REQUEST_SCENE_CAMERA;
     g_AreaWalkFlags &= 0x1F;
 }
 #else

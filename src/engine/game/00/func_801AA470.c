@@ -20,7 +20,7 @@ NON_MATCHING u8 func_801AA470(void* sub, s32 target, u8 value) {
             g_ScrollHeight = Area_SampleHeight(g_AreaScrollTargetX, g_AreaScrollTargetY);
             return value;
         case 0xD1:
-            if (g_GameStateIndex != 3) {
+            if (g_GameStateIndex != GAME_REQUEST_BATTLE) {
                 hit              = Actor_ReadState();
                 SP_REF(u16, 0x0) = hit;
                 if (FIELD(u16, g_SpadWork, 0x58u) != hit) {
@@ -101,7 +101,7 @@ NON_MATCHING u8 func_801AA470(void* sub, s32 target, u8 value) {
             *(u8*)sub |= 8;
             return value;
         case 0xD9:
-            if (g_GameStateIndex == 2) {
+            if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
                 goto back;
             }
             return value;
@@ -128,7 +128,7 @@ NON_MATCHING u8 func_801AA470(void* sub, s32 target, u8 value) {
             goto set_cursor;
         }
         case 0xDF:
-            if (g_GameStateIndex == 3) {
+            if (g_GameStateIndex == GAME_REQUEST_BATTLE) {
                 goto back;
             }
             return value;

@@ -1,6 +1,6 @@
 #include "game_00.h"
 
-MATCH s32 func_801C7518(s32 pos_x, s32 pos_y, s32 glyph_index) {
+MATCH s32 func_801C7518(s32 pos_x, s32 pos_y, s32 reach) {
     s32 off;
     s32 xa;
     s32 ya;
@@ -11,7 +11,7 @@ MATCH s32 func_801C7518(s32 pos_x, s32 pos_y, s32 glyph_index) {
     u16 fracy;
 
     xa    = pos_x + 0x8000;
-    off   = ((glyph_index & BYTE_MASK) + 1) << 0xF;
+    off   = ((reach & BYTE_MASK) + 1) << 0xF;
     off   = -off;
     xa    = off + xa;
     ya    = pos_y + 0x8000;
@@ -21,7 +21,7 @@ MATCH s32 func_801C7518(s32 pos_x, s32 pos_y, s32 glyph_index) {
     xa    = xa >> 0x10;
     ya    = ya >> 0x10;
     tile  = func_801C6FD4(xa, ya) & BYTE_MASK;
-    index = ((glyph_index << 2) | 1) & BYTE_MASK;
+    index = ((reach << 2) | 1) & BYTE_MASK;
     if ((u32)tile < (u32)index) {
         return 0;
     }

@@ -1,16 +1,16 @@
 #include "game_00.h"
 
-MATCH s32 func_801C6EE0(s32 entry_count, s32 pos_x, s32 pos_y, s32 axis_mask) {
+MATCH s32 func_801C6EE0(s32 entry_count, s32 pos_x, s32 pos_y, s32 reach) {
     s32             index;
     s32             count;
-    s32             mask;
+    s32             probe_reach;
     u8*             fields;
     EncounterEnemy* entry;
 
-    entry = D_801463DC;
-    index = 0;
-    count = entry_count;
-    mask  = axis_mask;
+    entry       = D_801463DC;
+    index       = 0;
+    count       = entry_count;
+    probe_reach = reach;
     if (count & BYTE_MASK) {
         fields = (u8*)D_801463DC + 8;
     loop_2:
@@ -18,8 +18,8 @@ MATCH s32 func_801C6EE0(s32 entry_count, s32 pos_x, s32 pos_y, s32 axis_mask) {
             u8 slot;
 
             slot = fields[-7];
-            if (!(func_801C7498(pos_x, pos_y, *(s32*)(fields - 4), *(s32*)(fields), mask & BYTE_MASK,
-                                MEM(u8, ENCOUNTER_TABLE_BASE + 0xCA + slot * 0x88)) &
+            if (!(func_801C7498(pos_x, pos_y, *(s32*)(fields - 4), *(s32*)(fields), probe_reach & BYTE_MASK,
+                                ENCOUNTER_ENEMIES[slot].reach) &
                   0xFF)) {
                 return 0;
             }

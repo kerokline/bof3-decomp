@@ -20,7 +20,7 @@ MATCH s32 func_801C6BB4(void) {
             slot = D_801CD8C4 + ((D_801CD8C0 * (D_801CD8C0 - 1)) >> 1);
             y    = D_801CD620[slot].y;
             x    = D_801CD620[slot].x + 0x50000;
-            kind = MEM_PTR(Enemy, 0x800E4048u) + entry->id;
+            kind = ENCOUNTER_ENEMIES + entry->id;
             while (i != 0) {
                 tmp = x;
                 x   = y;
@@ -31,8 +31,8 @@ MATCH s32 func_801C6BB4(void) {
                 off      = i * 2;
                 entry->x = D_80143F24 + x + (s_EntitySpawnOffsets[off] << 15);
                 entry->y = D_80143F28 + y + (D_801CD5BD[off] << 15);
-                if ((func_801C7518(entry->x, entry->y, kind->unk_81[1]) & BYTE_MASK) &&
-                    (func_801C6EE0((u8)index, entry->x, entry->y, kind->unk_81[1]) & BYTE_MASK)) {
+                if ((func_801C7518(entry->x, entry->y, kind->reach) & BYTE_MASK) &&
+                    (func_801C6EE0((u8)index, entry->x, entry->y, kind->reach) & BYTE_MASK)) {
                     D_801CD8C4++;
                     break;
                 }

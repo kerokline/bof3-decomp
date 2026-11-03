@@ -10,6 +10,7 @@
 
 #include "types.h"
 #include "game/records.h"
+#include "psx/mem.h"
 
 /* One byte per resistance slot. */
 #define RES_SLOT_COUNT      9
@@ -56,19 +57,27 @@ typedef struct Enemy {
     u16          defense;
     u16          agility;
     u16          intellect;
-    u8           steal_item_index;
-    u8           steal_item_type;
-    u16          steal_rate;
-    u8           drop_item_index;
-    u8           drop_item_type;
-    u16          drop_rate;
+    u8           first_item_index;
+    u8           first_item_type;
+    u16          first_item_rate;
+    u8           second_item_index;
+    u8           second_item_type;
+    u16          second_item_rate;
     EnemyAiBlock ai[ENEMY_AI_COUNT];
     u8           unk_74[4];
     u8           resistances[RES_SLOT_COUNT];
-    u8           unk_81[7];
+    u8           unk_81;
+    u8           reach;  /* +0x82: sizes the probe step and the overlap extent of encounter placement */
+    u8           height; /* +0x83: the final probe must lie this far plus 8 pixels below the screen top */
+    u8           unk_84[4];
 } Enemy;
 
 ASSERT_SIZE(Enemy, ENEMY_STRIDE);
+
+/* The enemy records in the encounter block at 0x800E4000, from block +0x48 and indexed by enemy index. */
+#define ENCOUNTER_ENEMIES          MEM_PTR(Enemy, 0x800E4048u)
+/* The record at a byte offset (index * ENEMY_STRIDE) from the first, for callers that keep the offset in a register. */
+#define ENCOUNTER_ENEMY_AT(offset) ((Enemy*)((u8*)ENCOUNTER_ENEMIES + (offset)))
 
 typedef struct Encounter {
     u8 enemy_indexes[ENCOUNTER_ENEMY_COUNT];

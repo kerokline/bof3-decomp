@@ -1,0 +1,3 @@
+# Warnings and errors fail the lint. The info notes (SC2013, SC2015, SC2016, SC2086) flag
+# intended word splitting and A && B || C chains in these scripts.
+severity=warning

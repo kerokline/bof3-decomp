@@ -72,6 +72,7 @@ done
 obj=$(awk -v u="$unit" '$1 ~ ("^src\\+.*\\+" u "\\.c\\.o\\(\\.text\\);$") { sub(/\(.*/, "", $1); print $1; exit }' "$ldscript")
 
 # base, function name, file offset, size from the unit's asm
+# shellcheck disable=SC2046 # the output is a few fields to split
 set -- $(awk -v addr="$addr" '
 	/^\.section/ { text = ($2 ~ /^\.text/); next }
 	/^glabel / { g = $2; next }
@@ -122,6 +123,7 @@ done
 # --- Candidate bytes -------------------------------------------------------------------
 
 "$BIN/nm" -S "$co" >"$tmp/nm.txt"
+# shellcheck disable=SC2046 # the output is a few fields to split
 set -- $(awk -v n="$fname" '$NF == n && $(NF - 1) ~ /^[Tt]$/ && NF == 4 { print $1, $2; exit }' "$tmp/nm.txt")
 [ $# -eq 2 ] || {
 	there=$(awk -v r="$rel" 'function hex(s, n, i) { n = 0; for (i = 1; i <= length(s); i++) n = n * 16 + index("0123456789abcdef", tolower(substr(s, i, 1))) - 1; return n }
@@ -156,6 +158,7 @@ esac
 		[ ! -f "$f" ] || cat "$f"
 	done
 	cat "$tmp/syms.ld"
+	# shellcheck disable=SC2046 # the output is a few fields to split
 	awk '
 		/^(glabel|dlabel|jlabel) / { g = $2; next }
 		g != "" && $1 == "/*" && $5 == "*/" { printf "PROVIDE(%s = 0x%s);\n", g, $3; g = "" }' \

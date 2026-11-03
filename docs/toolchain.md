@@ -38,8 +38,9 @@ script is safe to run again; each step checks its result first. It runs:
    aids with `--matching`.
 3. The pinned GCC 2.7.2 PSX compiler, the object parser and the PSn00b binutils, each checked by
    SHA-256, and `tools/psyq.sh`, which stages PsyQ 3.7 (skipped with `--no-sdk`).
-4. `tools/setup.py`: builds the `tools/bof3-tools` extractor, extracts the disc into `build/disc`,
-   unpacks every EMI archive and materializes the targets under `build/`.
+4. `tools/setup.py`: builds the `tools/bof3-tools` extractor, checks the tracks, extracts the disc
+   into `build/disc`, checks every extracted file, unpacks every EMI archive, materializes the targets
+   under `build/` and checks every code image ([disc manifest](#disc-manifest)).
 
 `--no-payloads` skips step 4. `--no-sdk` skips `tools/psyq.sh`: no SDK object is downloaded or
 staged, and the tracked `include/psyq/` headers still work. The build reads the shared `CARGO_TARGET_DIR` when it is set and uses
@@ -52,7 +53,7 @@ BIOS or SDK payload.
 ### Without a disc
 
 The game is not in this repository. Dump your own US disc (a Redump-verified CUE sheet and two BIN
-tracks); setup checks each track's SHA-1 against the Redump dump and never uploads it.
+tracks); setup checks each track against [`config/disc.toml`](#disc-manifest) and never uploads it.
 
 Without a disc (`tools/setup.sh --dev --no-payloads --no-sdk`) you can edit code and docs, and run `format`,
 `format-check`, `check-tree`, `include-asm`, `check-headers` and `meson test`. You cannot build an
@@ -61,6 +62,25 @@ all of them need the extracted retail data. Matching a function needs the disc.
 
 `meson setup` states what it is missing and offers only the targets that can run. After you add
 the missing piece, run `meson setup --reconfigure build/meson`.
+
+### Disc manifest
+
+`config/disc.toml` is the one record of the game version and of the disc: title, region, serial
+`SLUS-00422`, the Redump name, the CUE sheet and both tracks (size, CRC32, MD5, SHA-1), and every
+ISO 9660 file (path, LBA, size, SHA-1). It holds paths, sizes and hashes only. The retail SHA-1 of
+each code image stays in its `config/<target>/splat.yaml` (`sha1`), the value `check` reads.
+
+`tools/setup.py` stops with one line per mismatch, named by path, when a track, an extracted file or a
+code image differs from the manifest. To run the same checks at any time:
+
+```sh
+tools/disc.py verify                 # tracks, build/disc files and code images
+tools/disc.py verify --no-images     # without the code images
+```
+
+A file of an XA stream (`BIN/*_XA/*.STR`) keeps its raw 2336-byte sectors, so its size and SHA-1 are
+those of the extracted file. `tools/disc.py manifest --cue <file.cue>` writes the manifest again from a
+dump and its extracted folder; run it only for a new release of the disc.
 
 ### Matching aids
 
@@ -106,6 +126,7 @@ delete `build/meson` and run `meson setup build/meson`; the extracted disc stays
 | `bin/coddog <verb> ...`             | Twin search ([coddog](#coddog)).                                                     |
 | `tools/permuter_import.py <file.c>` | Import one unit into the permuter ([permuter](#permuter)).                           |
 | `tools/match.sh <target> <func>`    | Build one unit's object and compare the function with retail ([match.sh](#matchsh)). |
+| `tools/<name>.py`                   | Find templates, twins and type loss, rename and scan ([tools](../tools/README.md)).  |
 
 ### match.sh
 
@@ -451,9 +472,10 @@ Environment variables the tools read:
 
 ## Python code
 
-The Python build chain is the scripts in `tools/`, `tools/bof3/` (layout, manifests, link inputs)
-and `tools/psxdecomp/dmpsx.py` (the DMPSX rewrite). `tools/tests/` guards the split, DMPSX and
-splat text. `ruff` owns Python format.
+The Python build chain is the scripts in `tools/`, `tools/bof3/` (layout, manifests, link inputs,
+source scans) and `tools/psxdecomp/dmpsx.py` (the DMPSX rewrite). [`tools/README.md`](../tools/README.md)
+lists every tool by task. `tools/tests/` guards the split, DMPSX, splat text and the source tools.
+`ruff` owns Python format.
 
 ## Sources
 

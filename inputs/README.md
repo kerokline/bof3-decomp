@@ -9,6 +9,13 @@ Put the CUE sheet and both BIN tracks in `inputs/external/`. `tools/setup.sh` ex
 `tools/setup.sh --no-payloads` to set up for the disc-free checks
 ([toolchain](../docs/toolchain.md#without-a-disc)).
 
-`tools/setup.sh` checks both raw US track files against the
-[Redump SHA-1 values](https://data.spludlow.co.uk/redump/redump/Sony%20-%20PlayStation/Breath%20of%20Fire%20III%20%28USA%29).
-It requires a CUE sheet that names the two separate BIN tracks.
+## The disc
+
+The build targets *Breath of Fire III*, US release, serial `SLUS-00422` (Redump name
+`Breath of Fire III (USA)`). [`config/disc.toml`](../config/disc.toml) lists the CUE sheet, both
+tracks (size, CRC32, MD5, SHA-1) and every file of the disc (path, LBA, size, SHA-1). It requires a
+CUE sheet that names the two separate BIN tracks.
+
+`tools/setup.sh` checks both track files before it extracts, then every extracted file and every
+code image, and names each one that differs. Check again at any time with `tools/disc.py verify`
+([disc manifest](../docs/toolchain.md#disc-manifest)).

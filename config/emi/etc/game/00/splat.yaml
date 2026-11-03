@@ -205,7 +205,7 @@ segments:
       - [0x148C, c, GFX_UpdatePaletteAnimations]
       - [0x14F0, c, GFX_StartPaletteAnimation]
       - [0x1584, c, GFX_StepPaletteAnimation]
-      - [0x1674, c, GFX_UploadPaletteAnimation]
+      - [0x1674, c, GFX_CopyPaletteAnimationColors]
       - [0x1778, c, Game_RunCampMenuLoop]
       - [0x17FC, c, Game_LoadCampMenu]
       - [0x1868, c, Game_RunMainLoop]

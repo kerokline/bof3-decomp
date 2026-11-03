@@ -621,7 +621,7 @@ s32     GFX_AllocPaletteFade(u8* color_data, s32 palette_base, s32 palette_count
 /* func_80196718 */
 void    GFX_FreePaletteFadeTarget(void* target);
 /* func_80196E74 */
-void    GFX_UploadPaletteAnimation(GraphicsPaletteAnimation* slot);
+void    GFX_CopyPaletteAnimationColors(GraphicsPaletteAnimation* slot);
 /* func_801971E8 */
 void    Game_RunAreaLoadState(void);
 /* func_80197378 */

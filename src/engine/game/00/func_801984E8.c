@@ -17,7 +17,7 @@ MATCH void func_801984E8(void) {
     GFX_AddPrim(5u, 0x18u);
     func_801E0BD0();
     D_80143F22       = 0;
-    g_GameStateIndex = 0u;
+    g_GameStateIndex = GAME_REQUEST_IDLE;
     {
         u16 tmp_3B92 = g_GameEntrySubstate;
         u16 tmp_625A = g_AreaWalkFlags;

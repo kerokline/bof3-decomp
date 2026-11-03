@@ -10,7 +10,7 @@ MATCH void func_801B2B6C(void) {
         }
     } else if ((g_PartySize < 2) || ((D_80145FD1 == 5) && ((g_PartySize != 3) || (D_80146111 == D_80145FD1)))) {
         g_SpadWork->unk_0B = 0;
-        g_GameStateIndex   = 3;
+        g_GameStateIndex   = GAME_REQUEST_BATTLE;
         g_AreaWalkFlags &= ~AREA_WALK_TRANSITION;
     }
 }

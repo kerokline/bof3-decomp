@@ -9,7 +9,7 @@ MATCH void func_801B830C(void) {
         step     = work[10] + 1;
         work[10] = step;
         if (step == 3) {
-            g_GameStateIndex = 5;
+            g_GameStateIndex = GAME_REQUEST_AREA_CHANGE;
         }
         func_801C24D0();
     }

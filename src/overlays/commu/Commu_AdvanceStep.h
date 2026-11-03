@@ -4,7 +4,7 @@
 MATCH void Commu_AdvanceStep(void) {
     u8* state;
 
-    if (g_GameStateIndex != 2) {
+    if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
         state = &D_801448EC;
         *state += 1;
     }

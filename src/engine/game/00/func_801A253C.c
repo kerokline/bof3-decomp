@@ -39,7 +39,7 @@ MATCH void func_801A253C(Actor* entity) {
         }
     }
     func_801A3D1C(&entity->flags_74);
-    if (g_GameStateIndex != 2) {
+    if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
         if (g_SpadWork->unk_09 <= g_SpadWork->unk_0A) {
             flags = entity->flags_74 | ACTOR_FLAG_SCRIPT_REQUEST;
         } else {

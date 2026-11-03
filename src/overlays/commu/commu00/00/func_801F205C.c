@@ -46,5 +46,5 @@ MATCH void func_801F205C(void) {
         FAIRY_EVENT_STEP = FAIRY_EVENT_STEP + 1;
     }
     Message_StartAreaMessage((s16)message_id);
-    g_GameStateIndex = 2;
+    g_GameStateIndex = GAME_REQUEST_MESSAGE;
 }

@@ -7,6 +7,6 @@ MATCH void func_801B7988(void) {
     next += 0x10;
     g_SpadWork->z.part.integer = next;
     if ((s16)next > Area_ReadHeight(g_SpadWork->x.fixed, g_SpadWork->y.fixed) + 0x200)
-        g_GameStateIndex = 5;
+        g_GameStateIndex = GAME_REQUEST_AREA_CHANGE;
     func_8014D978();
 }

@@ -17,7 +17,7 @@ MATCH void func_801B2FC8(void) {
     s32            resource;
     s32            i;
 
-    if (g_GameStateIndex == 0) {
+    if (g_GameStateIndex == GAME_REQUEST_IDLE) {
         sel      = func_801B5C54();
         marks    = (u8*)&D_80145004;
         marked   = SYS_TestFlag(marks, sel->index_04);
@@ -51,7 +51,7 @@ MATCH void func_801B2FC8(void) {
         }
         Resource_RequestArea(resource);
     state:
-        g_GameStateIndex     = 2;
+        g_GameStateIndex     = GAME_REQUEST_MESSAGE;
         g_SpadWork->state_02 = 2;
     }
 }

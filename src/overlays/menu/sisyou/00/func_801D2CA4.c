@@ -10,7 +10,7 @@ MATCH void func_801D2CA4(void) {
 
     if (g_MasterBannerLock != 0) {
         Message_StartAreaMessage((s16)(D_801D41BC[D_801448ED] + 4));
-        g_GameStateIndex = 2;
+        g_GameStateIndex = GAME_REQUEST_MESSAGE;
         g_MasterStep     = 6;
         g_MasterSubStep  = 0;
     } else {
@@ -34,7 +34,7 @@ MATCH void func_801D2CA4(void) {
         g_Characters[D_80145FCC.bytes[(g_MasterMenuCursor * 5) << 6]].level_up_modifiers[5] =
             D_801D4154[*edp].intellect;
         Message_StartAreaMessage((s16)(D_801D41BC[*edp] + 10));
-        g_GameStateIndex = 2;
+        g_GameStateIndex = GAME_REQUEST_MESSAGE;
         g_MasterSubStep += 1;
     }
 }

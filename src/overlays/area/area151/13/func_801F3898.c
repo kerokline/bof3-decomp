@@ -10,7 +10,7 @@ MATCH void func_801F3898(void) {
     if (scratch->unk_30 >= 0xF0) {
         scratch->unk_03 = 0;
     }
-    if (D_801454F2 == 0 && g_GameStateIndex != 2 && GAME_SCRIPT_ACTIVE() == 0) {
+    if (D_801454F2 == 0 && g_GameStateIndex != GAME_REQUEST_MESSAGE && GAME_SCRIPT_ACTIVE() == 0) {
         armed                        = 1;
         ((Actor*)g_SpadWork)->unk_03 = armed;
     }

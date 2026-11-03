@@ -1,7 +1,7 @@
 #include "area145_14.h"
 
 MATCH void func_801F2E58(void) {
-    if (g_GameStateIndex == 5) {
+    if (g_GameStateIndex == GAME_REQUEST_AREA_CHANGE) {
         SND_PlayCue(EMI_CUE_ID(2, 9));
     }
 }

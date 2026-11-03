@@ -79,12 +79,12 @@ MATCH void func_801F2C6C(void) {
                 }
                 Message_StartAreaMessage((s16)(index + 22));
             }
-            g_GameStateIndex = 2;
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
             (*(u8*)&D_801448EC)++;
             break;
 
         case 1:
-            if (g_GameStateIndex != 2) {
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
                 Game_ClearScriptActive();
                 D_801448EB = 0;
                 *state     = 0;

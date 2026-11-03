@@ -10,6 +10,6 @@ MATCH s32 func_801F13B8(void) {
     sprintf(dest + 0x20, fmt, D_80145038);
     sprintf(dest + 0x40, fmt, D_8014503C);
     Message_StartAreaMessage(0x56);
-    g_GameStateIndex = 2;
+    g_GameStateIndex = GAME_REQUEST_MESSAGE;
     return 0;
 }

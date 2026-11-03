@@ -63,7 +63,7 @@ MATCH void SND_StopSelectionEffect(void) { /* func_801D1184 */
  */
 /* func_801D11E4 */
 MATCH void UI_DrawChoicePrompt(void) { /* func_801D11E4 */
-    if (g_GameStateIndex == 5u && g_GameEntryState == 2u && g_UiWindowEffectBusy == 0u) {
+    if (g_GameStateIndex == GAME_REQUEST_AREA_CHANGE && g_GameEntryState == 2u && g_UiWindowEffectBusy == 0u) {
         LOBU(g_UiPopupRequest) = 0u;
     }
 

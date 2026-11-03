@@ -3,7 +3,7 @@
 MATCH void func_801F2DBC(void) {
     u8* state;
 
-    if (g_GameStateIndex != 2) {
+    if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
         state              = &D_80146875;
         *state             = *state + 1;
         g_SpadWork->unk_01 = 3;

@@ -3,7 +3,7 @@
 MATCH void func_801AD2CC(void) {
     Actor* work;
 
-    if (g_GameStateIndex != 2) {
+    if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
         work = g_SpadWork;
         if (!(work->unk_07 & ACTOR_OPT_ROUTE_LOCKED)) {
             func_8015BAC4(work->direction_08);

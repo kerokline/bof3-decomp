@@ -17,6 +17,6 @@ MATCH void func_801983D8(void) {
     }
     g_GameEntryState    = 2u;
     g_GameEntrySubstate = 0u;
-    g_GameStateIndex    = 0u;
+    g_GameStateIndex    = GAME_REQUEST_IDLE;
     Area_RunFrame();
 }

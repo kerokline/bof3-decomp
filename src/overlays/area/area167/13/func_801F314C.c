@@ -6,7 +6,7 @@ MATCH void func_801F314C(void) {
     work = g_SpadWork;
     work->unk_30 -= 0x10;
     if ((s16)work->unk_30 <= 0) {
-        if (g_GameStateIndex == 0) {
+        if (g_GameStateIndex == GAME_REQUEST_IDLE) {
             SND_PlayCue(EMI_CUE_ID(2, 1));
         }
         g_SpadWork->state_02 = 1;

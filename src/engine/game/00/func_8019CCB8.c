@@ -12,7 +12,7 @@ MATCH void func_8019CCB8(void) {
     u8  step;
 
     if (g_GameEntryState != 1) {
-        if (g_GameStateIndex == 5) {
+        if (g_GameStateIndex == GAME_REQUEST_AREA_CHANGE) {
             func_8019D4BC();
             goto block_9; /* shared tail */
         }
@@ -53,7 +53,7 @@ MATCH void func_8019CCB8(void) {
         goto block_9; /* shared tail */
     }
 block_9:
-    if (g_GameStateIndex != 3) {
+    if (g_GameStateIndex != GAME_REQUEST_BATTLE) {
         func_8015A944();
     }
 }

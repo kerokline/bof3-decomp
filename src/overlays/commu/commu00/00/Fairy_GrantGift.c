@@ -34,6 +34,6 @@ MATCH void Fairy_GrantGift(void) {
             g_FairyJobs[D_801448ED].progress_anchor = g_BattleCount;
         }
     }
-    g_GameStateIndex = 2;
+    g_GameStateIndex = GAME_REQUEST_MESSAGE;
     FAIRY_EVENT_STEP = FAIRY_EVENT_STEP + 1;
 }

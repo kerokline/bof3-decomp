@@ -9,7 +9,7 @@ MATCH void func_801B3A3C(void) {
     MATCH_REG(Actor*, work, "v0");
     s32 off;
 
-    if (g_GameStateIndex != 0u) {
+    if (g_GameStateIndex != GAME_REQUEST_IDLE) {
         return;
     }
     if (g_MessageRequest == 3u) {

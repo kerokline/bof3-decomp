@@ -36,7 +36,7 @@ MATCH void Scene_RunShopSaveEvent(void) {
             D_801448EC = 10;
             break;
         case 5:
-            if (g_GameStateIndex == 2) {
+            if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
                 break;
             }
             Game_SetScriptActive();
@@ -60,12 +60,12 @@ MATCH void Scene_RunShopSaveEvent(void) {
             id = D_801448ED;
             if ((u8)id != GAME_NONE) {
                 Message_StartAreaMessage(id);
-                g_GameStateIndex = 2;
+                g_GameStateIndex = GAME_REQUEST_MESSAGE;
             }
             D_801448EC = 11;
             break;
         case 11:
-            if (g_GameStateIndex == 2) {
+            if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
                 break;
             }
             Game_ClearScriptActive();

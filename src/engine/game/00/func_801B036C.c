@@ -2,7 +2,8 @@
 
 MATCH void func_801B036C(void) {
     if (!(g_GameFlags & GAME_FLAG_SCRIPT_ACTIVE) && !(g_AreaWalkFlags & AREA_WALK_ENTRY_PENDING) &&
-        (g_GameStateIndex != 5) && !(func_801C3790(1) & BYTE_MASK) && !(func_801C37DC(1) & BYTE_MASK)) {
+        (g_GameStateIndex != GAME_REQUEST_AREA_CHANGE) && !(func_801C3790(1) & BYTE_MASK) &&
+        !(func_801C37DC(1) & BYTE_MASK)) {
         if (func_801B544C() & BYTE_MASK) {
             g_GameState->step_12A.s8_value = 0;
             return;

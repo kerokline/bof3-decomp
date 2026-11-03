@@ -1651,7 +1651,7 @@ static inline void GameRunMapLoadHandshake(void) {
     }
     g_GameEntryState    = 2;
     g_GameEntrySubstate = 0;
-    g_GameStateIndex    = 0;
+    g_GameStateIndex    = GAME_REQUEST_IDLE;
     Area_RunFrame();
 }
 

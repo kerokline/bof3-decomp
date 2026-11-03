@@ -28,7 +28,7 @@ NON_MATCHING void func_801D3A24(void) {
     s32 k;
 
     done = 0;
-    if (g_GameStateIndex == 2) {
+    if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
         return;
     }
     idx        = g_MasterMenuCursor * BATTLE_PARTY_STRIDE;
@@ -97,7 +97,7 @@ NON_MATCHING void func_801D3A24(void) {
     }
     if (done) {
         Message_StartAreaMessage((s16)(D_801D41BC[D_801448ED] + 0xE));
-        g_GameStateIndex = 2;
+        g_GameStateIndex = GAME_REQUEST_MESSAGE;
     }
     g_MasterSubStep += 1;
 }

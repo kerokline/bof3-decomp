@@ -2,7 +2,7 @@
 
 MATCH void func_801F2FEC(void) {
     if (SYS_TestFlag(g_SceneEventFlags, 0x54) != 0) {
-        if (g_GameStateIndex == 0) {
+        if (g_GameStateIndex == GAME_REQUEST_IDLE) {
             SND_PlayCue(EMI_CUE_ID(2, 0));
         }
         g_SpadWork->state_02 = 2;

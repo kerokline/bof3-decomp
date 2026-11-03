@@ -7,7 +7,7 @@ MATCH void func_801A18C8(Actor* record) {
 
     work       = record;
     game_state = &g_GameStateIndex;
-    state      = 2;
+    state      = GAME_REQUEST_MESSAGE;
     if (*game_state != state) {
         if (work->callback_index != GAME_NONE) {
             Game_DispatchScenarioRecord(record);

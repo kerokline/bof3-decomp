@@ -533,11 +533,11 @@ MATCH void func_801F7CC4(void) {
                 next_state  = &D_80146875;
                 *next_state = (u8)(*next_state + 1u);
             }
-            g_GameStateIndex = 2u;
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
             break;
 
         case 1:
-            if (g_GameStateIndex == 2u) {
+            if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
                 return;
             }
             state  = &D_80146875;
@@ -556,11 +556,11 @@ MATCH void func_801F7CC4(void) {
                 next_state  = &D_80146875;
                 *next_state = (u8)(*next_state + 1u);
             }
-            g_GameStateIndex = 2u;
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
             break;
 
         case 3:
-            if (g_GameStateIndex != 2u && g_ScriptVars == 4u) {
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE && g_ScriptVars == 4u) {
                 D_80146876 = 0x130u;
                 D_80146875 = (u8)(D_80146875 + 1u);
             }

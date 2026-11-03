@@ -7,7 +7,7 @@ MATCH s32 func_801BD938(void) {
     if (D_80145FBB[0].mode == 8) {
         return 0;
     }
-    if (g_GameStateIndex != 0) {
+    if (g_GameStateIndex != GAME_REQUEST_IDLE) {
         return 0;
     }
     index = g_GameState->slot_13C;

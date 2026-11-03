@@ -85,7 +85,7 @@ MATCH void func_801B146C(void) {
         if (func_801C39D8(work_g->x.fixed, work_g->y.fixed, work_g->speed_70, 0xA7, 0U) & BYTE_MASK) {
             work_h = g_SpadWork;
             func_801A0048(work_h->x.part.integer, work_h->y.part.integer);
-            g_GameStateIndex = 5;
+            g_GameStateIndex = GAME_REQUEST_AREA_CHANGE;
             Actor_RequestScript(g_SpadWork->direction_08);
             goto block_46; /* re-arm the frame flags */
         }

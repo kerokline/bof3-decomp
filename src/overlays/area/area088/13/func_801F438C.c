@@ -15,7 +15,7 @@ MATCH void func_801F438C(void) {
     if (D_801454F2 != 0 && g_SpadWork->unk_0B != 0) {
         goto bump;
     }
-    if (g_GameStateIndex == 2) {
+    if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
         goto bump;
     }
     if (GAME_SCRIPT_ACTIVE() == 0) {

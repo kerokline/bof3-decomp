@@ -1,7 +1,7 @@
 #include "game_00.h"
 
 MATCH void func_801B6FDC(void) {
-    if (g_GameStateIndex == 2) {
+    if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
         return;
     }
     g_GameState->flags_118 &= 0xDFu;

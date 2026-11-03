@@ -9,7 +9,7 @@ MATCH void func_801D2614(void) {
         step = 5;
     } else if (D_801448ED == 9) {
         Message_StartAreaMessage(0x2E);
-        g_GameStateIndex = 2;
+        g_GameStateIndex = GAME_REQUEST_MESSAGE;
         step             = 6;
     } else {
         step = 1;

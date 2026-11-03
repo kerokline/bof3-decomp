@@ -69,6 +69,6 @@ MATCH void Fairy_RollExploreReward(void) {
         goto done;
     }
 done:
-    g_GameStateIndex = 2;
+    g_GameStateIndex = GAME_REQUEST_MESSAGE;
     FAIRY_EVENT_STEP = FAIRY_EVENT_STEP + 1;
 }

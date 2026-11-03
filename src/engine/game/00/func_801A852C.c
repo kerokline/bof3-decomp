@@ -10,11 +10,11 @@ MATCH void func_801A852C(void) {
         case 0:
             Game_SetScriptActive();
             Message_StartAreaMessage((Party_CountItem(0, ITEM_FAERIE_TIARA, 0) & HALF_MASK) ? 0x21 : 0x20);
-            g_GameStateIndex = 2;
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
             (&D_801448EB)[1] += 1;
             break;
         case 1:
-            if (g_GameStateIndex != 2) {
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
                 Game_ClearScriptActive();
                 D_801448EB = 0;
                 *state     = 0;

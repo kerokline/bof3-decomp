@@ -8,7 +8,7 @@ MATCH void func_801F31D4(void) {
     if (g_GameEntryState != 1) {
         scratch = (u8*)g_SpadWork;
         step    = scratch[0x0B];
-        if (step == scratch[0x07] && g_GameStateIndex != 5) {
+        if (step == scratch[0x07] && g_GameStateIndex != GAME_REQUEST_AREA_CHANGE) {
             if (step != 1) {
                 goto tail;
             }

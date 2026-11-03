@@ -9,7 +9,7 @@
 MATCH void func_801D2A4C(void) {
     s32 i;
 
-    if (g_GameStateIndex == 2) {
+    if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
         return;
     }
     for (i = 0; i < g_PartySize; i++) {
@@ -23,6 +23,6 @@ MATCH void func_801D2A4C(void) {
         return;
     }
     Message_StartAreaMessage((s16)(D_801D41BC[D_801448ED] + 9));
-    g_GameStateIndex = 2;
+    g_GameStateIndex = GAME_REQUEST_MESSAGE;
     g_MasterSubStep++;
 }

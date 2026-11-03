@@ -3,7 +3,7 @@
 /* Panel-lock flag owned by the main executable. */
 
 MATCH void func_801D3E70(void) {
-    if (g_GameStateIndex == 2) {
+    if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {
         return;
     }
     g_MasterMenuCursor++;

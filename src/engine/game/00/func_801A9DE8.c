@@ -127,7 +127,7 @@ MATCH u8 func_801A9DE8(GameCursorState* state, const u8* table, u8 value) {
             Actor* work;
             u16    mode;
 
-            if (g_GameStateIndex != 3) {
+            if (g_GameStateIndex != GAME_REQUEST_BATTLE) {
                 mode                = Actor_ReadState();
                 work                = g_SpadWork;
                 GAME_ENTITY_COUNTER = mode;

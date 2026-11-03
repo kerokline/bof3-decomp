@@ -1,5 +1,9 @@
-Describe the change and its verification.
+## What changed
 
-- [ ] `meson compile -C build/meson check-headers check-tree include-asm format-check` and `meson test -C build/meson` pass.
-- [ ] `meson compile -C build/meson check` matches all 428 game images, when you have a disc.
-- [ ] No game data, retail executables, or PsyQ objects are included.
+Name the targets and addresses (`TARGET@0xADDRESS`) and the evidence for each new name or type.
+
+## Checks
+
+- [ ] `meson test -C build/meson` and `meson compile -C build/meson check-headers check-tree include-asm format-check` pass.
+- [ ] `meson compile -C build/meson check` passes (needs a disc), or this change does not touch code.
+- [ ] No game data, extracted assets, retail executables or PsyQ objects are included.

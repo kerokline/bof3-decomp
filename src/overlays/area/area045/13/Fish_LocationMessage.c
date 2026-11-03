@@ -28,7 +28,7 @@ MATCH void Fish_LocationMessage(void) {
                         break;
                     }
                 }
-                Message_StartAreaMessage((s16)D_801F51BC[index][g_SceneState]);
+                Message_StartAreaMessage((s16)D_801F51BC[index][g_SceneState.scenario_id]);
             } else {
                 at  = pos;
                 row = (WorldMapPoint*)D_801F4DA4;

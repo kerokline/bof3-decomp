@@ -16,6 +16,6 @@ MATCH void func_801F2C04(void) {
         default:
             return;
     }
-    g_ScriptVars = value;
-    D_80146867   = value;
+    g_ScriptVars[0] = value;
+    g_ScriptVars[3] = value;
 }

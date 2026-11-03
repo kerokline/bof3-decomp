@@ -8,7 +8,7 @@ MATCH void func_801F3E04(void) {
     if (sel >= 0) {
         if (sel >= 5) {
             if (sel == 5) {
-                g_ScriptVars = 6;
+                g_ScriptVars[0] = 6;
             }
         }
     }

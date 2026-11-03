@@ -5,9 +5,9 @@ MATCH void func_801F31B8(void) {
     u8* flag;
 
     work    = (u8*)g_SpadWork;
-    flag    = &D_80146865;
+    flag    = &g_ScriptVars[1];
     work[1] = 0;
-    if (*flag == GAME_NONE || D_80146866 == 0x80) {
+    if (*flag == GAME_NONE || g_ScriptVars[2] == 0x80) {
         *flag = 0;
     }
 }

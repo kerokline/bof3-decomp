@@ -15,7 +15,7 @@ MATCH void func_801A7E54(void) {
             D_801448EC = 2;
             break;
         case 2:
-            if (D_80146867 == 0x20) {
+            if (g_ScriptVars[3] == 0x20) {
                 D_801448EE = 0x10;
                 D_801448EC = 3;
             }
@@ -40,7 +40,7 @@ MATCH void func_801A7E54(void) {
             }
             break;
         case 4:
-            flag = &D_80146867;
+            flag = &g_ScriptVars[3];
             if (*flag == 0x31) {
                 *flag = 0;
                 Game_ClearScriptActive();

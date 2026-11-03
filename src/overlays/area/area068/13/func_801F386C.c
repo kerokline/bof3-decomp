@@ -8,11 +8,11 @@ MATCH void func_801F386C(void) {
     g_MessageRequest = D_801F4D68[sel];
     switch (sel) {
         case 0:
-            g_ScriptVars = 0;
+            g_ScriptVars[0] = 0;
             break;
         case 1:
-            value        = 0xFF;
-            g_ScriptVars = value;
+            value           = 0xFF;
+            g_ScriptVars[0] = value;
             break;
         default:
             break;

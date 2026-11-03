@@ -217,9 +217,9 @@ MATCH void func_801F72A0(void) {
 
     work = SCN_EFFECT;
     if (work->color_r == 0x80) {
-        g_ScriptVars.byte  = 0x14;
-        work->step         = 2;
-        g_SpadWork->unk_09 = 0xFF;
+        g_ScriptVarsReq.byte = 0x14;
+        work->step           = 2;
+        g_SpadWork->unk_09   = 0xFF;
     }
 }
 
@@ -593,7 +593,7 @@ MATCH void func_801F8140(void) {
         u8* counter;
 
         SND_PlayCue(EMI_CUE_ID(2, 3));
-        counter = &g_ScriptVars.byte;
+        counter = &g_ScriptVarsReq.byte;
         (*counter) += 1;
         SCN_EFFECT->step = 9;
     }
@@ -1050,8 +1050,8 @@ MATCH void func_801F9178(void) {
     while (EMI_LoaderIsReady() == 0) {
         CallbackWait(1U);
     }
-    g_ScriptVars.word = 0;
-    D_80146872        = 1;
+    g_ScriptVarsReq.word = 0;
+    D_80146872           = 1;
 }
 
 /* SND_PlayCue from include/sys/gameui.h */
@@ -1157,7 +1157,7 @@ MATCH void func_801F9644(void) {
 
     if (g_GameAreaId == 2) {
         if (SYS_TestFlag(g_SceneFlags, 2) == 0) {
-            g_ScriptVars.word = 0;
+            g_ScriptVarsReq.word = 0;
             Area_AdvanceScroll(0x300);
             func_801C601C(0);
             timer       = &g_AreaCameraAngle.vx;
@@ -1206,8 +1206,8 @@ MATCH void func_801F9868(void) {
                         CallbackWait(1U);
                         goto loop_10; /* spin until the overlay loader reports ready */
                     }
-                    g_AreaDrawFlags   = AREA_DRAW_ALL_FLAGS;
-                    g_ScriptVars.word = 0;
+                    g_AreaDrawFlags      = AREA_DRAW_ALL_FLAGS;
+                    g_ScriptVarsReq.word = 0;
                     SYS_SetFlag(g_SceneFlags, 3U);
                     Area_AdvanceScroll(0x480);
                     g_AreaViewOffsetZ    = 0x480;
@@ -1239,8 +1239,8 @@ MATCH void func_801F9868(void) {
                     }
                     g_GfxPalettePending = 1;
                     if (SYS_TestFlag(g_SceneFlags, 5) == 0) {
-                        g_AreaDrawFlags   = AREA_DRAW_ALL_FLAGS;
-                        g_ScriptVars.word = 0;
+                        g_AreaDrawFlags      = AREA_DRAW_ALL_FLAGS;
+                        g_ScriptVarsReq.word = 0;
                         func_801BE1B0(1U);
                         return;
                     }
@@ -1249,7 +1249,7 @@ MATCH void func_801F9868(void) {
                 }
                 break;
             case 0:
-                g_ScriptVars.word = 0;
+                g_ScriptVarsReq.word = 0;
                 if (SYS_TestFlag(g_SceneFlags, 6) == 0) {
                     D_80146874 = 8;
                     D_80146875 = 0;
@@ -1257,16 +1257,16 @@ MATCH void func_801F9868(void) {
                 break;
             case 2:
                 if (SYS_TestFlag(g_SceneFlags, 8) == 0) {
-                    g_ScriptVars.word = 0;
-                    D_80146874        = 6;
-                    D_80146875        = 0;
+                    g_ScriptVarsReq.word = 0;
+                    D_80146874           = 6;
+                    D_80146875           = 0;
                 }
                 break;
             case 4:
                 if (SYS_TestFlag(g_SceneFlags, 9) == 0) {
-                    g_ScriptVars.word = 0;
-                    D_80146874        = 6;
-                    D_80146875        = 0;
+                    g_ScriptVarsReq.word = 0;
+                    D_80146874           = 6;
+                    D_80146875           = 0;
                 }
                 break;
         }
@@ -1482,7 +1482,7 @@ MATCH void func_801FA27C(void) {
             break;
 
         case 2:
-            if (g_ScriptVars.byte != 3) {
+            if (g_ScriptVarsReq.byte != 3) {
                 break;
             }
             Message_StartAreaMessage(2);
@@ -1491,7 +1491,7 @@ MATCH void func_801FA27C(void) {
             break;
 
         case 3:
-            if (g_ScriptVars.byte != 4) {
+            if (g_ScriptVarsReq.byte != 4) {
                 break;
             }
             Message_StartAreaMessage(3);
@@ -1516,7 +1516,7 @@ MATCH void func_801FA27C(void) {
         }
 
         case 5:
-            if (g_ScriptVars.byte != 5) {
+            if (g_ScriptVarsReq.byte != 5) {
                 break;
             }
             id            = Actor_FindFreeSlot();
@@ -1533,7 +1533,7 @@ MATCH void func_801FA27C(void) {
             break;
 
         case 6:
-            if (g_ScriptVars.byte != 8) {
+            if (g_ScriptVarsReq.byte != 8) {
                 break;
             }
             id            = Actor_FindFreeSlot();
@@ -1564,7 +1564,7 @@ MATCH void func_801FA27C(void) {
         }
 
         case 8:
-            if (g_ScriptVars.byte != 0xB) {
+            if (g_ScriptVarsReq.byte != 0xB) {
                 break;
             }
             UI_SetMode(0);
@@ -1637,7 +1637,7 @@ MATCH void func_801FA7D8(void) {
         }
 
         case 3:
-            if (g_ScriptVars.byte == 0xCu) {
+            if (g_ScriptVarsReq.byte == 0xCu) {
                 D_80146876 = 0x3Cu;
                 D_80146875 = 4u;
                 D_80146866 = 0u;
@@ -1655,7 +1655,7 @@ MATCH void func_801FA7D8(void) {
                 u8* scene;
 
                 D_80146875 = 5u;
-                scene      = &g_ScriptVars.byte;
+                scene      = &g_ScriptVarsReq.byte;
                 (*scene)++;
             }
             fade = &D_80146866;
@@ -1673,7 +1673,7 @@ MATCH void func_801FA7D8(void) {
             /* FAKE: index copy stays in v0 across the schedule wall. */
             MATCH_FAKE_PIN(s32, index_raw, "v0");
 
-            if (g_ScriptVars.byte == 0x11u) {
+            if (g_ScriptVarsReq.byte == 0x11u) {
                 D_80146876 = 0x3Cu;
                 D_80146875 = 6u;
             }
@@ -1729,7 +1729,7 @@ MATCH void func_801FA7D8(void) {
             }
             *counter   = 0x84u;
             D_80146875 = 7u;
-            scene      = &g_ScriptVars.byte;
+            scene      = &g_ScriptVarsReq.byte;
             (*scene)++;
             return;
         }
@@ -1758,16 +1758,16 @@ MATCH void func_801FA7D8(void) {
                     return;
                 }
             } else {
-                g_ScriptVars.byte = 0x14u;
-                *counter          = 0x40u;
-                D_80146875        = 0xAu;
+                g_ScriptVarsReq.byte = 0x14u;
+                *counter             = 0x40u;
+                D_80146875           = 0xAu;
                 return;
             }
             break;
         }
 
         case 9:
-            if (g_ScriptVars.byte == 0x14u) {
+            if (g_ScriptVarsReq.byte == 0x14u) {
                 func_80164020(0u, 1u);
                 D_80146876 = 0x25Cu;
                 D_80146875 = 0xAu;
@@ -1793,14 +1793,14 @@ MATCH void func_801FA7D8(void) {
 
         case 11:
             if (WINDOW_EFFECT_IDLE()) {
-                g_ScriptVars.byte = 1u;
-                D_80146875        = 0xCu;
+                g_ScriptVarsReq.byte = 1u;
+                D_80146875           = 0xCu;
                 return;
             }
             break;
 
         case 12:
-            if ((g_ScriptVars.byte == 4u) && (EMI_LoaderIsReady() != 0)) {
+            if ((g_ScriptVarsReq.byte == 4u) && (EMI_LoaderIsReady() != 0)) {
                 SND_PlayBgm(3u, 0x69, 8);
                 D_80146875 = 0xDu;
                 return;
@@ -1808,7 +1808,7 @@ MATCH void func_801FA7D8(void) {
             break;
 
         case 13:
-            if (g_ScriptVars.byte == 5u) {
+            if (g_ScriptVarsReq.byte == 5u) {
                 D_80146876 = 0x20u;
                 D_80146875 = 0xEu;
                 return;
@@ -1835,7 +1835,7 @@ MATCH void func_801FA7D8(void) {
         }
 
         case 15:
-            if (g_ScriptVars.byte == 7u) {
+            if (g_ScriptVarsReq.byte == 7u) {
                 func_801BFE34(D_80145EC4, D_80145EC8, 1u);
                 Battle_StartScripted(1u);
                 SYS_SetFlag(g_SceneFlags, 5u);
@@ -1847,7 +1847,7 @@ MATCH void func_801FA7D8(void) {
         case 17: {
             u8* scene;
 
-            scene = &g_ScriptVars.byte;
+            scene = &g_ScriptVarsReq.byte;
             (*scene)++;
             Game_ClearScriptActive();
             func_801BE1B0(6u);
@@ -1882,7 +1882,7 @@ MATCH void func_801FAF6C(void) {
             break;
 
         case 11:
-            if (g_ScriptVars.byte == 0xB) {
+            if (g_ScriptVarsReq.byte == 0xB) {
                 func_801BFE34(D_80145EC4, D_80145EC8, 4);
                 Battle_StartScripted(4);
                 D_80146875 = 0xC;
@@ -1890,7 +1890,7 @@ MATCH void func_801FAF6C(void) {
             break;
 
         case 13:
-            g_ScriptVars.byte++;
+            g_ScriptVarsReq.byte++;
             Game_ClearScriptActive();
             D_80146875 = 0;
             D_80146874 = 0;
@@ -1906,7 +1906,7 @@ MATCH void func_801FAF6C(void) {
             break;
 
         case 21:
-            if (g_ScriptVars.byte == 5) {
+            if (g_ScriptVarsReq.byte == 5) {
                 func_801BFE34(D_80145EC4, D_80145EC8, 5);
                 Battle_StartScripted(5);
                 D_80146875 = 0x16;
@@ -1923,7 +1923,7 @@ MATCH void func_801FAF6C(void) {
             break;
 
         case 31:
-            if (g_ScriptVars.byte == 4) {
+            if (g_ScriptVarsReq.byte == 4) {
                 func_801BFE34(D_80145EC4, D_80145EC8, 6);
                 Battle_StartScripted(6);
                 D_80146875 = 0x20;
@@ -1935,7 +1935,7 @@ MATCH void func_801FAF6C(void) {
             Game_ClearScriptActive();
             D_80146875 = 0;
             D_80146874 = 0;
-            g_ScriptVars.byte++;
+            g_ScriptVarsReq.byte++;
             break;
 
         case 50:
@@ -1960,14 +1960,14 @@ MATCH void func_801FB204(void) {
 
     switch (D_80146875) {
         case 0:
-            g_ScriptVars.byte = 0xA;
+            g_ScriptVarsReq.byte = 0xA;
             func_801BE1B0(1);
             func_801C601C(1);
             D_80146875 = 1;
             break;
 
         case 1:
-            if (g_ScriptVars.byte == 0xD) {
+            if (g_ScriptVarsReq.byte == 0xD) {
                 func_801BFE34(D_80145EC4, D_80145EC8, 7);
                 Battle_StartScripted(7);
                 D_80146875 = 2;
@@ -1986,8 +1986,8 @@ MATCH void func_801FB204(void) {
 
         case 4:
             if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
-                g_ScriptVars.byte = 0x1E;
-                g_AreaDrawFlags   = AREA_DRAW_ALL_FLAGS;
+                g_ScriptVarsReq.byte = 0x1E;
+                g_AreaDrawFlags      = AREA_DRAW_ALL_FLAGS;
                 UI_SetMode(3);
                 g_PartyX               = 0x2F0000;
                 g_AreaScrollTargetX    = 0x2F0000;
@@ -2039,20 +2039,20 @@ MATCH void func_801FB204(void) {
                 g_AreaViewOffsetZ -= 0x24;
             } else {
                 D_80146875 = 7;
-                g_ScriptVars.byte++;
+                g_ScriptVarsReq.byte++;
             }
             break;
         }
 
         case 7:
-            if (g_ScriptVars.byte == 0x24) {
+            if (g_ScriptVarsReq.byte == 0x24) {
                 SND_PlayBgm(4, 0x69, 8);
                 D_80146875 = 8;
             }
             break;
 
         case 8:
-            if (g_ScriptVars.byte == 0x25) {
+            if (g_ScriptVarsReq.byte == 0x25) {
                 Game_RequestAreaChange(0x1F, 0x40000, 0x240000, 1);
                 D_80146874 = 0;
                 D_80146875 = 0;
@@ -2095,9 +2095,9 @@ MATCH void func_801FB67C(void) {
             } else {
                 Game_RequestAreaChange(1, 0xF0000u, 0x210000u, 1);
                 SND_PlayCue(EMI_CUE_ID(2, 6));
-                g_ScriptVars.word = 0;
-                *state            = 0;
-                D_80146874        = 0xA;
+                g_ScriptVarsReq.word = 0;
+                *state               = 0;
+                D_80146874           = 0xA;
             }
             break;
     }
@@ -2225,9 +2225,9 @@ MATCH void func_801FB924(void) {
             buttons = g_InputPressed;
             (*counter)--;
             if ((buttons & INPUT_DIRECTIONAL) != 0 || *counter == 0) {
-                D_80146865        = 0;
-                g_ScriptVars.byte = 0;
-                D_80146866        = 0x12;
+                D_80146865           = 0;
+                g_ScriptVarsReq.byte = 0;
+                D_80146866           = 0x12;
                 func_801FBE88();
                 *counter   = 900;
                 D_80146875 = 5;
@@ -2246,7 +2246,7 @@ MATCH void func_801FB924(void) {
             }
             counter = &g_InputPressed;
             if ((*counter & INPUT_DIRECTIONAL) != 0) {
-                g_ScriptVars.byte = 0;
+                g_ScriptVarsReq.byte = 0;
                 D_80146865++;
                 func_801FBE88();
                 index = *counter >> 12;
@@ -2256,10 +2256,10 @@ MATCH void func_801FB924(void) {
                     Actor_RequestScript(D_80146890);
                 }
             } else {
-                g_ScriptVars.byte++;
-                if (g_ScriptVars.byte >= 21) {
-                    D_80146865        = 0;
-                    g_ScriptVars.byte = 0;
+                g_ScriptVarsReq.byte++;
+                if (g_ScriptVarsReq.byte >= 21) {
+                    D_80146865           = 0;
+                    g_ScriptVarsReq.byte = 0;
                 }
             }
             if (D_80146865 >= 31) {

@@ -10,8 +10,6 @@
 #include "work/area_spad.h"
 #include <rand.h>
 
-#define g_SceneState (*(s8*)&g_SceneState)
-
 /* One spawn point in the area's spawn table: x then y, four bytes. */
 typedef Vec2us AreaSpawnPoint;
 

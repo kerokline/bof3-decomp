@@ -8,7 +8,7 @@ MATCH s32 func_8015B870(u32 kind) {
     switch (kind & BYTE_MASK) {
         case 0:
         case 14:
-            return g_SceneState.sbyte;
+            return g_SceneRecord.sbyte;
         case 1:
             return g_GameAreaId;
         case 2:
@@ -16,14 +16,14 @@ MATCH s32 func_8015B870(u32 kind) {
         case 3:
             return g_ScriptVars[0];
         case 4:
-            return D_80146865;
+            return g_ScriptVars[1];
         case 5:
-            return D_80146866;
+            return g_ScriptVars[2];
         case 6:
-            return D_80146867;
+            return g_ScriptVars[3];
         case 7:
-            /* FAKE: retail reads D_80146874 as RecordKey. */
-            return (*(RecordKey*)&D_80146874).sbyte;
+            /* FAKE: retail reads g_SceneState.state_04 as RecordKey. */
+            return (*(RecordKey*)&g_SceneState.state_04).sbyte;
         case 8:
             return D_80143F03;
         case 9:

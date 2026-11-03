@@ -9,8 +9,6 @@
 
 void Area_SetCellCode(s16 column, s16 row, u8 code);
 
-#define g_ScriptVars (*(s8*)&g_ScriptVars)
-
 extern u8  D_801F3FF4[];
 extern u8  D_801F4004[];
 extern u8  D_801F4060[];

@@ -154,7 +154,6 @@ extern volatile u8    g_BattleActionLock;
 extern EncounterEnemy D_801463DC[];
 /* D_8014682D */
 extern s8             g_EmiServiceState;
-extern u8             D_80146866;
 extern volatile u8    D_80146880;
 extern volatile u8    D_80146881;
 extern u8             D_80146889[];

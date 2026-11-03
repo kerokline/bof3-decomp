@@ -57,7 +57,7 @@ INCLUDE_ASM(func_801F7FA0);
 INCLUDE_ASM(func_801F8550);
 
 MATCH void func_801F8694(void) {
-    SYS_DISPATCH_BYTE(D_801FE900, D_80146874);
+    SYS_DISPATCH_BYTE(D_801FE900, g_SceneState.state_04);
 }
 
 MATCH void func_801F86D0(void) {
@@ -120,15 +120,15 @@ MATCH void func_801FD4CC(void) {
 
 MATCH void func_801FD4F4(void) {
     Game_SetScriptActive();
-    D_80146874 = 2;
-    D_80146875 = 0;
+    g_SceneState.state_04 = 2;
+    g_SceneState.step_05  = 0;
 }
 
 MATCH void func_801FD528(void) {
     Game_SetScriptActive();
-    D_80146874   = 3;
-    D_80146875   = 0xA;
-    g_ScriptVars = 0xA;
+    g_SceneState.state_04 = 3;
+    g_SceneState.step_05  = 0xA;
+    g_ScriptVars[0]       = 0xA;
 }
 
 INCLUDE_ASM(func_801FD568);
@@ -151,15 +151,15 @@ MATCH void func_801FDA74(void) {
 
 MATCH void func_801FDA9C(void) {
     Game_SetScriptActive();
-    D_80146874 = 0xA;
-    D_80146875 = 1;
+    g_SceneState.state_04 = 0xA;
+    g_SceneState.step_05  = 1;
 }
 
 MATCH void func_801FDAD4(void) {
     *SP_REF(s8*, 0x44) = 0;
     Game_SetScriptActive();
-    D_80146874 = 0xD;
-    D_80146875 = 5;
+    g_SceneState.state_04 = 0xD;
+    g_SceneState.step_05  = 5;
 }
 
 INCLUDE_ASM(func_801FDB14);

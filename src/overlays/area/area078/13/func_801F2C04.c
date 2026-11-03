@@ -14,6 +14,6 @@ MATCH void func_801F2C04(void) {
         default:
             return;
     }
-    g_ScriptVars = 0x1E;
+    g_ScriptVars[0] = 0x1E;
     SYS_SetFlag(g_SceneFlags, bit);
 }

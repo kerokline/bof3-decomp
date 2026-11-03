@@ -140,7 +140,7 @@ MATCH u8 func_801A9DE8(GameCursorState* state, const u8* table, u8 value) {
             break;
         }
         case 0xF6:
-            D_80146874 = *(table + state->index_0A + 1);
+            g_SceneState.state_04 = *(table + state->index_0A + 1);
             /* Retail shares the +1 cursor advance with case 0xF8. */
             goto advance_one;
         case 0xF7: {

@@ -7,10 +7,10 @@ MATCH void func_801F42D4(void) {
     g_MessageRequest = D_801F53F0[state];
     switch (state) {
         case 0:
-            g_ScriptVars = 1;
+            g_ScriptVars[0] = 1;
             break;
         case 1:
-            g_ScriptVars = 0;
+            g_ScriptVars[0] = 0;
             break;
         default:
             return;

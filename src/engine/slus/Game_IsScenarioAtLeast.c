@@ -7,7 +7,7 @@ MATCH s32 Game_IsScenarioAtLeast(u8** cursor) {
     u32 result;
 
     result = **cursor;
-    if (g_SceneState.ubyte <= result) {
+    if (g_SceneRecord.ubyte <= result) {
         /* the record byte is at or above the global */
         goto one;
     }

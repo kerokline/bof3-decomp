@@ -1864,7 +1864,7 @@ Scene_DrawBands = { addr = 0x801D165C, type = "func", source = "draws 17 depth s
 
 ["emi/scenario/scena00/00"]
 Scene_DispatchActor = { addr = 0x801FC7D0, type = "func", source = "entry_04 of the scena00 handler block, dispatches the entity through D_801FCA84 by byte 0x7A of the entity record" }
-Scene_CheckStepTrigger = { addr = 0x801FC818, type = "func", source = "entry_08 of the scena00 handler block: Area_IsStepBlocked passes its handler_x and a nonzero result blocks the step; it starts scripted scenes by D_80146874 at x 0x2B in area 2 and x 0x14 in area 24" }
+Scene_CheckStepTrigger = { addr = 0x801FC818, type = "func", source = "entry_08 of the scena00 handler block: Area_IsStepBlocked passes its handler_x and a nonzero result blocks the step; it starts scripted scenes by g_SceneState.state_04 at x 0x2B in area 2 and x 0x14 in area 24" }
 Scene_ClearParty = { addr = 0x801FC8FC, type = "func", source = "clears the effect bank party and battle order, sets the menu flags low bits and runs the effect callback, one body shared with scena16" }
 
 ["emi/scenario/scena01/00"]
@@ -2868,8 +2868,8 @@ g_SndCdVolume = { addr = 0x80146830, type = "u8", source = "SND_SetCdVolume latc
 g_SndCdMix = { addr = 0x8014683C, type = "CdlATV", size = 4, source = "api:CdMix SND_SetCdVolume fills the four attenuator bytes" }
 g_EmiServiceMode = { addr = 0x80146840, source = "EMI_LoaderService runs EMI_LoaderServiceStream for 1 and SND_ServiceXa for 2" }
 g_EmiStreamFlags = { addr = 0x80146854, source = "the area, battle and commu code write 0x20 before streaming" }
-g_ScriptVars = { addr = 0x80146864, type = "u8", source = "src/engine/slus/func_8015B870 returns D_80146864[0]..D_80146867 for kinds 3-6 Game_SetScriptVar/8015BA50/8015BA84 index it with (op & 0xC) >> 2 etc/start/08 func_801E5FD4 loads the four" }
-g_SceneFlags = { addr = 0x8014686C, type = "u8", source = "game/00 func_801A7704 sets it to 0x80144E88 + scenario_id * 8 SYS_SetFlag/TestBit/ToggleBit operate on it (scena09 764.c 130-144, scena00 8.c 1111-1273) etc/start/08" }
+g_ScriptVars = { addr = 0x80146864, type = "u8", size = 0x4, source = "src/engine/slus/func_8015B870 returns g_ScriptVars[0]..g_ScriptVars[3] for kinds 3-6 Game_SetScriptVar/8015BA50/8015BA84 index it with (op & 0xC) >> 2 etc/start/08 func_801E5FD4 loads the four" }
+g_SceneFlags = { addr = 0x8014686C, type = "u32", source = "game/00 func_801A7704 sets it to 0x80144E88 + scenario_id * 8 SYS_SetFlag/TestBit/ToggleBit operate on it (scena09 764.c 130-144, scena00 8.c 1111-1273) etc/start/08" }
 g_SceneState = { addr = 0x80146870, source = "read or written by Area_IsStepBlocked, func_80197C94, func_8019A904" }
 g_CurrentActor = { addr = 0x80146884, type = "Actor", source = "func_8015A758/8015A7E8 publish each row through it world00/area030/04 func_801DE4AC/801DE1C0 and the boss setup functions store it field_work_record.h 9 names it the published row" }
 g_Actors = { addr = 0x80146888, size = 0x1170, source = "Actor_FindFree returns the first of the 30 field actor records of 0x98 bytes whose first byte is 0, else 0xFF" }
@@ -2921,6 +2921,7 @@ g_AreaDrawMode = { addr = 0x8014933E, type = "u8", source = "the GFX_AddPrim dra
 s__LOGO_LOGO_EXE_1_80149800 = { addr = 0x80149800, size = 0x14, source = "SYS_RunLogo passes this LOGO executable path to SYS_LoadExec" }
 D_80149814 = { addr = 0x80149814, size = 0x11F0 }
 D_80149998 = { addr = 0x80149998, size = 0x178, alias = true }
+g_UiLocalModeFuncs = { addr = 0x801499AC, size = 0x54, alias = true, source = "UI_DispatchLocalMode@0x8014ED6C snapshots its 21 callbacks to the stack and dispatches the entry the game-UI local mode selects; GFX_RunBlackFade starts through four of them" }
 g_EmiCdSteps = { addr = 0x80149C3C, alias = true, source = "EMI_LoaderRunCd calls the entry selected by the step byte" }
 g_EmiSlotDrainFuncs = { addr = 0x80149C60, alias = true, source = "EMI_LoaderServiceStream copies it" }
 __main = { addr = 0x8014AA04, type = "func", source = "SLUS entry, C calls it by its func_ name" }
@@ -3077,9 +3078,9 @@ Game_TestEventFlag = { addr = 0x8015B764, type = "func", source = "tests the ope
 Game_HasVitalItem = { addr = 0x8015B798, type = "func", source = "forwards the operand byte to Party_HasVitalItem; entry 13 of the script handler table D_8018217C" }
 Game_IsScenarioAtLeast = { addr = 0x8015B7C4, type = "func", source = "returns 1 when the operand byte is at or above g_SceneState.scenario_id; entry 14 of the script handler table D_8018217C" }
 Game_IsScriptVar0Equal = { addr = 0x8015B98C, type = "func", source = "returns 1 when the operand byte equals g_ScriptVars[0]; entry 3 of the script handler table D_8018217C" }
-Game_IsScriptVar1Equal = { addr = 0x8015B9B4, type = "func", source = "returns 1 when the operand byte equals D_80146865 (g_ScriptVars[1]); entry 4 of the script handler table D_8018217C" }
-Game_IsScriptVar2Equal = { addr = 0x8015B9DC, type = "func", source = "returns 1 when the operand byte equals D_80146866 (g_ScriptVars[2]); entry 5 of the script handler table D_8018217C" }
-Game_IsScriptVar3Equal = { addr = 0x8015BA04, type = "func", source = "returns 1 when the operand byte equals D_80146867 (g_ScriptVars[3]); entry 6 of the script handler table D_8018217C" }
+Game_IsScriptVar1Equal = { addr = 0x8015B9B4, type = "func", source = "returns 1 when the operand byte equals g_ScriptVars[1]; entry 4 of the script handler table D_8018217C" }
+Game_IsScriptVar2Equal = { addr = 0x8015B9DC, type = "func", source = "returns 1 when the operand byte equals g_ScriptVars[2]; entry 5 of the script handler table D_8018217C" }
+Game_IsScriptVar3Equal = { addr = 0x8015BA04, type = "func", source = "returns 1 when the operand byte equals g_ScriptVars[3]; entry 6 of the script handler table D_8018217C" }
 Game_SetScriptVar = { addr = 0x8015BA2C, type = "func", source = "stores operand[1] in g_ScriptVars[(operand[0] & 0xC) >> 2]; entry 17 of the script handler table D_8018217C" }
 Game_IsScriptVarEqual = { addr = 0x8015BA50, type = "func", source = "compares operand[1] with g_ScriptVars[(operand[0] & 0xC) >> 2]; entry 18 of the script handler table D_8018217C" }
 Game_IncScriptVar = { addr = 0x8015BA84, type = "func", source = "increments g_ScriptVars[(operand[0] & 0xC) >> 2]; entry 19 of the script handler table D_8018217C" }

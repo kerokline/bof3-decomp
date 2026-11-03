@@ -6,8 +6,6 @@
 
 #include "overlays/scenario/scenario.h"
 
-#define g_ScriptVars (*(s8*)&g_ScriptVars)
-
 extern u32       D_801F6C00;
 extern Callback  D_801FE8A0[];
 extern Callback  D_801FE8D0[];

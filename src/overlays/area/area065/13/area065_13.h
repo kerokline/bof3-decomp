@@ -42,8 +42,6 @@ extern u8            D_801F525C[12];
 extern u8            D_801F525D[];
 extern u8            D_801F5268[]; /* the "Manillo" text at +0x10 */
 
-#define g_SceneState (*(s8*)&g_SceneState)
-
 void func_801F40FC(s16 x, s16 y);
 void Area_Update(void);
 

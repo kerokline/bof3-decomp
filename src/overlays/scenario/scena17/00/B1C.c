@@ -67,7 +67,7 @@ INCLUDE_ASM(func_801F8110);
 INCLUDE_ASM(func_801F8170);
 
 MATCH void func_801F81BC(void) {
-    SYS_DISPATCH_BYTE(D_801F97A4, D_80146874);
+    SYS_DISPATCH_BYTE(D_801F97A4, g_SceneState.state_04);
 }
 
 INCLUDE_ASM(func_801F81F8);
@@ -95,8 +95,8 @@ INCLUDE_ASM(func_801F8710);
 INCLUDE_ASM(func_801F87D0);
 
 MATCH void func_801F8844(void) {
-    D_80146873 = 0;
-    D_80146874 = 0;
+    D_80146873            = 0;
+    g_SceneState.state_04 = 0;
     CallbackReplace(func_801F9490);
 }
 

@@ -51,6 +51,4 @@ extern u8  D_801F5718[28];
 extern u8  D_801F5719[]; /* the record-selector byte at +1 */
 extern u8  D_801F5728[]; /* the "Manillo" text at +0x10 */
 
-#define g_SceneState (*(s8*)&g_SceneState)
-
 #endif

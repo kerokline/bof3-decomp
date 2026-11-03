@@ -4,7 +4,7 @@ MATCH void func_801F318C(void) {
     u16* channel = (u16*)&g_UiWindowChannel;
     u16  bits    = *channel;
 
-    g_ScriptVars = 0x32;
-    *channel     = bits | 0x2;
+    g_ScriptVars[0] = 0x32;
+    *channel        = bits | 0x2;
     Actor_Clear();
 }

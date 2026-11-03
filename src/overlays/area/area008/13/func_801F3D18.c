@@ -7,7 +7,7 @@ MATCH void func_801F3D18(void) {
 
     buffer = (char*)g_UiFormatBuffer;
     Menu_DrawHeaderBar(0xC8, 0xA0, 0x22, 0x14, 1u);
-    value = WORLD00_AREA008_D_80146867;
+    value = g_ScriptVars[3];
     fmt   = WORLD00_AREA008_D_801F2C10;
     sprintf(buffer, fmt, value);
     UI_DrawAsciiString(0xD1, 0xA3, 0, buffer);

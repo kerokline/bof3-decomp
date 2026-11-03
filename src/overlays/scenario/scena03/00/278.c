@@ -320,7 +320,7 @@ MATCH void func_801F8DE4(void) {
 INCLUDE_ASM(func_801F8E00);
 
 MATCH void func_801F92F4(void) {
-    SYS_DISPATCH_BYTE(D_801FCFE0, D_80146874);
+    SYS_DISPATCH_BYTE(D_801FCFE0, g_SceneState.state_04);
 }
 
 MATCH void func_801F9330(void) {

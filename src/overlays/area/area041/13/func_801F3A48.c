@@ -13,5 +13,5 @@ MATCH void func_801F3A48(void) {
         func_801BE1B0(2);
         value = 0x14;
     }
-    D_80146865 = value;
+    g_ScriptVars[1] = value;
 }

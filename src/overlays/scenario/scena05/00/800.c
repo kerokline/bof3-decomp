@@ -57,7 +57,7 @@ MATCH void func_801F7AB4(void) {
 INCLUDE_ASM(func_801F7AC8);
 
 MATCH void func_801F83EC(void) {
-    SYS_DISPATCH_BYTE(D_801FD5E8, D_80146874);
+    SYS_DISPATCH_BYTE(D_801FD5E8, g_SceneState.state_04);
 }
 
 MATCH void func_801F8428(void) {
@@ -133,59 +133,59 @@ INCLUDE_ASM(func_801FCB1C);
 
 MATCH void func_801FCB80(void) {
     Game_SetScriptActive();
-    g_ScriptVars = 0;
-    D_80146865   = 0;
-    D_80146866   = 0;
-    D_80146867   = 0;
-    D_80146875   = 0;
-    D_80146874   = 12;
+    g_ScriptVars[0]       = 0;
+    g_ScriptVars[1]       = 0;
+    g_ScriptVars[2]       = 0;
+    g_ScriptVars[3]       = 0;
+    g_SceneState.step_05  = 0;
+    g_SceneState.state_04 = 12;
 }
 
 MATCH void func_801FCBD4(void) {
     Game_SetScriptActive();
-    g_ScriptVars = 0;
-    D_80146865   = 0;
-    D_80146866   = 0;
-    D_80146867   = 0;
-    D_80146875   = 0;
-    D_80146874   = 13;
+    g_ScriptVars[0]       = 0;
+    g_ScriptVars[1]       = 0;
+    g_ScriptVars[2]       = 0;
+    g_ScriptVars[3]       = 0;
+    g_SceneState.step_05  = 0;
+    g_SceneState.state_04 = 13;
 }
 
 MATCH void func_801FCC28(void) {
     Game_SetScriptActive();
-    D_80146865 = 0;
-    D_80146866 = 0;
-    D_80146867 = 0;
-    D_80146875 = 0;
-    D_80146874 = 16;
+    g_ScriptVars[1]       = 0;
+    g_ScriptVars[2]       = 0;
+    g_ScriptVars[3]       = 0;
+    g_SceneState.step_05  = 0;
+    g_SceneState.state_04 = 16;
 }
 
 MATCH void func_801FCC74(void) {
     Game_SetScriptActive();
-    D_80146865 = 0;
-    D_80146866 = 0;
-    D_80146867 = 0;
-    D_80146875 = 0;
-    D_80146874 = 17;
+    g_ScriptVars[1]       = 0;
+    g_ScriptVars[2]       = 0;
+    g_ScriptVars[3]       = 0;
+    g_SceneState.step_05  = 0;
+    g_SceneState.state_04 = 17;
 }
 
 MATCH void func_801FCCC0(void) {
     Game_SetScriptActive();
-    D_80146865 = 0;
-    D_80146866 = 0;
-    D_80146867 = 0;
-    D_80146875 = 0;
-    D_80146874 = 18;
+    g_ScriptVars[1]       = 0;
+    g_ScriptVars[2]       = 0;
+    g_ScriptVars[3]       = 0;
+    g_SceneState.step_05  = 0;
+    g_SceneState.state_04 = 18;
 }
 
 MATCH void func_801FCD0C(void) {
     Game_SetScriptActive();
-    g_ScriptVars = 0;
-    D_80146865   = 0;
-    D_80146866   = 0;
-    D_80146867   = 0;
-    D_80146875   = 0;
-    D_80146874   = 13;
+    g_ScriptVars[0]       = 0;
+    g_ScriptVars[1]       = 0;
+    g_ScriptVars[2]       = 0;
+    g_ScriptVars[3]       = 0;
+    g_SceneState.step_05  = 0;
+    g_SceneState.state_04 = 13;
 }
 
 MATCH s32 func_801FCD60(void) {

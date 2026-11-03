@@ -473,10 +473,10 @@ MATCH void func_801F300C(void) {
     g_MessageRequest = D_801F4CDC[state];
     switch (state) {
         case 0:
-            g_ScriptVars = 0xBE;
+            g_ScriptVars[0] = 0xBE;
             break;
         case 1:
-            g_ScriptVars = 0xBF;
+            g_ScriptVars[0] = 0xBF;
             break;
         default:
             return;

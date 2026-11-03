@@ -116,13 +116,37 @@ MATCH void func_801FD484(void) {
 
 INCLUDE_ASM(func_801FD48C);
 
-INCLUDE_ASM(func_801FD4F0);
+MATCH void func_801FD4F0(void) {
+    Game_SetScriptActive();
+    D_80146865 = 0;
+    D_80146866 = 0;
+    D_80146875 = 0;
+    D_80146874 = 23;
+}
 
-INCLUDE_ASM(func_801FD534);
+MATCH void func_801FD534(void) {
+    Game_SetScriptActive();
+    D_80146875 = 5;
+    D_80146865 = 0;
+    D_80146866 = 0;
+    D_80146874 = 23;
+}
 
-INCLUDE_ASM(func_801FD57C);
+MATCH void func_801FD57C(void) {
+    Game_SetScriptActive();
+    D_80146875 = 2;
+    D_80146865 = 0;
+    D_80146866 = 0;
+    D_80146874 = 23;
+}
 
-INCLUDE_ASM(func_801FD5C4);
+MATCH void func_801FD5C4(void) {
+    Game_SetScriptActive();
+    D_80146875 = 2;
+    D_80146865 = 0;
+    D_80146866 = 0;
+    D_80146874 = 17;
+}
 
 INCLUDE_ASM(func_801FD60C);
 
@@ -148,11 +172,31 @@ MATCH void func_801FD934(void) {
     g_ScriptVars = 0x68;
 }
 
-INCLUDE_ASM(func_801FD948);
+MATCH void func_801FD948(void) {
+    Game_SetScriptActive();
+    D_80146875   = 40;
+    g_ScriptVars = 0;
+    D_80146865   = 0;
+    D_80146866   = 0;
+    D_80146867   = 0;
+    D_80146874   = 9;
+}
 
-INCLUDE_ASM(func_801FD9A0);
+MATCH void func_801FD9A0(void) {
+    Game_SetScriptActive();
+    D_80146865 = 0;
+    D_80146866 = 0;
+    D_80146875 = 0;
+    D_80146874 = 17;
+}
 
-INCLUDE_ASM(func_801FD9E4);
+MATCH void func_801FD9E4(void) {
+    Game_SetScriptActive();
+    D_80146875 = 5;
+    D_80146865 = 0;
+    D_80146866 = 0;
+    D_80146874 = 17;
+}
 
 MATCH void func_801FDA2C(void) {
     Game_SetScriptActive();

@@ -9,7 +9,13 @@ MATCH void func_801D0C2C(void) {
     SYS_DISPATCH_BYTE(D_801D4BCC, D_801F294C);
 }
 
-INCLUDE_ASM(func_801D0C68);
+MATCH void func_801D0C68(void) {
+    D_801D4DF4 = 1;
+    D_801D4DF8 = 0;
+    D_801D4DFC = 0;
+    D_801D4E0C = 181;
+    D_801F294C++;
+}
 
 INCLUDE_ASM(func_801D0CAC);
 
@@ -83,4 +89,11 @@ INCLUDE_ASM(func_801D49C4);
 
 INCLUDE_ASM(func_801D4AAC);
 
-INCLUDE_ASM(func_801D4B58);
+MATCH void func_801D4B58(void) {
+    D_801D4E10 = D_801F294D;
+    D_801D4E14 = D_801D4E0C;
+    SND_PlayCue(259);
+    D_801D4E0C = 61;
+    D_801D4E18 = 0;
+    D_801F294D = 5;
+}

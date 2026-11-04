@@ -33,4 +33,6 @@ extern Callback      D_801DAE74[];
 extern u8            g_MenuPortraitAtlas[];
 
 /* The overlay's state byte the guarded step advances. */
+extern u8 D_801DB0B4;
+
 #endif

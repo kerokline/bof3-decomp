@@ -20,7 +20,15 @@ INCLUDE_ASM(func_801EF038);
 
 INCLUDE_ASM(func_801EF0D0);
 
-INCLUDE_ASM(func_801EF2A8);
+MATCH void func_801EF2A8(void) {
+    PartyBattler* work;
+
+    if (func_8014DAEC() != 0u) {
+        work         = (PartyBattler*)D_801EB4E0;
+        work->unk_0B = work->unk_0B + 1;
+        func_801E5988();
+    }
+}
 
 INCLUDE_ASM(func_801EF2F4);
 

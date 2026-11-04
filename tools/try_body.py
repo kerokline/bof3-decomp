@@ -31,17 +31,20 @@ QUOTED = re.compile(r'^\s*#\s*include\s+"([^"]+)"', re.M)
 DECL = re.compile(r"^@decl\s+(.*)$", re.M)
 
 
-def resolve(root: Path, src: str, include: str) -> str | None:
-    """Return the repo path of a quoted include of ``src`` under ``src/``, or None."""
+def resolve(root: Path, src: str, include: str, anywhere: bool = False) -> str | None:
+    """Return the repo path of a quoted include of ``src`` under ``src/`` (or ``include/``)."""
     for base in (str(Path(src).parent), "src/shared", "src", "include"):
         candidate = (Path(base) / include).as_posix()
-        if (root / candidate).is_file() and candidate.startswith("src/"):
+        if (root / candidate).is_file() and (anywhere or candidate.startswith("src/")):
             return candidate
     return None
 
 
-def closure(root: Path, src: str, depth: int = 3) -> list[str]:
-    """Return ``src`` and the headers it includes, as repo paths, nearest first."""
+def closure(root: Path, src: str, depth: int = 3, anywhere: bool = False) -> list[str]:
+    """Return ``src`` and the headers it includes, as repo paths, nearest first.
+
+    ``anywhere`` follows includes into ``include/`` too.
+    """
     seen: list[str] = []
 
     def walk(path: str, left: int) -> None:
@@ -50,7 +53,7 @@ def closure(root: Path, src: str, depth: int = 3) -> list[str]:
         seen.append(path)
         if left:
             for inc in QUOTED.findall(read(root, path)):
-                found = resolve(root, path, inc)
+                found = resolve(root, path, inc, anywhere)
                 if found:
                     walk(found, left - 1)
 
@@ -65,7 +68,7 @@ def declares(root: Path, src: str, name: str) -> bool:
         define.search(read(root, f))
         or declaration(read(root, f), name)
         or re.search(r"\b" + re.escape(name) + r"\s*\([^;{]*\)\s*\{", read(root, f))
-        for f in closure(root, src)
+        for f in closure(root, src, 6, True)
     )
 
 

@@ -97,6 +97,10 @@ INCLUDE_ASM(func_801CFA44);
 /* func_801CFD20 */
 #include "overlays/plchar/Char_ProbeFacingCell.h"
 
-INCLUDE_ASM(func_801CFE54);
+MATCH void func_801CFE54(void) {
+    D_801CFF20[g_SpadWork->unk_2C]();
+}
 
-INCLUDE_ASM(func_801CFE98);
+MATCH void func_801CFE98(void) {
+    D_801CFF2C[g_SpadWork->unk_2C]();
+}

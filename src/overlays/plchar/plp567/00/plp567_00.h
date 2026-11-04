@@ -23,5 +23,7 @@ extern Callback D_801D07B8[];
 extern Callback D_801D07CC[];
 extern Callback D_801D07D8[];
 extern Callback D_801D07E4[];
+extern Callback D_801D07F0[];
+extern Callback D_801D07FC[];
 
 #endif

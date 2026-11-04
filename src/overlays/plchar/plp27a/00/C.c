@@ -63,6 +63,10 @@ MATCH void func_801CF868(void) {
     g_GameState->mode_12B.s8_value = 0;
 }
 
-INCLUDE_ASM(func_801CF878);
+MATCH void func_801CF878(void) {
+    D_801CF92C[g_SpadWork->unk_2C]();
+}
 
-INCLUDE_ASM(func_801CF8BC);
+MATCH void func_801CF8BC(void) {
+    D_801CF938[g_SpadWork->unk_2C]();
+}

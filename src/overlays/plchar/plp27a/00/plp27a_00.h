@@ -17,5 +17,7 @@
 /* The field work row this overlay moves, at scratchpad 0x1F800044. */
 extern Callback D_801CF914[];
 extern Callback D_801CF920[];
+extern Callback D_801CF92C[];
+extern Callback D_801CF938[];
 
 #endif

@@ -21,5 +21,7 @@ extern Callback D_801CFCC8[];
 extern Callback D_801CFCD4[];
 extern Callback D_801CFCE0[];
 extern Callback D_801CFCEC[];
+extern Callback D_801CFCF4[];
+extern Callback D_801CFD00[];
 
 #endif

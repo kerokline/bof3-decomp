@@ -69,6 +69,10 @@ INCLUDE_ASM(func_801CF8AC);
 
 INCLUDE_ASM(func_801CF9C4);
 
-INCLUDE_ASM(func_801CFA30);
+MATCH void func_801CFA30(void) {
+    D_801CFAFC[g_SpadWork->unk_2C]();
+}
 
-INCLUDE_ASM(func_801CFA74);
+MATCH void func_801CFA74(void) {
+    D_801CFB08[g_SpadWork->unk_2C]();
+}

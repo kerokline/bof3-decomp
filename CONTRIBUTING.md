@@ -124,7 +124,8 @@ runs the format checks only.
 
 ## Pull requests
 
-- One topic per pull request: one function, or a small group with one cause.
+- One topic per pull request, with one commit per function or shared body. Polish the C before you
+  open it: readable, formatted, typed, twins shared. Do not send one pull request per function.
 - Commit subjects are `type(scope): subject`, imperative, lowercase, no final period, for example
   `fix(setup): validate disc tracks`.
 - Name the targets and addresses, give the evidence for each new name or type, and list the checks

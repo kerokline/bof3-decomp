@@ -46,7 +46,17 @@ MATCH void Effect_CountDownTimerStep_801EF42C(void) {
     BMAGIC_COUNT_DOWN_TIMER_STEP();
 }
 
-INCLUDE_ASM(func_801EF478);
+MATCH void func_801EF478(void) {
+    PartyBattler* work;
+
+    work         = g_SpadWork;
+    work->unk_0A = work->unk_0A - 1;
+    if (work->unk_0A == 0) {
+        work         = (PartyBattler*)D_801EB4E0;
+        work->unk_0B = work->unk_0B - 1;
+        func_801E5988();
+    }
+}
 
 INCLUDE_ASM(func_801EF4D4);
 

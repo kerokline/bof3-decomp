@@ -55,10 +55,11 @@ jobs:
         run: git ls-files 'tools/*.sh' | xargs shellcheck --severity=warning
       # dprint/check above covers Markdown, TOML and JSON; DPRINT=true skips the second run.
       # format.sh --check also runs `ruff check` on tools/ (ruff is pinned in pyproject.toml).
-      - name: Format and lint
-        run: DPRINT=true tools/format.sh --check
+      # check-headers, check-tree, include-asm, format-check (ruff included), meson test, typeloss.
       - run: meson setup build/meson
-      - run: meson compile -C build/meson check-headers check-tree include-asm
-      - run: meson test -C build/meson --print-errorlogs
+      - run: tools/pre_push.sh refs/remotes/origin/main
+      - name: Failed check logs
+        if: failure()
+        run: tail -n 40 build/pre-push/*.log
       - name: No SDK object in the tree
         run: test -z "$(find . -path ./.venv -prune -o \( -iname '*.obj' -o -iname '*.lib' \) -print)"

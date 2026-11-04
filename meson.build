@@ -70,6 +70,8 @@ run_target('include-asm', command: [tools / 'check_asm.sh'])
 format_sh = find_program(tools / 'format.sh')
 run_target('format', command: [format_sh])
 run_target('format-check', command: [format_sh, '--check'])
+# Every check a push needs, one line each (see tools/pre_push.sh).
+run_target('pre-push', command: [tools / 'pre_push.sh'])
 
 # pytest is in the dev group: tools/setup.sh --dev installs it.
 if fs.exists(root / '.venv/bin/pytest')

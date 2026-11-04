@@ -60,6 +60,9 @@ MATCH void func_801EF188(void) {
 
 INCLUDE_ASM(func_801EF23C);
 
+/* Follows sce10eff func_801D218C (160 instructions) but draws through Area_AddCellPrim(x, y, 2, 12) and starts with a
+ * 128 base length where the template has 64 (first difference li v0,64 against li v0,128 at +0x18; the frame is also 64
+ * bytes against 56). */
 INCLUDE_ASM(func_801EF9A4);
 
 INCLUDE_ASM(func_801EFC74);

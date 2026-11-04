@@ -11,14 +11,13 @@ INCLUDE_ASM(func_801EEC70);
 MATCH void func_801EEDB0(void) {
     PartyBattler* work;
 
-    work = g_SpadWork;
+    work         = g_SpadWork;
     work->unk_09 = work->unk_09 - 1;
     if (work->unk_09 == 0) {
         SND_QueueSelectionFx(0x100);
         g_SpadWork->step_01 = g_SpadWork->step_01 + 1;
     }
 }
-
 
 #include "overlays/bmagic/Effect_PlayOnZeroTick.h"
 

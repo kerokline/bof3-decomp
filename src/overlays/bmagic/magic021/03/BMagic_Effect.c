@@ -54,7 +54,7 @@ INCLUDE_ASM(func_801EF600);
 MATCH void func_801EF7A0(void) {
     PartyBattler* work;
 
-    work = g_SpadWork;
+    work         = g_SpadWork;
     work->unk_0A = work->unk_0A - 2;
     if (work->unk_0A == 0) {
         work         = (PartyBattler*)D_801EB4E0;
@@ -62,7 +62,6 @@ MATCH void func_801EF7A0(void) {
         Actor_Clear();
     }
 }
-
 
 INCLUDE_ASM(func_801EF7FC);
 

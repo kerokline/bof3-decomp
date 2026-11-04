@@ -36,7 +36,6 @@ MATCH void func_801EF6D8(void) {
     }
 }
 
-
 MATCH void func_801EF728(void) {
     SVECTOR pos;
     SVECTOR rot;

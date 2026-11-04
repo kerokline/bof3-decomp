@@ -81,14 +81,13 @@ INCLUDE_ASM(func_801F014C);
 MATCH void func_801F01D0(void) {
     PartyBattler* work;
 
-    work = g_SpadWork;
+    work         = g_SpadWork;
     work->unk_0A = work->unk_0A - 1;
     if (work->unk_0A == 0) {
         SND_QueueSelectionFx(0x102);
         g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
     }
 }
-
 
 INCLUDE_ASM(func_801F0230);
 

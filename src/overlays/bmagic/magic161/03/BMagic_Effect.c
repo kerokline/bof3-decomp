@@ -16,7 +16,15 @@ MATCH void func_801EEF3C(void) {
     SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
 }
 
-INCLUDE_ASM(func_801EEF80);
+MATCH void func_801EEF80(void) {
+    BattleHandlerTable5 handlers;
+
+    handlers = D_801EEC10;
+    SYS_DISPATCH_BYTE(handlers.handlers, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0 && g_SpadWork->unk_02 != 0) {
+        func_8014D290();
+    }
+}
 
 #include "overlays/bmagic/Effect_ReloadTimerAndStep.h"
 

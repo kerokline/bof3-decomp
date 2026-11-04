@@ -4,7 +4,17 @@
 __asm__(".include \"include/match/macro.inc\"\n");
 #endif
 
-INCLUDE_ASM(func_801EEC18);
+MATCH void func_801EEC18(void) {
+    BattleHandlerTable5 handlers;
+
+    handlers = D_801EEC04;
+    SYS_DISPATCH_BYTE(handlers.handlers, g_SpadWork->step_01);
+    if (g_SpadWork->unk_0A != 0 && g_SpadWork->flags_00 != 0) {
+        Effect_SetActorMatrix();
+        func_801EF07C();
+        PopMatrix();
+    }
+}
 
 INCLUDE_ASM(func_801EECCC);
 

@@ -33,7 +33,17 @@ MATCH void func_801EF190(void) {
     SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
 }
 
-INCLUDE_ASM(func_801EF1D4);
+MATCH void func_801EF1D4(void) {
+    BattleHandlerTable3 handlers;
+
+    handlers = D_801EEC1C;
+    SYS_DISPATCH_BYTE(handlers.handlers, g_SpadWork->unk_02);
+    if (ACTOR_IN_USE(*g_SpadWork) && g_SpadWork->unk_02 != 0) {
+        Effect_SetActorMatrix();
+        func_801EF670();
+        PopMatrix();
+    }
+}
 
 INCLUDE_ASM(func_801EF27C);
 
@@ -64,7 +74,17 @@ MATCH void func_801EF358(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF3D0);
+MATCH void func_801EF3D0(void) {
+    MagicTaskFuncs handlers;
+
+    handlers = D_801EEC28;
+    SYS_DISPATCH_BYTE(handlers.handlers, g_SpadWork->unk_02);
+    if (ACTOR_IN_USE(*g_SpadWork) && g_SpadWork->unk_02 != 0) {
+        Effect_SetActorMatrix();
+        func_801EFAB8();
+        PopMatrix();
+    }
+}
 
 INCLUDE_ASM(func_801EF484);
 

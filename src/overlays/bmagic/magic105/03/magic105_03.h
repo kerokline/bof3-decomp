@@ -5,4 +5,6 @@
 
 #include "overlays/bmagic/bmagic.h"
 
+extern MagicTaskFuncs D_801EEC04;
+
 #endif

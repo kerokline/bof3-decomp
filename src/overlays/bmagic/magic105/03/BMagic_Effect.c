@@ -14,7 +14,17 @@ MATCH void func_801EEF78(void) {
     SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
 }
 
-INCLUDE_ASM(func_801EEFBC);
+MATCH void func_801EEFBC(void) {
+    MagicTaskFuncs handlers;
+
+    handlers = D_801EEC04;
+    SYS_DISPATCH_BYTE(handlers.handlers, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0 && g_SpadWork->unk_02 != 3) {
+        func_801EF2F0();
+        func_801EF3A0();
+        PopMatrix();
+    }
+}
 
 INCLUDE_ASM(func_801EF06C);
 

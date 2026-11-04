@@ -151,7 +151,15 @@ INCLUDE_ASM(func_801F0B44);
 
 INCLUDE_ASM(func_801F0BBC);
 
-INCLUDE_ASM(func_801F0DA8);
+MATCH void func_801F0DA8(void) {
+    BmagicEffectFuncs handlers;
+
+    handlers = D_801EEC94;
+    SYS_DISPATCH_BYTE(handlers.handlers, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0 && g_SpadWork->unk_02 != 0) {
+        func_8014D290();
+    }
+}
 
 INCLUDE_ASM(func_801F0E54);
 

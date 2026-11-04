@@ -34,7 +34,16 @@ INCLUDE_ASM(func_801EF478);
 
 INCLUDE_ASM(func_801EFB6C);
 
-INCLUDE_ASM(func_801F0064);
+MATCH void func_801F0064(void) {
+    BattleHandlerTable3 handlers;
+
+    handlers = D_801EEC1C;
+    SYS_DISPATCH_BYTE(handlers.handlers, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0 && g_SpadWork->unk_02 != 0) {
+        func_800AF764();
+        func_801F0308();
+    }
+}
 
 INCLUDE_ASM(func_801F0100);
 
@@ -44,7 +53,17 @@ INCLUDE_ASM(func_801F020C);
 
 INCLUDE_ASM(func_801F0308);
 
-INCLUDE_ASM(func_801F04F4);
+MATCH void func_801F04F4(void) {
+    MagicTaskFuncs handlers;
+
+    handlers = D_801EEC28;
+    SYS_DISPATCH_BYTE(handlers.handlers, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0 && g_SpadWork->unk_02 != 0) {
+        Effect_SetActorMatrix();
+        func_801F0790();
+        PopMatrix();
+    }
+}
 
 INCLUDE_ASM(func_801F05A4);
 

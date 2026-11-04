@@ -11,6 +11,10 @@ typedef struct BattleHandlerTable6 {
 
 ASSERT_SIZE(BattleHandlerTable6, 0x18);
 
+extern MagicTaskFuncs D_801EEC28;
+
+extern BattleHandlerTable3 D_801EEC1C;
+
 extern BattleHandlerTable6 D_801EEC04;
 
 #endif

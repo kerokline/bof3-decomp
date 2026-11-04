@@ -5,4 +5,6 @@
 
 #include "overlays/bmagic/bmagic.h"
 
+extern BattleHandlerTable5 D_801EEC04;
+
 #endif

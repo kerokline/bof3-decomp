@@ -39,7 +39,16 @@ INCLUDE_ASM(func_801EF320);
 
 INCLUDE_ASM(func_801EF44C);
 
-INCLUDE_ASM(func_801EF4E4);
+MATCH void func_801EF4E4(void) {
+    BattleHandlerTable3 handlers;
+
+    handlers = D_801EEC28;
+    SYS_DISPATCH_BYTE(handlers.handlers, g_SpadWork->unk_02);
+    if (ACTOR_IN_USE(*g_SpadWork) && g_SpadWork->unk_02 != 0) {
+        func_800AF764();
+        func_801EF758();
+    }
+}
 
 INCLUDE_ASM(func_801EF584);
 

@@ -11,6 +11,8 @@ typedef struct BattleHandlerTable6 {
 
 ASSERT_SIZE(BattleHandlerTable6, 0x18);
 
+extern BattleHandlerTable3 D_801EEC3C;
+
 extern BattleHandlerTable6 D_801EEC04;
 
 #endif

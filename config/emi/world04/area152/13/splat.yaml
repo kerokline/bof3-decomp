@@ -34,7 +34,7 @@ segments:
       - [0xC9C, c, Area_DrawHudSprite]
       - [0xDC4, c, Area_DrawHud]
       - [0x1190, c, Area_DrawGradientDiamond]
-      - [0x1388, c, func_801F3F88]
+      - [0x1388, c, Area_DrawHudBanner]
       - [0x1438, c, func_801F4038]
       - [0x147C, c, func_801F407C]
       - [0x15B8, c, func_801F41B8]

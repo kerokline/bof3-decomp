@@ -42,6 +42,7 @@ void                  Area_DrawGradientDiamond(s16 x, s16 y);
 void func_801F338C(void);
 
 void func_801F3550(void);
-void func_801F3F88(s16 x, s16 y);
+/* func_801F3F88 */
+void Area_DrawHudBanner(s16 x, s16 y);
 
 #endif

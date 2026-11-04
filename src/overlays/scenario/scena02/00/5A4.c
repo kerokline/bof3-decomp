@@ -157,7 +157,9 @@ INCLUDE_ASM(func_801FCD14);
 
 INCLUDE_ASM(func_801FCECC);
 
-INCLUDE_ASM(func_801FD084);
+MATCH void func_801FD084(void* record) {
+    D_801FE304[((Actor*)record)->callback_index](record, &D_80144E98);
+}
 
 MATCH void func_801FD0C4(void) {
 }

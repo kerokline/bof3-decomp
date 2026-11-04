@@ -6,7 +6,16 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 INCLUDE_ASM(func_801D0C0C);
 
-INCLUDE_ASM(func_801D0C70);
+MATCH void func_801D0C70(void) {
+    u8* work;
+    u8* step;
+
+    work    = (u8*)g_SpadWork;
+    work[9] = 0x10;
+    step    = (u8*)g_SpadWork;
+    FIELD(s32, work, 0xC) = 0;
+    step[1]++;
+}
 
 INCLUDE_ASM(func_801D0CA0);
 
@@ -42,7 +51,14 @@ MATCH void func_801D10A4(void) {
     SYS_DISPATCH_TASK(D_801D1B48, 1, g_SpadWork);
 }
 
-INCLUDE_ASM(func_801D10E8);
+MATCH void func_801D10E8(void) {
+    u8* work;
+
+    work    = (u8*)g_SpadWork;
+    work[9] = 0x10;
+    work    = (u8*)g_SpadWork;
+    work[1]++;
+}
 
 INCLUDE_ASM(func_801D1118);
 

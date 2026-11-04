@@ -26,7 +26,16 @@ INCLUDE_ASM(func_801EF324);
 
 INCLUDE_ASM(func_801EF4A0);
 
-INCLUDE_ASM(func_801EF530);
+MATCH void func_801EF530(void) {
+    PartyBattler* work;
+
+    if (g_SpadWork->unk_0B == 0x80) {
+        work         = (PartyBattler*)D_801EB4E0;
+        work->unk_0B = work->unk_0B - 1;
+        func_801E5988();
+    }
+}
+
 
 INCLUDE_ASM(func_801EF580);
 

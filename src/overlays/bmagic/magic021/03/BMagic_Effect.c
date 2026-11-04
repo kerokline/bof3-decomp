@@ -51,7 +51,18 @@ INCLUDE_ASM(func_801EF600);
 
 #include "overlays/bmagic/Effect_CountUpByTwoAndStep.h"
 
-INCLUDE_ASM(func_801EF7A0);
+MATCH void func_801EF7A0(void) {
+    PartyBattler* work;
+
+    work = g_SpadWork;
+    work->unk_0A = work->unk_0A - 2;
+    if (work->unk_0A == 0) {
+        work         = (PartyBattler*)D_801EB4E0;
+        work->unk_0B = work->unk_0B - 1;
+        Actor_Clear();
+    }
+}
+
 
 INCLUDE_ASM(func_801EF7FC);
 

@@ -22,7 +22,17 @@ INCLUDE_ASM(func_801EEF28);
 
 INCLUDE_ASM(func_801EF04C);
 
-INCLUDE_ASM(func_801EF0B8);
+MATCH void func_801EF0B8(void) {
+    PartyBattler* work;
+
+    work = g_SpadWork;
+    work->unk_09 = work->unk_09 - 1;
+    if (work->unk_09 == 0) {
+        SND_QueueSelectionFx(0x101);
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    }
+}
+
 
 INCLUDE_ASM(func_801EF118);
 

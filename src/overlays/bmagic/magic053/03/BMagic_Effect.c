@@ -26,7 +26,16 @@ INCLUDE_ASM(func_801EF5C0);
 
 INCLUDE_ASM(func_801EF674);
 
-INCLUDE_ASM(func_801EF6D8);
+MATCH void func_801EF6D8(void) {
+    PartyBattler* work;
+
+    if (g_SpadWork->unk_04 == 0) {
+        work         = (PartyBattler*)D_801EB4E0;
+        work->unk_0B = work->unk_0B - 1;
+        func_801E5988();
+    }
+}
+
 
 MATCH void func_801EF728(void) {
     SVECTOR pos;

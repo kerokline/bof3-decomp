@@ -33,6 +33,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+import quality
 from bof3.link.graph import source_object
 from bof3.resolve import load_target_manifests
 from bof3.status.claims import source_text
@@ -723,11 +724,11 @@ def report(config_path: Path, root: Path | None, build_dir: Path) -> int:
 
     ``objdiff-cli report generate`` writes ``build/report.json``: its version,
     the progress categories and one unit per source file. The status site
-    reads that file as its only input, so two top-level fields are added and
+    reads that file as its only input, so three top-level fields are added and
     the objdiff ones are left as written. ``provenance`` names the commit and
     UTC date that produced the report; ``images`` lists every image the layout
     names with its unit count, so the image with no units is counted instead
-    of absent.
+    of absent. ``quality`` holds the debt totals of ``tools/quality.py``.
     """
     cfg = _load_config(config_path, build_dir)
     base = root.resolve() if root is not None else config_path.resolve().parent.parent
@@ -788,6 +789,7 @@ def report(config_path: Path, root: Path | None, build_dir: Path) -> int:
     for unit in data.get("units", []):
         if unit["name"] in sdk_info:
             unit.setdefault("metadata", {})["sdk"] = sdk_info[unit["name"]]
+    data["quality"] = quality.totals(quality.scan(quality.work_files(base)))
     data["images"] = _image_counts(
         list(load_target_manifests(base)), list(data.get("units", []))
     )

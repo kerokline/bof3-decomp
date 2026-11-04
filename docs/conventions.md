@@ -49,6 +49,12 @@ The layout: 4-space indent, 120 columns, braces on the same line, `T* x` pointer
 assignments aligned within each block. The formatter owns it, so never hand-align
 ([formatter](#formatter)).
 
+A function reads in blocks, like its pseudocode: the declarations, then one block per step (set up,
+loop, finish), with one blank line between blocks and none at the start of a block. The order,
+the loops and the stop conditions show at a glance. The formatter keeps at most one blank line and
+never adds one inside a function, so the blocks are yours to place. Blank lines never change the
+bytes.
+
 - Every `if`, `else`, `for`, `while` and `do` body has braces, even one statement.
 - A bitwise expression inside a comparison or a logical operator is in parentheses.
 - `for` has its init, condition and step; `do`-`while` only when the body must run first; `goto`
@@ -60,6 +66,7 @@ assignments aligned within each block. The formatter owns it, so never hand-alig
 if ((battler->flags & BATTLER_FLAG_KO) != 0 && battler->hp == 0) {
     return;
 }
+
 for (i = 0; i < PARTY_SLOT_COUNT; i++) {
     Party_ResetMember(i);
 }

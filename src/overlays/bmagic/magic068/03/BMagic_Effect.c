@@ -46,7 +46,19 @@ INCLUDE_ASM(func_801EF884);
 
 INCLUDE_ASM(func_801EF908);
 
-INCLUDE_ASM(func_801EF9D0);
+MATCH void func_801EF9D0(void) {
+    u8 timer;
+
+    Effect_SetActorMatrix();
+    func_801EFA48();
+    PopMatrix();
+    timer              = g_SpadWork->unk_09 - 1;
+    g_SpadWork->unk_09 = timer;
+    if (timer == 0) {
+        BMAGIC_TICK_EFFECT_WORK();
+        func_801E5988();
+    }
+}
 
 INCLUDE_ASM(func_801EFA48);
 

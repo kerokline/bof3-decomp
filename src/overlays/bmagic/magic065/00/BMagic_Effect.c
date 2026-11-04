@@ -27,7 +27,17 @@ INCLUDE_ASM(func_801EF250);
 
 #include "overlays/bmagic/Effect_ReloadTimerAndStep.h"
 
-INCLUDE_ASM(func_801EF328);
+MATCH void func_801EF328(void) {
+    u8 timer;
+
+    func_8014DAEC();
+    timer              = g_SpadWork->unk_09 - 1;
+    g_SpadWork->unk_09 = timer;
+    if (timer == 0) {
+        func_800AFC98(0, 4);
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    }
+}
 
 INCLUDE_ASM(func_801EF394);
 

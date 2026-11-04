@@ -66,14 +66,40 @@ MATCH void func_801F0008(void) {
 
 INCLUDE_ASM(func_801F0044);
 
-INCLUDE_ASM(func_801F009C);
+MATCH void func_801F009C(void) {
+    u8 timer;
+
+    func_801F0274();
+    timer              = g_SpadWork->unk_09 + 1;
+    g_SpadWork->unk_09 = timer;
+    if (timer == 0x60) {
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    }
+}
 
 INCLUDE_ASM(func_801F0104);
 
-INCLUDE_ASM(func_801F0158);
+MATCH void func_801F0158(void) {
+    u8 timer;
 
-/* Template: area125/13 func_801F2CD8 passes a wrong pointer type to RotTrans; compile fails. */
-INCLUDE_ASM(func_801F01C0);
+    func_801F08AC();
+    timer              = g_SpadWork->unk_09 + 1;
+    g_SpadWork->unk_09 = timer;
+    if (timer == 0x10) {
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    }
+}
+
+MATCH void func_801F01C0(void) {
+    u8 count;
+
+    func_801F08AC();
+    count              = g_SpadWork->unk_0A - 1;
+    g_SpadWork->unk_0A = count;
+    if (count == 0) {
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    }
+}
 
 INCLUDE_ASM(func_801F0224);
 

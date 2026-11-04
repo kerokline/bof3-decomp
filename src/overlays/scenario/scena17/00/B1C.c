@@ -164,7 +164,14 @@ MATCH void func_801F9654(void) {
     Shop_DispatchStep();
 }
 
-INCLUDE_ASM(func_801F967C);
+MATCH void func_801F967C(void) {
+    g_ScriptVars[0] = 0;
+    D_80146865      = 0;
+    D_80146866      = 0;
+    D_80146867      = 0;
+    SND_Exit();
+    CallbackReplace(SYS_StartFrontend);
+}
 
 MATCH s32 func_801F96CC(void) {
     return 0;

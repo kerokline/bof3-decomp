@@ -279,7 +279,13 @@ MATCH void func_801FE018(void* entity) {
     handler(entity, g_SceneFlags);
 }
 
-INCLUDE_ASM(func_801FE058);
+MATCH void func_801FE058(void) {
+    g_ScriptVars[0] = 0;
+    Game_SetScriptActive();
+    D_80146874 = 7;
+    D_80146876 = 32;
+    D_80146875 = 0;
+}
 
 MATCH void func_801FE0A0(void) {
     g_ScriptVars[0] = 0;
@@ -288,7 +294,13 @@ MATCH void func_801FE0A0(void) {
     g_SceneState.step_05  = 0xA;
 }
 
-INCLUDE_ASM(func_801FE0E0);
+MATCH void func_801FE0E0(void) {
+    g_ScriptVars[0] = 0;
+    Game_SetScriptActive();
+    D_80146874 = 10;
+    D_80146875 = 0;
+    SYS_SetFlag(g_SceneFlags, 19);
+}
 
 INCLUDE_ASM(func_801FE12C);
 
@@ -296,7 +308,12 @@ INCLUDE_ASM(func_801FE170);
 
 INCLUDE_ASM(func_801FE2A0);
 
-INCLUDE_ASM(func_801FE698);
+MATCH void func_801FE698(void) {
+    EMI_LoaderStreamFamily(7, 2, 10, 0);
+    g_PartySize = 0;
+    Party_JoinMember(10);
+    func_801C1630();
+}
 
 INCLUDE_ASM(func_801FE6DC);
 
@@ -304,11 +321,23 @@ MATCH void func_801FE740(void) {
     Party_JoinMember(2);
 }
 
-INCLUDE_ASM(func_801FE760);
+MATCH void func_801FE760(void) {
+    EMI_LoaderStreamFamily(7, 2, 4, 0);
+    g_PartySize = 0;
+    Party_JoinMember(7);
+    Party_JoinMember(2);
+    func_801C1630();
+}
 
 INCLUDE_ASM(func_801FE7AC);
 
-INCLUDE_ASM(func_801FE800);
+MATCH void func_801FE800(void) {
+    g_PartySize = 0;
+    Party_JoinMember(7);
+    Party_JoinMember(8);
+    Party_JoinMember(4);
+    func_801C1630();
+}
 
 MATCH void func_801FE840(void) {
     EMI_LoaderStreamFamily(7U, 8U, 4U, 0U);

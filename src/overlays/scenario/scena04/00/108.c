@@ -149,7 +149,18 @@ MATCH void func_801FA074(void) {
     g_SceneState.step_05  = 0;
 }
 
-INCLUDE_ASM(func_801FA0B4);
+MATCH void func_801FA0B4(void) {
+    EMI_LoaderStreamFamily(0, 1, 5, 0);
+    D_80144F5A    = 255;
+    D_80144F5B    = 255;
+    D_80144F5C    = 255;
+    D_80144F5D[0] = 255;
+    D_80144F5E    = 255;
+    D_80144F5F    = 255;
+    g_PartySize   = 0;
+    Party_JoinMember(0);
+    Party_JoinMember(1);
+}
 
 INCLUDE_ASM(func_801FA12C);
 

@@ -18,4 +18,32 @@ void func_801FD29C(void);
 
 extern Callback D_801FE3D8[];
 
+extern u8 D_80146875;
+extern u8 D_80146865;
+extern u8 D_80146866;
+extern u8 D_80146867;
+extern u8 D_80146874;
+
+extern u16 D_80144DF8;
+extern u8  D_801FE464;
+extern u8  D_80144DF2;
+extern u8  D_801FE46A;
+extern u8  D_80144DF5;
+extern u8  D_801FE46B;
+extern u16 D_80144E00;
+extern u8  D_801FE465;
+extern u16 D_80144E20;
+extern u16 D_80144E04;
+extern u8  D_801FE466;
+extern u16 D_80144E24;
+extern u16 D_80144E06;
+extern u8  D_801FE467;
+extern u16 D_80144E26;
+extern u16 D_80144E08;
+extern u8  D_801FE468;
+extern u16 D_80144E28;
+extern u16 D_80144E0A;
+extern u8  D_801FE469;
+extern u16 D_80144E2A;
+
 #endif

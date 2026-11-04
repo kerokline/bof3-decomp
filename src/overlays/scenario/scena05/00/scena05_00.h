@@ -18,4 +18,8 @@ extern SceneFunc D_801FD644[];
 
 extern Callback D_801FD5A8[];
 
+extern u8 D_80146865;
+extern u8 D_80146866;
+extern u8 D_80146867;
+
 #endif

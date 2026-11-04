@@ -215,7 +215,11 @@ MATCH void func_801F82E4(void) {
     SYS_DISPATCH_TASK(D_801FCF94, 1, g_SpadWork);
 }
 
-INCLUDE_ASM(func_801F8328);
+MATCH void func_801F8328(void) {
+    g_SpadWork->unk_09 = 96;
+    g_SpadWork->unk_01++;
+    SND_PlayCue(516);
+}
 
 INCLUDE_ASM(func_801F8370);
 
@@ -440,9 +444,26 @@ INCLUDE_ASM(func_801FCD1C);
 
 INCLUDE_ASM(func_801FCDB4);
 
-INCLUDE_ASM(func_801FCE18);
+MATCH void func_801FCE18(void) {
+    Message_StartAreaMessage(25);
+    g_GameStateIndex = 2;
+    Game_SetScriptActive();
+    D_80146876 = 30;
+    D_80146874 = 7;
+    D_80146875 = 0;
+}
 
-INCLUDE_ASM(func_801FCE6C);
+MATCH void func_801FCE6C(void) {
+    EMI_LoaderStreamFamily(0, 1, 2, 0);
+    D_80144F5A[0] = 255;
+    D_80144F5B    = 255;
+    D_80144F5C    = 255;
+    D_80144F5D[0] = 255;
+    D_80144F5E[0] = 255;
+    D_80144F5F    = 255;
+    g_PartySize   = 0;
+    Party_JoinMember(0);
+}
 
 MATCH void func_801FCEDC(void) {
     Party_JoinMember(1);

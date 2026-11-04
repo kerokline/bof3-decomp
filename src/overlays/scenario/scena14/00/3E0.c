@@ -88,19 +88,54 @@ INCLUDE_ASM(func_801FB648);
 
 INCLUDE_ASM(func_801FB84C);
 
-INCLUDE_ASM(func_801FBD2C);
+MATCH void func_801FBD2C(void) {
+    EMI_LoaderStreamFamily(7, 8, 4, 0);
+    g_PartySize = 0;
+    Party_JoinMember(7);
+    Party_JoinMember(4);
+    Party_JoinMember(8);
+}
 
-INCLUDE_ASM(func_801FBD78);
+MATCH void func_801FBD78(void) {
+    EMI_LoaderStreamFamily(7, 4, 6, 0);
+    g_PartySize = 0;
+    Party_JoinMember(7);
+    Party_JoinMember(4);
+    Party_JoinMember(6);
+}
 
-INCLUDE_ASM(func_801FBDC4);
+MATCH void func_801FBDC4(void) {
+    EMI_LoaderStreamFamily(7, 5, 6, 0);
+    g_PartySize = 0;
+    Party_JoinMember(7);
+    Party_JoinMember(5);
+    Party_JoinMember(6);
+}
 
 INCLUDE_ASM(func_801FBE10);
 
 INCLUDE_ASM(func_801FBF18);
 
-INCLUDE_ASM(func_801FBFA8);
+MATCH void func_801FBFA8(void) {
+    EMI_LoaderStreamFamily(0, 1, 5, 0);
+    g_PartySize = 0;
+    Party_JoinMember(0);
+    Party_JoinMember(1);
+    Party_JoinMember(5);
+    func_801C1630();
+    D_80144F5D[0] = 7;
+    D_80144F5E    = 8;
+    D_80144F5F    = 5;
+}
 
-INCLUDE_ASM(func_801FC020);
+MATCH void func_801FC020(void) {
+    EMI_LoaderStreamFamily(7, 2, 6, 0);
+    g_PartySize = 0;
+    Party_JoinMember(7);
+    Party_JoinMember(2);
+    Party_JoinMember(6);
+    func_801C1630();
+}
 
 INCLUDE_ASM(func_801FC074);
 
@@ -108,7 +143,12 @@ INCLUDE_ASM(func_801FC0C8);
 
 INCLUDE_ASM(func_801FC130);
 
-INCLUDE_ASM(func_801FC1E8);
+MATCH void func_801FC1E8(void) {
+    EMI_LoaderStreamFamily(7, 2, 6, 0);
+    g_PartySize = 0;
+    Party_JoinMember(7);
+    func_801C1630();
+}
 
 INCLUDE_ASM(func_801FC22C);
 

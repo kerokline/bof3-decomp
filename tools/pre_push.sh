@@ -4,7 +4,7 @@
 #   tools/pre_push.sh [BASE_REF]          or    meson compile -C build/meson pre-push
 #
 # Checks: check (only with a disc), check-headers, check-tree, include-asm, format-check,
-# meson test, typeloss. BASE_REF is what the work is compared with; it defaults to the newer of
+# meson test, typeloss, quality (no touched file gets worse). BASE_REF is what the work is compared with; it defaults to the newer of
 # public/main and origin/main. Each log is build/pre-push/<check>.log. Format first with
 # `meson compile -C build/meson format`.
 set -u
@@ -48,6 +48,7 @@ step include-asm tools/check_asm.sh "$ref"
 step format-check meson compile -C "$bld" format-check
 step test meson test -C "$bld" --print-errorlogs
 step typeloss python3 tools/typeloss.py "$ref" HEAD
+step quality python3 tools/quality.py --diff "$ref"
 
 [ "$status" -eq 0 ] && echo "pre-push: all checks passed against $ref" || echo "pre-push: failed; read build/pre-push/<check>.log"
 exit "$status"

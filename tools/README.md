@@ -30,6 +30,7 @@ as `+`. Run each Python tool with `.venv/bin/python tools/<name>.py` or directly
 | Rank units to name first                 | `tools/symbol.py refs src/<path>`                                        | same                                                      |
 | Add a symbol row                         | `tools/symbol.py add <target> <Name> 0x<ADDR> --source "<evidence>"`     | [symbols](../docs/conventions.md#symbols-and-the-link)    |
 | Split a data unit                        | add a `[0xOFFSET, type, name]` row to `config/<target>/splat.yaml`       | [split](../docs/toolchain.md#split)                       |
+| Count readability debt, gate touched files | `tools/quality.py`, `--queue`, `--diff BASE`                           | [quality](#quality)                                       |
 | Check type loss between two revisions    | `tools/typeloss.py HEAD~5 HEAD`                                          | [type loss](#type-loss)                                   |
 | Scan prototypes against definitions      | `tools/sigs.py scan`                                                     | [signatures](#signatures)                                 |
 | Scan arrays for text and struct shapes   | `tools/shapes.py text`, `tools/shapes.py strided`, `tools/shapes.py types` | [data shapes](#data-shapes)                             |
@@ -107,6 +108,15 @@ one function. Every edit is a lead: run `check` afterwards.
 `typeloss.py OLD NEW` lists prototypes and externs that carry fewer named types in `NEW` than in `OLD`
 (`WORK` is the working tree). Run it before a pull request that renames, moves or retypes.
 
+## Quality
+
+`quality.py` counts, per directory and in total: matched functions still named `func_<ADDR>`, `D_` and
+`unk_` tokens, raw width casts, harmful fake helpers, `FAKE:` notes, bodies pasted into several images
+under one name (`pasted`, one `Name.h` is the rule) and under several names (`twins`). `--queue` lists
+files worst first. `--diff BASE` compares BASE with `--to` (default `HEAD`) and exits 1 when a file the
+change touched rose in `casts`, `harmful` or `pasted`; `--gate` picks other metrics. Old debt in an
+untouched file never fails. `report` stores the totals under `quality` in `report.json`.
+
 ## Data shapes
 
 `shapes.py text` finds byte arrays written as hex that hold text; `strided` finds arrays read with a
@@ -131,7 +141,7 @@ format the rows. It reads the function index, so build first.
 ## Pre-push
 
 `pre_push.sh [BASE_REF]` (Meson target `pre-push`) runs `check` (with a disc), `check-headers`,
-`check-tree`, `include-asm`, `format-check`, `meson test` and `typeloss`, prints one line each and
+`check-tree`, `include-asm`, `format-check`, `meson test`, `typeloss` and `quality`, prints one line each and
 keeps the logs in `build/pre-push/`. CI runs it too.
 
 ## Worktrees

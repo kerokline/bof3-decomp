@@ -10,7 +10,12 @@ INCLUDE_ASM(func_801EECA4);
 
 INCLUDE_ASM(func_801EED60);
 
-INCLUDE_ASM(func_801EEDCC);
+MATCH void func_801EEDCC(void) {
+    if (func_801EF8EC() == 0) {
+        g_SpadWork->unk_09  = 4;
+        g_SpadWork->step_01 = g_SpadWork->step_01 + 1;
+    }
+}
 
 INCLUDE_ASM(func_801EEE24);
 

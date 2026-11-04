@@ -63,7 +63,15 @@ MATCH void func_801EF3A0(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF3E0);
+MATCH void func_801EF3E0(void) {
+    u8 timer;
+
+    timer              = g_SpadWork->unk_09 - 1;
+    g_SpadWork->unk_09 = timer;
+    if (timer == 0) {
+        func_801E5988();
+    }
+}
 
 INCLUDE_ASM(func_801EF424);
 

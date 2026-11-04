@@ -1,3 +1,12 @@
 #include "area172_13.h"
 
-INCLUDE_ASM(func_801F2D98);
+MATCH void func_801F2D98(void) {
+    PartyBattler* work;
+
+    work         = g_SpadWork;
+    work->unk_09 = work->unk_09 - 1;
+    if (g_SpadWork->unk_09 == 0) {
+        func_80196070();
+    }
+    func_801F2DF4(1);
+}

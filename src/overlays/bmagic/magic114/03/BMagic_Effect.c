@@ -26,7 +26,27 @@ INCLUDE_ASM(func_801EF280);
 
 /* Follows BMAGIC_PROJECT_ACTOR_MATRIX (bmagic.h), but the rotation derives from the work byte
  * at +0x0A masked to 0x1F and a second global. */
-INCLUDE_ASM(func_801EF6A8);
+MATCH void func_801EF6A8(void) {
+    PartyBattler* src;
+    SVECTOR       pos;
+    SVECTOR       rot;
+    MATRIX        matrix;
+    long          flags;
+
+    PushMatrix();
+    rot.vx = 0;
+    rot.vy = 0;
+    rot.vz = ((g_SpadWork->unk_0A & 0x1F) - 2) << 7;
+    src    = (PartyBattler*)D_801EB4E0;
+    pos.vx = (src->coord_x_34.raw >> 9) - 0x4000;
+    pos.vy = (src->coord_y_38.raw >> 9) - 0x4000;
+    pos.vz = -(src->word_3C.half.span_3E + 0x200) / 2;
+    RotTrans(&pos, &matrix.t, &flags);
+    RotMatrix(&rot, &matrix);
+    MulMatrix2((MATRIX*)g_CameraMatrix, &matrix);
+    SetRotMatrix(&matrix);
+    SetTransMatrix(&matrix);
+}
 
 MATCH void func_801EF774(void) {
     SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);

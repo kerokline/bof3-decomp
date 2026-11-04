@@ -29,7 +29,9 @@ MATCH void Char_StartTurn_801CE664(void) {
 /* Follows CHAR_RUN_STEP_SCRIPT (plchar.h), but retail branches on the second
  * facing with `bne` and the 0x41 load in the delay slot, where the macro emits
  * `beq`; the script selection needs another switch or if form. */
-INCLUDE_ASM(func_801CE730);
+MATCH void Char_RunStepScript_801CE730(void) {
+    CHAR_RUN_STEP_CASES(CHARACTER_FACING_AWAY, 0x41, CHARACTER_FACING_BACK, 0x40);
+}
 
 MATCH void func_801CE82C(void) {
     SYS_DISPATCH_TASK(D_801CF918, 2, g_SpadWork);

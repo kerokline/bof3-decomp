@@ -1804,6 +1804,7 @@ Char_RunStepScript = { addr = 0x801CF438, type = "func", source = "runs one rout
 Char_StartTurn = { addr = 0x801CE448, type = "func", source = "starts the character walk route through Actor_GetTurnStep, writes the direction byte and arms the step timer" }
 Char_RunStepScript = { addr = 0x801CE514, type = "func", source = "runs one route step script, selecting the turn script id at the direction byte or counting the step timer down to the next script" }
 Char_StartTurn_801CE664 = { addr = 0x801CE664, type = "func", source = "starts the character walk route, the same body as Char_StartTurn in this image" }
+Char_RunStepScript_801CE730 = { addr = 0x801CE730, type = "func", source = "runs the route step script with this image's turn facings, the same body as Char_RunStepScript in this image" }
 Char_RunStepScript_801CED54 = { addr = 0x801CED54, type = "func", source = "runs the route step script with this image's turn facings, the same body as Char_RunStepScript in this image" }
 Char_WalkStep = { addr = 0x801CEE94, type = "func", source = "runs one field-character route step, turning and probing then playing the walk or blocked animation" }
 Char_AdvanceScript = { addr = 0x801CF37C, type = "func", source = "advances the character script phase from the work byte at +0x0B, clearing the +0x2B marker and the panel mode byte on completion" }
@@ -1835,6 +1836,7 @@ Char_RunStepScript_801CF38C = { addr = 0x801CF38C, type = "func", source = "runs
 
 ["emi/plchar/plp567/00"]
 Char_StartTurn = { addr = 0x801CE448, type = "func", source = "starts the character walk route through Actor_GetTurnStep, writes the direction byte and arms the step timer" }
+Char_RunStepScript_801CE514 = { addr = 0x801CE514, type = "func", source = "runs the route step script with this image's turn facings, the same body as Char_RunStepScript in this image" }
 Char_StartTurn_801CEA44 = { addr = 0x801CEA44, type = "func", source = "starts the character walk route, the same body as Char_StartTurn in this image" }
 Char_RunStepScript = { addr = 0x801CEB10, type = "func", source = "runs one route step script, selecting the turn script id at the direction byte or counting the step timer down to the next script" }
 Char_SelectScriptAndStep = { addr = 0x801CF130, type = "func", source = "starts the character script from the cue byte once func_8014DAEC reports ready, then advances the work byte at +0x03" }
@@ -1846,6 +1848,7 @@ Char_ProbeFacingCell = { addr = 0x801D05D0, type = "func", source = "the route-s
 
 ["emi/plchar/plp578/00"]
 Char_StartTurn_801CE448 = { addr = 0x801CE448, type = "func", source = "starts the character walk route, the same body as Char_StartTurn in this image" }
+Char_RunStepScript_801CE514 = { addr = 0x801CE514, type = "func", source = "runs the route step script with this image's turn facings, the same body as Char_RunStepScript in this image" }
 Char_RunStepScript = { addr = 0x801CEB38, type = "func", source = "runs one route step script, selecting the turn script id at the direction byte or counting the step timer down to the next script" }
 Char_WalkStep = { addr = 0x801CEC78, type = "func", source = "runs one field-character route step, turning and probing then playing the walk or blocked animation" }
 Char_AdvanceScript = { addr = 0x801CF160, type = "func", source = "advances the character script phase from the work byte at +0x0B, clearing the +0x2B marker and the panel mode byte on completion" }

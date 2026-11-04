@@ -21,14 +21,19 @@
  * script. The body of every Char_RunStepScript member; each passes the two
  * facing values at which it selects script 0x40 and 0x41. Every change here must verify every member
  * image. */
-#define CHAR_RUN_STEP_SCRIPT(FACING_SCRIPT_40, FACING_SCRIPT_41)                      \
+#define CHAR_RUN_STEP_SCRIPT(FACING_SCRIPT_40, FACING_SCRIPT_41)        \
+    CHAR_RUN_STEP_CASES(FACING_SCRIPT_40, 0x40, FACING_SCRIPT_41, 0x41)
+
+/* The same step with the two switch cases written in the given order: a member whose
+ * retail switch tests the 0x41 facing first passes the 0x41 case first. */
+#define CHAR_RUN_STEP_CASES(FIRST_FACING, FIRST_SCRIPT, SECOND_FACING, SECOND_SCRIPT) \
     if (g_SpadWork->direction_08 == g_SpadWork->unk_03) {                             \
         switch (g_SpadWork->direction_08) {                                           \
-            case FACING_SCRIPT_40:                                                    \
-                Actor_RequestScript(0x40);                                            \
+            case FIRST_FACING:                                                        \
+                Actor_RequestScript(FIRST_SCRIPT);                                    \
                 break;                                                                \
-            case FACING_SCRIPT_41:                                                    \
-                Actor_RequestScript(0x41);                                            \
+            case SECOND_FACING:                                                       \
+                Actor_RequestScript(SECOND_SCRIPT);                                   \
                 break;                                                                \
         }                                                                             \
         g_SpadWork->state_02++;                                                       \

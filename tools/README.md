@@ -113,8 +113,8 @@ one function. Every edit is a lead: run `check` afterwards.
 `quality.py` counts, per directory and in total: matched functions still named `func_<ADDR>`, `D_` and
 `unk_` tokens, raw width casts, harmful fake helpers, `FAKE:` notes, bodies pasted into several images
 under one name (`pasted`, one `Name.h` is the rule) and under several names (`twins`). `--queue` lists
-files worst first. `--diff BASE` compares BASE with `--to` (default `HEAD`) and exits 1 when a file the
-change touched rose in `casts`, `harmful` or `pasted`; `--gate` picks other metrics. Old debt in an
+files worst first. `--diff BASE` compares BASE with `--to` (default `HEAD`) and exits 1 when `casts`,
+`harmful` or `pasted` rose over the files the change touched (a moved body nets to zero); `--gate` picks other metrics. Old debt in an
 untouched file never fails. `report` stores the totals under `quality` in `report.json`.
 
 ## Data shapes

@@ -79,3 +79,11 @@ def test_queue_ranks_the_highest_score_first() -> None:
     high = dict.fromkeys((*quality.METRICS, "funcs"), 0) | {"pasted": 1}
     lines = quality.table({"low.c": low, "high.c": high}, 10, "file").splitlines()
     assert lines[1].endswith("high.c") and lines[2].endswith("low.c")
+
+
+def test_a_body_moved_between_touched_files_nets_to_zero() -> None:
+    old = {"a.c": {"casts": 2}, "b.h": {"casts": 0}}
+    new = {"b.h": {"casts": 2}}
+    assert quality.worse(old, new, {"a.c", "b.h"}, ("casts",)) == []
+    new = {"b.h": {"casts": 3}}
+    assert quality.worse(old, new, {"a.c", "b.h"}, ("casts",)) == ["b.h: casts 0 -> 3"]

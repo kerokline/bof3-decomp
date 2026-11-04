@@ -77,7 +77,25 @@ INCLUDE_ASM(func_801F87C4);
 
 INCLUDE_ASM(func_801F8B94);
 
-INCLUDE_ASM(func_801F8C1C);
+MATCH void func_801F8C1C(void) {
+    u8* state;
+
+    state = &D_80146875;
+    switch (*state) {
+        case 0:
+            Message_StartAreaMessage(0x26);
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
+            *state           = 1;
+            return;
+        case 1:
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
+                Game_ClearScriptActive();
+                *state     = 0;
+                D_80146874 = 0;
+            }
+            return;
+    }
+}
 
 INCLUDE_ASM(func_801F8CAC);
 
@@ -85,7 +103,25 @@ INCLUDE_ASM(func_801F8EB0);
 
 INCLUDE_ASM(func_801F9148);
 
-INCLUDE_ASM(func_801F92EC);
+MATCH void func_801F92EC(void) {
+    u8* state;
+
+    state = &D_80146875;
+    switch (*state) {
+        case 0:
+            Message_StartAreaMessage(0);
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
+            *state           = 1;
+            return;
+        case 1:
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
+                Game_ClearScriptActive();
+                *state     = 0;
+                D_80146874 = 0;
+            }
+            return;
+    }
+}
 
 MATCH void func_801F937C(void) {
 }
@@ -103,13 +139,49 @@ INCLUDE_ASM(func_801FB66C);
 
 INCLUDE_ASM(func_801FBDBC);
 
-INCLUDE_ASM(func_801FC2F0);
+MATCH void func_801FC2F0(void) {
+    u8* state;
+
+    state = &D_80146875;
+    switch (*state) {
+        case 0:
+            Message_StartAreaMessage(0x84);
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
+            *state           = 1;
+            return;
+        case 1:
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
+                Game_ClearScriptActive();
+                *state     = 0;
+                D_80146874 = 0;
+            }
+            return;
+    }
+}
 
 INCLUDE_ASM(func_801FC380);
 
 INCLUDE_ASM(func_801FC6A8);
 
-INCLUDE_ASM(func_801FC778);
+MATCH void func_801FC778(void) {
+    u8* state;
+
+    state = &D_80146875;
+    switch (*state) {
+        case 0:
+            Message_StartAreaMessage(0x4C);
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
+            *state           = 1;
+            return;
+        case 1:
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
+                Game_ClearScriptActive();
+                *state     = 0;
+                D_80146874 = 0;
+            }
+            return;
+    }
+}
 
 INCLUDE_ASM(func_801FC808);
 

@@ -4,12 +4,7 @@
 __asm__(".include \"include/match/macro.inc\"\n");
 #endif
 
-MATCH void func_801EEC24(void) {
-    BattleResultRings table;
-
-    table = D_801EEC04;
-    SYS_DISPATCH_TASK(table.handlers, 1, g_SpadWork);
-}
+#include "overlays/bmagic/func_801EEC24.h"
 
 INCLUDE_ASM(func_801EEC90);
 

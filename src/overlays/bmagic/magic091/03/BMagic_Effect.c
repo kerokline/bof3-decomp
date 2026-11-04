@@ -8,24 +8,11 @@ INCLUDE_ASM(func_801EEC10);
 
 INCLUDE_ASM(func_801EECCC);
 
-MATCH void func_801EEE3C(void) {
-    g_SpadWork->unk_09 += 1;
-    g_SpadWork->unk_0A += 1;
-    if (g_SpadWork->unk_09 == 0x10) {
-        g_SpadWork->step_01 = g_SpadWork->step_01 + 1;
-    }
-}
+#include "overlays/bmagic/func_801EEE3C.h"
 
 INCLUDE_ASM(func_801EEEA8);
 
-MATCH void func_801EEF74(void) {
-    SYS_DISPATCH_BYTE(D_801EFC64, ((u8*)g_SpadWork)[1]);
-    if (g_SpadWork->flags_00 != 0 && ((u8*)g_SpadWork)[1] != 0) {
-        Effect_SetActorMatrix();
-        func_801EF240();
-        PopMatrix();
-    }
-}
+#include "overlays/bmagic/func_801EEF74.h"
 
 INCLUDE_ASM(func_801EEFFC);
 

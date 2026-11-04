@@ -38,7 +38,15 @@ MATCH void func_801EF504(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF570);
+MATCH void func_801EF570(void) {
+    u8 timer;
+
+    timer              = g_SpadWork->unk_09 + 1;
+    g_SpadWork->unk_09 = timer;
+    if (timer == 0xA0) {
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    }
+}
 
 #include "overlays/bmagic/Effect_CountDownTimer.h"
 

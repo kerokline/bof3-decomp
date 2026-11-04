@@ -88,6 +88,6 @@ MATCH void func_801F0410(void) {
     }
 }
 
-INCLUDE_ASM(func_801F0460);
+#include "overlays/bmagic/Effect_CountDownTimerCapped.h"
 
 INCLUDE_ASM(func_801F04E0);

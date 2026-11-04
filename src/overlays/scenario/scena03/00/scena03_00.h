@@ -26,6 +26,8 @@ extern u8        D_801FCF30[];
 extern u8        D_801FCF5C[];
 
 extern Callback D_801FCF24[];
+extern s8       D_80146874;
+extern u8       D_80146875;
 
 extern u16 D_80146876;
 extern u8  D_80146874;

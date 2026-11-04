@@ -16,7 +16,12 @@ INCLUDE_ASM(func_801EED60);
 
 INCLUDE_ASM(func_801EEE4C);
 
-INCLUDE_ASM(func_801EEF1C);
+MATCH void func_801EEF1C(void) {
+    func_800A9610(g_BattleTargetSelector, 32);
+    g_SpadWork->unk_09 = 0;
+    g_SpadWork->unk_0A = 0;
+    g_SpadWork->step_01++;
+}
 
 INCLUDE_ASM(func_801EEF7C);
 

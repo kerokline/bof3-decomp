@@ -33,7 +33,13 @@ INCLUDE_ASM(func_801EF12C);
 
 INCLUDE_ASM(func_801EF1FC);
 
-INCLUDE_ASM(func_801EF268);
+MATCH void func_801EF268(void) {
+    SND_QueueSelectionFx(258);
+    D_801463D6 = g_SpadWork->unk_0A;
+    func_800A9820(g_BattleTargetSelector);
+    g_BattleState = g_BattleState | 4;
+    func_801E5988();
+}
 
 MATCH void func_801EF2CC(void) {
     Callback handlers[2] = {func_801EF324, func_801EF708};

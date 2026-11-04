@@ -22,7 +22,16 @@ INCLUDE_ASM(func_801EF08C);
 
 INCLUDE_ASM(func_801EF12C);
 
-INCLUDE_ASM(func_801EF1CC);
+MATCH void func_801EF1CC(void) {
+    u8 count;
+
+    count              = g_SpadWork->unk_0A - 1;
+    g_SpadWork->unk_0A = count;
+    if (count == 0) {
+        BATTLE_ACTIVE_WORK->unk_0B = 1;
+        g_SpadWork->unk_02         = g_SpadWork->unk_02 + 1;
+    }
+}
 
 INCLUDE_ASM(func_801EF228);
 

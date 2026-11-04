@@ -73,7 +73,7 @@ MATCH void func_801EFBA4(void) {
     }
 }
 
-INCLUDE_ASM(func_801EFBF4);
+#include "overlays/bmagic/Effect_CountDownTimerCapped.h"
 
 INCLUDE_ASM(func_801EFC74);
 

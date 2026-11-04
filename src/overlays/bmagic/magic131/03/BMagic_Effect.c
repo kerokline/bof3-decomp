@@ -79,7 +79,22 @@ INCLUDE_ASM(func_801F04C0);
 
 INCLUDE_ASM(func_801F053C);
 
-INCLUDE_ASM(func_801F058C);
+MATCH void func_801F058C(void) {
+    PartyBattler* work;
+    PartyBattler* active;
+    s8            count;
+
+    work = g_SpadWork;
+    work->unk_09 += 2;
+    work         = g_SpadWork;
+    count        = work->unk_5D - 4;
+    work->unk_5D = count;
+    if (count == 0) {
+        active = BATTLE_ACTIVE_WORK;
+        active->unk_0B--;
+        func_801E5988();
+    }
+}
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"
 

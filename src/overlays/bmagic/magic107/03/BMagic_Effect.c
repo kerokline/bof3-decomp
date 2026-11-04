@@ -16,7 +16,12 @@ INCLUDE_ASM(func_801EEC5C);
 
 INCLUDE_ASM(func_801EEDA0);
 
-INCLUDE_ASM(func_801EEE50);
+MATCH void func_801EEE50(void) {
+    g_SpadWork->unk_0B = 0;
+    g_SpadWork->unk_09 = 0;
+    g_SpadWork->unk_0A = 0;
+    g_SpadWork->step_01++;
+}
 
 MATCH void func_801EEEA0(void) {
     g_SpadWork->unk_09 += 1;

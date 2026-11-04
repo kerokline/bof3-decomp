@@ -83,7 +83,12 @@ MATCH void func_801F007C(void) {
 
 INCLUDE_ASM(func_801F009C);
 
-INCLUDE_ASM(func_801F01C4);
+MATCH void func_801F01C4(void) {
+    g_SpadWork->unk_0B = 0;
+    g_SpadWork->unk_09 = 64;
+    func_801F03D8();
+    g_SpadWork->unk_02++;
+}
 
 MATCH void func_801F0214(void) {
     u8 timer;

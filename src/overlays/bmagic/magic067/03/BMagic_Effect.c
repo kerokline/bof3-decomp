@@ -91,7 +91,12 @@ MATCH void func_801F038C(void) {
     SYS_DISPATCH_TASK(handlers.handlers, 2, g_SpadWork);
 }
 
-INCLUDE_ASM(func_801F03EC);
+MATCH void func_801F03EC(void) {
+    g_SpadWork->unk_0B = 0;
+    g_SpadWork->unk_09 = 0;
+    Actor_SelectScript(3);
+    g_SpadWork->unk_02++;
+}
 
 MATCH void func_801F043C(void) {
     func_8014D978();

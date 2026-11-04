@@ -35,7 +35,12 @@ INCLUDE_ASM(func_801EF910);
 
 INCLUDE_ASM(func_801EF9E8);
 
-INCLUDE_ASM(func_801EFA70);
+MATCH void func_801EFA70(void) {
+    if (func_8014DAEC() & BYTE_MASK) {
+        BATTLE_ACTIVE_WORK->unk_0B--;
+        g_SpadWork->unk_02++;
+    }
+}
 
 MATCH void func_801EFAD4(void) {
     func_801E5988();

@@ -36,7 +36,30 @@ INCLUDE_ASM(func_801EFE14);
 
 /* Follows BMAGIC_PROJECT_ACTOR_MATRIX (bmagic.h), but the work pointer lives in $a1 and a
  * type-13 branch loads a word into the rotation before the projection. */
-INCLUDE_ASM(func_801EFEB8);
+MATCH void func_801EFEB8(void) {
+    PartyBattler* work;
+    SVECTOR       pos;
+    SVECTOR       rot;
+    MATRIX        matrix;
+    long          flags;
+
+    PushMatrix();
+    work   = g_SpadWork;
+    rot.vx = 0;
+    rot.vy = 0;
+    rot.vz = 0;
+    if (work->slot == 0xD) {
+        rot.vz = work->unk_0C;
+    }
+    pos.vx = (work->coord_x_34.raw >> 9) - 0x4000;
+    pos.vy = (work->coord_y_38.raw >> 9) - 0x4000;
+    pos.vz = -work->word_3C.half.span_3E / 2;
+    RotTrans(&pos, &matrix.t, &flags);
+    RotMatrix(&rot, &matrix);
+    MulMatrix2((MATRIX*)g_CameraMatrix, &matrix);
+    SetRotMatrix(&matrix);
+    SetTransMatrix(&matrix);
+}
 
 INCLUDE_ASM(func_801EFF84);
 

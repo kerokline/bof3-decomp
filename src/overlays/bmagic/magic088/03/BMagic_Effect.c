@@ -76,7 +76,15 @@ MATCH void func_801EF9DC(void) {
 
 INCLUDE_ASM(func_801EFA2C);
 
-INCLUDE_ASM(func_801EFA94);
+MATCH void func_801EFA94(void) {
+    PartyBattler* work;
+
+    work         = g_SpadWork;
+    work->unk_09 = work->unk_09 - 2;
+    if (g_SpadWork->unk_09 == 0) {
+        func_801E5988();
+    }
+}
 
 INCLUDE_ASM(func_801EFAE8);
 

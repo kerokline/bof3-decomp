@@ -82,7 +82,17 @@ MATCH void func_801EFFB8(void) {
 
 INCLUDE_ASM(func_801F0040);
 
-INCLUDE_ASM(func_801F00D8);
+MATCH void func_801F00D8(void) {
+    PartyBattler* work;
+
+    work         = g_SpadWork;
+    work->unk_09 = work->unk_09 + 2;
+    work         = g_SpadWork;
+    work->unk_0A = work->unk_0A - 1;
+    if (work->unk_0A == 0) {
+        func_801E5988();
+    }
+}
 
 MATCH void Effect_SetActorMatrix_801F0138(void) {
     SVECTOR pos;

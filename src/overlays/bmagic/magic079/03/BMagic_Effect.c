@@ -35,7 +35,17 @@ INCLUDE_ASM(func_801EEF34);
 
 INCLUDE_ASM(func_801EEFB8);
 
-INCLUDE_ASM(func_801EF048);
+MATCH void func_801EF048(void) {
+    PartyBattler* work;
+
+    work         = g_SpadWork;
+    work->unk_0A = work->unk_0A - 1;
+    work         = g_SpadWork;
+    work->unk_0B = work->unk_0B - 1;
+    if (work->unk_0B == 0) {
+        func_801E5988();
+    }
+}
 
 MATCH void func_801EF0A8(void) {
     SYS_DISPATCH_BYTE(D_801F02C8, g_SpadWork->unk_02);
@@ -54,7 +64,17 @@ INCLUDE_ASM(func_801EF23C);
 
 INCLUDE_ASM(func_801EF2BC);
 
-INCLUDE_ASM(func_801EF348);
+MATCH void func_801EF348(void) {
+    PartyBattler* work;
+
+    work         = g_SpadWork;
+    work->unk_0A = work->unk_0A + 1;
+    work         = g_SpadWork;
+    work->unk_0B = work->unk_0B - 1;
+    if (work->unk_0B == 0) {
+        func_801E5988();
+    }
+}
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"
 

@@ -4,66 +4,94 @@
     tools/template_try.py ROWS.tsv [--dry-run]
 
 Each row of ROWS.tsv is `TARGET@NAME`, a tab, then `TEMPLATE@NAME`: the assembly function and the
-lifted function it resembles (`tools/dups.py near` and `tools/template_diff.py` find pairs). For
-each row the tool replaces the target's `INCLUDE_ASM(name);` line with the template's definition
-under the target's name and runs `tools/match.sh`. An exact result stays in the tree; any other
-result restores the file. One line per row: `EXACT`, `FAIL` with the first difference, `SKIP` with
-the reason. A row that ran stays a lead: run `meson compile -C build/meson check-<image>`, then give
-the body its evidence-based name and the shared-body treatment of docs/conventions.md.
+lifted function it resembles (`tools/dups.py near --full` and `tools/template_diff.py` find pairs;
+other columns are ignored). The tool lines up the template's instructions with the target's. Where
+only a relocation symbol differs (`%hi/%lo(D_x)`, `jal func_x`), it names the target's symbol in
+the template's C and declares it like the template's; where only an immediate differs and that
+literal occurs once in the body, it writes the target's literal. It then puts the body in place of
+the target's `INCLUDE_ASM(name);` line (`tools/try_body.py`) and runs `tools/match.sh`. An exact
+result stays in the tree; any other result restores the files. One line per row: `EXACT`,
+`REMAP-EXACT` (after a rename or literal), `FAIL` with the number of differing instructions and the
+first difference, `SKIP` with the reason. A row that ran stays a lead: run `meson compile -C
+build/meson check-<image>`, then give the body its evidence-based name and the shared-body
+treatment of docs/conventions.md.
 """
 
 from __future__ import annotations
 
 import argparse
 import re
-import subprocess
 from pathlib import Path
 
+import try_body
 from bof3.source.ctext import find_definition, read
-from bof3.source.index import find, load_index
+from bof3.source.index import Func, find, load_index
+from bof3.source.remap import (
+    Plan,
+    align,
+    declaration,
+    diff_count,
+    macro_edits,
+    object_insns,
+    read_listing,
+    rename,
+    substitute_literals,
+    target_insns,
+    used_defines,
+)
 
 ROOT = Path(__file__).resolve().parent.parent
-QUOTED = re.compile(r'^\s*#\s*include\s+"([^"]+)"', re.M)
 
 
-def locate(
-    src: str, name: str, depth: int = 3, seen: set[str] | None = None
-) -> tuple[str, int, int] | None:
+def locate(src: str, name: str, depth: int = 3) -> tuple[str, int, int] | None:
     """Find where ``name`` is defined for the C file ``src``, or in a header it includes."""
-    seen = seen if seen is not None else set()
-    if src in seen:
-        return None
-    seen.add(src)
-    text = read(ROOT, src)
-    span = find_definition(text, name)
-    if span:
-        return src, *span
-    if depth:
-        for inc in QUOTED.findall(text):
-            for base in (str(Path(src).parent), "src/shared", "src", "include"):
-                candidate = (Path(base) / inc).as_posix()
-                if (ROOT / candidate).is_file() and candidate.startswith("src/"):
-                    found = locate(candidate, name, depth - 1, seen)
-                    if found:
-                        return found
+    for path in try_body.closure(ROOT, src, depth):
+        span = find_definition(read(ROOT, path), name)
+        if span:
+            return path, *span
     return None
 
 
-def match(ref: str) -> tuple[bool, str]:
-    """Run ``tools/match.sh`` on one function; return (exact, last lines)."""
-    target, _, name = ref.partition("@")
-    result = subprocess.run(
-        ["sh", "tools/match.sh", target, name],
-        cwd=ROOT,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    tail = (result.stdout + result.stderr).strip().splitlines()[-3:]
-    return result.returncode == 0, " | ".join(x.strip() for x in tail)[:230]
+def analyse(target: Func, template: Func) -> Plan | None:
+    """Line up the template's instructions with the target's; None when that is not possible."""
+    if not template.src:
+        return None
+    obj = template.src.replace("/", "+") + ".o"
+    theirs = object_insns(ROOT, obj, template.name, len(template.words))
+    listing = read_listing(ROOT, target.image)
+    lines = [listing.get(target.addr + 4 * i) for i in range(len(target.words))]
+    if theirs is None or None in lines:
+        return None
+    return align(theirs, target_insns(target.words, lines), template.words)  # type: ignore[arg-type]
 
 
-def attempt(funcs, row: str, dry: bool) -> str:
+def remap(plan: Plan, template: Func, body: str) -> str | None:
+    """Apply the plan's renames and literals to ``body`` and append the declarations."""
+    texts = [read(ROOT, f) for f in try_body.closure(ROOT, template.src or "")]
+    decls = []
+    for name in plan.keep:
+        found = next((d for t in texts if (d := declaration(t, name))), None)
+        if found:
+            decls.append("@decl " + found)
+    for old, new in plan.symbols.items():
+        body = rename(body, old, new) or ""
+        if not body:
+            return None
+        found = next((d for t in texts if (d := declaration(t, old))), None)
+        if found:
+            decls.append("@decl " + re.sub(r"\b" + re.escape(old) + r"\b", new, found))
+    pairs, defines = macro_edits(body, plan.literals, texts)
+    decls += ["@decl " + d for d in defines]
+    if pairs:
+        body = substitute_literals(body, pairs) or ""
+    named = {d.split()[1] for d in defines}
+    decls += [
+        "@decl " + d for d in used_defines(body, texts) if d.split()[1] not in named
+    ]
+    return "\n".join([body, *decls]) if body else None
+
+
+def attempt(funcs: list[Func], row: str, dry: bool) -> str:
     """Try one row and return its report line."""
     target_ref, template_ref = row.split("\t")[:2]
     target, template = find(funcs, target_ref), find(funcs, template_ref)
@@ -71,9 +99,7 @@ def attempt(funcs, row: str, dry: bool) -> str:
         return f"SKIP {target_ref} is not an INCLUDE_ASM function"
     if template.status != "C" or not template.src:
         return f"SKIP {template_ref} is not lifted C"
-    marker = f"INCLUDE_ASM({target.name});"
-    text = read(ROOT, target.src)
-    if marker not in text:
+    if f"INCLUDE_ASM({target.name});" not in read(ROOT, target.src):
         return f"SKIP {target_ref} already has a body"
     where = locate(template.src, template.name)
     if where is None:
@@ -83,16 +109,26 @@ def attempt(funcs, row: str, dry: bool) -> str:
         r"\b" + re.escape(template.name) + r"\b",
         target.name,
         read(ROOT, source)[start:end],
-    )
+    ).strip("\n")
+    pair = f"{target_ref} <- {template_ref}"
+    plan = analyse(target, template)
+    kind, differ = "EXACT", diff_count(template.words, target.words)
+    if plan:
+        differ = plan.total
+        if plan.hard:
+            return f"FAIL {pair}: {differ} differ, {plan.first_hard}"
+        body = remap(plan, template, body) or ""
+        if not body:
+            return (
+                f"FAIL {pair}: {differ} differ, a symbol or literal is not in the body"
+            )
+        kind = "REMAP-EXACT" if plan.edits else "EXACT"
     if dry:
-        return f"DRY {target_ref} <- {template_ref}\n{body}"
-    path = ROOT / target.src
-    path.write_text(text.replace(marker, body.strip("\n")), encoding="utf-8")
-    exact, detail = match(target_ref)
-    if exact:
-        return f"EXACT {target_ref} <- {template_ref} in {target.src}"
-    path.write_text(text, encoding="utf-8")
-    return f"FAIL {target_ref} <- {template_ref}: {detail}"
+        return f"DRY {pair}\n{body}"
+    status, detail = try_body.attempt(ROOT, target, body)
+    if status == "EXACT":
+        return f"{kind} {pair} in {detail}"
+    return f"{status} {pair}: {differ} differ, {detail}"
 
 
 def main(argv: list[str] | None = None) -> int:

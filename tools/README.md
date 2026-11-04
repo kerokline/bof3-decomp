@@ -18,6 +18,7 @@ as `+`. Run each Python tool with `.venv/bin/python tools/<name>.py` or directly
 | Permute a near match                     | `tools/permuter_import.py src/<path>/<Name>.c`                           | [permuter](../docs/toolchain.md#permuter)                 |
 | Find a template for an assembly function | `tools/template_diff.py <target>@<func>`                                 | [template diff](#templates)                               |
 | Try templates in batch                   | `tools/template_try.py rows.tsv`                                         | [template diff](#templates)                               |
+| Try one C body for an assembly function  | `tools/try_body.py <target>@<func> body.c`                               | [try body](#try-body)                                     |
 | Find twins in one image                  | `bin/coddog match <target> <func> -t 0.95`                               | [coddog](../docs/toolchain.md#coddog)                     |
 | Find alike functions across images       | `tools/dups.py near`                                                     | [duplicates](#duplicates-and-names)                       |
 | List same-name groups and split names    | `tools/dups.py shared-names`, `tools/dups.py split-names`                | same                                                      |
@@ -46,18 +47,39 @@ tools/template_diff.py emi/plchar/plp016/00@func_801CF610
 tools/template_diff.py <target>@<func> <template target>@<template func>
 ```
 
-`template_try.py` takes rows of `TARGET@NAME<TAB>TEMPLATE@NAME`, replaces each `INCLUDE_ASM` line with
-the template's body under the target's name, runs `tools/match.sh`, and keeps only the exact ones. A
-kept body is a lead: run `check-<image>`, then name it from evidence and share it
+`template_try.py` takes rows of `TARGET@NAME<TAB>TEMPLATE@NAME` (`dups.py near --full` writes them,
+cheapest first). It lines up the template's instructions with the target's. Where only a
+relocation symbol differs, it names the target's symbol in the template's C; where only an
+immediate differs and that literal (or the numeric macro that holds it) occurs once, it writes the
+target's value. It declares what the body now uses in the image header, then calls `try_body.py`.
+Each row prints `EXACT`, `REMAP-EXACT` (after a rename or literal), `FAIL` with the number of
+differing instructions and the first difference, or `SKIP`. A kept body is a lead: run
+`check-<image>`, then name it from evidence and share it
 ([shared bodies](../docs/conventions.md#shared-bodies)). Both tools read the function index
 `build/func_index.json.gz`, built from the images on first use; add `--rebuild` after a build.
 They need `rapidfuzz` for the search (`tools/setup.sh --matching`).
 
+### Try body
+
+`try_body.py` puts a C body in place of one `INCLUDE_ASM(<func>);` line, runs `tools/match.sh`, and
+keeps every edit only on `match`; any other result restores each touched file.
+
+```sh
+tools/try_body.py <target>@<func> body.c        # or `-` for stdin
+tools/try_body.py --batch rows.tsv              # rows: <target>@<func> <TAB> body.c
+```
+
+A line `@decl <declaration>` in the body file (an `extern`, a prototype or a `#define`) is removed from
+the body and added to the image header, the first include of the C file, unless an include of that
+file already declares the name. Output: `EXACT`, `FAIL` with the first difference, or `SKIP`.
+
 ## Duplicates and names
 
 `dups.py near` groups functions with alike opcodes across all images and names the matched template of
-each assembly function. `shared-names` lists one name that several bodies use, worst first.
-`split-names` lists byte-equal bodies that carry several names. All print tab-separated rows.
+each assembly function; `near --full` writes one row per assembly function with its cheapest template
+and `diff_count`, the instructions that differ (jump targets ignored), cheapest first. `shared-names`
+lists one name that several bodies use, worst first. `split-names` lists byte-equal bodies that carry
+several names. All print tab-separated rows.
 
 ## Signatures
 

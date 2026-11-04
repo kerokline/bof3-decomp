@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 
 import template_try
+import try_body
 from bof3.source.index import Func
 
 DEF = "int Lifted(int a)\n{\n    return a + 1;\n}\n"
@@ -15,6 +16,7 @@ DEF = "int Lifted(int a)\n{\n    return a + 1;\n}\n"
 @pytest.fixture
 def root(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
     monkeypatch.setattr(template_try, "ROOT", tmp_path)
+    monkeypatch.setattr(try_body, "ROOT", tmp_path)
     return tmp_path
 
 
@@ -84,14 +86,14 @@ def test_attempt_keeps_an_exact_body_and_restores_a_failed_one(
     write(root, "src/a/b.c", "INCLUDE_ASM(func_8001);\n")
     funcs = [func("Lifted", "C", "src/a/a.c"), func("func_8001", "ASM", "src/a/b.c")]
     row = "exe/a@func_8001\texe/a@Lifted"
-    monkeypatch.setattr(template_try, "match", lambda ref: (True, ""))
+    monkeypatch.setattr(try_body, "match", lambda ref, root: (True, ""))
     assert template_try.attempt(funcs, row, dry=False).startswith("EXACT ")
     assert "int func_8001" in (root / "src/a/b.c").read_text(encoding="utf-8")
     write(root, "src/a/b.c", "INCLUDE_ASM(func_8001);\n")
-    monkeypatch.setattr(template_try, "match", lambda ref: (False, "diff at 0x4"))
+    monkeypatch.setattr(try_body, "match", lambda ref, root: (False, "diff at 0x4"))
     assert (
         template_try.attempt(funcs, row, dry=False)
-        == f"FAIL {row.replace(chr(9), ' <- ')}: diff at 0x4"
+        == f"FAIL {row.replace(chr(9), ' <- ')}: 0 differ, diff at 0x4"
     )
     assert (root / "src/a/b.c").read_text(
         encoding="utf-8"

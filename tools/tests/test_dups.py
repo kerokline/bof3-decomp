@@ -28,7 +28,7 @@ def func(
 
 
 def args(**kw: object) -> argparse.Namespace:
-    return argparse.Namespace(**{"rebuild": False, "out": None, **kw})
+    return argparse.Namespace(**{"rebuild": False, "out": None, "full": False, **kw})
 
 
 def serve(monkeypatch: pytest.MonkeyPatch, funcs: list[Func]) -> None:
@@ -163,3 +163,27 @@ def test_near_groups_alike_sequences(
     captured = capsys.readouterr()
     assert len(captured.out.splitlines()) == 2
     assert "groups 1, with a matched and an assembly member 1" in captured.err
+
+
+def test_near_full_lists_each_assembly_function_with_its_cheapest_template(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    pytest.importorskip("rapidfuzz")
+    body = (ADDIU | 1,) * 5 + (JR,)
+    near = (ADDIU | 1,) * 4 + (ADDIU | 2, JR)
+    serve(
+        monkeypatch,
+        [
+            func("far", near, sha1="h1", addr=0x1000),
+            func("close", body, sha1="h2", addr=0x2000),
+            func("func_1", body, status="ASM", sha1="h3", addr=0x3000),
+            func("func_2", body, status="ASM", sha1="h4", addr=0x4000),
+        ],
+    )
+    assert dups.near(args(threshold=0.9, min_words=6, full=True)) == 0
+    rows = [r.split("\t") for r in capsys.readouterr().out.splitlines()]
+    assert rows[0][:2] == ["#target", "template"]
+    assert [(r[0], r[1], r[3]) for r in rows[1:]] == [
+        ("exe/a@0x00003000", "exe/a@0x00002000", "0"),
+        ("exe/a@0x00004000", "exe/a@0x00002000", "0"),
+    ]

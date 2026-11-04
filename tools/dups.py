@@ -3,6 +3,9 @@
 
     tools/dups.py near [-t 0.9] [-m 6] [-o FILE]   groups of functions with alike opcodes,
                                                    and the matched template of each assembly one
+    tools/dups.py near --full [-o FILE]            one row per assembly function that has a
+                                                   template, cheapest first; the first two columns
+                                                   are the input of tools/template_try.py
     tools/dups.py shared-names                     one name used in several places, worst first
     tools/dups.py split-names                      byte-equal bodies that carry several names
 
@@ -22,6 +25,7 @@ import sys
 from pathlib import Path
 
 from bof3.source.index import CACHE, Func, load_index, opcode_string
+from bof3.source.remap import diff_count
 
 ROOT = Path(__file__).resolve().parent.parent
 PLACEHOLDER = ("func_", "D_", "jtbl_")
@@ -84,6 +88,7 @@ def near(args: argparse.Namespace) -> int:
     order = sorted(range(len(seqs)), key=lambda i: (-len(adjacent[i]), not has_c[i], i))
     assigned: set[int] = set()
     rows = []
+    groups = []
     for centre in order:
         if centre in assigned:
             continue
@@ -92,6 +97,9 @@ def near(args: argparse.Namespace) -> int:
         row = near_row(by_seq, seqs, adjacent, centre, members)
         if row:
             rows.append(row)
+            groups.append(members)
+    if args.full:
+        return near_full(args, by_seq, seqs, adjacent, groups)
     rows.sort(
         key=lambda r: (-r["candidate"], -r["asm_bytes"], -r["members"] * r["size_max"])
     )
@@ -108,6 +116,43 @@ def near(args: argparse.Namespace) -> int:
         f"groups {len(rows)}, with a matched and an assembly member {len(candidates)}, "
         f"assembly functions with a template {sum(r['asm_with_template'] for r in candidates)}, "
         f"their bytes {sum(r['asm_bytes'] for r in candidates)}",
+        file=sys.stderr,
+    )
+    return 0
+
+
+TEMPLATE_POOL = 8
+
+
+def near_full(args, by_seq, seqs, adjacent, groups) -> int:
+    """Write one row per assembly function that has a template, with the cheapest template."""
+    header = ["#target", "template", "similarity", "diff_count", "size", "group_size"]
+    rows = []
+    for members in groups:
+        funcs = [f for i in members for f in by_seq[seqs[i]]]
+        for i in members:
+            for f in (g for g in by_seq[seqs[i]] if g.status == "ASM" and g.src):
+                pool: dict[str, tuple[float, Func]] = {}
+                for j in members:
+                    sim = 1.0 if j == i else adjacent[i].get(j)
+                    for c in (g for g in by_seq[seqs[j]] if g.status == "C"):
+                        if sim is not None and sim > pool.get(c.sha1, (0.0,))[0]:
+                            pool[c.sha1] = (sim, c)
+                best = min(
+                    sorted(pool.values(), key=lambda p: -p[0])[:TEMPLATE_POOL],
+                    key=lambda p: (diff_count(p[1].words, f.words), -p[0]),
+                    default=None,
+                )
+                if best:
+                    rows.append([
+                        f.ref, best[1].ref, f"{best[0]:.3f}",
+                        diff_count(best[1].words, f.words), f.size, len(funcs),
+                    ])  # fmt: skip
+    rows.sort(key=lambda r: (r[3], r[4], r[0]))
+    emit(args, header, rows)
+    print(
+        f"assembly functions with a template {len(rows)}, "
+        f"with no instruction differing {sum(r[3] == 0 for r in rows)}",
         file=sys.stderr,
     )
     return 0
@@ -245,6 +290,11 @@ def main(argv: list[str] | None = None) -> int:
         verb = verbs.add_parser(name, help=help_text)
         verb.add_argument("-o", "--out", help="write the table here instead of stdout")
         if name == "near":
+            verb.add_argument(
+                "--full",
+                action="store_true",
+                help="one row per assembly function with a template, by diff_count",
+            )
             verb.add_argument(
                 "-t", "--threshold", type=float, default=0.9, help="similarity (0.9)"
             )

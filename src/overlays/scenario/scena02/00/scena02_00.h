@@ -9,6 +9,10 @@
 /* The four script variable bytes read as one word. */
 #define g_ScriptVarsWord (*(s32*)&g_ScriptVars)
 
+extern u8 D_80146874;
+
+extern u8 D_80146875;
+
 extern u32      D_801F6C00;
 extern Callback D_801FE294[];
 

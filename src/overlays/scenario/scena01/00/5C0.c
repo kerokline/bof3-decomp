@@ -99,11 +99,67 @@ INCLUDE_ASM(func_801FCC24);
 MATCH void func_801FCCF4(void) {
 }
 
-INCLUDE_ASM(func_801FCCFC);
+MATCH void func_801FCCFC(void) {
+    u8* state;
 
-INCLUDE_ASM(func_801FCD9C);
+    state = &D_80146875;
+    switch (*state) {
+        case 0:
+            Message_StartAreaMessage(0x18);
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
+            *state           = 1;
+            return;
+        case 1:
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
+                Game_ClearScriptActive();
+                D_80146865 = 0;
+                D_80146866 = 0;
+                *state     = 0;
+                D_80146874 = 0;
+            }
+            return;
+    }
+}
 
-INCLUDE_ASM(func_801FCE30);
+MATCH void func_801FCD9C(void) {
+    u8* state;
+
+    state = &D_80146875;
+    switch (*state) {
+        case 0:
+            Message_StartAreaMessage(0x34);
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
+            *state           = 1;
+            return;
+        case 1:
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
+                Game_ClearScriptActive();
+                *state     = 0;
+                D_80146874 = 0x6;
+            }
+            return;
+    }
+}
+
+MATCH void func_801FCE30(void) {
+    u8* state;
+
+    state = &D_80146875;
+    switch (*state) {
+        case 0:
+            Message_StartAreaMessage(0x34);
+            g_GameStateIndex = GAME_REQUEST_MESSAGE;
+            *state           = 1;
+            return;
+        case 1:
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
+                Game_ClearScriptActive();
+                *state     = 0;
+                D_80146874 = 0;
+            }
+            return;
+    }
+}
 
 INCLUDE_ASM(func_801FCEC0);
 

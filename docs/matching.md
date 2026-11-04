@@ -8,12 +8,16 @@ verdict; a score, a marker or a disassembler opinion is a lead.
 Take the cheapest route first and move on after one honest try. `tools/worklist.py` ranks the open
 functions by route ([find work](../CONTRIBUTING.md#find-work)).
 
-| # | Route         | Command                                                                   | Move on when                                            |
-| - | ------------- | ------------------------------------------------------------------------- | ------------------------------------------------------- |
-| 1 | Generator     | `tools/gen_body.py <shape> --dry-run`, then without `--dry-run`           | the shape is `branch`, or the body is not `EXACT`       |
-| 2 | Template      | `tools/template_try.py rows.tsv` (rows from `tools/dups.py near --full`)  | the row is `FAIL`, or the template has `diff_count` > 3 |
-| 3 | Template edit | `tools/template_diff.py <target>@<func>`, then up to three edits          | three edits leave a difference                          |
-| 4 | Draft         | m2c draft, `tools/match.sh`, [diagnose](#diagnose), [permuter](#permuter) | three tries per form fail                               |
+| # | Route           | Command                                                                   | Move on when                                            |
+| - | --------------- | ------------------------------------------------------------------------- | ------------------------------------------------------- |
+| 1 | Generator       | `tools/gen_body.py <shape> --dry-run`, then without `--dry-run`           | the shape is `branch`, or the body is not `EXACT`       |
+| 2 | Template        | `tools/template_try.py rows.tsv` (rows from `tools/dups.py near --full`)  | the row is `FAIL`, or the template has `diff_count` > 3 |
+| 3 | Template edit   | `tools/template_diff.py <target>@<func>`, then up to three edits          | three edits leave a difference                          |
+| 4 | m2c sweep, seed | `tools/m2c_sweep.py`, `tools/seed.py` ([tools](../tools/README.md))       | no exact body from the seed                             |
+| 5 | Hand loop       | m2c draft, `tools/match.sh`, [diagnose](#diagnose), [permuter](#permuter) | three structurally different tries fail                 |
+
+Budget: three structurally different tries per function (a different shape, not a tweak of the same
+one). Then leave the hint and report `BLOCKED <reason>`.
 
 A route that gives `EXACT` still needs `check-<image>`, a name from evidence and the shared-body
 treatment ([shared bodies](conventions.md#shared-bodies)). When you give up, leave a hint above the

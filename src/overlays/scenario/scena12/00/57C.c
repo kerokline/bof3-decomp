@@ -243,7 +243,13 @@ MATCH void func_801FCFD4(void) {
     func_801C1630();
 }
 
-INCLUDE_ASM(func_801FD018);
+MATCH void func_801FD018(void) {
+    EMI_LoaderStreamFamily(7, 4, 2, 0);
+    func_801C1400(0);
+    func_801C187C(4);
+    func_801C187C(2);
+    func_801C1630();
+}
 
 MATCH void func_801FD064(void) {
     EMI_LoaderStreamFamily(7, 5, 2, 0);

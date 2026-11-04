@@ -39,7 +39,25 @@ INCLUDE_ASM(func_801EF64C);
 
 /* Follows BMAGIC_PROJECT_ACTOR_MATRIX (bmagic.h), but rot.vx starts at 0x400 and a halfword
  * table indexed by the work byte at +0x08 feeds the rotation. */
-INCLUDE_ASM(func_801EF72C);
+MATCH void func_801EF72C(void) {
+    SVECTOR pos;
+    SVECTOR rot;
+    MATRIX  matrix;
+    long    flags;
+
+    PushMatrix();
+    rot.vx = 0x400;
+    rot.vy = D_801EFC9C[g_SpadWork->unk_08];
+    rot.vz = 0;
+    pos.vx = (g_SpadWork->coord_x_34.raw >> 9) - 0x4000;
+    pos.vy = (g_SpadWork->coord_y_38.raw >> 9) - 0x4000;
+    pos.vz = -g_SpadWork->word_3C.half.span_3E / 2;
+    RotTrans(&pos, &matrix.t, &flags);
+    RotMatrix(&rot, &matrix);
+    MulMatrix2((MATRIX*)g_CameraMatrix, &matrix);
+    SetRotMatrix(&matrix);
+    SetTransMatrix(&matrix);
+}
 
 INCLUDE_ASM(func_801EF7F8);
 

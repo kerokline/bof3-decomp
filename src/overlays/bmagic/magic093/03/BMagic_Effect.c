@@ -51,7 +51,7 @@ MATCH void func_801EF710(void) {
 MATCH void func_801EF750(void) {
     PartyBattler* work;
 
-    work = g_SpadWork;
+    work         = g_SpadWork;
     work->unk_09 = work->unk_09 - 1;
     if (work->unk_09 == 0) {
         work         = (PartyBattler*)D_801EB4E0;
@@ -59,7 +59,6 @@ MATCH void func_801EF750(void) {
         Actor_Clear();
     }
 }
-
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"
 

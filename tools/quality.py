@@ -17,9 +17,10 @@ Metrics, counted inside ``MATCH`` function bodies unless noted:
               file of another image: one ``Name.h`` is the rule (docs/conventions.md, Shared bodies)
 - ``twins``   the same, under another name; sharing needs one evidence name first (trended)
 
-The gate covers ``casts``, ``harmful`` and ``pasted``; a new match may add a ``func_`` name or a
-``D_`` reference, so ``addr``, ``names``, ``notes`` and ``twins`` are trended, not gated (``--gate`` changes
-the set). A file the change did not touch never fails, so old debt never blocks.
+The gate sums each metric over the touched files, so a body moved between them nets to zero.
+It covers ``casts``, ``harmful`` and ``pasted``. A new match may add a ``func_`` name or a ``D_``
+reference, so ``addr``, ``names``, ``notes`` and ``twins`` are trended, not gated (``--gate``
+changes the set). A file the change did not touch never counts, so old debt never blocks.
 """
 
 from __future__ import annotations
@@ -161,15 +162,19 @@ def worse(
     changed: Iterable[str],
     gate: Iterable[str] = GATED,
 ) -> list[str]:
-    """Return one line per touched file whose gated metric rose."""
+    """Return one line per touched file whose gated metric rose, for each metric whose total
+    over the touched files rose; a body moved between touched files nets to zero."""
+    paths = sorted(set(changed) & (old.keys() | new.keys()))
     lines = []
-    for path in sorted(set(changed) & new.keys()):
-        before = old.get(path, {})
-        for metric in gate:
-            if new[path][metric] > before.get(metric, 0):
-                lines.append(
-                    f"{path}: {metric} {before.get(metric, 0)} -> {new[path][metric]}"
-                )
+    for metric in gate:
+        before = {p: old.get(p, {}).get(metric, 0) for p in paths}
+        after = {p: new.get(p, {}).get(metric, 0) for p in paths}
+        if sum(after.values()) > sum(before.values()):
+            lines += [
+                f"{p}: {metric} {before[p]} -> {after[p]}"
+                for p in paths
+                if after[p] > before[p]
+            ]
     return lines
 
 

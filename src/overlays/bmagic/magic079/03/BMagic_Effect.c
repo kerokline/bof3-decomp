@@ -89,7 +89,17 @@ MATCH void func_801EFBEC(void) {
     }
 }
 
-INCLUDE_ASM(func_801EFC74);
+MATCH void func_801EFC74(void) {
+    PartyBattler* src;
+
+    src                    = g_BattleSelectedActor;
+    g_SpadWork->coord_x_34 = src->coord_x_34;
+    g_SpadWork->coord_y_38 = src->coord_y_38;
+    g_SpadWork->word_3C    = src->word_3C;
+    g_SpadWork->unk_09     = 4;
+    g_SpadWork->unk_0A     = 0xB0;
+    g_SpadWork->unk_02     = g_SpadWork->unk_02 + 1;
+}
 
 #include "overlays/bmagic/Effect_CountUpAndStep.h"
 

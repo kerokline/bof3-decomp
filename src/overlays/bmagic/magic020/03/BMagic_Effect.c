@@ -14,7 +14,18 @@ INCLUDE_ASM(func_801EECC0);
 
 INCLUDE_ASM(func_801EF0F8);
 
-INCLUDE_ASM(func_801EF234);
+MATCH void func_801EF234(void) {
+    u8 timer;
+
+    func_801EFD88();
+    if (g_SpadWork->unk_0B == 0) {
+        timer              = g_SpadWork->unk_09 - 1;
+        g_SpadWork->unk_09 = timer;
+        if (timer == 0) {
+            g_SpadWork->step_01 = g_SpadWork->step_01 + 1;
+        }
+    }
+}
 
 INCLUDE_ASM(func_801EF2A8);
 
@@ -32,8 +43,16 @@ INCLUDE_ASM(func_801EF498);
 
 INCLUDE_ASM(func_801EF518);
 
-/* Template: area125/13 func_801F2CD8 reads unk_01 of the effect struct, which this image's struct lacks; compile fails. */
-INCLUDE_ASM(func_801EF5A4);
+MATCH void func_801EF5A4(void) {
+    u8 timer;
+
+    func_8014DAEC();
+    timer              = g_SpadWork->unk_09 - 1;
+    g_SpadWork->unk_09 = timer;
+    if (timer == 0) {
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    }
+}
 
 INCLUDE_ASM(func_801EF608);
 

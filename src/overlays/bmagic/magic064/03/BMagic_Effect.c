@@ -85,8 +85,16 @@ INCLUDE_ASM(func_801F009C);
 
 INCLUDE_ASM(func_801F01C4);
 
-/* Template: area125/13 func_801F2CD8 reads unk_01 of the effect struct, which this image's struct lacks; compile fails. */
-INCLUDE_ASM(func_801F0214);
+MATCH void func_801F0214(void) {
+    u8 timer;
+
+    func_801F03D8();
+    timer              = g_SpadWork->unk_09 - 1;
+    g_SpadWork->unk_09 = timer;
+    if (timer == 0) {
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    }
+}
 
 INCLUDE_ASM(func_801F0278);
 

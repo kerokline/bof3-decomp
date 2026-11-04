@@ -24,8 +24,7 @@ git clone https://github.com/raulcorreia7/bof3-decomp.git
 cd bof3-decomp
 tools/setup.sh --dev --no-payloads --no-sdk
 meson setup build/meson
-meson compile -C build/meson format-check check-headers check-tree include-asm
-meson test -C build/meson
+meson compile -C build/meson pre-push     # every check that needs no disc, one line each
 ```
 
 With your own US disc in `inputs/external/` ([how](inputs/README.md)) you can also build and match:
@@ -33,10 +32,12 @@ With your own US disc in `inputs/external/` ([how](inputs/README.md)) you can al
 ```sh
 tools/setup.sh --dev
 meson setup build/meson
+meson compile -C build/meson
 meson compile -C build/meson check        # every image against its retail SHA-1
+tools/worklist.py -n 10                   # what to match first
 ```
 
-Then follow [your first match](CONTRIBUTING.md#your-first-match).
+Then [find work](CONTRIBUTING.md#find-work) and follow [your first match](CONTRIBUTING.md#your-first-match).
 
 ## The data
 

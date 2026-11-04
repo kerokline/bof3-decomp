@@ -12,6 +12,8 @@ as `+`. Run each Python tool with `.venv/bin/python tools/<name>.py` or directly
 | Check the disc, extracted files, images  | `tools/disc.py verify`                                                   | [toolchain: disc](../docs/toolchain.md#disc-manifest)     |
 | Build and check every image              | `meson compile -C build/meson check`                                     | [toolchain: commands](../docs/toolchain.md#commands)      |
 | Check one image                          | `meson compile -C build/meson check-<image>`                             | same                                                      |
+| Rank the open functions, cheapest route first | `tools/worklist.py -n 10 [--image <name>]`                          | [worklist](#worklist)                                     |
+| Run every check before a push            | `meson compile -C build/meson pre-push`                                  | [pre-push](#pre-push)                                     |
 | Compare one function with retail         | `tools/match.sh <target>@0x<ADDR>`                                       | [match.sh](../docs/toolchain.md#matchsh)                  |
 | Preprocess the context for m2c or a scratch | `tools/m2ctx.py include/common.h -o ctx.c`                            | [m2c](../docs/toolchain.md#m2c)                           |
 | Draft and upload                         | m2c draft, then a decomp.me scratch with the project flags               | [m2c](../docs/toolchain.md#m2c), [decomp.me](../docs/decomp-me.md) |
@@ -116,6 +118,21 @@ hex initializer as string rows. The reader of the array decides its type.
 `values.py fields` and `values.py compare` list hex literals that are quantities (coordinates,
 primitive macro arguments, compares with named variables). `--write` rewrites them after you review
 the lines.
+
+## Worklist
+
+`worklist.py` prints one row per `INCLUDE_ASM` function with its cheapest route: `template0` (a
+template with no differing instruction, for `template_try.py`), `generator` (a `gen_body.py`
+shape), `template` (up to three differing instructions, for `template_diff.py`) or `plain`. It
+reuses `gen_body.py` and `dups.py near --full`, sorts untried functions before those with a hint
+above their `INCLUDE_ASM`, and shows that hint. `--route`, `--image`, `-n` and `--tsv` select and
+format the rows. It reads the function index, so build first.
+
+## Pre-push
+
+`pre_push.sh [BASE_REF]` (Meson target `pre-push`) runs `check` (with a disc), `check-headers`,
+`check-tree`, `include-asm`, `format-check`, `meson test` and `typeloss`, prints one line each and
+keeps the logs in `build/pre-push/`. CI runs it too.
 
 ## Worktrees
 

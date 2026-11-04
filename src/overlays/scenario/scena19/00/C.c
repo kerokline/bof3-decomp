@@ -47,7 +47,13 @@ MATCH s32 func_801F6D60(void) {
     return 0;
 }
 
-INCLUDE_ASM(func_801F6D68);
+MATCH void func_801F6D68(void) {
+    EMI_LoaderStreamFamily(0, 3, 4, 0);
+    g_PartySize = 0;
+    func_801C187C(0);
+    func_801C187C(3);
+    func_801C187C(4);
+}
 
 MATCH void func_801F6DB4(void) {
 }

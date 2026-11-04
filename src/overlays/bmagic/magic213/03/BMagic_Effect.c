@@ -34,7 +34,15 @@ INCLUDE_ASM(func_801EF524);
 
 INCLUDE_ASM(func_801EF5BC);
 
-INCLUDE_ASM(func_801EF7A0);
+MATCH void func_801EF7A0(void) {
+    PartyBattler* work;
+
+    if (func_8014DAEC() != 0u) {
+        work         = (PartyBattler*)D_801EB4E0;
+        work->unk_0B = work->unk_0B - 1;
+        Actor_Clear();
+    }
+}
 
 INCLUDE_ASM(func_801EF7EC);
 

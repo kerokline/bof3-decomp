@@ -30,7 +30,13 @@ INCLUDE_ASM(func_801EF52C);
 
 INCLUDE_ASM(func_801EF5D0);
 
-INCLUDE_ASM(func_801EF6A4);
+MATCH void func_801EF6A4(void) {
+    if (func_8014D978() != 0u) {
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    } else {
+        Area_AddActor();
+    }
+}
 
 MATCH void func_801EF6F8(void) {
     PartyBattler* active;

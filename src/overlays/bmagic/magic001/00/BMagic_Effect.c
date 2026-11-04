@@ -26,7 +26,12 @@ INCLUDE_ASM(func_801EF1CC);
 
 INCLUDE_ASM(func_801EF280);
 
-INCLUDE_ASM(func_801EF324);
+MATCH void func_801EF324(void) {
+    if (func_8014DAEC() != 0u) {
+        func_801E257C(g_BattleActingBattler, 0xA);
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    }
+}
 
 INCLUDE_ASM(func_801EF37C);
 

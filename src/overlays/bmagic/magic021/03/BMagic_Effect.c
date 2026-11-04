@@ -22,7 +22,12 @@ INCLUDE_ASM(func_801EF020);
 
 INCLUDE_ASM(func_801EF104);
 
-INCLUDE_ASM(func_801EF208);
+MATCH void func_801EF208(void) {
+    if (func_8014DAEC() != 0u) {
+        func_800A9820(g_BattleTargetSelector);
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    }
+}
 
 INCLUDE_ASM(func_801EF260);
 

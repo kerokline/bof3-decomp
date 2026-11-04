@@ -42,7 +42,12 @@ INCLUDE_ASM(func_801F0540);
 
 INCLUDE_ASM(func_801F0648);
 
-INCLUDE_ASM(func_801F06B0);
+MATCH void func_801F06B0(void) {
+    func_8014DAEC();
+    if (func_8014DAEC() != 0u) {
+        g_SpadWork->unk_02 = g_SpadWork->unk_02 + 1;
+    }
+}
 
 INCLUDE_ASM(func_801F0700);
 

@@ -17,7 +17,15 @@ MATCH void func_801EEF08(void) {
     SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
 }
 
-INCLUDE_ASM(func_801EEF4C);
+MATCH void func_801EEF4C(void) {
+    SYS_DISPATCH_BYTE(D_801EFAF0, g_SpadWork->unk_02);
+    if (g_SpadWork->unk_02 != 0 && g_SpadWork->flags_00 != 0) {
+        func_800AF764();
+        func_801EF1B0();
+        func_801EF4C4();
+        func_801EF898();
+    }
+}
 
 INCLUDE_ASM(func_801EEFDC);
 

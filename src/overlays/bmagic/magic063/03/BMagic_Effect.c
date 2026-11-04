@@ -39,7 +39,14 @@ MATCH void func_801EF340(void) {
     SYS_DISPATCH_TASK(g_BMagicEffectFuncs + 1, 1, D_801F1054);
 }
 
-INCLUDE_ASM(func_801EF384);
+MATCH void func_801EF384(void) {
+    SYS_DISPATCH_BYTE(D_801F040C, D_801F1054->unk_02);
+    if (D_801F1054->flags_00 != 0 && D_801F1054->unk_02 != 0) {
+        func_801EF994();
+        func_801EFA5C();
+        PopMatrix();
+    }
+}
 
 INCLUDE_ASM(func_801EF40C);
 
@@ -75,7 +82,14 @@ MATCH void func_801EF994(void) {
 
 INCLUDE_ASM(func_801EFA5C);
 
-INCLUDE_ASM(func_801EFD7C);
+MATCH void func_801EFD7C(void) {
+    SYS_DISPATCH_BYTE(D_801F0440, D_801F1054->unk_02);
+    if (D_801F1054->flags_00 != 0 && D_801F1054->unk_02 != 0) {
+        func_801EF994();
+        func_801EFA5C();
+        PopMatrix();
+    }
+}
 
 INCLUDE_ASM(func_801EFE04);
 

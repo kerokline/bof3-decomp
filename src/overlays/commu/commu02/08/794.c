@@ -56,7 +56,13 @@ INCLUDE_ASM(func_801D2AC4);
 
 INCLUDE_ASM(func_801D2CF8);
 
-INCLUDE_ASM(func_801D2E10);
+MATCH void func_801D2E10(void) {
+    SND_PlayCue(262);
+    Message_StartAreaMessage(114);
+    g_GameStateIndex = 2;
+    D_801F294D       = 0;
+    D_801F294C++;
+}
 
 INCLUDE_ASM(func_801D2E60);
 
@@ -96,7 +102,16 @@ INCLUDE_ASM(func_801D3864);
 
 INCLUDE_ASM(func_801D39A4);
 
-INCLUDE_ASM(func_801D3B04);
+MATCH void func_801D3B04(void) {
+    Message_StartAreaMessage(128);
+    g_GameStateIndex = 2;
+    D_801F294D++;
+    func_801D4AE0(16, 24, 0);
+    func_801D4F88(104, 64, 0);
+    func_801D4EA4(104, 120, D_801DB0B4, 0);
+    func_801D3184(204, 16);
+    func_801D32A0(204, 60, 0);
+}
 
 INCLUDE_ASM(func_801D3B98);
 

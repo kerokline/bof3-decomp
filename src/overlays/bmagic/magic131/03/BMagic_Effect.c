@@ -141,7 +141,13 @@ MATCH void func_801F10F4(void) {
     SYS_DISPATCH_TASK((g_BMagicEffectFuncs + 27), 1, D_801F24E0);
 }
 
-INCLUDE_ASM(func_801F1138);
+MATCH void func_801F1138(void) {
+    SYS_DISPATCH_BYTE(D_801F1C48, D_801F24E0->unk_02);
+    if (D_801F24E0->flags_00 != 0 && D_801F24E0->unk_02 != 0) {
+        func_801F1B14();
+        func_801F1844();
+    }
+}
 
 INCLUDE_ASM(func_801F11B8);
 

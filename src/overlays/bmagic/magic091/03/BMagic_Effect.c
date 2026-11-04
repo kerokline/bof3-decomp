@@ -18,7 +18,14 @@ MATCH void func_801EEE3C(void) {
 
 INCLUDE_ASM(func_801EEEA8);
 
-INCLUDE_ASM(func_801EEF74);
+MATCH void func_801EEF74(void) {
+    SYS_DISPATCH_BYTE(D_801EFC64, ((u8*)g_SpadWork)[1]);
+    if (g_SpadWork->flags_00 != 0 && ((u8*)g_SpadWork)[1] != 0) {
+        Effect_SetActorMatrix();
+        func_801EF240();
+        PopMatrix();
+    }
+}
 
 INCLUDE_ASM(func_801EEFFC);
 

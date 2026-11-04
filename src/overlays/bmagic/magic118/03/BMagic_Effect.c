@@ -43,7 +43,14 @@ MATCH void func_801EEE8C(void) {
 
 #include "overlays/bmagic/Effect_PlayOnZeroTick.h"
 
-INCLUDE_ASM(func_801EEF6C);
+MATCH void func_801EEF6C(void) {
+    SYS_DISPATCH_BYTE(D_801EFCD4, ((u8*)g_SpadWork)[1]);
+    if (g_SpadWork->flags_00 != 0 && ((u8*)g_SpadWork)[1] != 0) {
+        Effect_SetActorMatrix();
+        func_801EF194();
+        PopMatrix();
+    }
+}
 
 INCLUDE_ASM(func_801EEFF4);
 

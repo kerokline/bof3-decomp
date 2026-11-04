@@ -31,7 +31,13 @@ INCLUDE_ASM(func_801EF18C);
 
 #include "overlays/bmagic/Effect_TickOnZeroTick.h"
 
-INCLUDE_ASM(func_801EF2F0);
+MATCH void func_801EF2F0(void) {
+    if (g_BattleState & BATTLE_STATE_EFFECT_PLAYING) {
+        func_801E5988();
+    } else {
+        func_800AFD9C();
+    }
+}
 
 MATCH void func_801EF330(void) {
     MagicTaskFuncs handlers;

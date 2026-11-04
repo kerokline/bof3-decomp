@@ -12,7 +12,16 @@ MATCH void func_801F6F40(void) {
     D_801FE57C[entity[1]]();
 }
 
-INCLUDE_ASM(func_801F6F7C);
+MATCH void func_801F6F7C(void) {
+    Actor* work;
+
+    work         = (Actor*)g_SpadWork;
+    work->unk_2E = 640;
+    work->unk_30 = 1536;
+    work->unk_09 = 0;
+    Area_ClearWorkColumn();
+    ((Actor*)g_SpadWork)->unk_01 = ((Actor*)g_SpadWork)->unk_01 + 1;
+}
 
 INCLUDE_ASM(func_801F6FCC);
 

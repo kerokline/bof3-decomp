@@ -9,4 +9,6 @@
 extern u8  D_801EFAB4[];
 extern u8* D_801EFAF4;
 
+u8 func_801EF8EC(void);
+
 #endif

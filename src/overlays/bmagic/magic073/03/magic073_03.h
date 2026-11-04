@@ -8,4 +8,6 @@
 extern BmagicEffectFuncs D_801EEC04;
 extern PartyBattler*     D_801F21F0;
 
+u8 func_801F04A4(void);
+
 #endif

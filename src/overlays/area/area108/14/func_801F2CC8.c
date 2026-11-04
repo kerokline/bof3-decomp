@@ -1,3 +1,14 @@
 #include "area108_14.h"
 
-INCLUDE_ASM(func_801F2CC8);
+MATCH void func_801F2CC8(void) {
+    u8* work;
+
+    /* FAKE: unused frame, 16 bytes; pure C compiles a 24-byte frame. */
+    STACK_PADS(u8, 16);
+
+    func_801F34B8();
+    if ((func_801F3034() & BYTE_MASK) == 0) {
+        work = SP_REF(u8*, 0x44u);
+        work[1]++;
+    }
+}

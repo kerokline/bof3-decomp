@@ -194,7 +194,21 @@ INCLUDE_ASM(func_801F86BC);
 
 INCLUDE_ASM(func_801F8764);
 
-INCLUDE_ASM(func_801F8804);
+MATCH void func_801F8804(u8 shade) {
+    TILE* tile;
+
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, GetTPage(0, 2, 960, 0), 0);
+    GFX_AddPrim(1, 0x0C);
+    tile = (TILE*)g_GfxPrimCursor;
+    SetTile(tile);
+    PSX_SET_SEMI_TRANSPARENT(tile);
+    tile->w  = 320;
+    tile->x0 = 0;
+    tile->y0 = 0;
+    tile->h  = 240;
+    setRGB0(tile, shade, shade, shade);
+    GFX_AddPrim(1, 0x10);
+}
 
 INCLUDE_ASM(func_801F88B8);
 

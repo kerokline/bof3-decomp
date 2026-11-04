@@ -6,9 +6,13 @@
 
 #include "overlays/scenario/scenario.h"
 
-extern u32       D_801F6C00;
-extern Callback  D_801FE3E4[];
-extern SceneFunc D_801FE42C[];
+/* The handler ABI of the dispatch table at D_801FE46C: seven arguments, a byte result. */
+typedef s8 (*Scena06Handler)(s32 entry, s8 dir_x, s8 dir_y, s16 vz_start, s16 vz_step, u8 landing_script, u8 flags);
+
+extern u32            D_801F6C00;
+extern Scena06Handler D_801FE46C[];
+extern Callback       D_801FE3E4[];
+extern SceneFunc      D_801FE42C[];
 
 void func_801FD29C(void);
 

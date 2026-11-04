@@ -102,14 +102,6 @@ typedef volatile struct BattleSelectionPlayer {
     u8           pad_04[0x13C];
 } BattleSelectionPlayer;
 
-/* Camera scroll step per direction: func_8009B488, func_8009B700, func_8009B794
- * and func_800A8678 add one entry to the x/y phase scroll words, indexed by
- * g_BattleScrollDir. */
-typedef struct BattleScrollDelta {
-    s8 x;
-    s8 y;
-} BattleScrollDelta;
-
 ASSERT_SIZE(BattleScrollDelta, 2);
 
 /* Battle sprite cell record consumed by func_800AF8F0, func_800AF9D4 and
@@ -400,7 +392,6 @@ extern Callback              D_800B448C[5];
 extern Callback              D_800B44A0[];
 extern u8                    D_800B44B0[];
 extern u8                    D_800B44B8[];
-extern BattleScrollDelta     D_800B44C0[4];
 extern Callback              D_800B44C8[3];
 extern Callback              D_800B44D4[4];
 extern Callback              D_800B44E4[];

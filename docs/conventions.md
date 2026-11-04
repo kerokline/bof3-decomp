@@ -472,9 +472,11 @@ line.
 
 ### Spelling
 
-US English in prose and in names: `color`, `behavior`, `center`, `defense`. The feature is `Fairy`
-(`Fairy`, `FAIRY_*`). Retail text keeps its original spelling, including `Faerie`. SDK names keep
-theirs (`CdlPause`, `SpuSetKey`).
+US English in prose and in names, as the US game text spells it: `color`, `behavior`, `center`,
+`defense`. A game concept takes the name the US game text gives it (items, places, characters,
+menus), unless the project lists its own name here. Listed: `Fairy` (`Fairy`, `FAIRY_*`) for the
+game's "Faerie". Retail text keeps its original spelling, including `Faerie`. SDK names keep theirs
+(`CdlPause`, `SpuSetKey`).
 
 ### Renames
 

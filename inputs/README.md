@@ -16,7 +16,7 @@ The build targets *Breath of Fire III*, US release, serial `SLUS-00422` (Redump 
 tracks (size, CRC32, MD5, SHA-1) and every file of the disc (path, LBA, size, SHA-1). It requires a
 CUE sheet that names the two separate BIN tracks.
 
-The Redump set is often kept as one 7-Zip archive. To recognise yours, compare it with this one,
+The Redump set is often kept as one 7-Zip archive. To recognize yours, compare it with this one,
 which holds exactly the three files in `config/disc.toml`:
 
 | Archive                        | Size (bytes) | SHA-1                                      |

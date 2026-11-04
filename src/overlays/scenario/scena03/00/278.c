@@ -287,7 +287,30 @@ MATCH void func_801F8710(void) {
     }
 }
 
-INCLUDE_ASM(func_801F87A4);
+MATCH void func_801F87A4(void) {
+    u8**   slots;
+    Actor* work;
+    u8*    chk;
+    u8     count;
+
+    slots = SP_PTR(u8*, 0u);
+    work  = (Actor*)slots[0x11];
+    GFX_DrawShadedDisc(work->unk_2E, work->unk_30, (work->unk_09 & 1) | 0x3C, 0x80, 0);
+    slots = SP_PTR(u8*, 0u);
+    if (slots[0x11][9] == 0xD7) {
+        SND_PlayCue(EMI_CUE_ID(2, 8));
+    }
+    slots  = SP_PTR(u8*, 0u);
+    chk    = slots[0x11];
+    count  = (u8)(chk[9] - 1);
+    chk[9] = count;
+    if (count == 0) {
+        slots          = SP_PTR(u8*, 0u);
+        slots[0x11][9] = 0x3C;
+        slots          = SP_PTR(u8*, 0u);
+        slots[0x11][1] += 1;
+    }
+}
 
 MATCH void func_801F885C(void) {
     u8**   slots;

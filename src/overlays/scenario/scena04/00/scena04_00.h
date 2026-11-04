@@ -17,4 +17,6 @@ extern SceneFunc D_801FA224[];
 
 extern Callback D_801FA180[];
 
+void func_801F7FCC(void);
+
 #endif

@@ -12,7 +12,14 @@ MATCH void func_801F6F50(void) {
     D_801FE894[entity[1]]();
 }
 
-INCLUDE_ASM(func_801F6F8C);
+MATCH void func_801F6F8C(void) {
+    Actor* work;
+
+    func_801F7DE8();
+    work         = (Actor*)g_SpadWork;
+    work->unk_0C = 0;
+    work->unk_01 += 1;
+}
 
 INCLUDE_ASM(func_801F6FC4);
 

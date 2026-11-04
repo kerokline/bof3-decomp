@@ -74,7 +74,16 @@ MATCH void func_801F04F4(void) {
     }
 }
 
-INCLUDE_ASM(func_801F05A4);
+MATCH void func_801F05A4(void) {
+    PartyBattler* src;
+
+    src                    = g_BattleSelectedActor;
+    g_SpadWork->coord_x_34 = src->coord_x_34;
+    g_SpadWork->coord_y_38 = src->coord_y_38;
+    g_SpadWork->word_3C    = src->word_3C;
+    g_SpadWork->unk_09     = 0;
+    g_SpadWork->unk_02     = g_SpadWork->unk_02 + 1;
+}
 
 MATCH void func_801F05F4(void) {
     u8 timer;

@@ -364,7 +364,12 @@ MATCH void func_801FC46C(void* entity) {
     handler(entity, g_SceneFlags);
 }
 
-INCLUDE_ASM(func_801FC4AC);
+MATCH void func_801FC4AC(void* entity, void* bits) {
+    Game_SetScriptActive();
+    SYS_SetFlag(bits, 0x14U);
+    g_SceneState.state_04 = 4;
+    g_SceneState.step_05  = 0;
+}
 
 INCLUDE_ASM(func_801FC4F4);
 

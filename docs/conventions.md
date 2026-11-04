@@ -448,6 +448,11 @@ code shows it. When the larger purpose is unknown, a name for what the code visi
 terms passes (`Actor_MoveByVelocity`, `Effect_CountDownTimer`). Without even that, keep the address
 name or `unk_<OFF>`: a mechanical name is worse than none, because it looks finished.
 
+Names are English. A label in romaji or shorthand becomes the English word it stands for
+(`SISYOU` 師匠 is `Master`), and a game concept takes the English the US game text uses, unless
+[spelling](#spelling) lists the project's own word. Data is the retail data: values, tables and
+text keep their retail bytes and spelling, whatever the code calls them.
+
 ### One name
 
 The same name appears in C, Rust, JSON fields, asset types, docs and the status site. An old name is
@@ -473,10 +478,9 @@ line.
 ### Spelling
 
 US English in prose and in names, as the US game text spells it: `color`, `behavior`, `center`,
-`defense`. A game concept takes the name the US game text gives it (items, places, characters,
-menus), unless the project lists its own name here. Listed: `Fairy` (`Fairy`, `FAIRY_*`) for the
-game's "Faerie". Retail text keeps its original spelling, including `Faerie`. SDK names keep theirs
-(`CdlPause`, `SpuSetKey`).
+`defense`. The project's own words, used in place of the game text's: `Fairy` (`Fairy`, `FAIRY_*`)
+for "Faerie". Retail text keeps its spelling (`ITEM_FAERIE_TIARA`, "Faerie Tiara"). SDK names keep
+theirs (`CdlPause`, `SpuSetKey`).
 
 ### Renames
 

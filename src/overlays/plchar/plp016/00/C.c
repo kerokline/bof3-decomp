@@ -76,7 +76,7 @@ INCLUDE_ASM(func_801CF8B4);
 
 INCLUDE_ASM(func_801CFB00);
 
-INCLUDE_ASM(func_801CFC30);
+#include "overlays/plchar/Char_SelectScriptAndStep.h"
 
 INCLUDE_ASM(func_801CFC90);
 

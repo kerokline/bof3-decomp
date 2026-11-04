@@ -30,7 +30,7 @@ INCLUDE_ASM(func_801CE7B8);
 
 INCLUDE_ASM(func_801CE9F4);
 
-INCLUDE_ASM(func_801CEB24);
+#include "overlays/plchar/Char_SelectScriptAndStep.h"
 
 INCLUDE_ASM(func_801CEB84);
 

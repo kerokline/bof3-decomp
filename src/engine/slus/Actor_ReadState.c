@@ -12,7 +12,7 @@ MATCH u16 Actor_ReadState(void) {
 
     record = g_SpadWork;
     if (record->unk_4A == 1) {
-        value = record->unk_58;
+        value = record->script_pc;
         if (((u16)value >> 1) == record->unk_49) {
             result = 2;
         } else {
@@ -24,7 +24,7 @@ MATCH u16 Actor_ReadState(void) {
             }
         }
     } else {
-        result = record->unk_58;
+        result = record->script_pc;
     }
     return result;
 }

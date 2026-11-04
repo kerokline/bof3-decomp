@@ -203,19 +203,44 @@ MATCH s32 func_801FAB6C(void) {
 
 INCLUDE_ASM(func_801FAB74);
 
-INCLUDE_ASM(func_801FABC0);
+MATCH void func_801FABC0(void) {
+    EMI_LoaderStreamFamily(7U, 8U, 5U, 0U);
+    Party_BuildBattlers(0);
+    Party_JoinMember(8);
+    func_801C1630();
+}
 
-INCLUDE_ASM(func_801FAC04);
+MATCH void func_801FAC04(void) {
+    EMI_LoaderStreamFamily(7U, 8U, 5U, 0U);
+    Party_BuildBattlers(0);
+    Party_JoinMember(5);
+    func_801C1630();
+}
 
 INCLUDE_ASM(func_801FAC48);
 
-INCLUDE_ASM(func_801FAC94);
+MATCH void func_801FAC94(void) {
+    EMI_LoaderStreamFamily(7U, 2U, 5U, 0U);
+    Party_BuildBattlers(0);
+    Party_JoinMember(5);
+    func_801C1630();
+}
 
-INCLUDE_ASM(func_801FACD8);
+MATCH void func_801FACD8(void) {
+    EMI_LoaderStreamFamily(7U, 8U, 5U, 0U);
+    Party_BuildBattlers(0);
+    Party_JoinMember(5);
+    func_801C1630();
+}
 
 INCLUDE_ASM(func_801FAD1C);
 
-INCLUDE_ASM(func_801FAD68);
+MATCH void func_801FAD68(void) {
+    EMI_LoaderStreamFamily(7U, 6U, 5U, 0U);
+    Party_BuildBattlers(0);
+    Party_JoinMember(6);
+    func_801C1630();
+}
 
 INCLUDE_ASM(func_801FADAC);
 

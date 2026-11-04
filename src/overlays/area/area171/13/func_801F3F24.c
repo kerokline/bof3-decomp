@@ -1,3 +1,7 @@
 #include "area171_13.h"
 
-INCLUDE_ASM(func_801F3F24);
+MATCH void func_801F3F24(void) {
+    g_AreaSceneMode = 1;
+    Area_SetCellPalette(28, 74);
+    SND_PlayCue(265);
+}

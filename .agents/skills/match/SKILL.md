@@ -10,7 +10,8 @@ Input: `TARGET@0xADDRESS` from the task. Only `check-<image>` exit 0 accepts a c
 1. Route ([order](../../../docs/matching.md#route)): `tools/worklist.py --image <image>` names the
    cheapest. Generator first (`tools/gen_body.py <shape>`), then a template
    (`tools/template_try.py rows.tsv`, then `tools/template_diff.py <target>@<func>` with up to three
-   edits, [templates](../../../tools/README.md#templates)), then a draft. Dedupe with
+   edits, [templates](../../../tools/README.md#templates)), then the m2c sweep and seed (`tools/m2c_sweep.py`, `tools/seed.py`), then the hand loop below.
+   Budget: three structurally different tries, then hint and `BLOCKED`. Dedupe with
    `bin/coddog match <target> <func>` ([coddog](../../../docs/toolchain.md#coddog)): a matched twin
    is reused and shared ([shared bodies](../../../docs/conventions.md#shared-bodies)), not lifted
    again; a twin in the same image is `<Name>_<ADDR>` with the group's statement macro as its body.

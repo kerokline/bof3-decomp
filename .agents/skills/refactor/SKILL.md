@@ -26,6 +26,16 @@ Input: the task `scope` and its `writes` list, the paths it lets you change ([ru
 
 A missing shared type outside the grant is a `needs: type <Type>+0xOFF <width> (<n> sites)` line.
 
+## Flow
+
+```text
+input ← scope, writes list
+collect every access across images → choose the form
+loop: declare once → convert a consumer → check-<image> → until every user is converted or keeps its cast
+gate: check
+stop: every touched image EXACT; each kept cast has its reason
+```
+
 Report: `typed` or `shared` (record, member or group, the accesses that prove it, owning header),
 `kept` (the access that still matches, and why) or `needs`. Last line `READY <sha>` or
 `BLOCKED <reason>`.

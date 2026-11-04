@@ -31,5 +31,15 @@ found through its users. Rules: [names](../../../docs/conventions.md#names).
 
 Unknown keeps the address name (`func_<ADDR>`, `D_<ADDR>`, `unk_<OFF>`).
 
+## Flow
+
+```text
+input ← symbols, writes list
+find every user → read what the users do → rank the evidence
+fact? yes → pick the form → tools/symbol.py rename → record the source | no → keep the address name
+gate: check-<image> → check → typeloss
+stop: named with the users that prove it | kept with the missing fact
+```
+
 Report: `named` (old, new, the users that prove it) or `kept` (the address name and the fact that
 would promote it: `needs: name <ADDR> <fact>`). Last line `READY <sha>` or `BLOCKED <reason>`.

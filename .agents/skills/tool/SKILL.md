@@ -18,5 +18,15 @@ Input: the task `scope` and its `writes` list, the paths it lets you change ([ru
 5. Add a test only for a byte-identity gate or a risky pure transform (`tools/tests/`).
 6. Gate: the narrow check, then `check`. Run the [quality pass](../review/SKILL.md#quality-pass).
 
+## Flow
+
+```text
+input ← scope, writes list
+state the success check → read the owner → edit (delete → stdlib → existing dependency → new code)
+test only a byte-identity gate or a risky pure transform
+gate: narrow check → check → quality pass
+stop: the success check passes and every link resolves
+```
+
 Report: result, changed paths, checks run, behavior changes, remaining problems with one concrete fix
 each. Last line `READY <sha>` or `BLOCKED <reason>`.

@@ -31,6 +31,16 @@ Input: `TARGET@0xADDRESS` from the task. Only `check-<image>` exit 0 accepts a c
    change also run `tools/sigs.py scan <path>`. Run the
    [quality pass](../review/SKILL.md#quality-pass) on your diff.
 
+## Flow
+
+```text
+input ← TARGET@0xADDRESS
+route → generator | template | m2c sweep and seed | hand loop   (tools/worklist.py)
+loop: draft → tools/match.sh → fix the first differing instruction → until match or three structural tries
+match? yes → polish → check-<image> → pre-push | no → hint above INCLUDE_ASM
+stop: check-<image> exits 0 (READY) | blocker and first difference recorded (BLOCKED)
+```
+
 Report: `exact` (candidate path, `check-<image>` result), `blocked` (cause, first diff,
 falsified hypotheses with measurements, best score, the one lever that would change it; leave the
 template and first differing instruction above the `INCLUDE_ASM` line) or `needs`

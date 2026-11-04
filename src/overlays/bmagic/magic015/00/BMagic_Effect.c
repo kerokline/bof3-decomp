@@ -78,7 +78,15 @@ MATCH void func_801EFEFC(void) {
     func_801E5988();
 }
 
-INCLUDE_ASM(func_801EFF1C);
+MATCH void func_801EFF1C(void) {
+    BattleHandlerTable5 handlers;
+
+    handlers = D_801EEC54;
+    SYS_DISPATCH_BYTE(handlers.handlers, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0 && g_SpadWork->unk_02 != 0) {
+        func_8014D290();
+    }
+}
 
 INCLUDE_ASM(func_801EFFC0);
 

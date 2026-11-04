@@ -16,7 +16,15 @@ MATCH void func_801EEFF8(void) {
     SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
 }
 
-INCLUDE_ASM(func_801EF03C);
+MATCH void func_801EF03C(void) {
+    BattleHandlerTable3 handlers;
+
+    handlers = D_801EEC10;
+    SYS_DISPATCH_BYTE(handlers.handlers, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0) {
+        func_8014D290();
+    }
+}
 
 MATCH void func_801EF0C0(void) {
     PartyBattler* work;

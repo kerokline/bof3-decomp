@@ -1,3 +1,12 @@
 #include "boss054_16.h"
 
-INCLUDE_ASM(func_800C1D7C);
+MATCH void func_800C1D7C(void) {
+    BattleHandlerTable3 handlers;
+
+    handlers = D_800C182C;
+    handlers.handlers[((PartyBattler*)g_SpadWork)->unk_02]();
+    if (ACTOR_IN_USE(*(PartyBattler*)g_SpadWork)) {
+        func_8014D978();
+        func_8014D290();
+    }
+}

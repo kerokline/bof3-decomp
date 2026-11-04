@@ -48,7 +48,17 @@ MATCH void func_801EF304(void) {
     func_801E5988();
 }
 
-INCLUDE_ASM(func_801EF324);
+MATCH void func_801EF324(void) {
+    BattleHandlerTable3 handlers;
+
+    handlers = D_801EEC1C;
+    SYS_DISPATCH_BYTE(handlers.handlers, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0) {
+        func_801EFB90();
+        func_801EFC48();
+        PopMatrix();
+    }
+}
 
 INCLUDE_ASM(func_801EF3B8);
 

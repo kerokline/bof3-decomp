@@ -41,7 +41,15 @@ MATCH void func_801EF2CC(void) {
     SYS_DISPATCH_TASK(handlers, 1, g_SpadWork);
 }
 
-INCLUDE_ASM(func_801EF324);
+MATCH void func_801EF324(void) {
+    BattleHandlerTable5 handlers;
+
+    handlers = D_801EEC04;
+    SYS_DISPATCH_BYTE(handlers.handlers, g_SpadWork->unk_02);
+    if (g_SpadWork->unk_02 != 0 && g_SpadWork->flags_00 != 0) {
+        Area_SetDrawMode();
+    }
+}
 
 INCLUDE_ASM(func_801EF3C8);
 
@@ -63,7 +71,15 @@ MATCH void func_801EF6CC(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF708);
+MATCH void func_801EF708(void) {
+    MagicTaskFuncs handlers;
+
+    handlers = D_801EEC18;
+    SYS_DISPATCH_BYTE(handlers.handlers, g_SpadWork->unk_02);
+    if (g_SpadWork->unk_02 != 0 && g_SpadWork->flags_00 != 0) {
+        Area_SetDrawMode();
+    }
+}
 
 INCLUDE_ASM(func_801EF7A8);
 

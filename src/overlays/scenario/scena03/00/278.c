@@ -440,12 +440,7 @@ INCLUDE_ASM(func_801FCAB8);
 
 INCLUDE_ASM(func_801FCB4C);
 
-MATCH s32 Scene_ShowMessage(s32 message_index) {
-    Message_StartAreaMessage(message_index & BYTE_MASK);
-    g_GameStateIndex = GAME_REQUEST_MESSAGE;
-    g_GameFlags |= GAME_FLAG_SCRIPT_ACTIVE;
-    return 1;
-}
+#include "overlays/scenario/Scene_ShowMessage.h"
 
 INCLUDE_ASM(func_801FCCDC);
 

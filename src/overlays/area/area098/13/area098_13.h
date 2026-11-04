@@ -16,29 +16,13 @@
 #define SCRATCH_COLUMN_STRIDE 0x18
 #define SCRATCH_COLUMN_COUNT  8
 
-/* The spin-effect work record the overlay's sprite pass draws. */
-typedef struct WorldSpin {
-    /* 0x00 */ s32     origin_x; /* the camera x, copied from the scratch record */
-    /* 0x04 */ s32     origin_y; /* the camera y */
-    /* 0x08 */ s32     origin_z; /* the camera z */
-    u8                 unk_0C[4];
-    /* 0x10 */ SVECTOR vertex_a;   /* the first rotated vertex offset */
-    /* 0x18 */ SVECTOR vertex_b;   /* the second rotated vertex offset */
-    /* 0x20 */ s16     angle_lo;   /* the angle accumulator's low half */
-    /* 0x22 */ s16     angle_hi;   /* the angle accumulator's high half */
-    /* 0x24 */ s16     spin_angle; /* the spin angle */
-    s16                unk_26;
-    /* 0x28 */ s16     scale; /* the vertex scale */
-    /* 0x2A */ s16     fade;  /* the triangle fade */
-} WorldSpin;
+#include "shared/WorldSpin.h"
 
-ASSERT_SIZE(WorldSpin, 0x2C);
-ASSERT_OFFSET(WorldSpin, origin_x, 0x00);
-ASSERT_OFFSET(WorldSpin, vertex_a, 0x10);
-ASSERT_OFFSET(WorldSpin, vertex_b, 0x18);
-ASSERT_OFFSET(WorldSpin, spin_angle, 0x24);
-ASSERT_OFFSET(WorldSpin, scale, 0x28);
-ASSERT_OFFSET(WorldSpin, fade, 0x2A);
+#define AREA_SPIN_RADIUS     16
+#define AREA_SPIN_PITCH      (RANDOM_MASK(0x7FF) - 0x400)
+#define AREA_SPIN_SCALE_MASK 0x2
+#define AREA_SPIN_SCALE_BASE 3
+#define AREA_SPIN_FADE       0x20
 
 extern Callback D_801F5F68[];
 extern Callback D_801F5F7C[];

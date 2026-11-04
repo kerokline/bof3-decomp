@@ -55,7 +55,7 @@ INCLUDE_ASM(func_801D1B10);
 
 INCLUDE_ASM(func_801D1CD4);
 
-INCLUDE_ASM(func_801D1F68);
+#include "shared/Area_InitSpin.h"
 
 INCLUDE_ASM(func_801D2088);
 

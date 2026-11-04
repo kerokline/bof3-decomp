@@ -14,5 +14,5 @@ MATCH void func_801F37EC(void) {
         armed              = 1;
         g_SpadWork->unk_03 = armed;
     }
-    func_801F3F88(0x5C, g_SpadWork->unk_30);
+    Area_DrawHudBanner(0x5C, g_SpadWork->unk_30);
 }

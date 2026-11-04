@@ -37,7 +37,8 @@ void Area_Update(void);
 void func_801F41F0(void);
 /* func_801F4664 */
 void Area_DrawHud(s16 x, s16 y);
-void func_801F4C28(s16 arg0, s16 arg1);
+/* func_801F4C28 */
+void Area_DrawHudBanner(s16 x, s16 y);
 
 /* The value of area update step in the shared Area_Update body. */
 #define AREA_UPDATE_STEP Area_DrawHud

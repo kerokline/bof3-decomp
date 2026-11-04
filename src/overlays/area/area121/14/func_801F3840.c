@@ -24,5 +24,5 @@ MATCH void func_801F3840(void) {
 bump:
     g_SpadWork->unk_03++;
 done:
-    func_801F40DC(0x5C, g_SpadWork->unk_30);
+    Area_DrawHudBanner(0x5C, g_SpadWork->unk_30);
 }

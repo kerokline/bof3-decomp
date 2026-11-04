@@ -67,7 +67,7 @@ def analyse(target: Func, template: Func) -> Plan | None:
 
 def remap(plan: Plan, template: Func, body: str) -> str | None:
     """Apply the plan's renames and literals to ``body`` and append the declarations."""
-    texts = [read(ROOT, f) for f in try_body.closure(ROOT, template.src or "")]
+    texts = [read(ROOT, f) for f in try_body.closure(ROOT, template.src or "", 6, True)]
     decls = []
     for name in plan.keep:
         found = next((d for t in texts if (d := declaration(t, name))), None)

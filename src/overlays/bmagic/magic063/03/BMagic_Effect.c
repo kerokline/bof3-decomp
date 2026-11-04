@@ -61,7 +61,7 @@ MATCH void func_801EF994(void) {
     PushMatrix();
     rot.vx = 0;
     rot.vy = 0;
-    off = FIELD(u16, D_801F1054, 0xE) + 0x800;
+    off    = FIELD(u16, D_801F1054, 0xE) + 0x800;
     rot.vz = (((D_801F1054)->unk_03 << 7) - off) & 0xFFF;
     pos.vx = ((D_801F1054)->unk_10 >> 9) - 0x4000;
     pos.vy = ((D_801F1054)->unk_14 >> 9) - 0x4000;

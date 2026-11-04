@@ -16,7 +16,14 @@ MATCH void func_801EEEBC(void) {
     SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);
 }
 
-INCLUDE_ASM(func_801EEF00);
+MATCH void func_801EEF00(void) {
+    SYS_DISPATCH_BYTE(D_801F006C, g_SpadWork->unk_02);
+    if (BATTLE_ACTIVE_WORK->unk_0B != 0xFF) {
+        Effect_SetActorMatrix();
+        func_801EF158();
+        PopMatrix();
+    }
+}
 
 INCLUDE_ASM(func_801EEF78);
 

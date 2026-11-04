@@ -82,7 +82,14 @@ MATCH void func_801EFDB4(void) {
     SYS_DISPATCH_TASK((g_BMagicEffectFuncs + 7), 1, g_SpadWork);
 }
 
-INCLUDE_ASM(func_801EFDF8);
+MATCH void func_801EFDF8(void) {
+    SYS_DISPATCH_BYTE(D_801F03DC, g_SpadWork->unk_02);
+    if (g_SpadWork->flags_00 != 0 && g_SpadWork->unk_09 != 0) {
+        func_801F00A8();
+        func_801F0164();
+        PopMatrix();
+    }
+}
 
 INCLUDE_ASM(func_801EFE80);
 

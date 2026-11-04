@@ -8,4 +8,9 @@
 extern BattleHandlerTable5 D_801EEC04;
 extern PartyBattler*       D_801F1054;
 
+extern Callback D_801F040C[];
+extern Callback D_801F0440[];
+void            func_801EF994(void);
+void            func_801EFA5C(void);
+
 #endif

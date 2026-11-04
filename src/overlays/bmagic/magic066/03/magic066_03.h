@@ -4,5 +4,8 @@
 /* The bmagic/magic066/03 overlay. Only this image includes the file. */
 
 #include "overlays/bmagic/bmagic.h"
+extern Callback D_801F006C[];
+void            Effect_SetActorMatrix(void);
+void            func_801EF158(void);
 
 #endif

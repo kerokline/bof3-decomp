@@ -3,6 +3,23 @@
 How to match, diagnose and polish one function (`TARGET@0xADDRESS`). The retail bytes are the
 verdict; a score, a marker or a disassembler opinion is a lead.
 
+## Route
+
+Take the cheapest route first and move on after one honest try. `tools/worklist.py` ranks the open
+functions by route ([find work](../CONTRIBUTING.md#find-work)).
+
+| # | Route         | Command                                                                   | Move on when                                            |
+| - | ------------- | ------------------------------------------------------------------------- | ------------------------------------------------------- |
+| 1 | Generator     | `tools/gen_body.py <shape> --dry-run`, then without `--dry-run`           | the shape is `branch`, or the body is not `EXACT`       |
+| 2 | Template      | `tools/template_try.py rows.tsv` (rows from `tools/dups.py near --full`)  | the row is `FAIL`, or the template has `diff_count` > 3 |
+| 3 | Template edit | `tools/template_diff.py <target>@<func>`, then up to three edits          | three edits leave a difference                          |
+| 4 | Draft         | m2c draft, `tools/match.sh`, [diagnose](#diagnose), [permuter](#permuter) | three tries per form fail                               |
+
+A route that gives `EXACT` still needs `check-<image>`, a name from evidence and the shared-body
+treatment ([shared bodies](conventions.md#shared-bodies)). When you give up, leave a hint above the
+`INCLUDE_ASM` line: the template tried and the first differing instruction, in one or two
+sentences. The worklist shows the hint, so the next person starts there.
+
 ## Order of work
 
 Fix causes before functions.

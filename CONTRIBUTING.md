@@ -24,18 +24,25 @@ your disc against [`config/disc.toml`](config/disc.toml) and names each file tha
 `tools/disc.py verify` repeats the check. Every routine task has one command in
 [`tools/README.md`](tools/README.md); `tools/worktree.sh` adds a worktree for parallel work.
 
+## Find work
+
+```sh
+tools/worklist.py --image slus_004_22 -n 10      # needs a build: meson compile -C build/meson
+```
+
+One row per function still in assembly, cheapest route first: a template with no differing
+instruction, a generator shape, a template with a few, then plain matching. `tried:` shows the hint
+an earlier attempt left above the `INCLUDE_ASM` line. `--route` and `--image` filter; `--tsv` prints
+the full hint. The route order and when to move on: [matching](docs/matching.md#route).
+
 ## Your first match
 
 A function is `TARGET@0xADDRESS`; `<image>` is the target with `/` written as `+`
 (`exe/slus_004_22` is `exe+slus_004_22`). This walkthrough needs a disc.
 
 1. **Pick a function.** An unmatched function is one `INCLUDE_ASM(func_<ADDR>);` line in its own
-   `.c` file. List them in one image and take a small one:
-
-   ```sh
-   git grep -c INCLUDE_ASM -- src/engine/slus
-   wc -l asm/exe/slus_004_22/func_<ADDR>.s     # the split assembly; fewer lines are easier
-   ```
+   `.c` file. Take the first row of the [worklist](#find-work); its route says which step below to
+   start with.
 
 2. **Look for a twin or a template.** A matched body with the same instructions is shared, not
    lifted again. Build once, then search ([coddog](docs/toolchain.md#coddog)). A template is a
@@ -93,24 +100,26 @@ A new header, a `NON_MATCHING` marker or an `asm/<target>/hand/` file needs
 ## Before you open a pull request
 
 ```sh
-meson compile -C build/meson format
-meson test -C build/meson
-meson compile -C build/meson check check-headers check-tree include-asm format-check
-tools/typeloss.py origin/main WORK        # a rename, move or retype must not weaken a type
+meson compile -C build/meson formatmeson compile -C build/meson pre-push    # or tools/pre_push.sh [BASE_REF]
 ```
 
-Without a disc Meson does not offer `check`; leave it out. Each check:
+`pre-push` runs every check below, one line each, and writes a log per check to
+`build/pre-push/`. It compares with the newer of `public/main` and `origin/main`. Without a disc
+Meson has no `check`; `pre-push` skips it. Each check:
 
-| Check                    | Fails when                                             |
-| ------------------------ | ------------------------------------------------------ |
-| `check`, `check-<image>` | an image differs from its retail SHA-1                 |
-| `check-headers`          | a public header does not compile alone                 |
-| `check-tree`             | a tracked file is game data or over 1 MiB              |
-| `include-asm`            | there are more `INCLUDE_ASM` lines than on `main`      |
-| `format-check`           | C, Python, TOML or Markdown differs from the formatter |
+| Check                    | Fails when                                                                  |
+| ------------------------ | --------------------------------------------------------------------------- |
+| `check`, `check-<image>` | an image differs from its retail SHA-1                                      |
+| `check-headers`          | a public header does not compile alone                                      |
+| `check-tree`             | a tracked file is game data or over 1 MiB                                   |
+| `include-asm`            | there are more `INCLUDE_ASM` lines than on `main`, in total or in one image |
+| `format-check`           | C, Python, TOML or Markdown differs from the formatter                      |
+| `meson test`             | a tool test fails                                                           |
+| `typeloss`               | a rename, move or retype weakens a type                                     |
 
-The same disc-free checks run in CI on every push and pull request. A match score, an analyzer
-opinion or a decompiler draft is a lead; only `check` proves bytes.
+The disc-free checks run in CI on every push and pull request through the same entry. A match score,
+an analyzer opinion or a decompiler draft is a lead; only `check` proves bytes. For parallel work,
+rebase and push, see [AGENTS.md](AGENTS.md#parallel-work).
 
 ## Pull requests
 

@@ -5,10 +5,18 @@ the retail bytes. A function is `TARGET@0xADDRESS`, for example `exe/slus_004_22
 addresses in different targets are unrelated. Authority: the retail binary first, then the manifests
 in `config/` and the specs. Setup and the folder map: [README.md](README.md).
 
-Set up with `tools/setup.sh --dev`, then `meson setup build/meson`
+Set up with `tools/setup.sh --dev`, then `meson setup build/meson` and `meson compile -C build/meson`
 ([toolchain](docs/toolchain.md#setup)). Gates run as `meson compile -C build/meson <name>`: `check`
 for every image, `check-<image>` for one, with `/` written as `+` (`check-exe+slus_004_22`). Without
 the disc only the disc-free checks run ([toolchain](docs/toolchain.md#without-a-disc)).
+
+## The path
+
+1. Find work: `tools/worklist.py -n 10` (cheapest route first; `--image` filters).
+2. Match in route order: generator, template, draft ([route](docs/matching.md#route), [`match` skill](.agents/skills/match/SKILL.md)).
+3. Prove the image: `meson compile -C build/meson check-<image>`.
+4. Check everything: `meson compile -C build/meson format pre-push`.
+5. Rebase on `main`, push ([parallel work](#parallel-work)).
 
 ## Standing rules
 
@@ -33,6 +41,17 @@ the disc only the disc-free checks run ([toolchain](docs/toolchain.md#without-a-
    when it is safe and inside the grant. Report larger finds.
 9. Read only what changes the outcome: compact output first (`check-<image>`, `rg -n`, `-q`,
    `--json | jq`), never a whole file or build log.
+
+## Parallel work
+
+- One worktree per task: `tools/worktree.sh --from <built checkout> <branch>`
+  ([worktrees](tools/README.md#worktrees)). Rebase on `main` before each push.
+- A `config/symbols.toml` conflict keeps both sides, one row per symbol per image, in address order.
+- `meson compile -C build/meson format` rewrites C, Python, TOML and Markdown and needs clang-format,
+  ruff and dprint; `pre-push` only checks.
+- In zsh quote word lists (`git grep -lz ... | xargs -0`) and overwrite with `>|`.
+- A function you give up on keeps a hint above its `INCLUDE_ASM`: the template tried and the first
+  differing instruction. `tools/worklist.py` shows it.
 
 ## Task routing
 

@@ -6,7 +6,7 @@
 #include "overlays/bmagic/bmagic.h"
 
 extern BattleHandlerTable5 D_801EEC04;
-extern Callback D_801EFCD4[];
+extern Callback            D_801EFCD4[];
 
 void func_801EF194(void);
 

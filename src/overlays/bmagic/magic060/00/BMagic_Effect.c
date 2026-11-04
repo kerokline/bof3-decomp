@@ -19,7 +19,14 @@ INCLUDE_ASM(func_801EEE00);
 
 INCLUDE_ASM(func_801EEE84);
 
-INCLUDE_ASM(func_801EEF04);
+MATCH void func_801EEF04(void) {
+    u16* flags;
+
+    if (g_SpadWork->unk_0B == 0x80) {
+        BATTLE_RAISE_STATE(BATTLE_STATE_EFFECT_PLAYING);
+        func_801E5988();
+    }
+}
 
 INCLUDE_ASM(func_801EEF50);
 

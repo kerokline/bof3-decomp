@@ -8,7 +8,14 @@ INCLUDE_ASM(func_801EEC28);
 
 INCLUDE_ASM(func_801EED18);
 
-INCLUDE_ASM(func_801EEF50);
+MATCH void func_801EEF50(void) {
+    u16* flags;
+
+    if (g_SpadWork->unk_0B == 0 && func_801F04A4() == 0) {
+        BATTLE_RAISE_STATE(BATTLE_STATE_EFFECT_PLAYING);
+        func_801E5988();
+    }
+}
 
 MATCH void func_801EEFB0(void) {
     SYS_DISPATCH_BYTE(g_BMagicEffectFuncs, ((u8*)g_SpadWork)[1]);

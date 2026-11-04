@@ -54,7 +54,18 @@ INCLUDE_ASM(func_801F7F04);
 
 INCLUDE_ASM(func_801F7F3C);
 
-INCLUDE_ASM(func_801F7F94);
+MATCH void func_801F7F94(void) {
+    u8* timer;
+    u8  count;
+
+    timer  = &D_80146875;
+    count  = *timer - 1;
+    *timer = count;
+    if (count == 0) {
+        UI_SetMode(13);
+        D_80146874 = D_80146874 + 1;
+    }
+}
 
 INCLUDE_ASM(func_801F7FF0);
 
@@ -78,7 +89,18 @@ INCLUDE_ASM(func_801F82C0);
 
 INCLUDE_ASM(func_801F833C);
 
-INCLUDE_ASM(func_801F83A8);
+MATCH void func_801F83A8(void) {
+    u8* timer;
+    u8  count;
+
+    timer  = &D_80146875;
+    count  = *timer - 1;
+    *timer = count;
+    if (count == 0) {
+        D_80146874 = D_80146874 + 1;
+    }
+    func_801F8B10(0x1F4, 0xFF);
+}
 
 INCLUDE_ASM(func_801F8404);
 

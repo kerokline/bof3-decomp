@@ -11,7 +11,12 @@ MATCH void func_801EECDC(void) {
     g_SpadWork->step_01 += 1;
 }
 
-INCLUDE_ASM(func_801EECFC);
+MATCH void func_801EECFC(void) {
+    BMagic064Steps steps;
+
+    steps = D_801EEC10;
+    steps.handlers[g_SpadWork->unk_02]();
+}
 
 INCLUDE_ASM(func_801EED7C);
 

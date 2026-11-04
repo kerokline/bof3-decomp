@@ -299,6 +299,8 @@ INCLUDE_ASM(func_801D7224);
 /* Same body in the shop, start, Bate and Shisu overlays; the start draft covers the five SPRT bands and four corner sprites, and the missing piece is a source shape for the retail per-band draw-mode setup. */
 INCLUDE_ASM(Menu_DrawWindowFrame);
 
+/* Same shape as bate/00 func_801D6C54: follows etc/game/00 func_801999F8.
+ * First differing instruction: +0x138 `lhu v1,18(s1)` (template `andi v1,s0,0xff`). */
 INCLUDE_ASM(func_801D7BFC);
 
 MATCH void func_801D835C(MenuChoicePanel* panel) {

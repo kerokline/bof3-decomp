@@ -44,6 +44,15 @@ typedef struct BattleModule {
 
 ASSERT_SIZE(BattleModule, 4);
 
+/* Camera scroll step per direction: func_8009B488, func_8009B700, func_8009B794
+ * and func_800A8678 add one entry to the x/y phase scroll words, indexed by
+ * g_BattleScrollDir. */
+typedef struct BattleScrollDelta {
+    s8 x;
+    s8 y;
+} BattleScrollDelta;
+
+extern BattleScrollDelta            D_800B44C0[4];
 extern u8                           D_800B6510[232];
 extern u8*                          D_800B6AB0[];
 /* One-field views of the same rows: the local rows (stride 0x140) and the

@@ -212,6 +212,8 @@ INCLUDE_ASM(func_801D627C);
 /* Same body in the shop, start, Bate and Shisu overlays; the start draft covers the five SPRT bands and four corner sprites, and the missing piece is a source shape for the retail per-band draw-mode setup. */
 INCLUDE_ASM(Menu_DrawWindowFrame);
 
+/* Follows etc/game/00 func_801999F8 (472 against 443 instructions).
+ * First differing instruction: +0x138 `lhu v1,18(s1)` (template `andi v1,s0,0xff`); retail tests (task->unk_12 >> 4) == 15 per row before the flag call, and the tail has an extra `task->unk_0A == 4` sprite pair. */
 INCLUDE_ASM(func_801D6C54);
 
 MATCH void func_801D73B4(BateAbilityPanel* panel) {

@@ -43,7 +43,18 @@ MATCH void func_801EF348(void) {
 
 #include "overlays/bmagic/Effect_CountDownTimerStep.h"
 
-INCLUDE_ASM(func_801EF3E0);
+MATCH void func_801EF3E0(void) {
+    PartyBattler* work;
+
+    work = g_SpadWork;
+    work->unk_0A = work->unk_0A - 1;
+    if (work->unk_0A == 0) {
+        work         = (PartyBattler*)D_801EB4E0;
+        work->unk_0B = work->unk_0B - 1;
+        func_801E5988();
+    }
+}
+
 
 MATCH void func_801EF43C(void) {
     SVECTOR pos;

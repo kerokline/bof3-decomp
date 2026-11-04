@@ -48,7 +48,18 @@ MATCH void func_801EF710(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF750);
+MATCH void func_801EF750(void) {
+    PartyBattler* work;
+
+    work = g_SpadWork;
+    work->unk_09 = work->unk_09 - 1;
+    if (work->unk_09 == 0) {
+        work         = (PartyBattler*)D_801EB4E0;
+        work->unk_0B = work->unk_0B - 1;
+        Actor_Clear();
+    }
+}
+
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"
 

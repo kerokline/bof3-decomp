@@ -107,6 +107,10 @@ INCLUDE_ASM(func_801D04F0);
 /* func_801D07CC */
 #include "overlays/plchar/Char_ProbeFacingCell.h"
 
-INCLUDE_ASM(func_801D0900);
+MATCH void func_801D0900(void) {
+    D_801D09E8[g_SpadWork->unk_2C]();
+}
 
-INCLUDE_ASM(func_801D0944);
+MATCH void func_801D0944(void) {
+    D_801D09F4[g_SpadWork->unk_2C]();
+}

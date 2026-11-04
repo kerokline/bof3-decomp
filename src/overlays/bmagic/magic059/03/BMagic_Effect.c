@@ -52,16 +52,16 @@ MATCH void func_801EF638(void) {
     long          flags;
 
     PushMatrix();
-    src    = (PartyBattler*)D_801EB4E0;
-    rot.vx = 0;
-    rot.vy = 0;
-    rot.vz = 0;
-    g_SpadWork->coord_x_34 = src->coord_x_34;
-    g_SpadWork->coord_y_38 = src->coord_y_38;
+    src                              = (PartyBattler*)D_801EB4E0;
+    rot.vx                           = 0;
+    rot.vy                           = 0;
+    rot.vz                           = 0;
+    g_SpadWork->coord_x_34           = src->coord_x_34;
+    g_SpadWork->coord_y_38           = src->coord_y_38;
     g_SpadWork->word_3C.half.span_3E = src->word_3C.half.span_3E;
-    pos.vx = (g_SpadWork->coord_x_34.raw >> 9) - 0x4000;
-    pos.vy = (g_SpadWork->coord_y_38.raw >> 9) - 0x4000;
-    pos.vz = -g_SpadWork->word_3C.half.span_3E / 2;
+    pos.vx                           = (g_SpadWork->coord_x_34.raw >> 9) - 0x4000;
+    pos.vy                           = (g_SpadWork->coord_y_38.raw >> 9) - 0x4000;
+    pos.vz                           = -g_SpadWork->word_3C.half.span_3E / 2;
     RotTrans(&pos, &matrix.t, &flags);
     RotMatrix(&rot, &matrix);
     MulMatrix2((MATRIX*)g_CameraMatrix, &matrix);

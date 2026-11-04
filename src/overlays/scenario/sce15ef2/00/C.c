@@ -10,9 +10,9 @@ MATCH void func_801D0C70(void) {
     u8* work;
     u8* step;
 
-    work    = (u8*)g_SpadWork;
-    work[9] = 0x10;
-    step    = (u8*)g_SpadWork;
+    work                  = (u8*)g_SpadWork;
+    work[9]               = 0x10;
+    step                  = (u8*)g_SpadWork;
     FIELD(s32, work, 0xC) = 0;
     step[1]++;
 }

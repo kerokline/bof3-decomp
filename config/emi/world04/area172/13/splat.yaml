@@ -34,7 +34,7 @@ segments:
       - [0xD84, c, func_801F3984]
       - [0xE38, c, func_801F3A38]
       - [0xFFC, c, func_801F3BFC]
-      - [0x1290, c, func_801F3E90]
+      - [0x1290, c, Area_InitSpin]
       - [0x13AC, c, func_801F3FAC]
       - [0x1460, c, func_801F4060]
       - [0x1538, c, func_801F4138]

@@ -13,7 +13,7 @@ segments:
       - [0xDC, c, func_801F2CDC]
       - [0x210, c, func_801F2E10]
       - [0x230, c, func_801F2E30]
-      - [0x4D0, c, func_801F30D0]
+      - [0x4D0, c, Area_InitSpin]
       - [0x5E8, c, func_801F31E8]
       - [0x62C, c, func_801F322C]
       - [0x684, c, func_801F3284]

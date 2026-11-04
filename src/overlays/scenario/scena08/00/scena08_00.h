@@ -5,6 +5,8 @@
  * includes the file. */
 
 #include "overlays/scenario/scenario.h"
+#define SCRATCH_ROW_STRIDE 0x28
+#define SCRATCH_ROW_OFFSET 0x00
 
 extern u32       D_801F6C00;
 extern Callback  D_801FE8A0[];

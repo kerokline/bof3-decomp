@@ -91,7 +91,19 @@ INCLUDE_ASM(func_801F7CF8);
 
 INCLUDE_ASM(func_801F7D54);
 
-INCLUDE_ASM(func_801F7DAC);
+MATCH u8* func_801F7DAC(void) {
+    u8* p;
+    u8  i;
+
+    p = MEM_PTR(u8, AREA_WORK_WINDOW_ADDRESS);
+    for (i = 0; i < 64; i++) {
+        if (p[SCRATCH_ROW_OFFSET] == 0) {
+            return p;
+        }
+        p += SCRATCH_ROW_STRIDE;
+    }
+    return NULL;
+}
 
 MATCH void func_801F7DE8(void) {
     s32 var_v1_6;

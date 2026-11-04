@@ -19,6 +19,7 @@ as `+`. Run each Python tool with `.venv/bin/python tools/<name>.py` or directly
 | Find a template for an assembly function | `tools/template_diff.py <target>@<func>`                                 | [template diff](#templates)                               |
 | Try templates in batch                   | `tools/template_try.py rows.tsv`                                         | [template diff](#templates)                               |
 | Try one C body for an assembly function  | `tools/try_body.py <target>@<func> body.c`                               | [try body](#try-body)                                     |
+| Measure shapes, write bodies for them | `tools/gen_body.py shapes`, `tools/gen_body.py call-seq`                  | [body generators](#body-generators)                       |
 | Find twins in one image                  | `bin/coddog match <target> <func> -t 0.95`                               | [coddog](../docs/toolchain.md#coddog)                     |
 | Find alike functions across images       | `tools/dups.py near`                                                     | [duplicates](#duplicates-and-names)                       |
 | List same-name groups and split names    | `tools/dups.py shared-names`, `tools/dups.py split-names`                | same                                                      |
@@ -72,6 +73,17 @@ tools/try_body.py --batch rows.tsv              # rows: <target>@<func> <TAB> bo
 A line `@decl <declaration>` in the body file (an `extern`, a prototype or a `#define`) is removed from
 the body and added to the image header, the first include of the C file, unless an include of that
 file already declares the name. Output: `EXACT`, `FAIL` with the first difference, or `SKIP`.
+
+## Body generators
+
+`gen_body.py` lifts the assembly of a branch-free function into calls and stores and writes C from
+it with the repo's names (`config/symbols.toml` by address, `g_SpadWork` members by offset).
+`shapes` counts every `INCLUDE_ASM` function by shape (`call-seq`, `store-seq`, `spad`, `dispatch`,
+`straight`, `branch`); `tools/gen_body.py <shape> [rows.tsv] [--dry-run]` writes a body per member
+(`MATCH`, one statement per call or store), declares missing globals in the image header and keeps
+the body only when `tools/match.sh` reports an exact result. Twins with one body at one address
+share `<func>.h`; twins at several addresses print `TWIN` and stay for a naming pass. A
+body is a lead: run `check-<image>`, then name it from evidence.
 
 ## Duplicates and names
 

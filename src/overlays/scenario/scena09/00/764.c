@@ -213,15 +213,35 @@ INCLUDE_ASM(func_801FDC1C);
 
 INCLUDE_ASM(func_801FDC70);
 
-INCLUDE_ASM(func_801FDCF4);
+MATCH void func_801FDCF4(void) {
+    EMI_LoaderStreamFamily(7U, 8U, 2U, 0U);
+    Party_BuildBattlers(0);
+    Party_JoinMember(8);
+    func_801C1630();
+}
 
-INCLUDE_ASM(func_801FDD38);
+MATCH void func_801FDD38(void) {
+    EMI_LoaderStreamFamily(7U, 8U, 2U, 0U);
+    Party_BuildBattlers(0);
+    Party_JoinMember(2);
+    func_801C1630();
+}
 
 INCLUDE_ASM(func_801FDD7C);
 
-INCLUDE_ASM(func_801FDDC8);
+MATCH void func_801FDDC8(void) {
+    EMI_LoaderStreamFamily(7U, 8U, 5U, 0U);
+    Party_BuildBattlers(0);
+    Party_JoinMember(5);
+    func_801C1630();
+}
 
-INCLUDE_ASM(func_801FDE0C);
+MATCH void func_801FDE0C(void) {
+    EMI_LoaderStreamFamily(7U, 8U, 5U, 0U);
+    Party_BuildBattlers(0);
+    Party_JoinMember(8);
+    func_801C1630();
+}
 
 MATCH void func_801FDE50(void) {
     Party_BuildBattlers(0);
@@ -231,19 +251,44 @@ MATCH void func_801FDE50(void) {
 
 INCLUDE_ASM(func_801FDE80);
 
-INCLUDE_ASM(func_801FDECC);
+MATCH void func_801FDECC(void) {
+    EMI_LoaderStreamFamily(7U, 6U, 5U, 0U);
+    Party_BuildBattlers(0);
+    Party_JoinMember(6);
+    func_801C1630();
+}
 
-INCLUDE_ASM(func_801FDF10);
+MATCH void func_801FDF10(void) {
+    EMI_LoaderStreamFamily(7U, 6U, 5U, 0U);
+    Party_BuildBattlers(0);
+    Party_JoinMember(5);
+    func_801C1630();
+}
 
 INCLUDE_ASM(func_801FDF54);
 
-INCLUDE_ASM(func_801FE014);
+MATCH void func_801FE014(void) {
+    EMI_LoaderStreamFamily(7U, 4U, 8U, 0U);
+    Party_BuildBattlers(0);
+    Party_JoinMember(8);
+    func_801C1630();
+}
 
 INCLUDE_ASM(func_801FE058);
 
-INCLUDE_ASM(func_801FE0A4);
+MATCH void func_801FE0A4(void) {
+    EMI_LoaderStreamFamily(7U, 4U, 8U, 0U);
+    Party_BuildBattlers(0);
+    Party_JoinMember(4);
+    func_801C1630();
+}
 
-INCLUDE_ASM(func_801FE0E8);
+MATCH void func_801FE0E8(void) {
+    EMI_LoaderStreamFamily(7U, 4U, 8U, 0U);
+    Party_BuildBattlers(0);
+    Party_JoinMember(7);
+    func_801C1630();
+}
 
 MATCH void func_801FE12C(void) {
     func_801C1ABC(4);

@@ -180,7 +180,19 @@ MATCH void func_801F8358(void) {
     D_801FDFC8 = 0;
 }
 
-INCLUDE_ASM(func_801F8394);
+MATCH u8* func_801F8394(void) {
+    u8* p;
+    u8  i;
+
+    p = MEM_PTR(u8, AREA_WORK_WINDOW_ADDRESS);
+    for (i = 0; i < 8; i++) {
+        if (p[SCRATCH_ROW_OFFSET] == 0) {
+            return p;
+        }
+        p += SCRATCH_ROW_STRIDE;
+    }
+    return NULL;
+}
 
 INCLUDE_ASM(func_801F83D0);
 

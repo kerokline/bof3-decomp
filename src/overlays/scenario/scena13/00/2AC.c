@@ -136,7 +136,15 @@ MATCH void func_801F7D14(void) {
     SYS_DISPATCH_BYTE(D_801FBF48, D_80146872);
 }
 
-INCLUDE_ASM(func_801F7D50);
+MATCH void func_801F7D50(void) {
+    Game_SetScriptActive();
+    g_AreaDrawFlags = 31;
+    func_801C16B8();
+    func_801C1DF0(0);
+    SYS_SetFlag(g_SceneEventFlags, 67);
+    SYS_ClearFlag(g_SceneEventFlags, 66);
+    D_80146872 = 1;
+}
 
 INCLUDE_ASM(func_801F7DBC);
 
@@ -209,13 +217,25 @@ MATCH void func_801FB3DC(void) {
     g_SceneState.step_05  = 0x19;
 }
 
-INCLUDE_ASM(func_801FB414);
+MATCH void func_801FB414(void) {
+    SYS_SetFlag(g_SceneFlags, 28);
+    Game_SetScriptActive();
+    D_801448EB = 44;
+    D_801448EC = 0;
+    D_801448ED = 17;
+}
 
 INCLUDE_ASM(func_801FB464);
 
 INCLUDE_ASM(func_801FBA34);
 
-INCLUDE_ASM(func_801FBB78);
+MATCH void func_801FBB78(void) {
+    EMI_LoaderStreamFamily(7, 5, 6, 0);
+    g_PartySize = 0;
+    Party_JoinMember(7);
+    Party_JoinMember(6);
+    Party_JoinMember(5);
+}
 
 INCLUDE_ASM(func_801FBBC4);
 
@@ -227,7 +247,14 @@ MATCH void func_801FBC88(void) {
 
 INCLUDE_ASM(func_801FBCC4);
 
-INCLUDE_ASM(func_801FBD84);
+MATCH void func_801FBD84(void) {
+    EMI_LoaderStreamFamily(7, 5, 8, 0);
+    g_PartySize = 0;
+    Party_JoinMember(7);
+    Party_JoinMember(5);
+    Party_JoinMember(8);
+    func_801C1630();
+}
 
 INCLUDE_ASM(func_801FBDD8);
 

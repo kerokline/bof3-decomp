@@ -19,4 +19,10 @@ extern Callback D_801FA180[];
 
 void func_801F7FCC(void);
 
+extern u8 D_80144F5A;
+extern u8 D_80144F5B;
+extern u8 D_80144F5C;
+extern u8 D_80144F5E;
+extern u8 D_80144F5F;
+
 #endif

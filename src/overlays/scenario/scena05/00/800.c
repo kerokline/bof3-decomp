@@ -201,7 +201,16 @@ MATCH void func_801FCA98(void) {
 
 INCLUDE_ASM(func_801FCAA0);
 
-INCLUDE_ASM(func_801FCB1C);
+MATCH void func_801FCB1C(void) {
+    SYS_SetFlag(g_SceneFlags, 11);
+    Game_SetScriptActive();
+    g_ScriptVars[0] = 0;
+    D_80146865      = 0;
+    D_80146866      = 0;
+    D_80146867      = 0;
+    D_80146875      = 0;
+    D_80146874      = 8;
+}
 
 MATCH void func_801FCB80(void) {
     Game_SetScriptActive();

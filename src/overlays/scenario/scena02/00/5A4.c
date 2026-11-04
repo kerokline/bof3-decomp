@@ -133,9 +133,23 @@ INCLUDE_ASM(func_801FC7E4);
 
 INCLUDE_ASM(func_801FC9CC);
 
-INCLUDE_ASM(func_801FCB54);
+MATCH void func_801FCB54(void) {
+    g_ScriptVars[0] = 31;
+    D_80146865      = 0;
+    D_80146866      = 0;
+    D_80146867      = 0;
+    D_80146875      = 0;
+    D_80146874      = 7;
+}
 
-INCLUDE_ASM(func_801FCB94);
+MATCH void func_801FCB94(void) {
+    g_ScriptVars[0] = 0;
+    D_80146865      = 0;
+    D_80146866      = 0;
+    D_80146867      = 0;
+    D_80146875      = 0;
+    SND_PlayCue(514);
+}
 
 INCLUDE_ASM(func_801FCBDC);
 

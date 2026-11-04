@@ -328,7 +328,13 @@ MATCH void func_801FDAFC(void) {
 
 INCLUDE_ASM(func_801FDB34);
 
-INCLUDE_ASM(func_801FDB80);
+MATCH void func_801FDB80(void) {
+    EMI_LoaderStreamFamily(0, 1, 2, 0);
+    g_PartySize = 0;
+    Party_JoinMember(0);
+    Party_JoinMember(1);
+    Party_JoinMember(2);
+}
 
 MATCH void func_801FDBCC(void) {
     func_801C1ABC(D_80146189);

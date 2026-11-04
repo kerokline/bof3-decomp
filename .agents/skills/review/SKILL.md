@@ -14,6 +14,15 @@ with file and line.
 3. Check the task's own gate: the changed images are EXACT and `check` passes.
 4. List one finding per line: `file:line class fix`, then the count per class.
 
+## Flow
+
+```text
+input ← diff or range
+set the diff → quality pass → task gate
+loop: finding → fix within the grant | needs: line → until every row of the quality pass is read
+stop: findings per class with counts | a clean pass naming the range
+```
+
 ## Quality pass
 
 | Check                  | Command                                                                                                  | Fix                                                                                                   |

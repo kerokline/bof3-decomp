@@ -14,6 +14,15 @@
 /* The row count this overlay clears. */
 #define SCRATCH_COLUMN_COUNT 16
 
+typedef struct AreaSprite {
+    u8  unk_00[3];
+    u8  flags_03;  /* the shade of the sprite */
+    u16 half_size; /* the projected half-size */
+    u8  unk_06[2];
+    s32 origin_x; /* the camera x */
+    s32 origin_y; /* the camera y */
+} AreaSprite;
+
 extern u8 D_801F364C[];
 
 /* func_801F3384 */

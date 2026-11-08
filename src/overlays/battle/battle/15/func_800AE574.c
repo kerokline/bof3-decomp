@@ -18,11 +18,9 @@ MATCH void func_800AE574(void) {
         return;
     }
 
-    source              = g_BattleEffectBattler;
-    second              = (PartyBattler*)g_Task;
-    second->pos.x.fixed = source->pos.x.fixed;
-    second->pos.y.fixed = source->pos.y.fixed;
-    second->pos.z.fixed = source->pos.z.fixed;
+    source = g_BattleEffectBattler;
+    second = (PartyBattler*)g_Task;
+    WorldPos_Copy(&second->pos, &source->pos);
     func_800AF764();
 
     third                   = TASK_BYTES;

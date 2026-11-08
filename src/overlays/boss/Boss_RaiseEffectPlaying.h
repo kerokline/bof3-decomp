@@ -6,7 +6,7 @@ MATCH void Boss_RaiseEffectPlaying(void) {
 
     if (func_801E30F8() != 0) {
         BATTLE_RAISE_STATE(BATTLE_STATE_EFFECT_PLAYING);
-        func_801E5704();
+        Battle_TriggerCritical();
         func_801E567C();
     }
 }

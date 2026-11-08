@@ -693,7 +693,8 @@ extern void  func_801D6EAC(void);
 extern void  func_801D6EEC(void);
 extern void  Battle_ReloadPartyBank(void);
 extern void  Battle_ReloadAreaAudio(void);
-extern void  func_801D716C(void);
+/* func_801D716C */
+extern void  Battle_WaitAreaReload(void);
 extern void  func_801D71A4(void);
 extern void  Battle_ReloadFieldText(void);
 extern void  Battle_ReloadMusicBank(void);
@@ -717,14 +718,16 @@ void         func_801D94D4(s32 x, u32 y, s32 clut_index, s32 text_value);
 /* func_801D9684 */
 void         Battle_DrawNumber(s16 x, s16 y, u8 palette, u16 value);
 void         func_801D9804(s32 x, s32 y, s32 clut_index, s32 glyph_index);
-void         func_801D9900(void);
+/* func_801D9900 */
+void         Battle_DrawDimOverlay(void);
 void         func_801D99AC(s16 x, s16 y, u8 template_index);
 void         func_801D9AB4(s16 x, s16 y, s32 shape_index, s32 shade);
 void         func_801D9C80(s16 x, s16 y, u8 template_index, u8 shade);
 void         func_801D9DBC(s16 x, s16 y, u8 template_index, u16 packed_color, u8 semi_trans);
 void         func_801D9E9C(s16 arg0, s16 arg1, u16 arg2, u16 arg3, s8 arg4);
 void         func_801DA078(s32 x, s32 y, s32 u_index);
-void         func_801DA408(s16 x0, s16 y0, s16 x1, s16 y1, u8 r, u8 g, u8 b);
+/* func_801DA408 */
+void         Battle_DrawLine(s16 x0, s16 y0, s16 x1, s16 y1, u8 r, u8 g, u8 b);
 void         func_801DA4B4(s16 x0, s16 y0, s16 x1, s16 y1, u8 r, u8 g, u8 b);
 void         func_801DA5A8(s16 x0, s16 y0, s16 x1, s16 y1, u8 r, u8 g, u8 b);
 u8           func_801DA69C(u32 enemy_index);
@@ -918,7 +921,8 @@ extern void  func_801E5288(void);
 extern void  func_801E52E8(void);
 /* func_801E531C */
 void         Battle_RollEnemyDrops(void);
-void         func_801E5768(void);
+/* func_801E5768 */
+void         Battle_HandleDesertDefeat(void);
 void         func_801E57C8(void);
 /* func_801E5824 */
 void         Battle_UpdateEffects(void);

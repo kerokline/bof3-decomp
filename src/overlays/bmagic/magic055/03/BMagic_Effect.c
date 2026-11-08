@@ -16,12 +16,10 @@ MATCH void func_801EECCC(void) {
     u16*          src;
     u16*          dst;
 
-    actor              = g_BattleSelectedActor;
-    g_Task->facing     = actor->facing;
-    task               = g_Task;
-    task->pos.x.fixed  = actor->pos.x.fixed;
-    task->pos.y.fixed  = actor->pos.y.fixed;
-    task->pos.z.fixed  = actor->pos.z.fixed;
+    actor          = g_BattleSelectedActor;
+    g_Task->facing = actor->facing;
+    task           = g_Task;
+    WorldPos_Copy(&task->pos, &actor->pos);
     task->param.unk_0B = 0;
     for (i = 0, anchor = 1; i < 6; i++) {
         slot                               = Battle_AllocEffect(1, 0x34);

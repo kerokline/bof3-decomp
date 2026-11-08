@@ -681,7 +681,8 @@ void        func_801EA6EC(void);
 void        func_801EA72C(void);
 void        func_801EA76C(void);
 void        func_801EA7AC(void);
-void        func_801EA7EC(void);
+/* func_801EA7EC */
+void        Menu_EquipChoicePanel(void);
 void        func_801EA840(void);
 void        func_801EA880(void);
 void        func_801EA8C0(void);

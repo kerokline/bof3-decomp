@@ -338,19 +338,22 @@ MATCH void func_801FE210(void) {
     Party_JoinMember(CHAR_ID_GARR);
 }
 
-MATCH void func_801FE254(void) {
+/* func_801FE254 */
+MATCH void Scene_RemoveRyuGarr(void) {
     Party_RemoveMember(CHAR_ID_RYU_YOUNG);
     Party_RemoveMember(CHAR_ID_GARR);
     Party_LoadPalettes();
 }
 
-MATCH void func_801FE284(void) {
+/* func_801FE284 */
+MATCH void Scene_RemoveRyuMomo(void) {
     Party_RemoveMember(CHAR_ID_RYU_YOUNG);
     Party_RemoveMember(CHAR_ID_MOMO);
     Party_LoadPalettes();
 }
 
-MATCH void func_801FE2B4(void) {
+/* func_801FE2B4 */
+MATCH void Scene_RemoveRyuPeco(void) {
     Party_RemoveMember(CHAR_ID_RYU_YOUNG);
     Party_RemoveMember(CHAR_ID_PECO);
     Party_LoadPalettes();
@@ -360,7 +363,8 @@ MATCH void func_801FE2B4(void) {
 
 #include "overlays/scenario/Scene_RemovePeco.h"
 
-MATCH void func_801FE334(void) {
+/* func_801FE334 */
+MATCH void Scene_RemovePecoGarr(void) {
     Party_RemoveMember(CHAR_ID_PECO);
     Party_RemoveMember(CHAR_ID_GARR);
     Party_LoadPalettes();
@@ -368,7 +372,8 @@ MATCH void func_801FE334(void) {
 
 #include "overlays/scenario/Scene_RemoveMomo.h"
 
-MATCH void func_801FE38C(void) {
+/* func_801FE38C */
+MATCH void Scene_RemoveMomoPeco(void) {
     Party_RemoveMember(CHAR_ID_MOMO);
     Party_RemoveMember(CHAR_ID_PECO);
     Party_LoadPalettes();

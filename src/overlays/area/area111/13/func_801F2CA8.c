@@ -3,7 +3,7 @@
 MATCH void func_801F2CA8(void) {
     Actor* work = g_Task;
 
-    work->timer    = 0x28;
+    work->timer    = 40;
     work->screen_x = 0;
     work->screen_y = 256;
     g_Task->header.mode++;

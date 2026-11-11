@@ -112,7 +112,6 @@ extern u8       g_SaveSlotFrameSprites[];
 extern u8       D_801D8B84[];
 /* D_801D8E80 */
 extern u8*      g_MenuAbilityListNames[];
-extern u8       D_801D8EE0[5];
 
 extern const char g_MenuInventoryCountFormat[];
 
@@ -122,12 +121,16 @@ typedef struct BateState {
     u8 unk_04;
     u8 pad_05[3];
     u8 unk_08;
+    u8 pad_09[3];
+    /* The equipped item in each slot before the change. */
+    u8 equipped_items[6];
 } BateState;
 
 extern s8        D_80148659;
 extern BateState D_801D8ED4;
 extern u8        D_801D86F8[];
 
+bool Item_Add(s32 category, u8 item, u8 amount, s32 unused);
 s32  Item_Count(u8 category, u8 item, u8 mode);
 void Menu_DrawPortrait(s32 sprite_x, s32 sprite_y, s32 atlas_index, s32 shade_mode);
 void Menu_DrawIcon(u16 sprite_x, u16 sprite_y, u8 icon_column, u8 shade_mode);

@@ -87,7 +87,20 @@ INCLUDE_ASM(func_801F7D04);
 
 INCLUDE_ASM(func_801F7DCC);
 
-INCLUDE_ASM(func_801F7EDC);
+MATCH void func_801F7EDC(void) {
+    POLY_F4* prim;
+    s32      tpage;
+
+    tpage = getTPage(1, 1, 320, 256);
+    GFX_SET_DRAW_MODE(tpage);
+    GFX_AddPrim(3, sizeof(DR_MODE));
+    prim = (POLY_F4*)g_GfxPrimCursor;
+    SetPolyF4(prim);
+    SetSemiTrans(prim, 1);
+    setXYWH(prim, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    setRGB0(prim, (s16)g_Task->screen_x / 8, 0, 0);
+    GFX_AddPrim(3, sizeof(POLY_F4));
+}
 
 MATCH void func_801F7FC4(void) {
     SYS_DISPATCH_BYTE(D_801FE29C, D_80146872);
@@ -268,7 +281,21 @@ MATCH void func_801FD5C4(void) {
     g_SceneState.state_04 = 17;
 }
 
-INCLUDE_ASM(func_801FD60C);
+MATCH void func_801FD60C(Actor* actor) {
+    Game_SetScriptActive();
+    g_ScriptVars[0]      = 10;
+    g_ScriptVars[1]      = 0;
+    g_ScriptVars[2]      = 0;
+    actor->header.mode   = 4;
+    actor->unk_7E        = 0;
+    actor->unk_7B        = 0;
+    actor->unk_77        = 10;
+    g_Task->direction_08 = g_Game.members[0].facing ^ 4;
+    func_8015BAC4(g_Task->direction_08);
+    g_Task->option_flags |= ACTOR_OPT_ROUTE_LOCKED;
+    g_SceneState.step_05  = 10;
+    g_SceneState.state_04 = 13;
+}
 
 MATCH void func_801FD6CC(Actor* actor) {
     Game_SetScriptActive();

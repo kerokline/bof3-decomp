@@ -75,7 +75,7 @@ MATCH void func_801F7644(void) {
 
 INCLUDE_ASM(func_801F7678);
 
-INCLUDE_ASM(func_801F7A24);
+#include "shared/Area_DrawSparkCell.h"
 
 #include "shared/Area_ClearWorkColumn.h"
 

@@ -83,7 +83,28 @@ MATCH void func_801F752C(AreaSpark* spark) {
 
 INCLUDE_ASM(func_801F75D8);
 
-INCLUDE_ASM(func_801F7748);
+MATCH bool func_801F7748(void) {
+    AreaSpark* spark;
+    u8         i;
+    bool       alive;
+
+    alive = false;
+    spark = MEM_PTR(AreaSpark, AREA_WORK);
+    i     = 0;
+    do {
+        if (spark->active != 0) {
+            spark->pos.z -= spark->fall_speed << 8;
+            func_801F752C(spark);
+            if (spark->pos.z < g_Task->pos.z.fixed) {
+                spark->active = 0;
+            }
+            alive = true;
+        }
+        spark++;
+        i++;
+    } while (i < AREA_SPARK_COUNT);
+    return alive;
+}
 
 MATCH void func_801F77F8(void) {
     SYS_DISPATCH_TASK(D_801FE590, 1, g_Task);

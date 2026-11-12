@@ -180,7 +180,18 @@ MATCH void func_801F79EC(void) {
     SYS_DISPATCH_TASK(D_801FDDB4, 2, g_Task);
 }
 
-INCLUDE_ASM(func_801F7A30);
+MATCH void func_801F7A30(void) {
+    /* FAKE: retail reserves 16 bytes of frame that no statement uses. */
+    FAKE_STACK_PADS(u8, 0x10);
+    Actor* work;
+
+    Scene_PlaceAtLead();
+    func_801F8358();
+    work         = g_Task;
+    work->unk_06 = 1;
+    work->vx     = 40;
+    g_Task->header.step += 1;
+}
 
 INCLUDE_ASM(func_801F7AB0);
 
@@ -204,7 +215,15 @@ MATCH void func_801F7D28(void) {
     SYS_DISPATCH_TASK(D_801FDDC8, 2, g_Task);
 }
 
-INCLUDE_ASM(func_801F7D6C);
+MATCH void func_801F7D6C(void) {
+    /* FAKE: retail reserves 16 bytes of frame that no statement uses. */
+    FAKE_STACK_PADS(u8, 0x10);
+
+    Scene_PlaceAtLead();
+    func_801FA01C();
+    g_Task->vx = 120;
+    g_Task->header.step += 1;
+}
 
 MATCH void func_801F7DDC(void) {
     func_801FA38C();

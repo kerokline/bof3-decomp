@@ -286,7 +286,30 @@ MATCH void func_801F7DE8(void) {
 
 INCLUDE_ASM(func_801F7E14);
 
-INCLUDE_ASM(func_801F802C);
+MATCH void func_801F802C(void) {
+    AreaSprite* work;
+    u32         angle;
+
+    work = (AreaSprite*)func_801F7DAC();
+    if (work != NULL) {
+        work->flags    = 1;
+        work->flags_02 = 0;
+        work->origin.x = g_Task->pos.x.fixed;
+        work->origin.y = g_Task->pos.y.fixed;
+        work->origin.z = g_Task->pos.z.fixed >> 8;
+        angle          = (u32)rsin(g_Task->vx) >> 4;
+        if (g_Task->unk_06 == 7) {
+            angle = (u16)angle;
+            angle += ANGLE_180;
+        } else {
+            angle = (u16)angle;
+            angle += ANGLE_90;
+        }
+        work->normal.vx = rcos(angle) * 3;
+        work->normal.vy = rsin(angle) * 3;
+        work->normal.vz = 0;
+    }
+}
 
 INCLUDE_ASM(func_801F8108);
 
@@ -423,7 +446,20 @@ MATCH void func_801F98E0(void) {
     }
 }
 
-INCLUDE_ASM(func_801F995C);
+MATCH void func_801F995C(void) {
+    g_Task->pos.x.fixed -= 0x10000;
+    g_Task->pos.z.fixed += g_Task->vz;
+    g_Task->vz -= 0x200000;
+    func_801F9F8C(&g_Task->pos, 0x20, 8, 0);
+    if (g_Task->pos.x.fixed == 0x490000) {
+        g_Task->vx = 0x38E3;
+        g_Task->vy = 0x10000;
+        g_Task->vz = 0xB8E38E;
+        g_Task->header.mode += 1;
+        SND_PlayCue(EMI_CUE_ID(SND_BANK_AREA, 2));
+        SND_PlayCue(EMI_CUE_ID(SND_BANK_AREA, 3));
+    }
+}
 
 MATCH void func_801F9A10(void) {
     g_Task->pos.x.fixed += g_Task->vx;
@@ -559,7 +595,17 @@ MATCH void func_801FA2D0(void) {
     SYS_SetFlag(&D_80144EC8[0x60], 0x43);
 }
 
-INCLUDE_ASM(func_801FA32C);
+MATCH void func_801FA32C(void) {
+    u8 i;
+
+    for (i = 0; i < CHARACTER_COUNT; i++) {
+        g_Characters[i].unk_07 |= 1;
+    }
+    func_801C16B8();
+    for (i = 1; i < CHARACTER_COUNT; i++) {
+        g_Characters[i].unk_07 &= 0xFE;
+    }
+}
 
 INCLUDE_ASM(func_801FA3E4);
 

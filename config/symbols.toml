@@ -1116,6 +1116,7 @@ BMagic_AllocEffect = { addr = 0x801EFC8C, type = "func", source = "Claims the fi
 g_BMagicEffectModes = { addr = 0x801F0048, source = "Handlers of magic105 (Kyrie), run by header.mode (byte 0x01)." }
 
 ["emi/bmagic/magic106/03"]
+Battle_ApplyDamageFlags = { addr = 0x800A9610, alias = true }
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true }
 g_BattleEffectBattler = { addr = 0x801EB4E0, source = "the battler the running effect acts on; Battle_UpdateEffects stores it for each effect step (emi/battle/battle/03 owns the cell)" }
 Effect_PlayOnZeroTick = { addr = 0x801EEE80, type = "func", source = "When the effect ticker (byte 0x0B) is zero plays the effect the target selector chose, raises BATTLE_STATE_EFFECT_PLAYING and clears the effect in magic106 (Death)." }
@@ -1221,7 +1222,9 @@ Effect_PlayOnce2 = { addr = 0x801EF344, type = "func", source = "Plays the effec
 ["emi/bmagic/magic118/03"]
 Battle_ApplyDamageFlags = { addr = 0x800A9610, type = "func", source = "Applies the damage flags to the selected battlers." }
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true }
+Battle_AllocEffect = { addr = 0x801E590C, alias = true }
 g_BattleEffectBattler = { addr = 0x801EB4E0, source = "the battler the running effect acts on; Battle_UpdateEffects stores it for each effect step (emi/battle/battle/03 owns the cell)" }
+g_BattleEffects = { addr = 0x801EC330, alias = true }
 BMagic_UpdateBurn = { addr = 0x801EEC18, type = "func", source = "per-frame update of the Burn effect: runs the step handler D_801EEC04 selects, then draws the flame quads and triangles while the effect is active" }
 BMagic_SpawnBurnFlames = { addr = 0x801EECD4, type = "func", source = "starts the Burn effect: claims eight flame effect slots with Battle_AllocEffect, each pointing at the effect work record, copies a palette row with the semi-transparent bit set and queues cue 0x100" }
 BMagic_SelectBurnTarget = { addr = 0x801EEE20, type = "func", source = "counts the effect timer at +0x09 up and, at 16, calls Battle_ApplyDamageFlags with g_BattleTargetSelector and 0x10, then advances the step byte at +0x01" }
@@ -1422,7 +1425,9 @@ g_BMagicEffectModes = { addr = 0x801EFEE8, source = "Handlers of magic143 (Thund
 ["emi/bmagic/magic144/03"]
 Battle_MarkDamaged = { addr = 0x800A9820, type = "func", source = "Marks the selected battlers as damaged." }
 Battle_ProjectRange = { addr = 0x800AF764, type = "func", source = "Projects the battle range to the screen." }
+Battle_AllocEffect = { addr = 0x801E590C, alias = true }
 g_BattleEffectBattler = { addr = 0x801EB4E0, source = "the battler the running effect acts on; Battle_UpdateEffects stores it for each effect step (emi/battle/battle/03 owns the cell)" }
+g_BattleEffects = { addr = 0x801EC330, alias = true }
 Effect_StartOnZeroTick = { addr = 0x801EEE50, type = "func", source = "When the effect ticker (byte 0x0B) is zero raises BATTLE_STATE_EFFECT_PLAYING and clears the effect in magic144 (Wall of Fire)." }
 BMagic_DispatchEffectMode = { addr = 0x801EEE9C, type = "func", source = "Runs the handler that header.mode (byte 0x01) selects from the effect handlers of magic144." }
 Effect_StepOnOwnTickFlag = { addr = 0x801EF11C, type = "func", source = "Advances header.step (byte 0x02) while bit 0x80 of the effect ticker (byte 0x0B) is set in magic144 (Wall of Fire)." }

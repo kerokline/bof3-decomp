@@ -329,6 +329,8 @@ void Effect_DrawBolt(void);
 void Effect_SetActorMatrix(void);
 /* Defined in Effect_DrawScreenFade.h, which a member includes after its first call. */
 void Effect_DrawScreenFade(void);
+/* Defined in Effect_DrawSparkleRays.h, which a member includes after its first call. */
+void Effect_DrawSparkleRays(u16 angle, u16 radius);
 
 #define EFFECT_ADVANCE_AT_COUNT(increment, limit) \
     do {                                          \

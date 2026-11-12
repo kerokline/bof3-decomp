@@ -130,7 +130,7 @@ MATCH void func_801F7408(void) {
     func_801F9DA8();
     g_Task->timer = 0;
     g_Task->vx    = 95;
-    g_Task->header.step += 1;
+    g_Task->header.step++;
     SND_PlayCue(EMI_CUE_ID(SND_BANK_AREA, 5));
 }
 

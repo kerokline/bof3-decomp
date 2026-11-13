@@ -91,7 +91,45 @@ MATCH void func_801EF750(void) {
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"
 
-INCLUDE_ASM(func_801EF85C);
+MATCH void func_801EF85C(void) {
+    POLY_G3* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      red;
+    s32      core;
+    s32      green;
+    s32      blue;
+
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, (GetGraphType() == 1 || GetGraphType() == 2) ? 0xA5 : 0x35, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+    D_1F800000.view.effect.params[0] = ((rsin((g_Task->param.unk_0B & 0x1F) << 7) * 16) >> 12) + 0x100;
+    red                              = g_Task->unk_09 * 10;
+    core                             = g_Task->unk_09 * 9;
+    blue                             = g_Task->unk_09 * 2;
+    green                            = g_Task->unk_09 * 4;
+    D_1F800014[2].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.effect.params[0]);
+    D_1F800014[2].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.effect.params[0]);
+    D_1F800014[2].vz                 = 0;
+    D_1F800014[1].vz                 = 0;
+    D_1F800014[0].vz                 = 0;
+    for (i = 1; i <= 16; i++) {
+        prim = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 1);
+        D_1F800014[0].vx = 0;
+        D_1F800014[0].vy = 0;
+        D_1F800014[1].vx = D_1F800014[2].vx;
+        D_1F800014[1].vy = D_1F800014[2].vy;
+        D_1F800014[2].vx = FIXED_MUL(rsin(i << 8), D_1F800000.view.effect.params[0]);
+        D_1F800014[2].vy = FIXED_MUL(rcos(i << 8), D_1F800000.view.effect.params[0]);
+        RotTransPers3(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, &depth, &flag);
+        setRGB0(prim, red, core, blue);
+        setRGB1(prim, red, green, blue);
+        setRGB2(prim, red, green, blue);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_G3));
+    }
+}
 
 INCLUDE_ASM(func_801EFAE8);
 

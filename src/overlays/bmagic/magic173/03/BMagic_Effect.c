@@ -143,4 +143,37 @@ MATCH void func_801F06B0(void) {
 }
 
 #include "overlays/bmagic/Effect_TickOnTimerZero.h"
-INCLUDE_ASM(func_801F075C);
+MATCH void func_801F075C(void) {
+    POLY_G3* prim;
+    s32      i;
+    s32      tpage;
+
+    if (GetGraphType() == 1) {
+        tpage = 0xA5;
+    } else if (GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(3, sizeof(DR_MODE));
+    D_1F800000.view.effect.params[0] = (rand() & 3) + 28;
+    D_1F800000.view.effect.params[3] = g_Task->unk_09 * 6;
+    for (i = 0; i < 8; i++) {
+        prim = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 1);
+        prim->x0 = g_Task->unk_2E.half;
+        prim->y0 = g_Task->unk_30.half;
+        prim->x1 = g_Task->unk_2E.half + FIXED_MUL(rsin(i << 9), D_1F800000.view.effect.params[0]);
+        prim->y1 = g_Task->unk_30.half + FIXED_MUL(rcos(i << 9), D_1F800000.view.effect.params[0]);
+        prim->x2 = g_Task->unk_2E.half + FIXED_MUL(rsin((i + 1) << 9), D_1F800000.view.effect.params[0]);
+        prim->y2 = g_Task->unk_30.half + FIXED_MUL(rcos((i + 1) << 9), D_1F800000.view.effect.params[0]);
+        prim->r0 = D_1F800000.view.effect.params[3];
+        prim->g0 = D_1F800000.view.effect.params[3];
+        prim->b0 = D_1F800000.view.effect.params[3];
+        setRGB1(prim, 1, 1, 1);
+        setRGB2(prim, 1, 1, 1);
+        GFX_AddPrim(3, sizeof(POLY_G3));
+    }
+}

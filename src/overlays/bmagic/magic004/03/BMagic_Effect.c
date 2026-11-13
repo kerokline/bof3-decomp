@@ -44,7 +44,33 @@ MATCH void func_801EF158(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF1F0);
+MATCH void func_801EF1F0(void) {
+    PartyMember* battler;
+    u8           selector;
+
+    if (g_Task->unk_09 < 12) {
+        Effect_DrawScreenFade();
+        g_Task->unk_09 += 4;
+    }
+    if ((s8)g_Task->unk_5D != 0) {
+        g_Task->unk_5D -= 2;
+    }
+    if ((s8)g_Task->unk_5E != 0) {
+        g_Task->unk_5E -= 2;
+    }
+    if ((s8)g_Task->unk_5F != 0) {
+        g_Task->unk_5F -= 2;
+    }
+    g_PaletteFades[g_Task->timer].offset.red   = g_Task->unk_5D;
+    g_PaletteFades[g_Task->timer].offset.green = g_Task->unk_5E;
+    g_PaletteFades[g_Task->timer].offset.blue  = g_Task->unk_5F;
+    if ((*(u32*)&g_Task->unk_5C & ~0xFF) == 0) {
+        BMAGIC_SELECT_TARGET_BATTLER();
+        GFX_FreePaletteFadeTarget(battler);
+        func_800AF814(g_Battle.target_selector);
+        g_Task->header.mode++;
+    }
+}
 
 MATCH void func_801EF3E0(void) {
     u8           slot;

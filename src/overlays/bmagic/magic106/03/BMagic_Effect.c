@@ -24,7 +24,43 @@ MATCH void func_801EEC04(void) {
     } while ((u8)count < 96);
 }
 
-INCLUDE_ASM(func_801EECE4);
+MATCH void func_801EECE4(void) {
+    PartyMember* work;
+    u8           i;
+    u32          row;
+    u8           growth;
+    u8           slot;
+
+    for (i = 0; i < 96; i++) {
+        D_801EF9F8[i << 5]       = 0;
+        D_801EF9F8[(i << 5) + 1] = 0;
+        D_801EF9F8[(i << 5) + 2] = 0;
+    }
+    work              = g_Task;
+    work->pos.x.fixed = g_Battle.selected_actor->pos.x.fixed;
+    /* FAKE: retail re-reads the selected actor for the next copy. */
+    FAKE_BARRIER();
+    work->pos.y.fixed = g_Battle.selected_actor->pos.y.fixed;
+    /* FAKE: retail re-reads the selected actor for the next copy. */
+    FAKE_BARRIER();
+    work->pos.z.fixed  = g_Battle.selected_actor->pos.z.fixed + 0x1000000;
+    work->param.unk_0B = 0;
+    g_Task->unk_09     = 0;
+    g_Task->header.mode += 1;
+    for (i = 0; i < 96; i++) {
+        slot                                 = func_801EF914();
+        row                                  = slot << 5;
+        FIELD(PartyMember*, D_801EFA14, row) = g_Task;
+        D_801EF9F8[row + 1]                  = 0;
+        D_801EF9F8[row + 4]                  = i;
+        growth                               = ((i >> 1) & 0x70) + (rand() & 0xF) + 1;
+        D_801EF9F8[row + 10]                 = growth;
+        D_801EF9F8[row + 8]                  = 0x40 - growth;
+        g_Task->param.unk_0B += 1;
+    }
+    SND_QueueSelectionFx(0x100);
+    SND_QueueSelectionFx(0x101);
+}
 
 #include "overlays/bmagic/Effect_PlayOnZeroTick.h"
 

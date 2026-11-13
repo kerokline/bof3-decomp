@@ -6,7 +6,53 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/func_801EEC28.h"
 
-INCLUDE_ASM(func_801EEC98);
+#include "overlays/bmagic/Effect_CopyActiveBattlerToSlot.h"
+
+MATCH void func_801EEC98(void) {
+    PartyMember* battler;
+    PartyMember* task;
+    PartyMember* owner;
+    PartyMember* parent;
+    u16*         dst;
+    u16*         src;
+    u32          slot;
+    s32          i;
+
+    g_Task->facing = g_BattleEffectBattler->facing;
+    battler        = g_BattleEffectBattler;
+    task           = g_Task;
+    WorldPos_Copy(&task->pos, &battler->pos);
+    task->param.unk_0B = 0;
+    g_Task->unk_09     = 0;
+    g_Task->header.mode++;
+    func_800AEF98(12, 2);
+    func_801EF490();
+    slot = Battle_AllocEffect(1, 70) & BYTE_MASK;
+    Effect_CopyActiveBattlerToSlot(slot);
+    owner                               = g_Task;
+    g_BattleEffects[slot].header.mode   = 0;
+    g_BattleEffects[slot].header.step   = 0;
+    g_BattleEffects[slot].unk_06        = 1;
+    g_BattleEffects[slot].handler_index = 70;
+    g_BattleEffects[slot].target.party  = owner;
+    g_Task->param.unk_0B++;
+    slot                               = Battle_AllocEffect(1, 70) & BYTE_MASK;
+    parent                             = g_Task;
+    g_BattleEffects[slot].header.mode  = 1;
+    g_BattleEffects[slot].target.party = parent;
+    g_BattleEffects[slot].unk_03       = g_Task->unk_03;
+    g_BattleEffects[slot].unk_04       = g_Task->unk_04;
+    g_Task->param.unk_0B++;
+    g_BattleEffectBattler->header.flags |= ACTOR_FLAG_HIDDEN;
+    g_Battle.state |= BATTLE_STATE_DAMAGE_APPLIED;
+    i   = 0;
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    for (; i < 256; i++) {
+        *dst++ = *src++;
+    }
+    g_GfxPalettePending = 1;
+}
 
 MATCH void func_801EEF8C(void) {
     PartyMember* battler;

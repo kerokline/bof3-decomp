@@ -324,7 +324,39 @@ MATCH void func_801EFA84(void) {
 
 INCLUDE_ASM(func_801EFC00);
 
-INCLUDE_ASM(func_801EFF14);
+/* Draws a ring of the timer radius round the effect's screen point as 64 line segments, keeping
+ * the middle half of every sixteen; the scratchpad holds the radius, angle, shade and centre. */
+MATCH void func_801EFF14(void) {
+    LINE_F2* prim;
+    s32      i;
+    s32      segment;
+
+    D_1F800000.view.effect.params[0] = g_Task->timer;
+    D_1F800000.view.effect.params[6] = g_Task->unk_2E.half;
+    D_1F800000.view.effect.params[7] = g_Task->unk_30.half;
+    if (g_Task->header.step < 2) {
+        D_1F800000.view.effect.params[3] = 0x80 - g_Task->param.unk_0B * 48;
+    } else {
+        D_1F800000.view.effect.params[3] = 0x80;
+    }
+    for (segment = 0, i = 0; i < 64; i++, segment++) {
+        if ((segment & 0xC) == 4 || (segment & 0xC) == 8) {
+            prim = (LINE_F2*)g_GfxPrimCursor;
+            SetLineF2(prim);
+            SetSemiTrans(prim, 1);
+            D_1F800000.view.effect.params[2] = i << 6;
+            prim->x0                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+            prim->y0                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+            D_1F800000.view.effect.params[2] = (i + 1) << 6;
+            prim->x1                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+            prim->y1                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+            prim->r0                         = D_1F800000.view.effect.params[3];
+            prim->g0                         = D_1F800000.view.effect.params[3];
+            prim->b0                         = D_1F800000.view.effect.params[3];
+            GFX_AddPrim(3, sizeof(LINE_F2));
+        }
+    }
+}
 
 MATCH void func_801F0104(void) {
     LINE_F2*      line;

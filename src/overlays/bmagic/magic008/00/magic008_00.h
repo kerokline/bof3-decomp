@@ -50,7 +50,7 @@ extern Magic008EarlySteps D_801EECAC;
 extern Magic008Steps      D_801EECC8;
 extern Point2DL           D_801F1C04[];
 extern u8                 D_800B6BF0[];
-u8                        func_800AED5C(s32 arg0, u32 battler_index);
+u8                        func_800AED5C(s32 battler, u32 battler_index);
 /* The battle/battle/15 sprite-cell routines, called with a battler or the effect work record. */
 u32                       func_800AFB48(PartyMember* record);
 void                      func_800AF8F0(PartyMember* record);

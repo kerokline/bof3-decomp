@@ -178,7 +178,21 @@ INCLUDE_ASM(func_801EF564);
 
 INCLUDE_ASM(func_801EF724);
 
-INCLUDE_ASM(func_801EF834);
+MATCH void func_801EF834(void) {
+    g_PaletteFades[g_Task->timer].offset.red -= 1;
+    g_PaletteFades[g_Task->timer].offset.green -= 1;
+    g_PaletteFades[g_Task->timer].offset.blue -= 1;
+    if (g_PaletteFades[g_Task->timer].offset.red == 0) {
+        if (g_Task->unk_04 == 0) {
+            SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 2));
+        }
+        GFX_FreePaletteFade(g_Task->timer);
+        func_800AF814(g_Task->param.unk_0B);
+        g_Task->unk_09 = 0;
+        g_Task->timer  = 4;
+        g_Task->header.step += 1;
+    }
+}
 
 MATCH void func_801EF9C4(void) {
     u8 timer;

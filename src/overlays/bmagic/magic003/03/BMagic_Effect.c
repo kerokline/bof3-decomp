@@ -409,7 +409,25 @@ MATCH void func_801EFD4C(void) {
     g_Task->param.unk_0B += 1;
 }
 
-INCLUDE_ASM(func_801EFEC8);
+MATCH void func_801EFEC8(void) {
+    BattleEffect* image;
+    u32           slot;
+    u8            i;
+
+    for (i = 0; i < 4; i++) {
+        slot = Battle_AllocEffect(1, 1);
+        Effect_CopyActiveBattlerToSlot(slot);
+        D_801EC3A4[slot & BYTE_MASK].target.party = g_Task;
+        image                                     = &g_BattleEffects[slot & BYTE_MASK];
+        image->unk_06                             = 1;
+        image->handler_index                      = 1;
+        image->header.mode                        = 1;
+        image->header.step                        = 0;
+        image->unk_0B                             = i;
+        image->arg.unk_09                         = (i + 1) * 4 + 1;
+        g_Task->param.unk_0B += 1;
+    }
+}
 
 MATCH void func_801F0078(void) {
     PartyMember* battler;

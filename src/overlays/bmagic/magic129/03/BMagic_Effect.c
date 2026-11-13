@@ -192,7 +192,40 @@ MATCH void func_801F029C(void) {
     }
 }
 
-INCLUDE_ASM(func_801F030C);
+MATCH void func_801F030C(void) {
+    POLY_G3* prim;
+    SVECTOR* edge;
+    s32      radius;
+    s32      r;
+    s32      g;
+    s32      b;
+    u8       i;
+
+    D_1F800014[0].vx = g_Task->unk_2E.half + ((rsin(0) * 32) >> 12);
+    D_1F800014[0].vy = g_Task->unk_30.half + ((rcos(0) * 32) >> 12);
+    r                = (s8)g_Task->unk_5D * g_Task->timer;
+    g                = (s8)g_Task->unk_5E * g_Task->timer;
+    b                = (s8)g_Task->unk_5F * g_Task->timer;
+    i                = 1;
+    edge             = &D_1F800014[0];
+    radius           = 32;
+    do {
+        prim = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 1);
+        prim->x0 = g_Task->unk_2E.half;
+        prim->y0 = g_Task->unk_30.half;
+        prim->x1 = edge->vx;
+        prim->y1 = edge->vy;
+        prim->x2 = edge->vx = g_Task->unk_2E.half + ((rsin(i << 9) * radius) >> 12);
+        prim->y2 = edge->vy = g_Task->unk_30.half + ((rcos(i << 9) * radius) >> 12);
+        setRGB0(prim, r, g, b);
+        setRGB1(prim, 1, 1, 1);
+        setRGB2(prim, 1, 1, 1);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_G3));
+        i++;
+    } while (i < 9);
+}
 
 /* func_801F0500 */
 #include "overlays/bmagic/BMagic_AllocEffect.h"

@@ -75,7 +75,44 @@ MATCH void func_801EF098(void) {
 
 INCLUDE_ASM(func_801EF130);
 
-INCLUDE_ASM(func_801EF27C);
+MATCH void func_801EF27C(void) {
+    s32          angle;
+    s32*         angle_cell;
+    u8           count;
+    u32          slot;
+    s8           tint;
+    PartyMember* battler;
+
+    Actor_StepAnimLoop();
+    count               = g_Task->unk_09 + 1;
+    g_Task->unk_09      = count;
+    angle               = (count & 0x3F) << 6;
+    angle_cell          = &D_1F800000;
+    *angle_cell         = angle;
+    g_Task->pos.x.fixed = g_BattleEffectBattler->pos.x.fixed + ((rsin(angle) * 0xC000) >> 12);
+    g_Task->pos.y.fixed = g_BattleEffectBattler->pos.y.fixed + ((rcos(*angle_cell) * 0xC000) >> 12);
+    if ((g_Task->unk_09 & 7) == 0) {
+        slot                               = Battle_AllocEffect(1, 48) & BYTE_MASK;
+        battler                            = g_BattleEffectBattler;
+        g_BattleEffects[slot].header.mode  = 1;
+        g_BattleEffects[slot].target.party = battler;
+        g_BattleEffects[slot].arg.unk_09   = (g_Task->unk_09 & 0xFC) + 8;
+        g_BattleEffects[slot].pos.x.fixed  = g_Task->pos.x.fixed;
+        g_BattleEffects[slot].pos.y.fixed  = g_Task->pos.y.fixed;
+        g_BattleEffects[slot].pos.z.fixed  = g_Task->pos.z.fixed;
+        g_BattleEffectBattler->unk_09++;
+        g_BattleEffectBattler->param.unk_0B++;
+    }
+    if (g_Task->unk_09 == 0x40) {
+        g_Task->header.flags |= 0x20;
+        g_Task->unk_5C = 1;
+        tint           = -0x40;
+        g_Task->unk_5D = tint;
+        g_Task->unk_5E = tint;
+        g_Task->unk_5F = tint;
+        g_Task->header.step++;
+    }
+}
 
 MATCH void func_801EF49C(void) {
     s32  value = -0x80;

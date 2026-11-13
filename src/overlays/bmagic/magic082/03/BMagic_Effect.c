@@ -17,7 +17,38 @@ MATCH void Effect_NextStep(void) {
     BMagic_AdvanceEffectStep(2);
 }
 
-INCLUDE_ASM(func_801EF10C);
+MATCH void func_801EF10C(void) {
+    u8  timer;
+    u32 slot;
+    /* FAKE: retail frame reserves 0x10 bytes no statement uses; pure C differs only in the frame (0x18 against 0x28). */
+    FAKE_STACK_PADS(u8, 0x10);
+
+    g_PaletteFades[g_Task->timer].offset.red -= 1;
+    g_PaletteFades[g_Task->timer].offset.green -= 1;
+    g_PaletteFades[g_Task->timer].offset.blue -= 1;
+    timer          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = timer;
+    if (timer == 0) {
+        GFX_FreePaletteFadeTarget(g_Battle.selected_actor);
+        func_800AF814(g_Battle.target_selector);
+        if (func_800AED5C(D_800B6BF0[g_Task->unk_04], g_Battle.target_selector) & BYTE_MASK) {
+            slot                               = Battle_AllocEffect(1, 72) & BYTE_MASK;
+            g_BattleEffects[slot].target.party = g_Task;
+            g_BattleEffects[slot].unk_04       = g_Task->unk_04;
+            g_BattleEffects[slot].arg.unk_09   = 1;
+            g_BattleEffects[slot].unk_0A       = 0;
+            g_Task->param.unk_0B++;
+        } else {
+            slot                               = Battle_AllocEffect(1, 72) & BYTE_MASK;
+            g_BattleEffects[slot].target.party = g_Task;
+            g_BattleEffects[slot].unk_04       = 8;
+            g_BattleEffects[slot].arg.unk_09   = 1;
+            g_BattleEffects[slot].unk_0A       = 0;
+            g_Task->param.unk_0B++;
+        }
+        g_Task->header.mode++;
+    }
+}
 
 #include "overlays/bmagic/Effect_StartOnZeroTick.h"
 

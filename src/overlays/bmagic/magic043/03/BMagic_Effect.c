@@ -97,7 +97,49 @@ MATCH void func_801EEF98(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF0B4);
+MATCH void func_801EF0B4(void) {
+    u8*          selector;
+    u8           slot;
+    PartyMember* work;
+    u8           count;
+
+    g_PaletteFades[g_Task->timer].offset.red -= 2;
+    g_PaletteFades[g_Task->timer].offset.green -= 2;
+    g_PaletteFades[g_Task->timer].offset.blue -= 2;
+    count          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = count;
+    if (count != 0) {
+        return;
+    }
+    if (g_Task->param.unk_0B < 2) {
+        GFX_FreePaletteFade(g_Task->timer);
+        selector = (u8*)&g_Battle.target_selector;
+        func_800AF814(*selector);
+        if (g_Battle.action_id == 0x2B) {
+            if (func_800AED5C(1, *selector) & BYTE_MASK) {
+                slot                               = Battle_AllocEffect(1, 72);
+                work                               = g_Task;
+                g_BattleEffects[slot].unk_04       = 0;
+                g_BattleEffects[slot].arg.unk_09   = 1;
+                g_BattleEffects[slot].unk_0A       = 0;
+                g_BattleEffects[slot].target.party = work;
+                g_Task->param.unk_0B += 1;
+            } else {
+                slot                               = Battle_AllocEffect(1, 72);
+                work                               = g_Task;
+                g_BattleEffects[slot].unk_04       = 8;
+                g_BattleEffects[slot].arg.unk_09   = 1;
+                g_BattleEffects[slot].unk_0A       = 0;
+                g_BattleEffects[slot].target.party = work;
+                g_Task->param.unk_0B += 1;
+            }
+        }
+        g_Task->header.mode += 1;
+    } else {
+        g_Task->unk_09 = 4;
+        g_Task->header.mode -= 1;
+    }
+}
 
 #include "overlays/bmagic/Effect_PlayOnZeroTick.h"
 

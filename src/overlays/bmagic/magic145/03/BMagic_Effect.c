@@ -6,7 +6,36 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/BMagic_DispatchMode.h"
 
-INCLUDE_ASM(func_801EEC70);
+MATCH void func_801EEC70(void) {
+    u8           i;
+    u8           slot;
+    PartyMember* work;
+    u16*         dst;
+    u16*         src;
+
+    g_Task->param.unk_0B = 0;
+    g_Task->header.mode += 1;
+    for (i = 0; i < 3; i++) {
+        slot                               = Battle_AllocEffect(1, 108);
+        work                               = g_Task;
+        g_BattleEffects[slot].header.mode  = 0;
+        g_BattleEffects[slot].unk_0B       = i;
+        g_BattleEffects[slot].arg.unk_09   = i * 4 + 1;
+        g_BattleEffects[slot].target.party = work;
+        g_Task->param.unk_0B += 1;
+    }
+    /* Copies colours 1 to 15 of CLUT 1 of arena palette row 26 into the work copy with STP set, then clears colour 0. */
+    i   = 1;
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    for (; i < 16; i++) {
+        dst[i + 32] = src[i + 32] | 0x8000;
+    }
+    *MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW + AREA_PALETTE_UNIT) = 0;
+    g_GfxPalettePending                                                          = 1;
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0));
+    Battle_ApplyDamageFlags(g_Battle.target_selector, 0x10);
+}
 
 #include "overlays/bmagic/Effect_NextStepOnZeroTick.h"
 

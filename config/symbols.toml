@@ -1504,8 +1504,11 @@ D_801F04FC = { addr = 0x801F04FC, source = "Step handlers of magic144, run by he
 D_801F050C = { addr = 0x801F050C, source = "Effect slot table of the magic144 effect, scanned by BMagic_AllocEffect." }
 
 ["emi/bmagic/magic145/03"]
+Battle_ApplyDamageFlags = { addr = 0x800A9610, alias = true, source = "Applies the damage flags to the selected battlers." }
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true, source = "Marks the selected battlers as damaged." }
+Battle_AllocEffect = { addr = 0x801E590C, alias = true, source = "Claims a free battle effect slot." }
 g_BattleEffectBattler = { addr = 0x801EB4E0, source = "the battler the running effect acts on; Battle_UpdateEffects stores it for each effect step (emi/battle/battle/03 owns the cell)" }
+g_BattleEffects = { addr = 0x801EC330, alias = true, source = "Battle effect work records (stride 0x78); Battle_AllocEffect claims a free one by setting bit 0 of header.flags." }
 BMagic_DispatchMode = { addr = 0x801EEC10, type = "func", source = "Runs the handler that header.mode (byte 0x01) selects from the module head's three callbacks in magic145 (Noting)." }
 Effect_NextStepOnZeroTick = { addr = 0x801EEDB0, type = "func", source = "Advances header.mode (byte 0x01) when the effect ticker (byte 0x0B) is zero in magic145 (Noting)." }
 Effect_PlayOnce = { addr = 0x801EEDE4, type = "func", source = "Plays the effect the target selector chose, raises BATTLE_STATE_EFFECT_PLAYING and clears the effect in magic145 (Noting)." }

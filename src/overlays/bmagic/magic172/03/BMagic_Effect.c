@@ -113,7 +113,7 @@ MATCH void func_801EF210(void) {
     actor  = g_Battle.selected_actor;
     pos.vx = (actor->pos.x.fixed >> 9) - 0x4000;
     pos.vy = (actor->pos.y.fixed >> 9) - 0x4000;
-    pos.vz = (actor->pos.z.fixed + 0x1000000) >> 17;
+    pos.vz = (actor->pos.z.fixed + TO_COORD(256)) >> 17;
     func_800AF3A0(pos, 0x40);
     g_Task->unk_10 = g_Task->unk_0C;
     g_Task->unk_0C = ratan2(actor->pos.x.fixed - g_Task->pos.x.fixed, actor->pos.y.fixed - g_Task->pos.y.fixed);

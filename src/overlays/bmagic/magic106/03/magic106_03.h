@@ -13,6 +13,7 @@ extern u8 D_801EF9F8[];
 void func_801EF52C(void);
 void func_801EF5F4(void);
 
-extern u8 D_801EFA14[];
+/* The battler column of the D_801EF9F8 rows, eight words to a row. */
+extern PartyMember* D_801EFA14[];
 
 #endif

@@ -109,4 +109,12 @@ MATCH void Effect_DrawBolt(void) {
     }
 }
 
-INCLUDE_ASM(func_801F083C);
+#include "overlays/bmagic/BMagic_DrawFlickerRing.h"
+
+MATCH void func_801F083C(void) {
+    POLY_G3* prim;
+    s32      i;
+    s32      tpage;
+
+    BMAGIC_DRAW_FLICKER_RING(12, 12, 10);
+}

@@ -51,4 +51,12 @@ INCLUDE_ASM(func_801EF5D4);
 
 INCLUDE_ASM(func_801EFE24);
 
-INCLUDE_ASM(func_801F00C4);
+#include "overlays/bmagic/BMagic_DrawFlickerRing.h"
+
+MATCH void func_801F00C4(void) {
+    POLY_G3* prim;
+    s32      i;
+    s32      tpage;
+
+    BMAGIC_DRAW_FLICKER_RING(15, 15, 12);
+}

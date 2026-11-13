@@ -7,7 +7,36 @@ __asm__(".include \"include/match/macro.inc\"\n");
 /* func_801EEC10 */
 #include "overlays/bmagic/BMagic_DispatchMode.h"
 
-INCLUDE_ASM(func_801EEC70);
+MATCH void func_801EEC70(void) {
+    PartyMember* work;
+    u32          slot;
+    u8           i;
+
+    g_Task->param.unk_0B = 0;
+    Battle_CenterCamera();
+    g_Task->facing       = g_BattleEffectBattler->facing;
+    g_Task->pos.x.fixed  = g_BattleEffectBattler->pos.x.fixed;
+    g_Task->pos.y.fixed  = g_BattleEffectBattler->pos.y.fixed;
+    g_Task->unk_09       = 0;
+    g_Task->param.unk_0B = 0;
+    g_Task->header.mode += 1;
+    i = 0;
+    do {
+        slot                               = Battle_AllocEffect(1, 4) & BYTE_MASK;
+        work                               = g_Task;
+        g_BattleEffects[slot].header.mode  = 0;
+        g_BattleEffects[slot].unk_0B       = i;
+        g_BattleEffects[slot].target.party = work;
+        g_BattleEffects[slot].arg.unk_09   = D_801EFA90[i] + 1;
+        g_BattleEffects[slot].unk_08       = g_Task->facing;
+        g_BattleEffects[slot].pos.x.fixed  = g_Task->pos.x.fixed;
+        g_BattleEffects[slot].pos.y.fixed  = g_Task->pos.y.fixed;
+        g_BattleEffects[slot].pos.z.fixed  = g_Task->pos.z.fixed;
+        g_Task->param.unk_0B += 1;
+        i++;
+    } while (i < 10);
+    SND_QueueSelectionFx(0x100);
+}
 
 MATCH void func_801EEDF8(void) {
     s32 cue;

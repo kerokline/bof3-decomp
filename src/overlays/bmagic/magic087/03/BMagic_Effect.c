@@ -17,7 +17,36 @@ MATCH void func_801EF0EC(void) {
     SYS_DISPATCH_TASK((g_BMagicEffectModes + 1), 2, g_Task);
 }
 
-INCLUDE_ASM(func_801EF130);
+MATCH void func_801EF130(void) {
+    PartyMember* work;
+    u8           slot;
+    u8           i;
+
+    g_Task->param.unk_0B = 0;
+    for (i = 0; i < 4; i++) {
+        slot                                   = BMagic_AllocEffect();
+        work                                   = g_Task;
+        BMAGIC_EFFECT_SLOTS[slot].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[slot].unk_04       = i;
+        BMAGIC_EFFECT_SLOTS[slot].unk_0B       = i;
+        BMAGIC_EFFECT_SLOTS[slot].arg.unk_09   = i * 2 + 1;
+        BMAGIC_EFFECT_SLOTS[slot].target.party = work;
+        g_Task->param.unk_0B++;
+    }
+    for (i = 0; i < 4; i++) {
+        slot                                   = BMagic_AllocEffect();
+        work                                   = g_Task;
+        BMAGIC_EFFECT_SLOTS[slot].header.mode  = 1;
+        BMAGIC_EFFECT_SLOTS[slot].unk_04       = i;
+        BMAGIC_EFFECT_SLOTS[slot].arg.unk_09   = i * 2 + 1;
+        BMAGIC_EFFECT_SLOTS[slot].target.party = work;
+        g_Task->param.unk_0B++;
+    }
+    g_Task->header.step++;
+    if (g_Task->unk_04 == 0) {
+        SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0));
+    }
+}
 
 MATCH void func_801EF2C0(void) {
     if (g_Task->param.unk_0B == 2) {

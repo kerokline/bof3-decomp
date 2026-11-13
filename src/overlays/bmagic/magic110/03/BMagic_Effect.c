@@ -96,7 +96,35 @@ MATCH void func_801EF068(void) {
 
 #include "shared/Effect_StartPlaying.h"
 
-INCLUDE_ASM(func_801EF148);
+/* Covers the screen with two semi-transparent quads in one flat shade of timer times 15;\nthe shade from byte 0x09 is stored first and overwritten. */
+MATCH void func_801EF148(void) {
+    POLY_G4* prim;
+    s16*     shade;
+
+    GFX_AddDitheredDrawMode(1, getTPage(0, 1, 320, 256));
+    shade  = &D_1F800004;
+    prim   = GFX_CURSOR(POLY_G4);
+    *shade = g_Task->unk_09 * 15;
+    *shade = g_Task->timer * 15;
+    SetPolyG4(prim);
+    SetSemiTrans(prim, 1);
+    setXY4(prim, 0, 0, 0x13F, 0, 0, 0x78, 0x13F, 0x78);
+    setRGB0(prim, *shade, *shade, *shade);
+    setRGB1(prim, *shade, *shade, *shade);
+    setRGB2(prim, *shade, *shade, *shade);
+    setRGB3(prim, *shade, *shade, *shade);
+    GFX_AddPrim(1, sizeof(POLY_G4));
+    prim = GFX_CURSOR(POLY_G4);
+    SetPolyG4(prim);
+    SetSemiTrans(prim, 1);
+    setXY4(prim, 0, 0x78, 0x13F, 0x78, 0, 0x167, 0x13F, 0x167);
+    setRGB0(prim, *shade, *shade, *shade);
+    setRGB1(prim, *shade, *shade, *shade);
+    setRGB2(prim, *shade, *shade, *shade);
+    setRGB3(prim, *shade, *shade, *shade);
+    GFX_AddPrim(1, sizeof(POLY_G4));
+    GFX_AddDitheredDrawMode(1, getTPage(0, 0, 320, 256));
+}
 
 /* func_801EF3F8 */
 #include "overlays/bmagic/BMagic_DispatchEffectMode.h"

@@ -121,7 +121,7 @@ MATCH void func_801EF388(void) {
 
 #include "overlays/bmagic/Effect_OffsetByTargetPose.h"
 
-MATCH void func_801EF430(void* arg0) {
+MATCH void func_801EF430(void* task) {
     PartyMember* work;
     u32          slot;
     u8           kind;

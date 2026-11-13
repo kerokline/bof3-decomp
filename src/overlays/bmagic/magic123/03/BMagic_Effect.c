@@ -96,7 +96,32 @@ MATCH void Effect_ClearEffect(void) {
     Actor_Clear();
 }
 
-INCLUDE_ASM(func_801EF584);
+MATCH void func_801EF584(void) {
+    POLY_G3* prim;
+    s32      i;
+    u8       phase;
+
+    D_1F800000.view.effect.params[0] = g_Task->timer;
+    for (i = 0; i < 6; i++) {
+        prim = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 1);
+        prim->x0                         = D_1F800000.view.effect.params[3];
+        prim->y0                         = D_1F800000.view.effect.params[4];
+        phase                            = (D_801EFD6C[i] + g_Task->unk_09) & 0x3F;
+        D_1F800000.view.effect.params[2] = phase << 6;
+        prim->x1                         = D_1F800000.view.effect.params[3] + FIXED_MUL(rsin(phase << 6), D_1F800000.view.effect.params[0]);
+        prim->y1                         = D_1F800000.view.effect.params[4] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        phase                            = (D_801EFD6C[i + 1] + g_Task->unk_09) & 0x3F;
+        D_1F800000.view.effect.params[2] = phase << 6;
+        prim->x2                         = D_1F800000.view.effect.params[3] + FIXED_MUL(rsin(phase << 6), D_1F800000.view.effect.params[0]);
+        prim->y2                         = D_1F800000.view.effect.params[4] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        setRGB0(prim, 1, 1, 0xC0);
+        setRGB1(prim, 0xE0, 0xE0, 0xE0);
+        setRGB2(prim, 0xE0, 0xE0, 0xE0);
+        GFX_AddPrim(3, sizeof(POLY_G3));
+    }
+}
 
 INCLUDE_ASM(func_801EF750);
 

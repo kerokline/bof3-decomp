@@ -7,6 +7,8 @@
 
 extern BMagicEffectFuncs D_801EEC04;
 extern SVECTOR           D_1F800014[];
+/* The scratchpad word at 0x1F800000: the ring radius func_801EF424 stages. */
+extern s32               D_1F800000_WORD[];
 extern Callback          D_801F0360[];
 
 void func_801EF424(void);

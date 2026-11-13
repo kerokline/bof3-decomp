@@ -162,7 +162,36 @@ MATCH void func_801EF324(Magic150SpanPair* pair) {
     GFX_AddPrim(1, sizeof(LINE_F2));
 }
 
-INCLUDE_ASM(func_801EF4E0);
+/* Draws the beam along its path: 128 segments, each 1/32 turn further round the path
+ * angle and a jittered step further along x. */
+MATCH void func_801EF4E0(void) {
+    s32 x;
+    s32 step;
+    u16 angle;
+    u16 i;
+
+    func_801AFE18();
+    angle                     = D_801EFA9C.angle;
+    x                         = D_801EFA9C.origin[0];
+    D_801EFAF8.current.pos[0] = x;
+    D_801EFAF8.current.pos[1] = D_801EFA9C.origin[1] + ((D_801EFA9C.offset * rcos(angle)) >> 4);
+    D_801EFAF8.current.pos[2] = D_801EFA9C.origin[2] + ((D_801EFA9C.offset * rsin(angle)) << 4);
+    BMagic_ProjectSpan(&D_801EFAF8.current);
+    step = 0x1000;
+    i    = 0;
+    do {
+        D_801EFAF8.previous = D_801EFAF8.current;
+        angle += 0x80;
+        x += step;
+        D_801EFAF8.current.pos[0] = x + (rand() & 0xFFF) * 16 - 0x8000;
+        D_801EFAF8.current.pos[1] = D_801EFA9C.origin[1] + ((D_801EFA9C.offset * rcos(angle)) >> 4);
+        D_801EFAF8.current.pos[2] = D_801EFA9C.origin[2] + ((D_801EFA9C.offset * rsin(angle)) << 4);
+        step += 0x40;
+        i++;
+        BMagic_ProjectSpan(&D_801EFAF8.current);
+        func_801EF324(&D_801EFAF8);
+    } while (i < 0x80);
+}
 
 MATCH void func_801EF6B0(void) {
     u8 i;

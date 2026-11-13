@@ -1316,7 +1316,9 @@ BMagic_StepTable = { addr = 0x801F0CC4, source = "Step handlers of magic120 (Whe
 ["emi/bmagic/magic121/03"]
 Battle_ApplyDamageFlags = { addr = 0x800A9610, type = "func", source = "Applies the damage flags to the selected battlers." }
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true, source = "Marks the selected battlers as damaged." }
+Battle_AllocEffect = { addr = 0x801E590C, alias = true }
 g_BattleEffectBattler = { addr = 0x801EB4E0, source = "the battler the running effect acts on; Battle_UpdateEffects stores it for each effect step (emi/battle/battle/03 owns the cell)" }
+g_BattleEffects = { addr = 0x801EC330, alias = true }
 Effect_PlayOnIdleTick = { addr = 0x801EEE08, type = "func", source = "When the effect ticker (byte 0x0B) is 0xFF plays the effect the target selector chose, raises BATTLE_STATE_EFFECT_PLAYING and clears the effect in magic121 (DragonBreath)." }
 BMagic_DispatchEffectMode = { addr = 0x801EEE68, type = "func", source = "Runs the handler that header.mode (byte 0x01) selects from the effect handlers of magic121." }
 BMagic_UpdateDragonBreath = { addr = 0x801EEEAC, type = "func", source = "Runs the step handler selected by header.step (byte 0x02); while the effect is active and header.step is nonzero, re-rolls work bytes 0x5D-0x5F every 8th frame, spawns the breath particles and draws the breath through BMagic_DrawDragonBreath in magic121 (DragonBreath)." }

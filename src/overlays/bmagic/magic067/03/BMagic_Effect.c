@@ -23,7 +23,48 @@ MATCH void func_801EEFA4(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF010);
+MATCH void func_801EF010(void) {
+    u8 slot;
+    u8 count;
+    u8 battler;
+    u8 i;
+
+    count          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = count;
+    if (count == 0) {
+        if (g_Battle.target_selector & 0x40) {
+            for (i = 0; i < 8; i++) {
+                battler = i + BATTLE_PARTY_CHARACTERS_COUNT;
+                if (!Battle_SlotIsBlocked(battler)) {
+                    slot                               = Battle_AllocEffect(1, 0x13);
+                    g_BattleEffects[slot].target.party = g_Task;
+                    g_BattleEffects[slot].header.mode  = 2;
+                    g_BattleEffects[slot].unk_03       = i;
+                    g_BattleEffects[slot].unk_04       = 5;
+                    g_BattleEffects[slot].pos.x.fixed  = g_BattleEnemyBattlers[i].pos.x.fixed;
+                    g_BattleEffects[slot].pos.y.fixed  = g_BattleEnemyBattlers[i].pos.y.fixed;
+                    g_BattleEffects[slot].pos.z.fixed  = g_BattleEnemyBattlers[i].pos.z.fixed;
+                    g_Task->param.unk_0B += 1;
+                }
+            }
+        } else {
+            for (i = 0; i < BATTLE_PARTY_CHARACTERS_COUNT; i++) {
+                if (!Battle_SlotIsBlocked(i)) {
+                    slot                               = Battle_AllocEffect(1, 0x13);
+                    g_BattleEffects[slot].target.party = g_Task;
+                    g_BattleEffects[slot].header.mode  = 2;
+                    g_BattleEffects[slot].unk_04       = 5;
+                    g_BattleEffects[slot].unk_03       = i;
+                    g_BattleEffects[slot].pos.x.fixed  = g_Game.members[i].pos.x.fixed;
+                    g_BattleEffects[slot].pos.y.fixed  = g_Game.members[i].pos.y.fixed;
+                    g_BattleEffects[slot].pos.z.fixed  = g_Game.members[i].pos.z.fixed;
+                    g_Task->param.unk_0B += 1;
+                }
+            }
+        }
+        g_Task->header.mode += 1;
+    }
+}
 
 #include "overlays/bmagic/Effect_StartOnZeroTick.h"
 

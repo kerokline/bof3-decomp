@@ -185,7 +185,44 @@ MATCH void func_801EF7CC(void) {
     }
 }
 
-INCLUDE_ASM(func_801EFA2C);
+MATCH void func_801EFA2C(void) {
+    POLY_G4* prim;
+    u16      x;
+    u16      y;
+    s32      i;
+    s32      tpage;
+
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(3, sizeof(DR_MODE));
+    D_1F800000.view.effect.params[2] = 0;
+    D_1F800000.view.effect.params[0] = 16;
+    D_1F800000.view.effect.params[1] = 24;
+    D_1F800000.view.effect.params[4] = g_Task->unk_09;
+    D_1F800000.view.effect.params[5] = g_Task->unk_09;
+    D_1F800000.view.effect.params[6] = g_Task->unk_09 * 14;
+    x                                = g_Task->unk_2E.half;
+    y                                = g_Task->unk_30.half;
+    for (i = 0; i < 16; i++) {
+        prim = (POLY_G4*)g_GfxPrimCursor;
+        SetPolyG4(prim);
+        SetSemiTrans(prim, 1);
+        prim->x0                         = x + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->y0                         = y + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->x2                         = x + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[1]);
+        prim->y2                         = y + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[1]);
+        D_1F800000.view.effect.params[2] = (i + 1) << 8;
+        prim->x1                         = x + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->y1                         = y + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->x3                         = x + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[1]);
+        prim->y3                         = y + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[1]);
+        setRGB0(prim, D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5], D_1F800000.view.effect.params[6]);
+        setRGB1(prim, D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5], D_1F800000.view.effect.params[6]);
+        setRGB2(prim, 1, 1, 1);
+        setRGB3(prim, 1, 1, 1);
+        GFX_AddPrim(3, sizeof(POLY_G4));
+    }
+}
 
 INCLUDE_ASM(func_801EFD04);
 

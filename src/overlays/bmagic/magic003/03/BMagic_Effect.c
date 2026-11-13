@@ -474,7 +474,35 @@ MATCH void func_801F03F0(s32 dir) {
 
 INCLUDE_ASM(func_801F0550);
 
-INCLUDE_ASM(func_801F07B0);
+MATCH void func_801F07B0(s32 index) {
+    TILE* tile;
+    s32   tpage;
+
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0x125 : 0x55;
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(2, sizeof(DR_MODE));
+    tile = (TILE*)g_GfxPrimCursor;
+    SetTile(tile);
+    SetSemiTrans(tile, 1);
+    tile->x0 = g_Task->unk_2E.half - (D_801F0B10[(u8)index].x + 4);
+    tile->y0 = g_Task->unk_30.half - (D_801F0B10[(u8)index].y + 4);
+    tile->w  = D_801F0B10[(u8)index].w + 8;
+    tile->h  = D_801F0B10[(u8)index].h + 8;
+    setRGB0(tile, 0x20, 0x20, 0x20);
+    GFX_AddPrim(2, sizeof(TILE));
+    tile = (TILE*)g_GfxPrimCursor;
+    SetTile(tile);
+    SetSemiTrans(tile, 1);
+    tile->x0 = g_Task->unk_2E.half - (D_801F0B10[(u8)index].x + 6);
+    tile->y0 = g_Task->unk_30.half - (D_801F0B10[(u8)index].y + 6);
+    tile->w  = D_801F0B10[(u8)index].w + 12;
+    tile->h  = D_801F0B10[(u8)index].h + 12;
+    setRGB0(tile, 0x20, 0x20, 0x20);
+    GFX_AddPrim(2, sizeof(TILE));
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0x25 : 0x15;
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(2, sizeof(DR_MODE));
+}
 
 /* func_801F09C4 */
 #include "overlays/bmagic/BMagic_AllocEffect.h"

@@ -53,7 +53,30 @@ INCLUDE_ASM(func_801EF2F8);
 
 #include "overlays/bmagic/Effect_StepOnZeroTick.h"
 
-INCLUDE_ASM(func_801EF55C);
+MATCH void func_801EF55C(void) {
+    PartyMember* battler;
+    u8           slot;
+
+    if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+        slot    = g_Task->unk_03 + 3;
+        battler = (PartyMember*)&g_BattleEnemyBattlers[g_Task->unk_03];
+    } else {
+        slot    = g_Task->unk_03;
+        battler = &g_Game.members[slot];
+    }
+    if (g_PaletteFades[g_Task->timer].offset.red != 0) {
+        g_PaletteFades[g_Task->timer].offset.red--;
+        g_PaletteFades[g_Task->timer].offset.green--;
+        g_PaletteFades[g_Task->timer].offset.blue--;
+    }
+    if (--g_Task->unk_09 == 0) {
+        GFX_FreePaletteFadeTarget(battler);
+        func_800AF814(slot);
+        func_800AEEC8(g_Task->unk_04, g_Task->unk_03);
+        g_Task->param.unk_0B++;
+        g_Task->header.step++;
+    }
+}
 
 #include "overlays/bmagic/Effect_TickOnZeroTick.h"
 

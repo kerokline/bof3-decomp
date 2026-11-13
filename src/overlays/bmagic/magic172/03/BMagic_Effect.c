@@ -358,41 +358,19 @@ MATCH void func_801F02C8(s32 angle, s32 spread) {
     s32      sine;
     s32      tpage;
 
-    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
-    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
-    GFX_AddPrim(3, sizeof(DR_MODE));
-    D_1F800000.view.effect.params[0] = 16;
-    D_1F800000.view.effect.params[2] = angle;
-    x                                = g_Task->unk_2E.half;
-    y                                = g_Task->unk_30.half;
-    D_1F800000.view.effect.params[3] = g_Task->unk_09 * 6;
-    i                                = 1;
-    do {
-        prim = (LINE_G2*)g_GfxPrimCursor;
-        SetLineG2(prim);
-        SetSemiTrans(prim, 1);
-        prim->x0                         = x + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
-        prim->y0                         = y + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
-        D_1F800000.view.effect.params[1] = (i & 0x1F) << 7;
-        sine                             = rsin(D_1F800000.view.effect.params[1]);
-        D_1F800000.view.effect.params[0] += FIXED_MUL(sine, rand() & (s16)spread);
-        D_1F800000.view.effect.params[2] = (D_1F800000.view.effect.params[2] + (rand() & 0x7F)) & 0xFFF;
-        prim->x1                         = x + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
-        prim->y1                         = y + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
-        if (g_Task->header.step < 3) {
-            D_1F800000.view.effect.params[3] = (D_1F800000.view.effect.params[0] - 12) * 6;
-        }
-        setRGB0(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3] / 3);
-        if (g_Task->header.step < 3) {
-            D_1F800000.view.effect.params[3] = (D_1F800000.view.effect.params[0] - 13) * 6;
-        }
-        setRGB1(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3] / 3);
-        GFX_AddPrim(3, sizeof(LINE_G2));
-        i++;
-    } while (D_1F800000.view.effect.params[0] >= 16);
+    MAGIC172_DRAW_JAGGED_LINE(angle, spread, 0x7F, 12, 16);
 }
 
-INCLUDE_ASM(func_801F05E8);
+MATCH void func_801F05E8(s32 angle, s32 spread) {
+    LINE_G2* prim;
+    u16      x;
+    u16      y;
+    s32      i;
+    s32      sine;
+    s32      tpage;
+
+    MAGIC172_DRAW_JAGGED_LINE(angle, spread, 0x3F, 8, 12);
+}
 
 MATCH void func_801F0908(void) {
     POLY_G3* prim;

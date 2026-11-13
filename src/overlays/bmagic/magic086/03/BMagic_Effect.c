@@ -6,7 +6,38 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/Effect_DispatchMode.h"
 
-INCLUDE_ASM(func_801EEC94);
+MATCH void func_801EEC94(void) {
+    PartyMember* actor;
+    PartyMember* task;
+    u8           slot;
+
+    actor                                  = g_Battle.selected_actor;
+    task                                   = g_Task;
+    task->pos.x.fixed                      = actor->pos.x.fixed;
+    task->pos.y.fixed                      = actor->pos.y.fixed;
+    task->pos.z.fixed                      = actor->pos.z.fixed;
+    slot                                   = Battle_AllocEffect(1, 29);
+    g_BattleEffects[slot].target.party     = g_Task;
+    g_BattleEffects[slot].header.mode      = 0;
+    g_BattleEffects[slot].arg.unk_09       = 0;
+    g_BattleEffects[slot].unk_0A           = 0;
+    g_BattleEffects[slot].pos.x            = g_Task->pos.x;
+    g_BattleEffects[slot].pos.y            = g_Task->pos.y;
+    COORD_INT(g_BattleEffects[slot].pos.z) = COORD_INT(g_Task->pos.z);
+    slot                                   = Battle_AllocEffect(1, 29);
+    g_BattleEffects[slot].target.party     = g_Task;
+    g_BattleEffects[slot].header.mode      = 1;
+    g_BattleEffects[slot].unk_0B           = 48;
+    g_BattleEffects[slot].arg.unk_09       = 0;
+    g_BattleEffects[slot].unk_0A           = 0;
+    g_BattleEffects[slot].pos.x            = g_Task->pos.x;
+    g_BattleEffects[slot].pos.y            = g_Task->pos.y;
+    COORD_INT(g_BattleEffects[slot].pos.z) = COORD_INT(g_Task->pos.z);
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0));
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 0;
+    g_Task->header.mode += 1;
+}
 
 MATCH void func_801EEE44(void) {
     PartyMember* battler;

@@ -226,7 +226,34 @@ INCLUDE_ASM(func_801EFCE4);
 
 INCLUDE_ASM(func_801EFE8C);
 
-INCLUDE_ASM(func_801EFFC8);
+MATCH void func_801EFFC8(void) {
+    POLY_G3* prim;
+    s32      i;
+
+    D_1F800000.view.effect.params[0] = g_Task->timer;
+    D_1F800014[0].vx                 = g_Task->unk_2E.half + FIXED_MUL(rsin(0), D_1F800000.view.effect.params[0]);
+    D_1F800014[0].vy                 = g_Task->unk_30.half + FIXED_MUL(rcos(0), D_1F800000.view.effect.params[0]);
+    D_1F800000.view.effect.params[3] = (s8)g_Task->unk_5D * 16;
+    D_1F800000.view.effect.params[4] = (s8)g_Task->unk_5E * 16;
+    D_1F800000.view.effect.params[5] = (s8)g_Task->unk_5F * 16;
+    for (i = 1; i < 9; i++) {
+        prim = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 1);
+        prim->x0         = g_Task->unk_2E.half;
+        prim->y0         = g_Task->unk_30.half;
+        prim->x1         = D_1F800014[0].vx;
+        prim->y1         = D_1F800014[0].vy;
+        D_1F800014[0].vx = g_Task->unk_2E.half + FIXED_MUL(rsin(i << 9), D_1F800000.view.effect.params[0]);
+        prim->x2         = D_1F800014[0].vx;
+        D_1F800014[0].vy = g_Task->unk_30.half + FIXED_MUL(rcos(i << 9), D_1F800000.view.effect.params[0]);
+        prim->y2         = D_1F800014[0].vy;
+        setRGB0(prim, 0xF0, 0xF0, 0xF0);
+        setRGB1(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5]);
+        setRGB2(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5]);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_G3));
+    }
+}
 
 INCLUDE_ASM(func_801F020C);
 

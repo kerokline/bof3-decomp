@@ -191,4 +191,37 @@ INCLUDE_ASM(func_801F01F0);
 /* func_801F0620 */
 #include "overlays/bmagic/Actor_Clear.h"
 
-INCLUDE_ASM(func_801F0670);
+MATCH void func_801F0670(void) {
+    s32 count;
+    s32 x;
+    s32 y;
+    s32 z;
+    u8  i;
+
+    count = 0;
+    z     = 0;
+    y     = 0;
+    x     = 0;
+    if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+        for (i = 0; i < 8; i++) {
+            if (!Battle_SlotIsBlocked((u8)(i + 3))) {
+                count++;
+                x += (g_BattleEnemyBattlers[i].pos.x.fixed >> 9) - 0x4000;
+                y += (g_BattleEnemyBattlers[i].pos.y.fixed >> 9) - 0x4000;
+                z += COORD_INT(g_BattleEnemyBattlers[i].pos.z);
+            }
+        }
+    } else {
+        for (i = 0; i < 3; i++) {
+            if (!Battle_SlotIsBlocked(i)) {
+                count++;
+                x += (g_Game.members[i].pos.x.fixed >> 9) - 0x4000;
+                y += (g_Game.members[i].pos.y.fixed >> 9) - 0x4000;
+                z += COORD_INT(g_Game.members[i].pos.z);
+            }
+        }
+    }
+    g_Task->pos.x.fixed      = (x / count + 0x4000) << 9;
+    g_Task->pos.y.fixed      = (y / count + 0x4000) << 9;
+    COORD_INT(g_Task->pos.z) = z / count;
+}

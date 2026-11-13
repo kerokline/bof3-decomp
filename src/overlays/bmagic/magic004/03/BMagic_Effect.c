@@ -89,7 +89,60 @@ MATCH void func_801EF3E0(void) {
     func_801E5988();
 }
 
-INCLUDE_ASM(func_801EF490);
+MATCH void func_801EF490(void) {
+    switch (g_Battle.action_id) {
+        case 0x04:
+            g_Task->unk_03 = 0;
+            g_Task->unk_04 = 0;
+            break;
+        case 0x05:
+            g_Task->unk_03 = 1;
+            g_Task->unk_04 = 1;
+            break;
+        case 0x07:
+            g_Task->unk_03 = 0;
+            g_Task->unk_04 = 2;
+            break;
+        case 0x1D:
+            g_Task->unk_03 = 1;
+            g_Task->unk_04 = 3;
+            break;
+        case 0x31:
+            g_Task->unk_03 = 0;
+            g_Task->unk_04 = 4;
+            break;
+        case 0x9B:
+            g_Task->unk_03 = 1;
+            g_Task->unk_04 = 5;
+            break;
+        case 0x9C:
+            g_Task->unk_03 = 0;
+            g_Task->unk_04 = 6;
+            break;
+        /* kept: retail bounds the tree above 0x9C, so one id there shares the default; 0x9D is the nearest. */
+        case 0x9D:
+        default:
+            g_Task->unk_03 = 0;
+            g_Task->unk_04 = 7;
+            break;
+        case 0x85:
+            g_Task->unk_03 = 1;
+            g_Task->unk_04 = 8;
+            break;
+        case 0x86:
+            g_Task->unk_03 = 1;
+            g_Task->unk_04 = 9;
+            break;
+        case 0x87:
+            g_Task->unk_03 = 1;
+            g_Task->unk_04 = 10;
+            break;
+        case 0x88:
+            g_Task->unk_03 = 1;
+            g_Task->unk_04 = 11;
+            break;
+    }
+}
 
 /* func_801EF6E0 */
 #include "overlays/bmagic/Effect_DrawScreenFade.h"

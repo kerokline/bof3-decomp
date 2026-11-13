@@ -255,7 +255,39 @@ MATCH void func_801EFFC8(void) {
     }
 }
 
-INCLUDE_ASM(func_801F020C);
+MATCH void func_801F020C(void) {
+    POLY_G4* prim;
+    s32      i;
+
+    D_1F800000.view.effect.params[0] = g_Task->timer;
+    D_1F800000.view.effect.params[1] = g_Task->timer * 2;
+    D_1F800014[0].vx                 = g_Task->unk_2E.half + FIXED_MUL(rsin(0), D_1F800000.view.effect.params[1]);
+    D_1F800014[0].vy                 = g_Task->unk_30.half + FIXED_MUL(rcos(0), D_1F800000.view.effect.params[1]);
+    D_1F800014[1].vx                 = g_Task->unk_2E.half + FIXED_MUL(rsin(0), D_1F800000.view.effect.params[0]);
+    D_1F800014[1].vy                 = g_Task->unk_30.half + FIXED_MUL(rcos(0), D_1F800000.view.effect.params[0]);
+    for (i = 1; i < 9; i++) {
+        prim = (POLY_G4*)g_GfxPrimCursor;
+        SetPolyG4(prim);
+        SetSemiTrans(prim, 1);
+        prim->x0         = D_1F800014[0].vx;
+        prim->y0         = D_1F800014[0].vy;
+        prim->x2         = D_1F800014[1].vx;
+        prim->y2         = D_1F800014[1].vy;
+        D_1F800014[0].vx = g_Task->unk_2E.half + FIXED_MUL(rsin(i << 9), D_1F800000.view.effect.params[1]);
+        prim->x1         = D_1F800014[0].vx;
+        D_1F800014[0].vy = g_Task->unk_30.half + FIXED_MUL(rcos(i << 9), D_1F800000.view.effect.params[1]);
+        prim->y1         = D_1F800014[0].vy;
+        D_1F800014[1].vx = g_Task->unk_2E.half + FIXED_MUL(rsin(i << 9), D_1F800000.view.effect.params[0]);
+        prim->x3         = D_1F800014[1].vx;
+        D_1F800014[1].vy = g_Task->unk_30.half + FIXED_MUL(rcos(i << 9), D_1F800000.view.effect.params[0]);
+        prim->y3         = D_1F800014[1].vy;
+        setRGB0(prim, 1, 1, 1);
+        setRGB1(prim, 1, 1, 1);
+        setRGB2(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5]);
+        setRGB3(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5]);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_G4));
+    }
+}
 
 /* func_801F0524 */
 #include "overlays/bmagic/BMagic_AllocEffect.h"

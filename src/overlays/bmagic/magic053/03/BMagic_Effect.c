@@ -99,7 +99,57 @@ MATCH void func_801EF0A8(void) {
     g_ScriptTable = AREA_SCRIPT_TABLE;
 }
 
-INCLUDE_ASM(func_801EF174);
+MATCH void func_801EF174(void) {
+    PartyMember* work;
+    PartyMember* sprite;
+    s16*         angle;
+    u8           count;
+
+    count          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = count;
+    if (!(count & BYTE_MASK)) {
+        angle                            = &D_1F800000.view.effect.params[2];
+        *angle                           = g_Task->param.unk_0B << 9;
+        D_1F800000.view.effect.params[0] = (rand() & 0x10) + 0x18;
+        g_Task->pos.x.fixed              = g_BattleEffectBattler->pos.x.fixed + rsin(*angle) * D_1F800000.view.effect.params[0];
+        g_Task->pos.y.fixed              = g_BattleEffectBattler->pos.y.fixed + rcos(*angle) * D_1F800000.view.effect.params[0];
+        g_Task->facing                   = g_BattleEffectBattler->facing;
+        g_Task->unk_0C                   = 0x20000;
+        g_Task->unk_10                   = 0;
+        g_Task->unk_14                   = 0x6000000;
+        func_801DD350(g_Task);
+        g_Task->pos.x.fixed += g_Task->unk_0C;
+        g_Task->pos.y.fixed += g_Task->unk_10;
+        g_Task->pos.z.fixed = g_BattleEffectBattler->pos.z.fixed + g_Task->unk_14;
+        g_Task->unk_0C      = -0x2000;
+        g_Task->unk_10      = 0;
+        g_Task->unk_20      = 0x600000;
+        func_801DD350(g_Task);
+        g_Task->unk_25      = 0x1D;
+        g_Task->unk_26      = 0;
+        g_Task->unk_27      = 0x1A;
+        g_Task->unk_28      = 1;
+        work                = g_Task;
+        work->unk_48        = 2;
+        work->scale.x       = 0x10000;
+        work->scale.y       = 0x10000;
+        g_Task->unk_5D      = 0;
+        g_Task->unk_5E      = 0;
+        g_Task->unk_5F      = 0;
+        g_Task->unk_5C      = 0;
+        g_Task->unk_2A      = 0;
+        g_Task->unk_29      = 4;
+        sprite              = g_Task;
+        sprite->unk_2B      = 1;
+        sprite->unk_2C.half = 0;
+        g_Task->unk_24      = 0;
+        Actor_SelectScript(0);
+        g_Task->param.unk_0B = 0;
+        g_Task->unk_09       = 16;
+        g_Task->timer        = 16;
+        g_Task->header.step += 1;
+    }
+}
 
 MATCH void func_801EF420(void) {
     PartyMember* work;

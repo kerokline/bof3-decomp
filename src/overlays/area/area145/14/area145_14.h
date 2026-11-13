@@ -4,6 +4,8 @@
 /* The world03/area145/14 overlay: one file per split function
  * and its data. Only this image includes the file. */
 
+#define GAME_SCRATCH_BASE_SCALAR
+#include "game/spawn.h"
 #include "overlays/area/world03.h"
 #include "area/spad.h"
 
@@ -25,9 +27,14 @@ extern PartyMemberMessages g_PartyMemberMessages[3];
 
 /* The selection-arm and work-reset calls shared with the field. */
 /* The bounds step and the choice query the handlers enter. */
-void func_801F332C(u8* first, u8* second);
+void func_801F332C(s32* first, s32* second);
+/* The semi-transparent quad that joins the two marker fans. */
+void func_801F3618(s16 x1, s16 y1, s16 radius1, u16 angle1, s16 x2, s16 y2, s16 radius2, u16 angle2);
 /* The draw step that reads the three-word work position. */
 void func_801F3980(u32* pos);
+
+/* Claims an actor slot of type 0x3F, seeds its two points and returns 1 when no slot is free. */
+u8 func_801F5190(s32 x1, s32 y1, s32 x2, s32 y2);
 
 /* The two corner cells of each of the four areas the step covers. */
 typedef struct CellBox {

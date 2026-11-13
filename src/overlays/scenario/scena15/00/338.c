@@ -23,7 +23,7 @@ MATCH void Scene_InitTaskArea(void) {
 MATCH void func_801F6FCC(void) {
     func_801F71B0(g_Task->timer);
     if (g_FrameCount & 0x1) {
-        func_801F75D8();
+        Area_AddSpark();
     }
     func_801F7748();
     g_Task->timer = (g_Task)->timer + 4;
@@ -36,7 +36,7 @@ MATCH void func_801F6FCC(void) {
 MATCH void func_801F7078(void) {
     func_801F71B0(0xFF);
     if (g_FrameCount & 0x1) {
-        func_801F75D8();
+        Area_AddSpark();
     }
     func_801F7748();
     if (g_ScriptVars[0] == 0x1F) {
@@ -81,7 +81,7 @@ MATCH void func_801F752C(AreaSpark* spark) {
 
 #include "shared/Area_ClearWorkColumn.h"
 
-INCLUDE_ASM(func_801F75D8);
+#include "shared/Area_AddSpark.h"
 
 MATCH bool func_801F7748(void) {
     AreaSpark* spark;
@@ -169,9 +169,41 @@ MATCH void func_801F7AA8(void) {
 
 INCLUDE_ASM(func_801F7AEC);
 
-INCLUDE_ASM(func_801F7D1C);
+MATCH void func_801F7D1C(void) {
+    UPoint2D pos;
 
-INCLUDE_ASM(func_801F7E2C);
+    if (g_GameStateIndex == 3 || g_GameStateIndex == 1) {
+        g_Actors[g_Task->param.actor_slot].active_flags &= 0xF7;
+        g_Task->header.mode = 0;
+    } else {
+        func_801F83AC(&pos);
+        g_Task->timer += 8;
+        g_Task->tint.signed_bytes.unk_5D = rsin(g_Task->timer << 4) >> 7;
+        g_Task->tint.signed_bytes.unk_5E = rcos(g_Task->timer << 4) >> 7;
+        func_801F7FFC(pos.x, pos.y);
+    }
+}
+
+MATCH void func_801F7E2C(void) {
+    UPoint2D pos;
+
+    func_801F83AC(&pos);
+    if (g_Task->tint.signed_bytes.unk_5D < 0x70) {
+        g_Task->tint.signed_bytes.unk_5D += 2;
+    }
+    if (g_Task->tint.signed_bytes.unk_5E < 0x30) {
+        g_Task->tint.signed_bytes.unk_5E += 1;
+    }
+    func_801F81D8(pos.x, pos.y);
+    if (g_GameStateIndex == 3 || g_GameStateIndex == 1) {
+        g_Actors[g_Task->param.actor_slot].active_flags &= 0xF7;
+        g_Task->header.mode = 0;
+    }
+    if ((g_Task->tint.word & 0xFFFF00) == 0x307000) {
+        g_Task->unk_06      = 0;
+        g_Task->header.mode = 1;
+    }
+}
 
 MATCH void func_801F7F5C(void) {
     UPoint2D pos;
@@ -314,7 +346,28 @@ MATCH void func_801F8930(void) {
     func_801F8958();
 }
 
-INCLUDE_ASM(func_801F8958);
+MATCH void func_801F8958(void) {
+    Actor* actor;
+    Actor* work;
+    u8     i;
+
+    actor = g_Task;
+    for (i = 0; i < ACTOR_COUNT; i++) {
+        if (func_801ACE9C(g_Actors[i].unk_2C) == 0x261) {
+            work             = &g_Actors[i];
+            g_Task           = work;
+            work->draw_layer = 3;
+            func_8014D290();
+        }
+        if (func_801ACE9C(g_Actors[i].unk_2C) == 0x308 && SYS_TestFlag(g_SceneFlags, 0x11)) {
+            work             = &g_Actors[i];
+            g_Task           = work;
+            work->draw_layer = 3;
+            func_8014D290();
+        }
+    }
+    g_Task = actor;
+}
 
 MATCH void func_801F8A5C(void) {
     SYS_DISPATCH_TASK(D_801FE5CC, 1, g_Task);
@@ -456,7 +509,23 @@ MATCH void func_801FDC10(s32 shift) {
     }
 }
 
-INCLUDE_ASM(func_801FDC6C);
+MATCH s32 func_801FDC6C(s32 x, s32 y, s32 unk_06, s32 unk_07, u8 link) {
+    u8 slot;
+
+    slot = Actor_FindFreeSlot();
+    if (slot != GAME_NONE) {
+        g_ActorSlots[slot].header.flags = 1;
+        g_ActorSlots[slot].pos.x.fixed  = x;
+        g_ActorSlots[slot].type         = 0x9E;
+        g_ActorSlots[slot].pos.y.fixed  = y;
+        g_ActorSlots[slot].pos.z.fixed  = (Area_SampleHeight(g_ActorSlots[slot].pos.x.fixed, y) << 16) + TO_COORD(512);
+        g_ActorSlots[slot].unk_06       = unk_06;
+        g_ActorSlots[slot].unk_07       = unk_07;
+        g_ActorSlots[slot].link         = link;
+        return 1;
+    }
+    return 0;
+}
 
 #include "overlays/scenario/Scene_DispatchActor.h"
 
@@ -579,7 +648,21 @@ MATCH s32 func_801FE18C(s32 x, s32 y) {
     return 0;
 }
 
-INCLUDE_ASM(func_801FE3C8);
+MATCH void func_801FE3C8(void) {
+    u8 ids[PARTY_SLOT_COUNT];
+    u8 slot;
+
+    for (slot = 0; slot < g_PartySize; slot++) {
+        ids[slot] = g_Game.members[slot].chr.character_id;
+    }
+    for (slot = 0; slot < PARTY_SLOT_COUNT; slot++) {
+        Party_RemoveMember(ids[slot]);
+    }
+    EMI_LoadPartyArchives(CHAR_ID_RYU_ADULT, CHAR_ID_REI, CHAR_ID_GARR, 0);
+    g_PartySize = 0;
+    Party_JoinMember(CHAR_ID_RYU_ADULT);
+    Party_LoadPalettes();
+}
 
 MATCH void func_801FE49C(void) {
     Party_JoinMember(CHAR_ID_REI);

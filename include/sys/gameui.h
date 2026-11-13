@@ -131,6 +131,13 @@ typedef struct MessageTable {
 #define MENU_SAVE_SLOT_WINDOW_HEIGHT  48
 #define MENU_FORMATION_WINDOW_WIDTH   69
 #define MENU_FORMATION_WINDOW_HEIGHT  48
+#define MENU_EXPERIENCE_WINDOW_WIDTH  101
+#define MENU_EXPERIENCE_WINDOW_HEIGHT 37
+#define MENU_EXPERIENCE_NEXT_X        0x26 /* caption column of the NEXT value */
+#define MENU_EXPERIENCE_EXP_X         0x2C /* caption column of the EXP value */
+#define MENU_EXPERIENCE_CAPTION_Y     7
+#define MENU_EXPERIENCE_VALUE_X       0x15
+#define MENU_EXPERIENCE_VALUE_Y       0x1A
 
 /* The requested message id: 0xFFFF means no message. ResourceRequestMessage
  * stores a message index in the slot and Message_StartRequest reads the slot as that
@@ -234,15 +241,15 @@ extern u16 g_GameEntryState;
 /* The request code, a GameRequest value. */
 /* D_80143BB0 */
 extern u8  g_GameStateIndex;
-/* D_80143F02. A unit that reads it as volatile (etc/game/00) defines
- * GAME_REQUEST_FLAGS_VOLATILE before its first include. */
+/* D_80143F02, a copy of the current AreaLoad.flag_32 (AreaLoadFlags). A unit
+ * that reads it as volatile (etc/game/00) defines GAME_REQUEST_FLAGS_VOLATILE
+ * before its first include. */
 #ifdef GAME_REQUEST_FLAGS_VOLATILE
 extern volatile u8 g_GameRequestFlags;
 #else
 extern u8 g_GameRequestFlags;
 #endif
-/* Map kind bit of g_GameRequestFlags: the area runs the world map. */
-#define GAME_REQUEST_FLAG_WORLD_MAP 0x01
+
 /* Not volatile: the qualifier changes the generated order in the scena00 drawer. */
 /* D_80143C40 */
 extern u16 g_UiWindowEffectBusy;

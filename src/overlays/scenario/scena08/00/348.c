@@ -332,7 +332,11 @@ INCLUDE_ASM(func_801F8534);
 
 INCLUDE_ASM(func_801F85F0);
 
-INCLUDE_ASM(func_801F8964);
+#include "shared/GFX_DrawProjectedDisc.h"
+
+MATCH void func_801F8964(Scena08Spark* spark) {
+    GFX_DRAW_PROJECTED_DISC(&spark->x, spark->fade, 0x20, 1);
+}
 
 MATCH void func_801F8AE8(void) {
     s32           index;
@@ -436,7 +440,8 @@ MATCH void func_801F95D4(void) {
 
 MATCH void func_801F9618(void) {
     func_801F9688();
-    if (g_GameAreaId != AREA_ID_DAUNA_MINE_WORKER) {
+    /* kept: the LOHU halfword compare matches retail; the plain u16 lvalue adds four bytes. */
+    if (LOHU(g_GameAreaId) != AREA_ID_DAUNA_MINE_WORKER) {
         g_Task->header.mode += 1;
     }
 }
@@ -715,7 +720,33 @@ INCLUDE_ASM(func_801FC21C);
 
 INCLUDE_ASM(func_801FC45C);
 
-INCLUDE_ASM(func_801FD07C);
+MATCH void func_801FD07C(void) {
+    s16* counter;
+    s32  first;
+    s32  second;
+
+    first      = Actor_FindFree();
+    D_801FEA74 = first;
+    if (first == GAME_NONE) {
+        return;
+    }
+    g_Actors[first].header.flags = 1;
+    second                       = Actor_FindFree();
+    D_801FEA78                   = second;
+    if (second == GAME_NONE) {
+        g_Actors[D_801FEA74].header.flags = 0;
+        return;
+    }
+    g_Actors[second].header.flags = 1;
+    /* kept: one base register for both writes; writing the view member directly adds four bytes. */
+    counter                       = &D_1F800000.view.area.entity_counter;
+    *counter                      = D_801FEA74;
+    func_801A65A0(D_801FE9A0);
+    Actor_BeginScript(0x4C, 0);
+    *counter = D_801FEA78;
+    func_801A65A0(D_801FE9A0 + 0x10);
+    Actor_BeginScript(0x36, 0);
+}
 
 INCLUDE_ASM(func_801FD1A4);
 
@@ -764,7 +795,7 @@ MATCH void func_801FE12C(void) {
     s32 index;
     u8* item;
 
-    item  = &g_VitalItemIds;
+    item  = g_VitalItemIds;
     index = 0;
     do {
         if (*item == 4) {
@@ -776,7 +807,7 @@ MATCH void func_801FE12C(void) {
 }
 
 MATCH s32 func_801FE170(s32 x, s32 y) {
-    if ((g_GameAreaId == AREA_ID_DAUNA_MINE_ADULT) && (x == TO_COORD(51) + COORD_HALF) && (((y >> 16) - 39) < 2U)) {
+    if ((LOHU(g_GameAreaId) == AREA_ID_DAUNA_MINE_ADULT) && (x == TO_COORD(51) + COORD_HALF) && (((y >> 16) - 39) < 2U)) {
         if (SYS_TestFlag(g_SceneFlags, 6) == 0) {
             Game_SetScriptActive();
             D_80146874 = 4;
@@ -793,7 +824,7 @@ MATCH s32 func_801FE170(s32 x, s32 y) {
         goto block_7;
     }
 block_7:
-    if ((g_GameAreaId == AREA_ID_MOUNT_LEVETT) && (x == TO_COORD(56) + COORD_HALF) && (((y >> 16) - 46) < 4U)) {
+    if ((LOHU(g_GameAreaId) == AREA_ID_MOUNT_LEVETT) && (x == TO_COORD(56) + COORD_HALF) && (((y >> 16) - 46) < 4U)) {
         SYS_SetFlag(g_SceneFlags, 22U);
     }
     return 0;

@@ -41,16 +41,45 @@ MATCH void func_801F7424(Actor* actor) {
 
 /* func_801F7574 */
 MATCH void Scene_ClearWorkRows(void) {
-    u8* row;
-    u8  i;
+    SceneSpark* row;
+    u8          i;
 
-    row = MEM_PTR(u8, 0x800E5000u) + g_Task->unk_06 * 0x500;
-    for (i = 0; i < 32; i++, row += 40) {
-        *row = 0;
+    row = (SceneSpark*)(MEM_PTR(u8, AREA_WORK + 0x800) + g_Task->unk_06 * 0x500);
+    for (i = 0; i < SCENE_SPARK_COUNT; i++, row++) {
+        row->active = 0;
     }
 }
 
-INCLUDE_ASM(func_801F75BC);
+MATCH s32 func_801F75BC(void) {
+    MATRIX      camera;
+    SceneSpark* row;
+    u8          i;
+    u8          life;
+    s32         alive;
+
+    Area_SetCameraMatrix(&camera);
+    alive = 0;
+    row   = (SceneSpark*)(MEM_PTR(u8, AREA_WORK + 0x800) + g_Task->unk_06 * 0x500);
+    for (i = 0; i < SCENE_SPARK_COUNT; row++, i++) {
+        if (row->active == 0) {
+            continue;
+        }
+        row->pos.x += row->vx;
+        row->pos.y += row->vy;
+        row->pos.z += row->vz;
+        row->vz -= 0x40000;
+        row->shade -= 4;
+        row->frame = rand() & 7;
+        life       = row->life - 1;
+        row->life  = life;
+        if (life == 0) {
+            row->active = 0;
+        }
+        func_801F7424(row);
+        alive = 1;
+    }
+    return alive;
+}
 
 INCLUDE_ASM(func_801F76D0);
 
@@ -107,7 +136,7 @@ MATCH void func_801F9354(void) {
 
     switch (*step) {
         case 0:
-            if (g_GameStateIndex != 2) {
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
                 *g_ScriptVars = 1;
                 func_801BE1B0(0xC);
                 *step = 1;
@@ -125,7 +154,7 @@ MATCH void func_801F9354(void) {
             }
             break;
         case 5:
-            if (g_GameStateIndex != 2) {
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
                 *g_ScriptVars = 1;
                 *step         = 6;
             }
@@ -158,7 +187,7 @@ MATCH void func_801FA08C(void) {
             }
             break;
         case 1:
-            if (g_GameStateIndex != 2) {
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
                 SYS_SetFlag(g_SceneFlags, 0x13);
                 Game_ClearScriptActive();
                 *step      = 0;
@@ -166,14 +195,14 @@ MATCH void func_801FA08C(void) {
             }
             break;
         case 5:
-            if (!(g_InputPressed & g_InputMasks[INPUT_SLOT_MENU]) && g_GameStateIndex == 0) {
+            if (!(g_InputPressed & g_InputMasks[INPUT_SLOT_MENU]) && g_GameStateIndex == GAME_REQUEST_IDLE) {
                 *g_ScriptVars = 0;
                 *step         = 6;
                 Game_RequestAreaChange(0x76, 0x490000, 0x188000, 0x81);
             }
             break;
         case 6:
-            if (*g_ScriptVars == 1 && g_GameStateIndex != 2) {
+            if (*g_ScriptVars == 1 && g_GameStateIndex != GAME_REQUEST_MESSAGE) {
                 *g_ScriptVars = 0;
                 Game_ClearScriptActive();
                 *step      = 0;

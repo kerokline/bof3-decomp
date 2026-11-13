@@ -1,4 +1,5 @@
 #include "scena07_00.h"
+
 #include "area/map.h"
 
 #if BOF3_USE_ASM
@@ -328,7 +329,11 @@ MATCH void func_801F81B4(void) {
     Actor_Clear();
 }
 
-INCLUDE_ASM(func_801F81D4);
+#include "shared/GFX_DrawProjectedDisc.h"
+
+MATCH void func_801F81D4(u8* row) {
+    GFX_DRAW_PROJECTED_DISC((s32*)(row + 0x0C), row[3], 0x20, 1);
+}
 
 MATCH void func_801F8358(void) {
     u8* p;
@@ -496,12 +501,12 @@ MATCH void func_801FAA70(void) {
         case 0:
             if (g_UiWindowEffectBusy == 0) {
                 Message_StartAreaMessage(1);
-                g_GameStateIndex = 2;
+                g_GameStateIndex = GAME_REQUEST_MESSAGE;
                 *step            = 1;
             }
             break;
         case 1:
-            if (g_GameStateIndex != 2) {
+            if (g_GameStateIndex != GAME_REQUEST_MESSAGE) {
                 UI_SetMode(1);
                 g_AreaScrollTargetX = 0x2D8000;
                 g_AreaScrollTargetY = 0x5D0000;

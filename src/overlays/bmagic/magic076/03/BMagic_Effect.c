@@ -103,7 +103,39 @@ MATCH void func_801EF4A8(void) {
 
 #include "overlays/bmagic/Effect_TickOnTimerZero.h"
 
-INCLUDE_ASM(func_801EF698);
+MATCH void func_801EF698(void) {
+    POLY_FT4* prim;
+    s16       x;
+    s16       y;
+    s16       half_w;
+    s16       height;
+
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, (GetGraphType() == 1 || GetGraphType() == 2) ? 0x2A5 : 0xB5, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 1, sizeof(DR_MODE));
+    if (g_Task->unk_04 != 0) {
+        height = 0x60;
+        half_w = 0x38;
+    } else {
+        height = 0x40;
+        half_w = 0x18;
+    }
+    prim                             = (POLY_FT4*)g_GfxPrimCursor;
+    D_1F800000.view.effect.params[3] = g_Task->unk_09 << 3;
+    x                                = g_Task->unk_2E.half;
+    y                                = g_Task->unk_30.half;
+    SetPolyFT4(prim);
+    SetSemiTrans(prim, 1);
+    setXY4(prim, x - half_w, y - height, x + half_w, y - height, x - half_w, y, x + half_w, y);
+    prim->tpage = GetTPage(1, 1, 0x340, 0x100);
+    prim->clut  = GetClut(0, 0x1FA);
+    if (g_Task->unk_04 != 0) {
+        setUV4(prim, 8, 8, 0x78, 8, 8, 0x68, 0x78, 0x68);
+    } else {
+        setUV4(prim, 0x78, 8, 0xA8, 8, 0x78, 0x48, 0xA8, 0x48);
+    }
+    setRGB0(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3]);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 1, sizeof(POLY_FT4));
+}
 
 MATCH void func_801EF8A8(void) {
     SYS_DISPATCH_TASK((g_BMagicEffectModes + 6), 1, g_Task);

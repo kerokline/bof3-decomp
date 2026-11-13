@@ -13,6 +13,21 @@
 /* The bytes a sparkle ray reserves in its cell packet. */
 #define BMAGIC_RAY_CELL_SIZE      32
 
+/* Per-slot column views over the 0x78-byte effect slots: the trailing padding
+ * carries the slot stride so each column keeps its own field base. */
+typedef struct BattleEffectByteColumn {
+    u8 value;
+    u8 pad[BATTLE_EFFECT_STRIDE - 1];
+} BattleEffectByteColumn;
+
+typedef struct BattleEffectTargetColumn {
+    BattleEffectTarget target;
+    u8                 pad[BATTLE_EFFECT_STRIDE - sizeof(BattleEffectTarget)];
+} BattleEffectTargetColumn;
+
+ASSERT_SIZE(BattleEffectByteColumn, BATTLE_EFFECT_STRIDE);
+ASSERT_SIZE(BattleEffectTargetColumn, BATTLE_EFFECT_STRIDE);
+
 /* The statements of Effect_SetActorMatrix after its rotation is set; each
  * member declares pos, rot, matrix and flags. SPAN_WORK is the work record
  * whose vertical span halves into the depth. */
@@ -32,6 +47,17 @@
     BMAGIC_PROJECT_ACTOR_MATRIX(SPAN_WORK)
 
 #define BMAGIC_SET_ACTOR_MATRIX() BMAGIC_SET_ACTOR_MATRIX_SPAN(g_Task)
+
+/* The battler the target selector names: a party row below
+ * BATTLE_PARTY_CHARACTERS_COUNT, else an enemy row. A statement macro: the
+ * member declares u8 selector and PartyMember* battler. */
+#define BMAGIC_SELECT_TARGET_BATTLER()                                              \
+    selector = LOBU(g_Battle.target_selector);                                      \
+    if (selector < BATTLE_PARTY_CHARACTERS_COUNT) {                                 \
+        battler = &g_Game.members[selector];                                        \
+    } else {                                                                        \
+        battler = (PartyMember*)(g_BattleEnemies + selector * BATTLE_ENEMY_STRIDE); \
+    }
 
 /* Free the palette fade of the battler the target selector names (a party row
  * below BATTLE_PARTY_CHARACTERS_COUNT, else an enemy row), tell the battle UI and
@@ -306,17 +332,33 @@ typedef struct BMagicOrbitWork {
     /* 0x0B */ u8         unk_0B;
     /* 0x0C */ s16        radius;
     /* 0x0E */ u16        angle;
-    /* 0x10 */ s32        unk_10;
-    /* 0x14 */ s32        unk_14;
-    /* 0x18 */ s32        unk_18;
+    /* 0x10 */ WorldPos   pos;
 } BMagicOrbitWork;
+
+ASSERT_SIZE(BMagicOrbitWork, 0x1C);
 
 ASSERT_OFFSET(BMagicOrbitWork, radius, 0x0C);
 ASSERT_OFFSET(BMagicOrbitWork, angle, 0x0E);
-ASSERT_OFFSET(BMagicOrbitWork, unk_14, 0x14);
+ASSERT_OFFSET(BMagicOrbitWork, pos, 0x10);
 
 /* D_801F05F8 (magic106), D_801F1054 (magic063) */
 extern BMagicOrbitWork* g_BMagicOrbitWork;
+
+/* Steps the orbit work around its battler: the angle advances and the position follows it at the work's radius, the
+ * vertical span grows by unk_0A, and every other frame the effect timer drops; at zero the battler's ticker drops and
+ * CLEAR runs. A statement macro. */
+#define BMAGIC_ORBIT_BATTLER_AND_CLEAR(CLEAR)                                                                                              \
+    g_BMagicOrbitWork->angle       = (g_BMagicOrbitWork->angle + 0x40) & 0xFFF;                                                            \
+    g_BMagicOrbitWork->pos.x.fixed = g_BattleEffectBattler->pos.x.fixed + rsin(g_BMagicOrbitWork->angle) * g_BMagicOrbitWork->radius;      \
+    g_BMagicOrbitWork->pos.y.fixed = g_BattleEffectBattler->pos.y.fixed + rcos((s16)g_BMagicOrbitWork->angle) * g_BMagicOrbitWork->radius; \
+    COORD_INT(g_BMagicOrbitWork->pos.z) += g_BMagicOrbitWork->unk_0A;                                                                      \
+    g_BMagicOrbitWork->unk_0B++;                                                                                                           \
+    if (g_FrameCount & 0x1) {                                                                                                              \
+        if (--g_BMagicOrbitWork->unk_09 == 0) {                                                                                            \
+            g_BattleEffectBattler->param.unk_0B--;                                                                                         \
+            CLEAR();                                                                                                                       \
+        }                                                                                                                                  \
+    }
 
 extern MagicModule       D_801EEC00;
 /* D_801EF3E8 (magic161), D_801EF414 (magic145), D_801EF420 (magic159), D_801EF510 (magic065), D_801EF658 (magic054),
@@ -351,7 +393,7 @@ extern SVECTOR D_1F800014[];
  * the row's column and g_EmiLoadedCharacterIndex picks the id. */
 extern u16* D_800B499C[][2];
 
-void Battle_ApplyDamageFlags(u8 selector, u16 flags);
+void Battle_ApplyDamageFlags(u8 target_mask, u16 damage_flags);
 /* Per-image effect entry points whose name is a different symbol in another
  * overlay; battle/battle/03 keeps its own view. */
 void func_800AFC54(void);
@@ -400,5 +442,28 @@ void Effect_DrawTexturedQuad(void);
     } while (0)
 
 void func_801F07A8(void);
+
+/* Prototypes the images of this group share. */
+u32  func_800AF6B8(u32, u32, s32, u32);
+void func_801EED38();
+void func_801EF174();
+void func_801EF250();
+void func_801EF338();
+void Effect_SetActorMatrixRolled();
+void func_801EF678();
+void func_801EF688();
+void func_801EF724();
+void func_801EF72C();
+void func_801EF87C();
+void Effect_SetActorMatrixQuarterRoll();
+void BMagic_DrawDarkRing();
+void func_801EFB90();
+void func_801F00A8();
+void func_801F014C();
+void Effect_RecordTrail();
+void Effect_ClearTrail();
+u32  BMagic_AllocEffect();
+void func_801F0454();
+void func_801F05A4();
 
 #endif

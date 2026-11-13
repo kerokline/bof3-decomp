@@ -67,16 +67,16 @@ ASSERT_OFFSET(ScanBar, y, 0x04);
 /* The scene context record the entity dispatchers pass to their handler. */
 #define g_SceneFlags ((void*)g_SceneFlags)
 
-/* Advance the current actor's state byte. */
-static inline void Scene_AdvanceActorState(void) {
+/* Advance the current actor's step byte. */
+static inline void Scene_AdvanceActorStep(void) {
     Actor* actor;
 
     actor              = SP_REF(Actor*, 0x44);
     actor->header.step = (u8)(actor->header.step + 1);
 }
 
-/* Advance the current actor's step index. */
-static inline void Scene_AdvanceActorStep(void) {
+/* Advance the current actor's mode byte. */
+static inline void Scene_AdvanceActorMode(void) {
     Actor* actor;
 
     actor              = SP_REF(Actor*, 0x44);
@@ -113,8 +113,22 @@ void func_801F7A18(void);
 void Scene_ClearParty(void);
 void Scene_ClearScanBars(void);
 void Area_ClearWorkColumn(void);
-void GFX_DrawShadedDisc(s16 x, s16 y, s16 radius, u8 center_shade, u8 rim_shade);
 
 /* Scene dispatch table indexed by the mode byte at D_80146872. */
 extern s8 D_80146872;
+/* Prototypes the images of this group share. */
+void      func_801D16DC();
+void      func_801F7180();
+void      func_801F78CC();
+u8*       func_801F8394();
+s32       func_801F8398();
+s32       func_801F83A0();
+void      func_801F845C();
+void      func_801F8530();
+void      func_801F9BD4();
+void      func_801F9BDC();
+void      GFX_CopyPaletteCapped(u32);
+void      func_801FC810();
+s32       func_801FC8F4();
+
 #endif

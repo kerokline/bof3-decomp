@@ -66,7 +66,41 @@ MATCH void func_801EF114(void) {
     g_ScriptTable = AREA_SCRIPT_TABLE;
 }
 
-INCLUDE_ASM(func_801EF1AC);
+MATCH void func_801EF1AC(void) {
+    u8           timer;
+    s8           tint;
+    PartyMember* work;
+
+    timer          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = timer;
+    if (timer == 0) {
+        g_Task->unk_0C                   = 0;
+        g_Task->unk_14                   = 0;
+        D_1F800000.view.scenario.math_00 = (g_Task->unk_0C & 0x7F) << 5;
+        g_Task->pos.x.fixed              = g_BattleEffectBattler->pos.x.fixed + FIXED_MUL(rsin(D_1F800000.view.scenario.math_00), 0x40000);
+        g_Task->pos.y.fixed              = g_BattleEffectBattler->pos.y.fixed + FIXED_MUL(rcos(D_1F800000.view.scenario.math_00), 0x40000);
+        D_1F800000.view.scenario.math_00 = (g_Task->unk_14 & 0x3F) << 6;
+        g_Task->pos.z.fixed              = g_BattleEffectBattler->pos.z.fixed + FIXED_MUL(rsin(D_1F800000.view.scenario.math_00), 0x800000);
+        g_Task->unk_25                   = 29;
+        g_Task->unk_26                   = 0;
+        g_Task->unk_27                   = 32;
+        g_Task->unk_28                   = 0;
+        g_Task->unk_24                   = 0;
+        g_Task->header.flags |= 0x20;
+        g_Task->unk_5C    = 1;
+        tint              = -0x80;
+        g_Task->unk_5D    = tint;
+        g_Task->unk_5E    = tint;
+        g_Task->unk_5F    = tint;
+        g_Task->unk_2A    = 0;
+        g_Task->unk_29    = 4;
+        work              = g_Task;
+        work->unk_2B      = 0;
+        work->unk_2C.half = 0;
+        Actor_SelectScript(D_801EF9C0[g_Task->param.unk_0B]);
+        g_Task->header.step += 1;
+    }
+}
 
 INCLUDE_ASM(func_801EF3BC);
 

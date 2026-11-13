@@ -52,7 +52,38 @@ INCLUDE_ASM(func_801EEE7C);
 
 INCLUDE_ASM(func_801EF158);
 
-INCLUDE_ASM(func_801EF210);
+MATCH void func_801EF210(void) {
+    VECTOR       pos;
+    PartyMember* actor;
+    s32          diff;
+    u8           count;
+
+    count = g_Task->unk_09;
+    if (count < 16) {
+        g_Task->unk_09 = count + 4;
+    }
+    actor  = g_Battle.selected_actor;
+    pos.vx = (actor->pos.x.fixed >> 9) - 0x4000;
+    pos.vy = (actor->pos.y.fixed >> 9) - 0x4000;
+    pos.vz = (actor->pos.z.fixed + 0x1000000) >> 17;
+    func_800AF3A0(pos, 0x40);
+    g_Task->unk_10 = g_Task->unk_0C;
+    g_Task->unk_0C = ratan2(actor->pos.x.fixed - g_Task->pos.x.fixed, actor->pos.y.fixed - g_Task->pos.y.fixed);
+    if (func_800AF66C((BattleRange*)actor, 0x8000) == 0) {
+        diff           = (g_Task->unk_10 & 0xFFF) - (g_Task->unk_0C & 0xFFF);
+        g_Task->unk_10 = diff;
+        if (diff < 0) {
+            g_Task->unk_10 = ~diff + 1;
+        }
+        if ((u32)(g_Task->unk_10 - 0x601) >= 0x3FF) {
+            return;
+        }
+    }
+    Battle_ApplyDamageFlags(g_Battle.target_selector, 0x10);
+    SND_QueueSelectionFx(0x101);
+    g_Task->unk_09 = 16;
+    g_Task->header.step += 1;
+}
 
 MATCH void func_801EF3A4(void) {
     u8 counter;

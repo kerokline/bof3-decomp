@@ -32,7 +32,29 @@ INCLUDE_ASM(func_801EF118);
 /* func_801EF1E0 */
 #include "overlays/bmagic/BMagic_DispatchEffectMode.h"
 
-INCLUDE_ASM(func_801EF224);
+MATCH void func_801EF224(void) {
+    SYS_DISPATCH_BYTE(D_801F0670, g_Task->header.step);
+    if (g_Task->header.flags != 0 && g_Task->header.step != 0) {
+        func_801EF638();
+        func_801EF70C(-g_Task->unk_09 & 0x3F, 0x20);
+        func_801EF70C((8 - g_Task->unk_09) & 0x3F, 0x20);
+        func_801EF70C((16 - g_Task->unk_09) & 0x3F, 0x20);
+        func_801EF70C((24 - g_Task->unk_09) & 0x3F, 0x20);
+        func_801EF70C((32 - g_Task->unk_09) & 0x3F, 0x20);
+        func_801EF70C((40 - g_Task->unk_09) & 0x3F, 0x20);
+        func_801EF70C((48 - g_Task->unk_09) & 0x3F, 0x20);
+        func_801EF70C((56 - g_Task->unk_09) & 0x3F, 0x20);
+        func_801EF70C((4 - g_Task->unk_09 * 2) & 0x3E, 0x50);
+        func_801EF70C((12 - g_Task->unk_09 * 2) & 0x3E, 0x50);
+        func_801EF70C((20 - g_Task->unk_09 * 2) & 0x3E, 0x50);
+        func_801EF70C((28 - g_Task->unk_09 * 2) & 0x3E, 0x50);
+        func_801EF70C((36 - g_Task->unk_09 * 2) & 0x3E, 0x50);
+        func_801EF70C((44 - g_Task->unk_09 * 2) & 0x3E, 0x50);
+        func_801EF70C((52 - g_Task->unk_09 * 2) & 0x3E, 0x50);
+        func_801EF70C((60 - g_Task->unk_09 * 2) & 0x3E, 0x50);
+        PopMatrix();
+    }
+}
 
 MATCH void func_801EF4C4(void) {
     u8* work;

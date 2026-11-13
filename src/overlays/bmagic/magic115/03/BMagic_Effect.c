@@ -6,7 +6,37 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/func_801EEC14.h"
 
-INCLUDE_ASM(func_801EEC80);
+MATCH void func_801EEC80(void) {
+    PartyMember* actor;
+    PartyMember* work;
+    u32          slot;
+    u8           i;
+    u16*         dst;
+    u16*         src;
+
+    actor                              = g_Battle.selected_actor;
+    g_Task->pos.x.fixed                = actor->pos.x.fixed;
+    g_Task->pos.y.fixed                = actor->pos.y.fixed;
+    g_Task->pos.z.fixed                = actor->pos.z.fixed;
+    slot                               = Battle_AllocEffect(1, 48) & BYTE_MASK;
+    work                               = g_Task;
+    g_BattleEffects[slot].header.mode  = 0;
+    g_BattleEffects[slot].target.party = work;
+    GFX_FreePaletteFadeTarget(actor);
+    g_Task->timer = GFX_AllocPaletteFade(actor, 0, 0, 0, 1);
+    i             = 0;
+    dst           = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src           = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    for (; i < 16; i++) {
+        dst[i] = src[i] | 0x8000;
+    }
+    *MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW) = *MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    g_GfxPalettePending                                      = 1;
+    SND_QueueSelectionFx(0x100);
+    g_Task->param.unk_0B = 1;
+    g_Task->unk_09       = 0;
+    g_Task->header.mode++;
+}
 
 MATCH void func_801EEDDC(void) {
     g_PaletteFades[g_Task->timer].offset.red   = g_Task->unk_09 * 2;

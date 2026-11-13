@@ -150,7 +150,25 @@ MATCH void func_801EF470(u8 item_id, u8 category, s32 y) {
 
 INCLUDE_ASM(func_801EF590);
 
-INCLUDE_ASM(func_801EF76C);
+MATCH void func_801EF76C(u8* text, s32 x, s32 y) {
+    POLY_FT4* prim;
+
+    GFX_AddDitheredDrawMode(2, getTPage(0, 0, 0x140, 0x100));
+    while (*text != 0) {
+        prim = GFX_CURSOR(POLY_FT4);
+        SetPolyFT4(prim);
+        setXY4(prim, x, y, x + 8, y, x, y + 8, x + 8, y + 8);
+        setRGB0(prim, 128, 128, 128);
+        setTPage(prim, 0, 1, 0x3C0, 0);
+        setClut(prim, 0, 0x1E0);
+        setUV4(prim, (*text - 0x40) * 8, 8, (*text - 0x40) * 8 + 8, 8, (*text - 0x40) * 8, 16, (*text - 0x40) * 8 + 8, 16);
+        if (*text != 0xFF) {
+            GFX_AddPrim(2, sizeof(POLY_FT4));
+        }
+        text++;
+        x += 8;
+    }
+}
 
 INCLUDE_ASM(func_801EF924);
 

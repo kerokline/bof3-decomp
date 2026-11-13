@@ -7,7 +7,53 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/Effect_DispatchMode.h"
 
-INCLUDE_ASM(func_801EEC94);
+MATCH void func_801EEC94(void) {
+    PartyMember* actor;
+    u16*         dst;
+    u16*         src;
+    PartyMember* owner;
+    PartyMember* spawner;
+    u8           i;
+    u8           slot;
+
+    actor                = g_Battle.selected_actor;
+    g_Task->facing       = actor->facing;
+    g_Task->pos.x.fixed  = actor->pos.x.fixed;
+    g_Task->pos.y.fixed  = actor->pos.y.fixed;
+    g_Task->pos.z.fixed  = actor->pos.z.fixed;
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 16;
+    g_Task->header.mode += 1;
+    slot                               = Battle_AllocEffect(1, 74);
+    owner                              = g_Task;
+    g_BattleEffects[slot].header.mode  = 0;
+    g_BattleEffects[slot].arg.unk_09   = 0;
+    g_BattleEffects[slot].target.party = owner;
+    g_BattleEffects[slot].pos.x.fixed  = g_Task->pos.x.fixed;
+    g_BattleEffects[slot].pos.y.fixed  = g_Task->pos.y.fixed;
+    g_BattleEffects[slot].pos.z.fixed  = g_Task->pos.z.fixed;
+    g_Task->param.unk_0B += 1;
+    for (i = 0; i < 4; i++) {
+        slot                               = Battle_AllocEffect(1, 74);
+        spawner                            = g_Task;
+        g_BattleEffects[slot].header.mode  = 1;
+        g_BattleEffects[slot].unk_0B       = i * 8;
+        g_BattleEffects[slot].unk_04       = i;
+        g_BattleEffects[slot].arg.unk_09   = i * 8 + 1;
+        g_BattleEffects[slot].target.party = spawner;
+        g_BattleEffects[slot].unk_0A       = g_Task->unk_09;
+        g_Task->param.unk_0B += 1;
+    }
+    i   = 0;
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    for (; i < 16; i++) {
+        dst[i]      = src[i];
+        dst[i + 16] = src[i + 16];
+    }
+    g_GfxPalettePending = 1;
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0x00));
+}
 
 #include "overlays/bmagic/Effect_ReplacePaletteFade.h"
 

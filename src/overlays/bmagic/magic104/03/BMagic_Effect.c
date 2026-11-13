@@ -15,7 +15,32 @@ MATCH void func_801EEE7C(void) {
     }
 }
 
-INCLUDE_ASM(func_801EEEC0);
+MATCH void func_801EEEC0(void) {
+    u8  timer;
+    u8  slot;
+    u32 i;
+
+    timer          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = timer;
+    if (timer == 0) {
+        g_Task->param.unk_0B = 0;
+        g_Task->header.mode += 1;
+        for (i = 0; i < 8; i++) {
+            slot                               = Battle_AllocEffect(1, 11);
+            g_BattleEffects[slot].target.party = g_Task;
+            g_BattleEffects[slot].header.mode  = 0;
+            g_BattleEffects[slot].unk_0B       = i;
+            g_BattleEffects[slot].arg.unk_09   = 0;
+            g_BattleEffects[slot].unk_0A       = i * 16 + 1;
+            g_Task->unk_0C                     = D_801F08A8[i].x;
+            g_Task->unk_10                     = D_801F08A8[i].y;
+            func_801DD350(g_Task);
+            g_BattleEffects[slot].pos.x.fixed = g_AreaScrollTargetX + g_Task->unk_0C;
+            g_BattleEffects[slot].pos.y.fixed = g_AreaScrollTargetY + g_Task->unk_10;
+            g_BattleEffects[slot].pos.z.fixed = g_Task->pos.z.fixed;
+        }
+    }
+}
 
 MATCH void func_801EF03C(void) {
     if (g_Task->param.unk_0B == 7) {

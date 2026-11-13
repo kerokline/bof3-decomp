@@ -249,7 +249,44 @@ MATCH void func_801F0368(void) {
     }
 }
 
-INCLUDE_ASM(func_801F03E0);
+MATCH void func_801F03E0(void) {
+    POLY_G3* poly;
+    s32      radius;
+    u8       red;
+    u8       green;
+    u8       blue;
+    u8       centre;
+    u8       i;
+
+    red    = g_Task->unk_09 * (s8)g_Task->unk_5D;
+    green  = g_Task->unk_09 * (s8)g_Task->unk_5E;
+    i      = 0;
+    centre = g_Task->unk_09 * 15;
+    radius = g_Task->timer * 2;
+    blue   = g_Task->unk_09 * (s8)g_Task->unk_5F;
+    do {
+        poly = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(poly);
+        SetSemiTrans(poly, 1);
+        poly->x0 = g_Task->unk_2E.half;
+        poly->y0 = g_Task->unk_30.half;
+        poly->x1 = g_Task->unk_2E.half + ((rsin(i << 9) * radius) >> 12);
+        poly->y1 = g_Task->unk_30.half + ((rcos(i << 9) * radius) >> 12);
+        poly->x2 = g_Task->unk_2E.half + ((rsin((i + 1) << 9) * radius) >> 12);
+        poly->y2 = g_Task->unk_30.half + ((rcos((i + 1) << 9) * radius) >> 12);
+        poly->r0 = centre;
+        poly->g0 = centre;
+        poly->b0 = centre;
+        poly->r1 = red;
+        poly->g1 = green;
+        poly->b1 = blue;
+        poly->r2 = red;
+        poly->g2 = green;
+        poly->b2 = blue;
+        GFX_AddPrim(3, sizeof(POLY_G3));
+        i++;
+    } while (i < 8);
+}
 
 INCLUDE_ASM(func_801F05B4);
 

@@ -447,7 +447,42 @@ MATCH void func_801F0078(void) {
     }
 }
 
-INCLUDE_ASM(func_801F0164);
+MATCH void func_801F0164(s32 index) {
+    POLY_FT4* prim;
+    s32       tpage;
+    u16       x;
+    u16       y;
+    u8        i;
+    u8        glyph;
+    u8        length;
+    s32       u;
+    s32       v;
+
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0x25 : 0x15;
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(2, sizeof(DR_MODE));
+    length = D_801F0A9C[(u8)index];
+    x      = g_Task->unk_2E.half - ((length >> 1) * 12 + (length & 1) * 6);
+    y      = g_Task->unk_30.half;
+    for (i = 0; D_801F0AA0[(u8)index][i] != 0; i++) {
+        glyph = D_801F0AA0[(u8)index][i] - 0x3F;
+        if (D_801F0AA0[(u8)index][i] != 0xFF) {
+            prim = (POLY_FT4*)g_GfxPrimCursor;
+            SetPolyFT4(prim);
+            setXY4(prim, x, y, x + 12, y, x, y + 12, x + 12, y + 12);
+            prim->tpage = GetTPage(0, 0, 0x3C0, 0);
+            prim->clut  = GetClut(0, 0x1E0);
+            setRGB0(prim, 0x80, 0x80, 0x80);
+            u = (glyph % 21) * 12;
+            v = (glyph / 21) * 12;
+            setUV4(prim, u, v + 36, u + 12, v + 36, u, v + 48, u + 12, v + 48);
+            GFX_AddPrim(2, sizeof(POLY_FT4));
+        } else {
+            x -= 6;
+        }
+        x += 12;
+    }
+}
 
 MATCH void func_801F03F0(s32 dir) {
     POLY_FT4* prim;

@@ -62,6 +62,9 @@ typedef struct Magic003Rect {
 } Magic003Rect;
 
 extern Magic003Rect D_801F0B10[];
+/* The length of each label and its glyph codes, 0 at the end and 0xFF for a space. */
+extern u8           D_801F0A9C[];
+extern u8           D_801F0AA0[][13];
 /* The effect slot table BMagic_AllocEffect scans, and its row count. */
 extern BattleEffect D_801F0B38[];
 #define BMAGIC_EFFECT_SLOTS D_801F0B38

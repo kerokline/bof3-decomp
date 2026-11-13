@@ -10,7 +10,48 @@ MATCH void func_801EECA0(void) {
     SYS_DISPATCH_TASK(table.steps, 1, g_Task);
 }
 
-INCLUDE_ASM(func_801EED0C);
+#include "overlays/bmagic/Effect_CopyActiveBattlerToSlot.h"
+
+MATCH void func_801EED0C(void) {
+    PartyMember* work;
+    u32          index;
+    PartyMember* owner;
+    u8           i;
+
+    g_Task->facing = g_BattleEffectBattler->facing;
+    WorldPos_Copy(&g_Task->pos, &g_BattleEffectBattler->pos);
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 0;
+    g_Task->header.mode += 1;
+    func_800AEF98(8, 2);
+    for (i = 0; i < 4; i++) {
+        index = Battle_AllocEffect(1, 35);
+        Effect_CopyActiveBattlerToSlot(index);
+        work                                             = g_Task;
+        g_BattleEffects[index & BYTE_MASK].handler_index = 35;
+        g_BattleEffects[index & BYTE_MASK].header.mode   = 1;
+        g_BattleEffects[index & BYTE_MASK].header.step   = 0;
+        g_BattleEffects[index & BYTE_MASK].unk_06        = 1;
+        g_BattleEffects[index & BYTE_MASK].arg.unk_09    = (i ^ 3) + 1;
+        g_BattleEffects[index & BYTE_MASK].unk_0B        = i ^ 3;
+        g_BattleEffects[index & BYTE_MASK].target.party  = work;
+        g_Task->param.unk_0B++;
+    }
+    index = Battle_AllocEffect(1, 35);
+    Effect_CopyActiveBattlerToSlot(index);
+    owner                                            = g_Task;
+    g_BattleEffects[index & BYTE_MASK].unk_06        = 1;
+    g_BattleEffects[index & BYTE_MASK].header.mode   = 0;
+    g_BattleEffects[index & BYTE_MASK].header.step   = 0;
+    g_BattleEffects[index & BYTE_MASK].handler_index = 35;
+    g_BattleEffects[index & BYTE_MASK].target.party  = owner;
+    g_Task->param.unk_0B++;
+    g_BattleEffectBattler->header.flags |= PARTY_MEMBER_FLAG_HANDLER_BUSY;
+    g_Task->unk_27 = func_800AFB48(g_BattleEffectBattler);
+    g_Task->unk_28 = g_BattleEffectBattler->unk_28;
+    g_Task->unk_24 = g_BattleEffectBattler->unk_24;
+    func_800AF8F0(g_Task);
+}
 
 #include "overlays/bmagic/Effect_RestorePaletteAndReleaseActive.h"
 
@@ -27,8 +68,6 @@ MATCH void func_801EF248(void) {
 
     SYS_DISPATCH_TASK(table.steps, 1, g_Task);
 }
-
-#include "overlays/bmagic/Effect_CopyActiveBattlerToSlot.h"
 
 MATCH void func_801EF2B4(void) {
     PartyMember* work;

@@ -132,6 +132,7 @@ MATCH void func_801EF710(void) {
     s32      next;
 
     switch (g_Task->header.mode) {
+        /* FAKE: retail compare tree needs a third case below 2 on the default body; the bytes do not say which mode. */
         case 1:
         default:
             D_1F800000_WORD[0] = g_Task->unk_09 * 3 + 16;

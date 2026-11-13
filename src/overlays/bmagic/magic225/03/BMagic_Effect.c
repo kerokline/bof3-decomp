@@ -195,7 +195,55 @@ MATCH void func_801EFE50(void) {
     g_ScriptTable = AREA_SCRIPT_TABLE;
 }
 
-INCLUDE_ASM(func_801EFEE8);
+MATCH void func_801EFEE8(void) {
+    PartyMember* caster;
+    PartyMember* work;
+    PartyMember* battler;
+    PartyMember* task;
+    u8           timer;
+
+    timer          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = timer;
+    if (!(timer & BYTE_MASK)) {
+        caster         = D_8014637C;
+        g_Task->facing = caster->facing;
+        g_Task->unk_0C = 0x10000;
+        g_Task->unk_10 = 0;
+        func_801DD350(g_Task);
+        work              = g_Task;
+        battler           = g_BattleEffectBattler;
+        work->pos.x.fixed = caster->pos.x.fixed + work->unk_0C;
+        work->pos.y.fixed = caster->pos.y.fixed + work->unk_10;
+        work->pos.z.fixed = caster->pos.z.fixed + TO_COORD(256);
+        g_Task->unk_14    = ratan2(battler->pos.x.fixed - work->pos.x.fixed, battler->pos.y.fixed - work->pos.y.fixed);
+        if (g_Task->param.unk_0B & 1) {
+            g_Task->unk_14 += rand() & 0xFF;
+        } else {
+            g_Task->unk_14 -= rand() & 0xFF;
+        }
+        g_Task->unk_25      = 0x1D;
+        g_Task->unk_26      = 0x80;
+        g_Task->scale.x     = 0x10000;
+        g_Task->scale.y     = 0x10000;
+        g_Task->unk_48      = 2;
+        g_Task->unk_27      = 2;
+        g_Task->unk_28      = 1;
+        g_Task->unk_24      = 0;
+        g_Task->unk_5C      = 0;
+        g_Task->unk_5D      = 0;
+        g_Task->unk_5E      = 0;
+        g_Task->unk_5F      = 0;
+        g_Task->unk_2A      = g_Task->facing & 1;
+        g_Task->unk_29      = 2;
+        g_Task->unk_2C.half = 0;
+        g_Task->unk_2B      = 1;
+        Actor_SelectScript(0);
+        task         = g_Task;
+        task->unk_09 = 16;
+        task->unk_0C = 12;
+        g_Task->header.step += 1;
+    }
+}
 
 MATCH void func_801F0140(void) {
     s32 value;

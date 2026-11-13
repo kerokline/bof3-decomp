@@ -24,7 +24,41 @@ MATCH void func_801EEC18(void) {
     } while ((u8)count < 96);
 }
 
-INCLUDE_ASM(func_801EECF8);
+MATCH void func_801EECF8(void) {
+    u8 slot;
+    u8 i;
+    u8 battler;
+
+    for (i = 0; i < 0x60; i++) {
+        D_801F0454[i << 5]       = 0;
+        D_801F0454[(i << 5) + 1] = 0;
+        D_801F0454[(i << 5) + 2] = 0;
+    }
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 0;
+    g_Task->header.mode += 1;
+    for (i = 0; i < 8; i++) {
+        battler = i + BATTLE_PARTY_CHARACTERS_COUNT;
+        if (!Battle_SlotIsBlocked(battler) && g_Battle.active_battler != i + BATTLE_PARTY_CHARACTERS_COUNT) {
+            slot                               = Battle_AllocEffect(1, 0x68);
+            g_BattleEffects[slot].target.party = g_Task;
+            g_BattleEffects[slot].header.mode  = 0;
+            g_BattleEffects[slot].unk_04       = battler;
+            g_Task->param.unk_0B += 1;
+        }
+    }
+    for (i = 0; i < BATTLE_PARTY_CHARACTERS_COUNT; i++) {
+        battler = i;
+        if (!Battle_SlotIsBlocked(battler) && g_Battle.active_battler != battler) {
+            slot                               = Battle_AllocEffect(1, 0x68);
+            g_BattleEffects[slot].target.party = g_Task;
+            g_BattleEffects[slot].header.mode  = 0;
+            g_BattleEffects[slot].unk_04       = i;
+            g_Task->param.unk_0B += 1;
+        }
+    }
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0));
+}
 
 #include "overlays/bmagic/Effect_StartOnZeroTick.h"
 

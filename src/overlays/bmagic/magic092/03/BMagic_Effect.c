@@ -206,7 +206,33 @@ MATCH void func_801F038C(void) {
 
 #include "overlays/bmagic/Effect_TickCounter.h"
 
-INCLUDE_ASM(func_801F04BC);
+/* Draws the glow fan at the effect point: eight triangles of a radius 64 to 79 picked\nonce, red at the centre with a fifth of it in green and blue, redrawing the blend\nmode for each. */
+MATCH void func_801F04BC(void) {
+    POLY_G3* prim;
+    s32      angle;
+    s32      i;
+
+    D_1F800000.view.effect.params[0] = RANDOM_MASK(0xF) + 0x40;
+    i                                = 0;
+    D_1F800000.view.effect.params[7] = g_Task->unk_09 * 10;
+    do {
+        SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, getTPage(0, 1, 320, 256), 0);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+        prim = GFX_BeginPolyG3(1);
+        setXY0(prim, g_Task->unk_2E.half, g_Task->unk_30.half);
+        angle    = i << 9;
+        prim->x1 = g_Task->unk_2E.half + FIXED_MUL(rsin(angle), D_1F800000.view.effect.params[0]);
+        prim->y1 = g_Task->unk_30.half + FIXED_MUL(rcos(angle), D_1F800000.view.effect.params[0]);
+        i++;
+        angle    = i << 9;
+        prim->x2 = g_Task->unk_2E.half + FIXED_MUL(rsin(angle), D_1F800000.view.effect.params[0]);
+        prim->y2 = g_Task->unk_30.half + FIXED_MUL(rcos(angle), D_1F800000.view.effect.params[0]);
+        setRGB0(prim, D_1F800000.view.effect.params[7], D_1F800000.view.effect.params[7] / 5, D_1F800000.view.effect.params[7] / 5);
+        setRGB1(prim, 1, 1, 1);
+        setRGB2(prim, 1, 1, 1);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_G3));
+    } while (i < 8);
+}
 
 /* func_801F0758 */
 #include "overlays/bmagic/BMagic_AllocEffect.h"

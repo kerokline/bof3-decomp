@@ -65,7 +65,34 @@ MATCH void func_801EF0F0(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF1F8);
+MATCH void func_801EF1F8(void) {
+    u8           i;
+    u32          slot;
+    PartyMember* work;
+    u8           facing;
+
+    func_8015D104(20, 16);
+    SND_StartVolumeSweep(20);
+    if (g_Task->param.unk_0B == 5) {
+        for (i = 0; i < 6; i++) {
+            slot                                   = Battle_AllocEffect(1, 3) & BYTE_MASK;
+            work                                   = g_Task;
+            g_BattleEffects[slot].header.mode      = 3;
+            g_BattleEffects[slot].unk_04           = i & 1;
+            g_BattleEffects[slot].target.party     = work;
+            facing                                 = g_BattleEffectBattler->facing;
+            g_BattleEffects[slot].arg.unk_09       = (i >> 1) * 8 + 1;
+            g_BattleEffects[slot].unk_0A           = 0;
+            g_BattleEffects[slot].unk_0B           = i >> 1;
+            g_BattleEffects[slot].unk_08           = (facing + 2) & 3;
+            g_BattleEffects[slot].pos.x            = g_Task->pos.x;
+            g_BattleEffects[slot].pos.y            = g_Task->pos.y;
+            COORD_INT(g_BattleEffects[slot].pos.z) = COORD_INT(g_Task->pos.z);
+        }
+        g_Task->param.unk_0B = 0;
+        g_Task->header.mode += 1;
+    }
+}
 
 MATCH void func_801EF35C(void) {
     if (g_Task->param.unk_0B == 6) {

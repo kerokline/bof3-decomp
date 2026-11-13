@@ -89,7 +89,30 @@ MATCH void func_801EF2B4(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF3FC);
+MATCH void func_801EF3FC(void) {
+    PartyMember* battler;
+
+    if (--g_Task->unk_09 == 0) {
+        Battle_CenterCamera();
+        Battle_ProjectRange();
+        battler                          = g_BattleEffectBattler;
+        D_1F800000.view.effect.params[6] = g_Task->unk_2E.half;
+        D_1F800000.view.effect.params[7] = g_Task->unk_30.half;
+        D_1F800000.view.effect.params[4] = g_Task->unk_2E.half = battler->unk_2E.half;
+        D_1F800000.view.effect.params[5] = g_Task->unk_30.half = battler->unk_30.half;
+        g_Task->unk_14 = ratan2(D_1F800000.view.effect.params[6] - D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[7] - D_1F800000.view.effect.params[5]);
+        if (g_Task->unk_04 & 1) {
+            g_Task->unk_14 += (rand() & 7) << 6;
+        } else {
+            g_Task->unk_14 -= (rand() & 7) << 6;
+        }
+        g_Task->unk_0C       = 0;
+        g_Task->param.unk_0B = rand() & 0x3F;
+        g_Task->unk_09       = 0x10;
+        g_Task->timer        = 0;
+        g_Task->header.step++;
+    }
+}
 
 MATCH void func_801EF588(void) {
     u8 timer;

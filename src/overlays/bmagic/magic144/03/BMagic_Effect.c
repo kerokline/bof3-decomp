@@ -128,8 +128,6 @@ MATCH void func_801EF154(void) {
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"
 
-#include "overlays/bmagic/Effect_SetActorMatrix.h"
-
 MATCH void func_801EF294(void) {
     POLY_G3* prim;
     long     depth;
@@ -238,8 +236,6 @@ MATCH void func_801F00A0(void) {
 }
 
 #include "overlays/bmagic/Effect_StepOnTickFlag.h"
-
-#include "overlays/bmagic/Effect_TickCounter.h"
 
 #include "overlays/bmagic/Effect_TickCounter.h"
 

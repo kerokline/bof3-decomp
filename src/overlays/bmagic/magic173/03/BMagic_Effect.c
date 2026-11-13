@@ -246,6 +246,7 @@ MATCH void func_801F06B0(void) {
 }
 
 #include "overlays/bmagic/Effect_TickOnTimerZero.h"
+
 MATCH void func_801F075C(void) {
     POLY_G3* prim;
     s32      i;

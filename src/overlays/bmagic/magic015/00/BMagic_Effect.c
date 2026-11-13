@@ -269,7 +269,43 @@ MATCH void func_801F0654(void) {
 
 INCLUDE_ASM(func_801F0770);
 
-INCLUDE_ASM(func_801F0864);
+MATCH void func_801F0864(void) {
+    s32 speed;
+
+    if (g_Task->param.unk_0B != 0) {
+        if ((s8)g_Task->unk_5D != -0x80) {
+            g_Task->unk_5D -= D_801F1640[g_Task->param.unk_0B - 1][0];
+            g_Task->unk_5E -= D_801F1640[g_Task->param.unk_0B - 1][1];
+            g_Task->unk_5F -= D_801F1640[g_Task->param.unk_0B - 1][1];
+        }
+    } else {
+        if ((s8)g_Task->unk_5D != 0) {
+            g_Task->unk_5D -= 3;
+            g_Task->unk_5E += 4;
+            g_Task->unk_5F += 4;
+        }
+    }
+    if (g_Task->unk_09 != 16) {
+        g_Task->unk_09--;
+    }
+    Actor_StepAnimOnce();
+    func_800AF4A0(D_8014637C, 0x2000, 0);
+    speed                      = g_Task->unk_14 + g_Task->unk_20;
+    g_Task->unk_14             = speed;
+    g_Task->pos.z.part.integer = (u16)g_Task->pos.z.part.integer + speed;
+    if ((g_Task->unk_14 < 0) && (g_Task->pos.z.fixed < g_Battle.selected_actor->pos.z.fixed)) {
+        if (g_Task->param.unk_0B != 0) {
+            g_BattleEffectBattler->param.unk_0B--;
+            func_801E5988();
+        } else {
+            g_Task->unk_5D      = 0;
+            g_Task->unk_5E      = 0;
+            g_Task->unk_5F      = 0;
+            g_Task->pos.z.fixed = g_Battle.selected_actor->pos.z.fixed;
+            g_Task->header.step++;
+        }
+    }
+}
 
 MATCH void func_801F0A94(void) {
     s8 tint;

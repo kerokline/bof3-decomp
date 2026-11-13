@@ -12,6 +12,9 @@
 #define ACTOR_SCREEN_X_STEP      0x10
 #define ACTOR_SCREEN_X_THRESHOLD 0x80
 
+/* The multiplier that derives the link byte from the current actor's byte offset. */
+#define ACTOR_LINK_MULTIPLIER    3616814565u
+
 /* The scratchpad cell holding this mode's work pointer. */
 
 /* The current map row in the field-loader table. */
@@ -25,7 +28,7 @@ extern u8*      D_801F6748[];
 /* The signed per-step offsets the scripted move adds to x and subtracts from y, indexed by the 4-bit step. */
 extern s8       D_801F6754[];
 
-extern void Actor_BeginScript(u8 raw_selector, u16 raw_code);
+extern void Actor_BeginScript(u8 script_index, u16 position);
 u8*         func_801F2E88(void);
 extern u8   Area_UpdateShots(void);
 extern void func_801F4A5C(u8* pairs, s32 facing);

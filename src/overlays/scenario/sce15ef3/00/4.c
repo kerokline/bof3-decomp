@@ -79,11 +79,11 @@ MATCH void func_801D0F94(void) {
 }
 
 MATCH void func_801D1008(void) {
-    Scene_AdvanceActorStep();
+    Scene_AdvanceActorMode();
 }
 
 MATCH void func_801D1028(void) {
-    Scene_AdvanceActorStep();
+    Scene_AdvanceActorMode();
 }
 
 MATCH void func_801D1048(void) {
@@ -188,7 +188,20 @@ MATCH void func_801D1588(void) {
 
 #include "overlays/scenario/Scene_EndScan.h"
 
-INCLUDE_ASM(func_801D1614);
+MATCH void func_801D1614(void) {
+    if (g_Task->timer == 0) {
+        Scene_ClaimScanBar();
+        g_Task->timer = (rand() & 0xF) + 0x18;
+    } else {
+        g_Task->timer--;
+    }
+    if (g_AreaDrawFlags != 0) {
+        Scene_UpdateScanBars(0xF0);
+    }
+    if (g_AreaDrawFlags == 0) {
+        g_Task->header.mode += 1;
+    }
+}
 
 MATCH void func_801D16BC(void) {
     Actor_Clear();

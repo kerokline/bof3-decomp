@@ -206,7 +206,6 @@ extern s32              D_801455BC;
 extern u16              D_801455C0;
 extern s8               D_801455C2;
 extern u8               D_801455C6;
-extern const u8         g_FairyRooms[];
 extern u8               D_801457A9[];
 extern u8               D_801457AA[];
 extern u8               D_801457AB[];
@@ -262,7 +261,7 @@ extern FairyVillageData D_801F24FC_Data;
 
 /* The scratchpad work pointer; each overlay types the pointee for its mode. */
 
-bool Item_Add(s32 category, u8 item, u8 amount, s32 unused);
+bool Item_Add(s32 category, u8 item_id, u8 count, s32 unused);
 void func_801D3568(void);
 void func_801D5034(void);
 void func_801D5D5C(void);

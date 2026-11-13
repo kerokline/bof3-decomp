@@ -22,11 +22,9 @@ extern Callback D_800C2744[];
 extern Callback D_800C2774[];
 
 /* The enemy-work mode dispatch each installer publishes at unk_E4. */
-void                func_800C1C88(s32 mode);
 void                func_800C1D74(s32 mode);
 void                func_800C1E60(s32 mode);
 void                func_800C1F4C(s32 mode);
-u8                  Boss_HandleBattleEvent4(u32 mode);
 /* The mode handler sets the image installs into the battle hooks; the
  * addresses are in [emi/boss/boss008/16] of config/symbols.toml. */
 void                Boss_ChooseBattleEnding4(void);
@@ -41,7 +39,7 @@ extern EnemyBattler g_BattleEnemyBattlers[];
 #define BOSS008_END_BATTLE_BEGIN(slot)          \
     func_800AC844(slot);                        \
     g_Task = (PartyMember*)func_800AC754(slot); \
-    Area_FindSceneRecord(0x83)
+    Area_SelectSceneRecord(0x83)
 
 #define BOSS008_END_BATTLE_FINISH()                   \
     Actor_SelectScript(0);                            \

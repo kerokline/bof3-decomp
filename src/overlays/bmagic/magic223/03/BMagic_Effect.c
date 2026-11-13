@@ -40,7 +40,44 @@ MATCH void func_801EF050(void) {
 
 #include "overlays/bmagic/Effect_TickOnTimerZero.h"
 
-INCLUDE_ASM(func_801EF1E8);
+MATCH void func_801EF1E8(void) {
+    POLY_G4* prim;
+    s32*     dark;
+    s32      tpage;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(2, sizeof(DR_MODE));
+    prim = (POLY_G4*)g_GfxPrimCursor;
+    SetPolyG4(prim);
+    SetSemiTrans(prim, 1);
+    if (g_BattleEffectBattler->facing & 1) {
+        setXY4(prim, 0, 0, 0x13F, 0, 0, 0xEF, 0x13F, 0xEF);
+    } else {
+        setXY4(prim, 0x13F, 0, 0, 0, 0x13F, 0xEF, 0, 0xEF);
+    }
+    dark       = &D_1F800008;
+    *dark      = g_Task->unk_09;
+    D_1F80000C = g_Task->unk_09 * 8;
+    prim->r0 = prim->r3 = D_1F80000C;
+    prim->g0 = prim->g3 = D_1F80000C;
+    prim->b0 = prim->b3 = D_1F80000C;
+    prim->r1 = prim->r2 = *dark;
+    prim->g1 = prim->g2 = *dark;
+    prim->b1 = prim->b2 = *dark;
+    GFX_AddPrim(2, sizeof(POLY_G4));
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x25;
+    } else {
+        tpage = 0x15;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(2, sizeof(DR_MODE));
+}
 
 MATCH void func_801EF3C0(void) {
     SYS_DISPATCH_TASK(D_801EFC40, 1, g_Task);

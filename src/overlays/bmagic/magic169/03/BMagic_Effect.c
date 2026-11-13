@@ -90,7 +90,50 @@ MATCH void func_801EEFE0(void) {
 
 #include "shared/Effect_StartPlaying.h"
 
-INCLUDE_ASM(func_801EF070);
+MATCH void func_801EF070(void) {
+    POLY_FT4* prim;
+    s16*      shade;
+    s32       tpage;
+    s16       x;
+    s16       y;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x2A5;
+    } else {
+        tpage = 0xB5;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 1, sizeof(DR_MODE));
+    shade  = &D_1F800006;
+    prim   = (POLY_FT4*)g_GfxPrimCursor;
+    *shade = g_Task->unk_09 * 8;
+    x      = g_Task->unk_2E.half;
+    y      = g_Task->unk_30.half;
+    SetPolyFT4(prim);
+    SetSemiTrans(prim, 1);
+    prim->x0    = x - 0x38;
+    prim->y0    = y - 0x60;
+    prim->x1    = x + 0x38;
+    prim->y1    = y - 0x60;
+    prim->x2    = x - 0x38;
+    prim->y2    = y;
+    prim->x3    = x + 0x38;
+    prim->y3    = y;
+    prim->tpage = GetTPage(1, 1, 832, 256);
+    prim->clut  = GetClut(0, 506);
+    prim->u0    = 8;
+    prim->v0    = 8;
+    prim->u1    = 120;
+    prim->v1    = 8;
+    prim->u2    = 8;
+    prim->v2    = 104;
+    prim->u3    = 120;
+    prim->v3    = 104;
+    prim->r0    = *shade;
+    prim->g0    = *shade;
+    prim->b0    = *shade;
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 1, sizeof(POLY_FT4));
+}
 
 /* func_801EF210 */
 #include "overlays/bmagic/BMagic_DispatchEffectMode.h"

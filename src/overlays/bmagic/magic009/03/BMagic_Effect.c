@@ -6,7 +6,60 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/func_801EEC28.h"
 
-INCLUDE_ASM(func_801EEC98);
+MATCH void func_801EEC98(void) {
+    BattleEffect* slot;
+    PartyMember*  work;
+    u16*          dst;
+    u16*          src;
+    u32           index;
+    u32           i;
+    u8            active;
+
+    g_Task->param.unk_0B = 0;
+    g_Task->header.mode += 1;
+    active = g_Battle.active_battler;
+    if (BATTLER_IS_PLAYER(active)) {
+        g_Game.members[active].unk_4B = 0xFF;
+    } else {
+        g_BattleEnemyBattlers[active - BATTLE_PARTY_CHARACTERS_COUNT].unk_4B = 0xFF;
+    }
+    func_800AEF98(0x2C, 6);
+    index  = Battle_AllocEffect(1, 42) & BYTE_MASK;
+    active = g_Battle.active_battler;
+    if (BATTLER_IS_PLAYER(active)) {
+        BattleWorkImage* row;
+
+        slot                    = &g_BattleEffects[index & BYTE_MASK];
+        row                     = (BattleWorkImage*)&g_Game.members[active];
+        *(BattleWorkImage*)slot = *row;
+    } else {
+        BattleWorkImage* row;
+        u32              enemy;
+
+        slot                    = &g_BattleEffects[index & BYTE_MASK];
+        enemy                   = active - BATTLE_PARTY_CHARACTERS_COUNT;
+        row                     = (BattleWorkImage*)&g_BattleEnemyBattlers[enemy];
+        *(BattleWorkImage*)slot = *row;
+    }
+    work                                             = g_Task;
+    g_BattleEffects[index & BYTE_MASK].header.mode   = 1;
+    g_BattleEffects[index & BYTE_MASK].unk_06        = 1;
+    g_BattleEffects[index & BYTE_MASK].header.step   = 0;
+    g_BattleEffects[index & BYTE_MASK].handler_index = 42;
+    g_BattleEffects[index & BYTE_MASK].target.party  = work;
+    g_Task->param.unk_0B += 1;
+    i   = 1;
+    src = MEM_PTR(u16, 0x80036C02u);
+    dst = MEM_PTR(u16, 0x8003AC02u);
+    for (; i < 16; i++) {
+        dst[0x20] = src[0x20] | 0x8000;
+        src++;
+        dst++;
+    }
+    *MEM_PTR(u16, 0x8003AC40u) = 0;
+    g_GfxPalettePending        = 1;
+    g_BattleEffectBattler->header.flags |= PARTY_MEMBER_FLAG_HANDLER_BUSY;
+}
 
 MATCH void func_801EEF08(void) {
     u32 slot;

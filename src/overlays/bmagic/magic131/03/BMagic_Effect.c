@@ -112,7 +112,48 @@ MATCH void func_801EF110(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF1C0);
+MATCH void func_801EF1C0(void) {
+    u8 count;
+    u8 found;
+    u8 i;
+
+    count          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = count;
+    found          = 0;
+    if (count != 0) {
+        return;
+    }
+    for (i = 0; i < g_Game.party_size; i++) {
+        if (g_Game.members[i].chr.character_id == CHAR_ID_REI && (g_Game.members[i].u.turn.action_flags.value & COMBATANT_FLAG_DRAGON_FORM_QUEUED)) {
+            found = 1;
+        }
+    }
+    if (found) {
+        if (g_EmiLoadedCharacterIndex == 7) {
+            EMI_LoadArchive((g_Battle.scroll_dir & 0x2) ? 0x205 : 0x201);
+        }
+        if (g_EmiLoadedCharacterIndex == 0xD) {
+            EMI_LoadArchive((g_Battle.scroll_dir & 0x2) ? 0x206 : 0x202);
+        }
+        if (g_EmiLoadedCharacterIndex == 0xE) {
+            EMI_LoadArchive((g_Battle.scroll_dir & 0x2) ? 0x207 : 0x203);
+        }
+        if (g_EmiLoadedCharacterIndex == 0xF) {
+            if (g_Battle.scroll_dir & 0x2) {
+                EMI_LoadArchive(0x208);
+            } else {
+                EMI_LoadArchive(0x204);
+            }
+        }
+    } else {
+        if (g_Battle.scroll_dir & 0x2) {
+            EMI_GetArchiveId(g_EmiLoadedCharacterIndex & 0x7F, 2);
+        } else {
+            EMI_GetArchiveId(g_EmiLoadedCharacterIndex & 0x7F, 1);
+        }
+    }
+    g_Task->header.mode += 1;
+}
 
 MATCH void func_801EF3D0(void) {
     if (!EMI_IsReady()) {

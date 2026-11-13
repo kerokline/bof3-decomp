@@ -6,7 +6,41 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/BMagic_DispatchMode.h"
 
-INCLUDE_ASM(func_801EEC7C);
+#include "overlays/bmagic/Effect_CopyActiveBattlerToSlot.h"
+
+MATCH void func_801EEC7C(void) {
+    PartyMember* work;
+    u32          index;
+    PartyMember* owner;
+
+    g_Task->facing = g_BattleEffectBattler->facing;
+    WorldPos_Copy(&g_Task->pos, &g_BattleEffectBattler->pos);
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 0;
+    g_Task->header.mode += 1;
+    index = Battle_AllocEffect(1, 87) & BYTE_MASK;
+    Effect_CopyActiveBattlerToSlot(index);
+    work                                 = g_Task;
+    g_BattleEffects[index].header.mode   = 0;
+    g_BattleEffects[index].header.step   = 0;
+    g_BattleEffects[index].unk_06        = 1;
+    g_BattleEffects[index].handler_index = 87;
+    g_BattleEffects[index].target.party  = work;
+    g_Task->param.unk_0B++;
+    index                               = Battle_AllocEffect(1, 87) & BYTE_MASK;
+    work                                = g_Task;
+    g_BattleEffects[index].header.mode  = 1;
+    g_BattleEffects[index].target.party = work;
+    g_Task->param.unk_0B++;
+    index                               = Battle_AllocEffect(1, 87) & BYTE_MASK;
+    owner                               = g_Task;
+    g_BattleEffects[index].header.mode  = 2;
+    g_BattleEffects[index].target.party = owner;
+    g_Task->param.unk_0B++;
+    SND_QueueSelectionFx(0x100);
+    SND_QueueSelectionFx(0x101);
+    g_BattleEffectBattler->header.flags |= PARTY_MEMBER_FLAG_HANDLER_BUSY;
+}
 
 MATCH void func_801EEF44(void) {
     if (g_Task->param.unk_0B == 0) {

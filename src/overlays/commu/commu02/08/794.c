@@ -1,4 +1,5 @@
 #include "commu02_08.h"
+#include "overlays/commu/Commu_CursorTriangle.h"
 #include "common/util.h"
 
 #if BOF3_USE_ASM
@@ -219,7 +220,18 @@ MATCH void func_801D2E10(void) {
     D_801F294C++;
 }
 
-INCLUDE_ASM(func_801D2E60);
+MATCH void func_801D2E60(s16 x, s16 y) {
+    LINE_F2* primitive;
+
+    primitive = (LINE_F2*)g_GfxPrimCursor;
+    SetLineF2(primitive);
+    primitive->x0 = x;
+    primitive->x1 = x + 8;
+    primitive->y0 = y;
+    primitive->y1 = y;
+    setRGB0(primitive, 0x80, 0x80, 0x80);
+    GFX_AddPrim(1, sizeof(LINE_F2));
+}
 
 INCLUDE_ASM(func_801D2EDC);
 
@@ -976,7 +988,12 @@ INCLUDE_ASM(func_801D851C);
 
 INCLUDE_ASM(func_801D875C);
 
-INCLUDE_ASM(func_801D88A4);
+MATCH void func_801D88A4(s32 x, s32 y, s32 bright) {
+    POLY_F3* poly;
+    u8       colour;
+
+    COMMU_DRAW_CURSOR_TRIANGLE(x, y, bright);
+}
 
 /* Fills D_801DB080 with a name built from one random half of each of the two name tables in the loaded text bank. */
 /* func_801D8968 */
@@ -1028,7 +1045,18 @@ INCLUDE_ASM(Menu_DrawHeaderBar);
 
 INCLUDE_ASM(func_801D90D8);
 
-INCLUDE_ASM(func_801D9210);
+MATCH void func_801D9210(void) {
+    s32 drawn;
+    u32 i;
+
+    drawn = 0;
+    for (i = 0; i < 7; i++) {
+        if (g_Characters[i].unk_07 & 1) {
+            func_801D90D8(((drawn & 1) * 0x88) + 0x20, (((u8)drawn >> 1) * 0x38) + 0x2B, (u8)i, 0);
+            drawn++;
+        }
+    }
+}
 
 MATCH u8 func_801D92B0(void) {
     s32 count = 0;

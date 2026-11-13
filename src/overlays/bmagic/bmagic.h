@@ -122,6 +122,35 @@ typedef Point2D TrailPoint;
     handlers.handlers[g_Task->field]()
 #define g_Task ((PartyMember*)g_Task)
 
+/* The 0x74 bytes of a battler's work record that a queued effect slot copies;
+ * GCC expands the copy into its 16-byte block-move loop. */
+typedef struct BattleWorkImage {
+    u32 words[29];
+} BattleWorkImage;
+
+ASSERT_SIZE(BattleWorkImage, 0x74);
+
+/* Copy the active battler's work image into a free effect slot. A statement
+ * macro: the member declares u32 index, u8 active and BattleEffect* slot. */
+#define BMAGIC_ALLOC_BATTLER_EFFECT()                                              \
+    index  = Battle_AllocEffect(1, 31);                                            \
+    active = g_Battle.active_battler;                                              \
+    if (BATTLER_IS_PLAYER(active)) {                                               \
+        BattleWorkImage* row;                                                      \
+                                                                                   \
+        row                     = (BattleWorkImage*)&g_Game.members[active];       \
+        slot                    = &g_BattleEffects[index & BYTE_MASK];             \
+        *(BattleWorkImage*)slot = *row;                                            \
+    } else {                                                                       \
+        BattleWorkImage* row;                                                      \
+        u32              enemy;                                                    \
+                                                                                   \
+        slot                    = &g_BattleEffects[index & BYTE_MASK];             \
+        enemy                   = active - BATTLE_PARTY_CHARACTERS_COUNT;          \
+        row                     = (BattleWorkImage*)&g_BattleEnemyBattlers[enemy]; \
+        *(BattleWorkImage*)slot = *row;                                            \
+    }
+
 /* Go to the effect's next step. */
 static inline void BMagic_NextStep(void) {
     PartyMember* work = g_Task;
@@ -212,6 +241,15 @@ typedef struct BMagicEffectFuncs {
 
 ASSERT_SIZE(BMagicEffectFuncs, 0x18);
 ASSERT_OFFSET(BMagicEffectFuncs, handlers, 0x00);
+
+/* The step handlers Effect_DrawRings runs, indexed by header.step (byte 0x02). */
+typedef struct BMagicStepHandlers {
+    Callback steps[3];
+} BMagicStepHandlers;
+
+ASSERT_SIZE(BMagicStepHandlers, 0xC);
+
+extern BMagicStepHandlers BMagic_EffectSteps;
 
 /* The effect work record D_801F17B4 points to: func_801F006C clears bytes 0-4,
  * func_801EF33C dispatches on mode. magic070-072 keep a pool of them, one
@@ -329,6 +367,8 @@ void func_801EF4F0(void);
 void func_801EF970(void);
 void func_801EFA48(void);
 void func_801F0068(void);
+void BMagic_DrawRingTriangles(void);
+void BMagic_DrawRingQuads(void);
 
 void func_801F006C(void);
 

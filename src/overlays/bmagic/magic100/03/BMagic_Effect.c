@@ -32,7 +32,33 @@ MATCH void func_801EEE9C(void) {
     }
 }
 
-INCLUDE_ASM(func_801EEF3C);
+MATCH s32 func_801EEF3C(void) {
+    PartyMember* battler;
+    PartyMember* work;
+
+    if (--g_Task->unk_09 == 0) {
+        g_Task->facing = g_BattleEffectBattler->facing;
+        g_Task->unk_0C = 0x60000;
+        g_Task->unk_10 = 0;
+        func_801DD350(g_Task);
+        g_Task->pos.x.fixed = g_BattleEffectBattler->pos.x.fixed + g_Task->unk_0C;
+        g_Task->pos.y.fixed = g_BattleEffectBattler->pos.y.fixed + g_Task->unk_10;
+        g_Task->pos.z.fixed = g_BattleEffectBattler->pos.z.fixed;
+        g_Task->facing      = g_BattleEffectBattler->facing;
+        battler             = g_BattleEffectBattler;
+        work                = g_Task;
+        WorldPos_Copy(&work->pos, &battler->pos);
+        g_Task->unk_20 = (ratan2(battler->pos.x.fixed - work->pos.x.fixed, battler->pos.y.fixed - work->pos.y.fixed) + 0x800) & 0xFFF;
+        if (g_Task->param.unk_0B & 1) {
+            g_Task->unk_18 = -((rand() & 3) + 4);
+        } else {
+            g_Task->unk_18 = (rand() & 3) + 4;
+        }
+        g_Task->unk_1C = (rand() & 0x30) + 0x50;
+        g_Task->timer  = 0;
+        g_Task->header.step++;
+    }
+}
 
 MATCH void func_801EF0D8(void) {
     u32          slot;

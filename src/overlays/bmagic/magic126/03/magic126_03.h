@@ -3,6 +3,8 @@
 
 /* The bmagic/magic126/03 overlay. Only this image includes the file. */
 
+#define BATTLE_PARTY_CELL_RECORD
+
 #include "overlays/bmagic/bmagic.h"
 
 extern SVECTOR D_1F800014[];

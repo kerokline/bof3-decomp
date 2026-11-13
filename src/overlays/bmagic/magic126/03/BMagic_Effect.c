@@ -205,7 +205,33 @@ MATCH void func_801F01C0(void) {
     }
 }
 
-INCLUDE_ASM(func_801F0240);
+MATCH void func_801F0240(void) {
+    PartyMember* work;
+    u8           timer;
+
+    timer          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = timer;
+    if (timer == 0) {
+        g_Task->facing    = D_8014637C->facing;
+        work              = g_Task;
+        work->pos.x.fixed = D_8014637C->pos.x.fixed;
+        /* FAKE: retail re-reads the party cell for the next copy. */
+        FAKE_BARRIER();
+        work->pos.y.fixed = D_8014637C->pos.y.fixed;
+        /* FAKE: retail re-reads the party cell for the next copy. */
+        FAKE_BARRIER();
+        work->pos.z.fixed = D_8014637C->pos.z.fixed;
+        work->unk_0C      = 0x8000;
+        work->unk_10      = 0;
+        func_801DD350(work);
+        g_Task->pos.x.fixed += g_Task->unk_0C;
+        g_Task->pos.y.fixed += g_Task->unk_10;
+        g_Task->pos.z.fixed += 0x800000;
+        g_Task->unk_0C = ratan2(g_BattleEffectBattler->pos.x.fixed - g_Task->pos.x.fixed, g_BattleEffectBattler->pos.y.fixed - g_Task->pos.y.fixed);
+        g_Task->unk_09 = 0;
+        g_Task->header.step += 1;
+    }
+}
 
 MATCH void func_801F037C(void) {
     s32 diff;

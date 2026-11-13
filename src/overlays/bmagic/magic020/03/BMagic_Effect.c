@@ -218,7 +218,38 @@ MATCH void func_801EFAF4(void) {
     BMAGIC_RUN_EFFECT_STEP(func_801EFBA0, func_801EFD10);
 }
 
-INCLUDE_ASM(func_801EFBA0);
+MATCH void func_801EFBA0(void) {
+    PartyMember* actor;
+    PartyMember* work;
+    u8           timer;
+
+    timer          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = timer;
+    if (!(timer & BYTE_MASK)) {
+        actor               = g_BattleSelectedActor;
+        g_Task->facing      = actor->facing;
+        g_Task->pos.x.fixed = actor->pos.x.fixed;
+        g_Task->pos.y.fixed = actor->pos.y.fixed;
+        g_Task->pos.z.fixed = actor->pos.z.fixed;
+        Battle_ProjectRange();
+        g_Task->unk_29    = 0;
+        g_Task->unk_25    = 0x1D;
+        g_Task->unk_26    = 0;
+        g_Task->unk_24    = 0x84;
+        work              = g_Task;
+        work->unk_2B      = 0;
+        work->unk_2C.half = 0;
+        g_Task->unk_28    = 0;
+        g_Task->unk_27    = D_801EFEC4[g_Task->param.unk_0B] + 0xB0;
+        if (g_Task->facing == 1 || g_Task->facing == 2) {
+            g_Task->unk_2A = 1;
+        } else {
+            g_Task->unk_2A = 0;
+        }
+        Actor_SelectScript(g_Task->param.unk_0B);
+        g_Task->header.step += 1;
+    }
+}
 
 MATCH void func_801EFD10(void) {
     if (Actor_StepAnimLoop() & BYTE_MASK) {

@@ -21,6 +21,7 @@ typedef struct Magic020Steps {
 
 extern Magic020SecondSteps D_801EEC3C;
 extern Magic020Steps       D_801EEC1C;
+extern u8                  D_801EFEC4[];
 
 void func_801EFBA0(void);
 

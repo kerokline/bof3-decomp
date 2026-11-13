@@ -7,7 +7,54 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/Effect_RunSlots.h"
 
-INCLUDE_ASM(func_801EED18);
+MATCH void func_801EED18(void) {
+    u16* dst;
+    u16* src;
+    u32  slot;
+    s32  i;
+
+    for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+        BMAGIC_EFFECT_SLOTS[i].header.flags = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.step  = 0;
+    }
+    Battle_CenterCamera();
+    Battle_ProjectRange();
+    if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+        if (g_Battle.active_battler >= BATTLE_PARTY_CHARACTERS_COUNT) {
+            g_Task->facing = D_8014637C->facing;
+        } else {
+            g_Task->facing = D_8014637C->facing ^ 2;
+        }
+    } else if (g_Battle.active_battler < BATTLE_PARTY_CHARACTERS_COUNT) {
+        g_Task->facing = D_8014637C->facing;
+    } else {
+        g_Task->facing = D_8014637C->facing ^ 2;
+    }
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 0x10;
+    g_Task->header.mode += 1;
+    slot                               = Battle_AllocEffect(1, 0x5F) & BYTE_MASK;
+    g_BattleEffects[slot].target.party = g_Task;
+    g_BattleEffects[slot].header.mode  = 0;
+    g_Task->param.unk_0B += 1;
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0));
+    i   = 0;
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    for (; i < 256; i++) {
+        *dst++ = *src++ | 0x8000;
+    }
+    i   = 0;
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 2 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA_33C00);
+    for (; i < 16; i++) {
+        *dst++ = *src++ | 0x8000;
+    }
+    *MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW) = *MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    *MEM_PTR(u16, AREA_PALETTE_WORK + 2 * AREA_PALETTE_ROW)  = *MEM_PTR(u16, AREA_PALETTE_ARENA_33C00);
+    g_GfxPalettePending                                      = 1;
+}
 
 #include "overlays/bmagic/Effect_RequestTargetOnTimerZero.h"
 

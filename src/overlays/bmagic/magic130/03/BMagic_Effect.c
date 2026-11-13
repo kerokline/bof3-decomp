@@ -121,6 +121,38 @@ MATCH void Effect_CountDownTimerStep2(void) {
 
 #include "overlays/bmagic/Effect_CountDownAndFinish.h"
 
-INCLUDE_ASM(func_801EF4D4);
+MATCH void func_801EF4D4(void) {
+    POLY_G3* prim;
+    s32      i;
+
+    D_1F800000.view.effect.params[0] = g_Task->unk_14;
+    D_1F800000.view.effect.params[2] = g_Task->timer * 8;
+    D_1F800000.view.effect.params[3] = g_Task->timer * 8;
+    D_1F800000.view.effect.params[4] = g_Task->timer * 4;
+    D_1F800000.view.effect.params[5] = g_Task->timer * 8;
+    D_1F800014[0].vx                 = g_Task->unk_2E.half + FIXED_MUL(rsin(0), D_1F800000.view.effect.params[0]);
+    D_1F800014[0].vy                 = g_Task->unk_30.half + FIXED_MUL(rcos(0), D_1F800000.view.effect.params[0]);
+    for (i = 1; i < 9; i++) {
+        prim = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 1);
+        prim->x0 = g_Task->unk_2E.half;
+        prim->y0 = g_Task->unk_30.half;
+        prim->x1 = D_1F800014[0].vx;
+        prim->y1 = D_1F800014[0].vy;
+        prim->x2 = D_1F800014[0].vx = g_Task->unk_2E.half + FIXED_MUL(rsin(i << 9), D_1F800000.view.effect.params[0]);
+        prim->y2 = D_1F800014[0].vy = g_Task->unk_30.half + FIXED_MUL(rcos(i << 9), D_1F800000.view.effect.params[0]);
+        prim->r0                    = D_1F800000.view.effect.params[2];
+        prim->g0                    = D_1F800000.view.effect.params[2];
+        prim->b0                    = D_1F800000.view.effect.params[2];
+        prim->r1                    = D_1F800000.view.effect.params[3];
+        prim->g1                    = D_1F800000.view.effect.params[4];
+        prim->b1                    = D_1F800000.view.effect.params[5];
+        prim->r2                    = D_1F800000.view.effect.params[3];
+        prim->g2                    = D_1F800000.view.effect.params[4];
+        prim->b2                    = D_1F800000.view.effect.params[5];
+        GFX_AddPrim(2, sizeof(POLY_G3));
+    }
+}
 
 INCLUDE_ASM(func_801EF730);

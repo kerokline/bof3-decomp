@@ -103,7 +103,49 @@ MATCH void func_801EFE5C(void) {
     }
 }
 
-INCLUDE_ASM(func_801EFEDC);
+MATCH void func_801EFEDC(void) {
+    s16* radius;
+    u8   count;
+    u8   phase;
+    u8   pick;
+    u8   flags;
+    u32  id;
+
+    count          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = count;
+    if (!(count & BYTE_MASK)) {
+        g_Task->pos.x.fixed              = g_BattleEffectBattler->pos.x.fixed;
+        g_Task->pos.y.fixed              = g_BattleEffectBattler->pos.y.fixed;
+        g_Task->pos.z.fixed              = g_BattleEffectBattler->pos.z.fixed;
+        radius                           = &D_1F800000.view.effect.params[0];
+        *radius                          = 0x100;
+        phase                            = rand() & 7;
+        D_1F800000.view.effect.params[5] = phase << 9;
+        g_Task->pos.x.fixed += (rsin(phase << 9) * *radius) >> 3;
+        g_Task->pos.y.fixed += (rcos(D_1F800000.view.effect.params[5]) * *radius) >> 3;
+        flags = g_Task->param.unk_0B;
+        if (flags & 1) {
+            pick = (flags >> 1) % 3;
+            switch (pick) {
+                case 0:
+                    id = EMI_CUE_ID(SND_BANK_COMMON, 0x01);
+                    break;
+                case 1:
+                    id = EMI_CUE_ID(SND_BANK_COMMON, 0x02);
+                    break;
+                case 2:
+                default:
+                    id = EMI_CUE_ID(SND_BANK_COMMON, 0x03);
+                    break;
+            }
+            SND_QueueSelectionFx(id);
+        }
+        g_Task->param.unk_0B = 0x10;
+        g_Task->unk_09       = 0;
+        g_Task->timer        = 0x40;
+        g_Task->header.step += 1;
+    }
+}
 
 MATCH void func_801F00A0(void) {
     u8 timer;

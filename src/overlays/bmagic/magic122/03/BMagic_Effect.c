@@ -77,7 +77,55 @@ MATCH void func_801EEEA0(void) {
     }
 }
 
-INCLUDE_ASM(func_801EEF2C);
+MATCH void func_801EEF2C(void) {
+    PartyMember* battler;
+    PartyMember* work;
+
+    if (--g_Task->unk_09 == 0) {
+        g_Task->facing = g_BattleEffectBattler->facing;
+        Battle_CenterCamera();
+        Battle_ProjectRange();
+        work                             = g_Task;
+        battler                          = g_BattleEffectBattler;
+        D_1F800000.view.effect.params[6] = work->unk_2E.half;
+        D_1F800000.view.effect.params[7] = work->unk_30.half;
+        WorldPos_Copy(&work->pos, &battler->pos);
+        Battle_ProjectRange();
+        if (g_Battle.active_battler < BATTLE_PARTY_CHARACTERS_COUNT) {
+            func_800B0118();
+        } else {
+            switch (g_Task->facing) {
+                case 0:
+                    g_Task->unk_0C = 41;
+                    g_Task->unk_10 = -13;
+                    break;
+                case 1:
+                    g_Task->unk_0C = -41;
+                    g_Task->unk_10 = -13;
+                    break;
+                case 2:
+                    g_Task->unk_0C = -38;
+                    g_Task->unk_10 = -38;
+                    break;
+                default:
+                    g_Task->unk_0C = 38;
+                    g_Task->unk_10 = -38;
+                    break;
+            }
+        }
+        g_Task->unk_2E.half += g_Task->unk_0C;
+        g_Task->unk_30.half += g_Task->unk_10;
+        D_1F800000.view.effect.params[4] = g_Task->unk_2E.half;
+        D_1F800000.view.effect.params[5] = g_Task->unk_30.half;
+        g_Task->unk_14                   = ratan2(D_1F800000.view.effect.params[6] - D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[7] - D_1F800000.view.effect.params[5]);
+        g_Task->unk_04                   = 16;
+        g_Task->param.unk_0B             = 17;
+        g_Task->unk_09                   = 0;
+        g_Task->timer                    = 1;
+        g_Task->header.step++;
+        SND_QueueSelectionFx(0x100);
+    }
+}
 
 MATCH void func_801EF158(void) {
     PartyMember* work;

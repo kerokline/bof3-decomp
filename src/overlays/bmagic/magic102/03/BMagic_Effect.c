@@ -1,5 +1,7 @@
 #include "magic102_03.h"
 
+#include <inline_c.h>
+
 #if BOF3_USE_ASM
 __asm__(".include \"include/match/macro.inc\"\n");
 #endif
@@ -29,7 +31,62 @@ INCLUDE_ASM(func_801EF2B8);
 
 INCLUDE_ASM(func_801EFD7C);
 
-INCLUDE_ASM(func_801EFEFC);
+/* Draws the textured quads of the five-record parts at parts like the resident Area_DrawPartQuads, but each vertex
+ * depth adds func_801F0ADC of its x and y. */
+MATCH void func_801EFEFC(ScenePart* parts, s32 shift_x, s32 shift_y) {
+    SVECTOR    verts[4];
+    ScenePart* p;
+    POLY_FT4*  prim;
+    s32        i;
+    s32        n;
+    u32        mask;
+    u8         ot;
+
+    if ((Area_TestCondition(parts->head.id) << 24) == 0) {
+        return;
+    }
+    shift_x = (shift_x - 0x80) << 7;
+    shift_y = (shift_y - 0x80) << 7;
+    func_801F0ADC(shift_x - 0x80, shift_y);
+    for (n = 1; n != parts->head.count; n += 5) {
+        verts[0].vx = shift_x + parts[n].vertex.x * 2;
+        verts[0].vy = shift_y + parts[n].vertex.y * 2;
+        verts[0].vz = func_801F0ADC(verts[0].vx, verts[0].vy) + parts[n].raw;
+        gte_ldv0(&verts[0]);
+        gte_rtps();
+        p    = &parts[n];
+        prim = (POLY_FT4*)g_GfxPrimCursor;
+        gte_stsxy2(&prim->x0);
+        if ((u16)(prim->x0 + 0x63) < 0x207U && (u16)(prim->y0 + 0x95) < 0x1C1U) {
+            SetPolyFT4(prim);
+            SetShadeTex(prim, 0);
+            for (i = 1; i < 4; i++) {
+                verts[i].vx = shift_x + p[i].vertex.x * 2;
+                verts[i].vy = shift_y + p[i].vertex.y * 2;
+                verts[i].vz = func_801F0ADC(verts[i].vx, verts[i].vy) + p[i].raw;
+            }
+            gte_ldv3c(&verts[1]);
+            func_80155560(parts[n + 4].raw, prim, 1);
+            gte_rtpt();
+            if (parts[n + 4].raw & 0x4000) {
+                /* Per-arm: keeps the constant's load inside the loop. */
+                mask = 0x40000000;
+                ot   = 4;
+                if (parts[n + 4].raw & mask) {
+                    ot = 7;
+                }
+            } else {
+                mask = 0x40000000;
+                ot   = 6;
+                if (!(parts[n + 4].raw & mask)) {
+                    ot = g_AreaDrawMode;
+                }
+            }
+            GFX_AddPrim(ot, sizeof(POLY_FT4));
+            gte_stsxy3(&prim->x1, &prim->x2, &prim->x3);
+        }
+    }
+}
 
 /* Draws one Gouraud-shaded quadrangle per eight-word part in the list at parts, like the resident
  * Area_DrawGouraudQuads, but each vertex's depth adds func_801F0ADC of its x and y. */

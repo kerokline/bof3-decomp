@@ -331,7 +331,41 @@ MATCH void func_801EFCF4(void) {
     }
 }
 
-INCLUDE_ASM(BMagic_DrawRingTriangles);
+MATCH void BMagic_DrawRingTriangles(void) {
+    POLY_G3* prim;
+    s16      i;
+    s16      x;
+    s16      y;
+
+    x                                = g_Task->unk_2E.half;
+    y                                = g_Task->unk_30.half;
+    D_1F800000.view.effect.params[0] = 8;
+    D_1F800000.view.effect.params[3] = g_Task->unk_09 * 12;
+    D_1F800000.view.effect.params[4] = (s8)g_Task->unk_5D * g_Task->unk_09;
+    D_1F800000.view.effect.params[5] = (s8)g_Task->unk_5E * g_Task->unk_09;
+    D_1F800000.view.effect.params[6] = (s8)g_Task->unk_5F * g_Task->unk_09;
+    for (i = 0; i < 8; i++) {
+        prim = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 1);
+        prim->x0 = x;
+        prim->y0 = y;
+        prim->x1 = x + FIXED_MUL(rsin(i << 9), D_1F800000.view.effect.params[0]);
+        prim->y1 = y + FIXED_MUL(rcos(i << 9), D_1F800000.view.effect.params[0]);
+        prim->x2 = x + FIXED_MUL(rsin((i + 1) << 9), D_1F800000.view.effect.params[0]);
+        prim->y2 = y + FIXED_MUL(rcos((i + 1) << 9), D_1F800000.view.effect.params[0]);
+        prim->r0 = D_1F800000.view.effect.params[3];
+        prim->g0 = D_1F800000.view.effect.params[3];
+        prim->b0 = D_1F800000.view.effect.params[3];
+        prim->r1 = D_1F800000.view.effect.params[4];
+        prim->g1 = D_1F800000.view.effect.params[5];
+        prim->b1 = D_1F800000.view.effect.params[6];
+        prim->r2 = D_1F800000.view.effect.params[4];
+        prim->g2 = D_1F800000.view.effect.params[5];
+        prim->b2 = D_1F800000.view.effect.params[6];
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_G3));
+    }
+}
 
 INCLUDE_ASM(BMagic_DrawRingQuads);
 

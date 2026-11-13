@@ -119,7 +119,15 @@ MATCH void func_801EF388(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF430);
+#include "overlays/bmagic/Effect_OffsetByTargetPose.h"
+
+MATCH void func_801EF430(void* arg0) {
+    PartyMember* work;
+    u32          slot;
+    u8           kind;
+
+    EFFECT_OFFSET_BY_TARGET_POSE(D_801EFD24, D_801EFCCC, D_801EFC74);
+}
 
 INCLUDE_ASM(func_801EF600);
 

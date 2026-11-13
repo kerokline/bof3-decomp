@@ -154,7 +154,36 @@ MATCH void func_801EFA2C(void) {
     }
 }
 
-INCLUDE_ASM(func_801EFAD4);
+MATCH void func_801EFAD4(void) {
+    PartyMember* work;
+    PartyMember* battler;
+    s32          offset;
+
+    g_Task->param.unk_0B += 1;
+    D_1F800000.view.scenario.math_04 = (++g_Task->unk_09 & 0x3F) << 6;
+    D_1F800000.view.scenario.math_00 = g_Task->unk_0C -= g_Task->unk_18;
+    g_Task->pos.x.fixed              = g_BattleEffectBattler->pos.x.fixed + ((rsin(D_1F800000.view.scenario.math_04) * D_1F800000.view.scenario.math_00) >> 3);
+    offset                           = rcos(D_1F800000.view.scenario.math_04) * D_1F800000.view.scenario.math_00;
+    battler                          = g_BattleEffectBattler;
+    work                             = g_Task;
+    work->pos.y.fixed                = battler->pos.y.fixed + (offset >> 3);
+    work->pos.z.fixed                = battler->pos.z.fixed;
+    if (work->timer < 33) {
+        work->timer += 1;
+    }
+    if (g_Task->unk_0C == 0) {
+        if (g_Task->unk_04 != 0) {
+            BATTLE_ACTIVE_WORK->param.unk_0B -= 1;
+            g_Task->header.flags = 0;
+            g_Task->header.mode  = 0;
+            g_Task->header.step  = 0;
+            g_Task->unk_03       = 0;
+            g_Task->unk_04       = 0;
+        } else {
+            g_Task->header.step += 1;
+        }
+    }
+}
 
 MATCH void func_801EFCA0(void) {
     PartyMember* active;

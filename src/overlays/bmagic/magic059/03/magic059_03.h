@@ -12,5 +12,8 @@ extern BattleEffect D_801F0694[];
 void func_801EED0C(void);
 void func_801EF118(void);
 void func_801EFE48(void);
+void func_801F01A4(void);
+
+extern Callback D_801F0684[];
 
 #endif

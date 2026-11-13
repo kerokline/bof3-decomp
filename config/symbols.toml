@@ -1301,6 +1301,8 @@ D_801EFCD4 = { addr = 0x801EFCD4, source = "Mode handlers of the bmagic/magic118
 ["emi/bmagic/magic120/03"]
 Battle_ApplyDamageFlags = { addr = 0x800A9610, alias = true, source = "Applies the damage flags to the selected battlers." }
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true, source = "Marks the selected battlers as damaged." }
+Battle_ProjectRange = { addr = 0x800AF764, alias = true, source = "Projects the battle range to the screen." }
+Battle_CenterCamera = { addr = 0x800AFD9C, alias = true, source = "Centres the battle camera on the living battlers." }
 Battle_SlotIsBlocked = { addr = 0x801DB524, alias = true, source = "Tells whether a battler slot can not be selected." }
 Battle_AllocEffect = { addr = 0x801E590C, alias = true, source = "Claims a free battle effect slot." }
 g_BattleEffectBattler = { addr = 0x801EB4E0, source = "the battler the running effect acts on; Battle_UpdateEffects stores it for each effect step (emi/battle/battle/03 owns the cell)" }

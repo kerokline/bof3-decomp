@@ -43,7 +43,39 @@ MATCH void BMagic_UpdateWhelpBreath(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF0D8);
+/* Projects the effect from the camera centre to the battler, offset by unk_0C and unk_10 on screen, and
+ * aims it along the screen line between the two points the scratchpad keeps. */
+MATCH void func_801EF0D8(void) {
+    u8           timer;
+    PartyMember* work;
+    s32          angle;
+
+    timer          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = timer;
+    if (timer == 0) {
+        g_Task->facing = g_BattleEffectBattler->facing;
+        Battle_CenterCamera();
+        Battle_ProjectRange();
+        D_1F800000.view.effect.params[6] = g_Task->unk_2E.half;
+        D_1F800000.view.effect.params[7] = g_Task->unk_30.half;
+        func_800B0118();
+        WorldPos_Copy(&g_Task->pos, &g_BattleEffectBattler->pos);
+        Battle_ProjectRange();
+        g_Task->unk_2E.half += g_Task->unk_0C;
+        g_Task->unk_30.half += g_Task->unk_10;
+        D_1F800000.view.effect.params[4] = g_Task->unk_2E.half;
+        D_1F800000.view.effect.params[5] = g_Task->unk_30.half;
+        angle                            = ratan2(D_1F800000.view.effect.params[6] - D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[7] - D_1F800000.view.effect.params[5]);
+        work                             = g_Task;
+        work->param.unk_0B               = 17;
+        work->unk_14                     = angle;
+        g_Task->unk_09                   = 0;
+        g_Task->timer                    = 1;
+        g_Task->unk_04                   = 16;
+        g_Task->header.step += 1;
+        SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0));
+    }
+}
 
 MATCH void func_801EF270(void) {
     u8 counter;

@@ -6,7 +6,33 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/func_801EEC18.h"
 
-INCLUDE_ASM(func_801EEC88);
+MATCH void func_801EEC88(void) {
+    u8            slot;
+    u32           i;
+    u16*          dst;
+    u16*          src;
+    PartyMember*  work;
+    PartyMember** selected;
+
+    g_Task->facing = g_BattleEffectBattler->facing;
+    Battle_CenterCamera();
+    slot                               = Battle_AllocEffect(1, 100);
+    work                               = g_Task;
+    g_BattleEffects[slot].header.mode  = 0;
+    g_BattleEffects[slot].arg.unk_09   = 24;
+    g_BattleEffects[slot].target.party = work;
+    for (i = 0, dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW), src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW); i < 256; i++) {
+        *dst++ = *src++ | 0x8000;
+    }
+    selected            = &D_8014637C;
+    g_GfxPalettePending = 1;
+    GFX_FreePaletteFadeTarget(*selected);
+    g_Task->timer = GFX_AllocPaletteFade(*selected, 0, 0, 0, 1);
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0));
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 0;
+    g_Task->header.mode += 1;
+}
 
 MATCH void func_801EEDD0(void) {
     g_PaletteFades[g_Task->timer].offset.red++;

@@ -4,7 +4,32 @@
 __asm__(".include \"include/match/macro.inc\"\n");
 #endif
 
-INCLUDE_ASM(func_801EEC14);
+MATCH void func_801EEC14(void) {
+    Magic010SharedSteps handlers;
+    PartyMember*        saved_task;
+    PartyMember*        saved_battler;
+    s32                 tpage;
+    u8                  i;
+
+    handlers = D_801EEC04;
+    SYS_DISPATCH_BYTE(handlers.steps, g_Task->header.mode);
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
+    GFX_AddDitheredDrawMode(3, tpage);
+    for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+        if (BMAGIC_EFFECT_SLOTS[i].header.flags & BMAGIC_EFFECT_IN_USE) {
+            saved_task            = g_Task;
+            saved_battler         = g_BattleEffectBattler;
+            g_Task                = (PartyMember*)&BMAGIC_EFFECT_SLOTS[i];
+            g_BattleEffectBattler = BMAGIC_EFFECT_SLOTS[i].target.party;
+            BMagic_DispatchEffectMode();
+            g_BattleEffectBattler = saved_battler;
+            g_Task                = saved_task;
+        }
+    }
+    func_801EF0B0();
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0x25 : 0x15;
+    GFX_AddDitheredDrawMode(3, tpage);
+}
 
 MATCH void func_801EEDD8(void) {
     PartyMember* task;

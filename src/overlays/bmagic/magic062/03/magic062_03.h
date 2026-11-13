@@ -4,10 +4,12 @@
 /* The bmagic/magic062/03 overlay. Only this image includes the file. */
 
 #include "overlays/bmagic/bmagic.h"
+#include "overlays/battle/battle/15/battle_15.h"
 
 extern BMagicEffectFuncs D_801EEC04;
 
 extern Callback D_801F0C18[];
+void            func_801EF2F0(s32 arg0);
 void            func_801EF934(void);
 
 void func_801F026C(void);

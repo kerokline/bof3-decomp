@@ -19,7 +19,30 @@ MATCH void Effect_NextStep(void) {
     BMagic_AdvanceEffectStep(2);
 }
 
-INCLUDE_ASM(func_801EF0C0);
+MATCH void func_801EF0C0(void) {
+    s32          i;
+    PartyMember* owner;
+    u8           slot;
+
+    g_PaletteFades[g_Task->timer].offset.red--;
+    g_PaletteFades[g_Task->timer].offset.green--;
+    g_PaletteFades[g_Task->timer].offset.blue--;
+    if (--g_Task->unk_09 == 0) {
+        GFX_FreePaletteFadeTarget(g_Battle.selected_actor);
+        func_800AF814(g_Battle.target_selector);
+        for (i = 0; i < 4; i++) {
+            func_801EF2F0(D_800B6BF0[i]);
+            slot                               = Battle_AllocEffect(1, 72);
+            owner                              = g_Task;
+            g_BattleEffects[slot].unk_04       = i;
+            g_BattleEffects[slot].arg.unk_09   = i * 5 + 1;
+            g_BattleEffects[slot].unk_0A       = i * 12 + 1;
+            g_BattleEffects[slot].target.party = owner;
+            g_Task->param.unk_0B++;
+        }
+        g_Task->header.mode++;
+    }
+}
 
 MATCH void func_801EF2A0(void) {
     u16* flags;

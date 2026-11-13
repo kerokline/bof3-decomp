@@ -28,7 +28,41 @@ MATCH void func_801EEC14(void) {
     } while ((u8)count < BMAGIC_EFFECT_COUNT);
 }
 
-INCLUDE_ASM(func_801EED1C);
+MATCH void func_801EED1C(void) {
+    PartyMember* owner;
+    u8           i;
+    u8           slot;
+
+    for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+        BMAGIC_EFFECT_SLOTS[i].header.flags = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.step  = 0;
+    }
+    Battle_CenterCamera();
+    g_Task->facing = g_BattleEffectBattler->facing;
+    g_Task->unk_0C = -0x80000;
+    g_Task->unk_10 = 0;
+    func_801DD350(g_Task);
+    g_Task->pos.x.fixed  = VOL(s32, g_AreaScrollTargetX) + g_Task->unk_0C;
+    g_Task->pos.y.fixed  = VOL(s32, g_AreaScrollTargetY) + g_Task->unk_10;
+    g_Task->unk_0C       = ratan2(VOL(s32, g_AreaScrollTargetX) - g_Task->pos.x.fixed, VOL(s32, g_AreaScrollTargetY) - g_Task->pos.y.fixed);
+    g_Task->param.unk_0B = 0;
+    for (i = 0; i < 7; i++) {
+        slot                               = Battle_AllocEffect(1, 51);
+        owner                              = g_Task;
+        g_BattleEffects[slot].header.mode  = 0;
+        g_BattleEffects[slot].unk_04       = i;
+        g_BattleEffects[slot].target.party = owner;
+        g_Task->param.unk_0B++;
+    }
+    for (i = 0; i < 16; i++) {
+        MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW)[i] = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW)[i] | 0x8000;
+    }
+    *MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW) = 0;
+    g_GfxPalettePending                                      = 1;
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0x00));
+    g_Task->header.mode++;
+}
 
 #include "overlays/bmagic/Effect_PlayOnZeroTick.h"
 

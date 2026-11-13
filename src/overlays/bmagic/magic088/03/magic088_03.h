@@ -6,6 +6,8 @@
 #include "overlays/bmagic/bmagic.h"
 
 s32 func_801EF34C(void);
+
+extern SVECTOR D_1F800014[];
 #include "overlays/battle/battle/15/battle_15.h"
 
 extern Callback D_801EEC04[];

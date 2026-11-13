@@ -1,4 +1,5 @@
 #include "magic073_03.h"
+#include "overlays/bmagic/Effect_LaunchSparkleBurst.h"
 #include "overlays/bmagic/Effect_SpawnTargetFades.h"
 
 #if BOF3_USE_ASM
@@ -49,7 +50,15 @@ MATCH void func_801EEFF4(void) {
     BMAGIC_DISPATCH_STEP_HANDLERS(D_801EEC04, header.step);
 }
 
-INCLUDE_ASM(func_801EF06C);
+MATCH void func_801EF06C(void) {
+    PartyMember* battler;
+    u8           slot;
+    u8           index;
+    u8           count;
+    u8           i;
+
+    EFFECT_LAUNCH_SPARKLE_BURST();
+}
 
 #include "overlays/bmagic/Effect_ReplaceSlotPaletteFade.h"
 

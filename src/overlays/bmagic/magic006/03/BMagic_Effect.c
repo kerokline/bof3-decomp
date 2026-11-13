@@ -93,7 +93,37 @@ MATCH void func_801EF0B8(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF118);
+MATCH void func_801EF118(void) {
+    PartyMember* actor;
+    VECTOR       pos;
+    s32          diff;
+    u8           ticker;
+
+    actor  = g_BattleSelectedActor;
+    pos.vx = (actor->pos.x.fixed >> 9) - 0x4000;
+    pos.vy = (actor->pos.y.fixed >> 9) - 0x4000;
+    pos.vz = (actor->pos.z.fixed + 0x800000) >> 17;
+    func_800AF3A0(pos, 0x60);
+    g_Task->unk_10 = g_Task->unk_0C;
+    g_Task->unk_0C = ratan2(actor->pos.x.fixed - g_Task->pos.x.fixed, actor->pos.y.fixed - g_Task->pos.y.fixed);
+    if (func_800AF66C((BattleRange*)actor, 0x20000) != 0) {
+        ticker = g_Task->param.unk_0B;
+    } else {
+        diff           = (g_Task->unk_10 & 0xFFF) - (g_Task->unk_0C & 0xFFF);
+        g_Task->unk_10 = diff;
+        if (diff < 0) {
+            g_Task->unk_10 = ~diff + 1;
+        }
+        if ((u32)(g_Task->unk_10 - 0x601) >= 0x3FF) {
+            return;
+        }
+        ticker = g_Task->param.unk_0B;
+    }
+    if (ticker == 0) {
+        Battle_ApplyDamageFlags(g_Battle.target_selector, 0x10);
+    }
+    g_Task->header.step += 1;
+}
 
 INCLUDE_ASM(func_801EF298);
 

@@ -299,6 +299,7 @@ g_BMagicEffectModes = { addr = 0x801EFE58, source = "Handlers of magic004 (Thund
 BMagic_StepTable = { addr = 0x801EFE60, source = "Step handlers of magic004, run by header.step (byte 0x02) through BMagic_RunStep." }
 
 ["emi/bmagic/magic006/03"]
+Battle_ApplyDamageFlags = { addr = 0x800A9610, alias = true }
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true, source = "Marks the selected battlers as damaged." }
 Battle_ProjectRange = { addr = 0x800AF764, type = "func", source = "Projects the battle range to the screen." }
 Battle_AllocEffect = { addr = 0x801E590C, alias = true, source = "Claims a free battle effect slot." }

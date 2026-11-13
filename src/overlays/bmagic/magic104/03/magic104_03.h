@@ -3,6 +3,8 @@
 
 /* The bmagic/magic104/03 overlay. Only this image includes the file. */
 
+#define BATTLE_PARTY_CELL_RECORD
+
 #include "overlays/bmagic/bmagic.h"
 
 extern Magic010SharedSteps D_801EEC04;

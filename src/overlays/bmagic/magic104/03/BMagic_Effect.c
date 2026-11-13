@@ -6,7 +6,42 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/func_801EEC14.h"
 
-INCLUDE_ASM(func_801EEC80);
+MATCH void func_801EEC80(void) {
+    u8  slot;
+    u32 i;
+
+    if (g_Battle.target_selector & 0x40) {
+        if (g_Battle.active_battler < 3) {
+            g_Task->facing = D_8014637C->facing ^ 2;
+        } else {
+            g_Task->facing = D_8014637C->facing;
+        }
+    } else {
+        if (g_Battle.active_battler < 3) {
+            g_Task->facing = D_8014637C->facing;
+        } else {
+            g_Task->facing = D_8014637C->facing ^ 2;
+        }
+    }
+    Battle_CenterCamera();
+    g_Task->param.unk_0B = 0;
+    g_Task->header.mode += 1;
+    for (i = 0; i < 8; i++) {
+        slot                               = Battle_AllocEffect(1, 11);
+        g_BattleEffects[slot].target.party = g_Task;
+        g_BattleEffects[slot].header.mode  = 1;
+        g_BattleEffects[slot].unk_0B       = i;
+        g_BattleEffects[slot].arg.unk_09   = 0;
+        g_BattleEffects[slot].unk_0A       = i * 2;
+        g_Task->unk_0C                     = D_801F08A8[i].x;
+        g_Task->unk_10                     = D_801F08A8[i].y;
+        func_801DD350(g_Task);
+        g_BattleEffects[slot].pos.x.fixed = g_AreaScrollTargetX + g_Task->unk_0C;
+        g_BattleEffects[slot].pos.y.fixed = g_AreaScrollTargetY + g_Task->unk_10;
+        g_BattleEffects[slot].pos.z.fixed = g_Task->pos.z.fixed;
+        SND_QueueSelectionFx(0x102);
+    }
+}
 
 MATCH void func_801EEE7C(void) {
     if (g_Task->param.unk_0B == 7) {

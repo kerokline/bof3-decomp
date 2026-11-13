@@ -84,7 +84,35 @@ MATCH void func_801EF0D8(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF1DC);
+MATCH void func_801EF1DC(void) {
+    u32          slot;
+    PartyMember* battler;
+
+    slot = LOBU(g_Battle.target_selector);
+    if (slot < BATTLE_PARTY_CHARACTERS_COUNT) {
+        battler = &g_Game.members[slot];
+    } else {
+        battler = (PartyMember*)(g_BattleEnemies + slot * BATTLE_ENEMY_STRIDE);
+    }
+    if (g_Task->param.unk_0B & 0x1) {
+        g_Task->unk_20 = (g_Task->unk_20 + 0x200) & 0xFFF;
+    } else {
+        g_Task->unk_20 = (g_Task->unk_20 - 0x200) & 0xFFF;
+    }
+    g_Task->unk_10 = g_Task->unk_14;
+    g_Task->unk_14 = func_800AF4A0(battler, 0xC000, g_Task->unk_18 << 6);
+    if (func_800AF66C((BattleRange*)battler, 0xC000) == 0) {
+        g_Task->unk_10 = (g_Task->unk_10 & 0xFFF) - (g_Task->unk_14 & 0xFFF);
+        if (g_Task->unk_10 < 0) {
+            g_Task->unk_10 = ~g_Task->unk_10 + 1;
+        }
+        if (g_Task->unk_10 <= 0x400 || g_Task->unk_10 >= 0xC00) {
+            return;
+        }
+    }
+    g_BattleEffectBattler->unk_09++;
+    g_Task->header.step++;
+}
 
 INCLUDE_ASM(func_801EF358);
 

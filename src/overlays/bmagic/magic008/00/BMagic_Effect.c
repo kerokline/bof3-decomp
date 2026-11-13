@@ -98,7 +98,36 @@ MATCH void func_801EF384(void) {
     SYS_DISPATCH_TASK(handlers.steps, 1, g_Task);
 }
 
-INCLUDE_ASM(func_801EF3F0);
+MATCH void func_801EF3F0(void) {
+    BattleEffect* slot;
+    PartyMember*  work;
+    u32           index;
+    u8            active;
+    u8            i;
+
+    g_Task->facing = g_BattleEffectBattler->facing;
+    WorldPos_Copy(&g_Task->pos, &g_BattleEffectBattler->pos);
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 0;
+    g_Task->header.mode += 1;
+    func_800AEF98(0xC, 2);
+    for (i = 0; i < 3; i++) {
+        BMAGIC_ALLOC_BATTLER_EFFECT();
+        work                                             = g_Task;
+        g_BattleEffects[index & BYTE_MASK].header.mode   = 3;
+        g_BattleEffects[index & BYTE_MASK].unk_06        = 1;
+        g_BattleEffects[index & BYTE_MASK].header.step   = 0;
+        g_BattleEffects[index & BYTE_MASK].handler_index = 31;
+        g_BattleEffects[index & BYTE_MASK].unk_0B        = i;
+        g_BattleEffects[index & BYTE_MASK].target.party  = work;
+        g_Task->param.unk_0B++;
+    }
+    g_Task->unk_27 = func_800AFB48(g_BattleEffectBattler);
+    g_Task->unk_28 = g_BattleEffectBattler->unk_28;
+    g_Task->unk_24 = g_BattleEffectBattler->unk_24;
+    func_800AF8F0(g_Task);
+    g_BattleEffectBattler->header.flags |= PARTY_MEMBER_FLAG_HANDLER_BUSY;
+}
 
 #include "overlays/bmagic/Effect_RestorePaletteAndReleaseActive.h"
 

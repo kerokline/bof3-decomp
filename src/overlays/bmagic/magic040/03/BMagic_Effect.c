@@ -159,41 +159,14 @@ MATCH void func_801EF600(u8 start, u16 radius) {
     GFX_AddDitheredDrawMode(3, tpage);
 }
 
+#include "overlays/bmagic/Effect_DrawGlowFan.h"
+
 MATCH void func_801EF7FC(void) {
     POLY_G3* poly;
     s32      tpage;
     s32      i;
 
-    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
-    GFX_AddDitheredDrawMode(3, tpage);
-    i                                = 0;
-    D_1F800000.view.effect.params[2] = g_Task->timer;
-    D_1F800000.view.effect.params[0] = g_Task->unk_2E.half;
-    D_1F800000.view.effect.params[1] = g_Task->unk_30.half;
-    do {
-        poly = (POLY_G3*)g_GfxPrimCursor;
-        SetPolyG3(poly);
-        SetSemiTrans(poly, 1);
-        poly->x0 = D_1F800000.view.effect.params[0];
-        poly->y0 = D_1F800000.view.effect.params[1];
-        poly->x1 = D_1F800000.view.effect.params[0] + ((rsin(i << 9) * D_1F800000.view.effect.params[2]) >> 12);
-        poly->y1 = D_1F800000.view.effect.params[1] + ((rcos(i << 9) * D_1F800000.view.effect.params[2]) >> 12);
-        poly->x2 = D_1F800000.view.effect.params[0] + ((rsin((i + 1) << 9) * D_1F800000.view.effect.params[2]) >> 12);
-        poly->y2 = D_1F800000.view.effect.params[1] + ((rcos((i + 1) << 9) * D_1F800000.view.effect.params[2]) >> 12);
-        poly->r0 = 0x80;
-        poly->g0 = 0x80;
-        poly->b0 = 0x80;
-        poly->r1 = 1;
-        poly->g1 = 1;
-        poly->b1 = 1;
-        poly->r2 = 1;
-        poly->g2 = 1;
-        poly->b2 = 1;
-        GFX_AddPrim(3, sizeof(POLY_G3));
-        i++;
-    } while (i < 16);
-    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0x25 : 0x15;
-    GFX_AddDitheredDrawMode(3, tpage);
+    EFFECT_DRAW_GLOW_FAN(g_Task->timer, 0x80);
 }
 
 INCLUDE_ASM(func_801EFA3C);

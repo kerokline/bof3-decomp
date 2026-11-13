@@ -152,4 +152,12 @@ MATCH void func_801EF71C(u8 start, u16 radius) {
     GFX_AddDitheredDrawMode(3, tpage);
 }
 
-INCLUDE_ASM(func_801EF920);
+#include "overlays/bmagic/Effect_DrawGlowFan.h"
+
+MATCH void func_801EF920(void) {
+    POLY_G3* poly;
+    s32      tpage;
+    s32      i;
+
+    EFFECT_DRAW_GLOW_FAN((g_Task->timer >> 1) + (rand() & 3), 0x60);
+}

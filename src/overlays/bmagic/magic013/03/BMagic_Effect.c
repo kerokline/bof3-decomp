@@ -114,7 +114,36 @@ MATCH void func_801EF0A4(void) {
 
 #include "overlays/bmagic/Effect_CountUpWorkByteAndStep.h"
 
-INCLUDE_ASM(func_801EF1F0);
+MATCH void func_801EF1F0(void) {
+    s32 i;
+    u8  slot;
+    u8  timer;
+
+    g_Task->pos.x.fixed += g_Task->unk_0C;
+    g_Task->pos.y.fixed += g_Task->unk_10;
+    timer          = g_Task->unk_09 - 4;
+    g_Task->unk_09 = timer;
+    if (timer == 0) {
+        for (i = 0; i < 32; i++) {
+            slot = BMagic_AllocEffect();
+            if (slot != 0xFF) {
+                BMAGIC_EFFECT_SLOTS[slot].target.party = g_Task;
+                BMAGIC_EFFECT_SLOTS[slot].header.flags |= 0x41;
+                BMAGIC_EFFECT_SLOTS[slot].unk_0B     = i;
+                BMAGIC_EFFECT_SLOTS[slot].arg.unk_09 = (rand() & 7) + 1;
+                g_Task->param.unk_0B += 1;
+            }
+        }
+        if (g_Task->timer == 4) {
+            Battle_ApplyDamageFlags(g_Battle.target_selector, 0x10);
+        }
+        g_Task->unk_0C = 0x3000;
+        g_Task->unk_10 = 0;
+        func_801DD350(g_Task);
+        SND_QueueSelectionFx(0x100);
+        g_Task->header.step += 1;
+    }
+}
 
 INCLUDE_ASM(func_801EF36C);
 

@@ -124,7 +124,53 @@ MATCH void func_801EF508(void) {
 
 #include "overlays/bmagic/Effect_TickOnTimerZero.h"
 
-INCLUDE_ASM(func_801EF678);
+MATCH void func_801EF678(void) {
+    POLY_G3* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      tpage;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(5, sizeof(DR_MODE));
+    D_1F800000.view.effect.params[3] = g_Task->unk_09 * 5;
+    D_1F800000.view.effect.params[4] = ((rand() & 3) + 3) * g_Task->unk_09;
+    D_1F800000.view.effect.params[5] = ((rand() & 3) + 3) * g_Task->unk_09;
+    D_1F800000.view.effect.params[6] = ((rand() & 3) + 3) * g_Task->unk_09;
+    D_1F800014[2].vx                 = FIXED_MUL(rsin(0), 128U);
+    D_1F800014[2].vy                 = FIXED_MUL(rcos(0), 128U);
+    for (i = 1; i <= 16; i++) {
+        D_1F800014[0].vx = 0;
+        D_1F800014[0].vy = 0;
+        D_1F800014[1].vx = D_1F800014[2].vx;
+        D_1F800014[1].vy = D_1F800014[2].vy;
+        D_1F800014[2].vx = FIXED_MUL(rsin(i << 8), 128U);
+        D_1F800014[2].vy = FIXED_MUL(rcos(i << 8), 128U);
+        prim             = (POLY_G3*)g_GfxPrimCursor;
+        D_1F800014[2].vz = 0;
+        D_1F800014[1].vz = 0;
+        D_1F800014[0].vz = 0;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 1);
+        RotTransPers3(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, &depth, &flag);
+        setRGB0(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3]);
+        setRGB1(prim, D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5], D_1F800000.view.effect.params[6]);
+        setRGB2(prim, D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5], D_1F800000.view.effect.params[6]);
+        GFX_AddPrim(5, sizeof(POLY_G3));
+    }
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x25;
+    } else {
+        tpage = 0x15;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(5, sizeof(DR_MODE));
+}
 
 MATCH void func_801EF934(void) {
     POLY_G4* prim;

@@ -27,6 +27,6 @@ INCLUDE_ASM(func_801EF240);
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"
 
-INCLUDE_ASM(func_801EF7B0);
+#include "overlays/bmagic/func_801EF7B0.h"
 
 #include "overlays/bmagic/func_801EF9E4.h"

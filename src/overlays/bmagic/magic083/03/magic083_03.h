@@ -20,4 +20,8 @@ void func_801F0BA8(s32 arg0);
 
 void func_801F050C(void);
 
+/* One RGB row per effect kind, scaled by the effect timer. */
+extern u8      D_801F0ED4[][3];
+extern SVECTOR D_1F800014[];
+
 #endif

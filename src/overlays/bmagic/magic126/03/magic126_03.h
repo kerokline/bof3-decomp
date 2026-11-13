@@ -22,6 +22,7 @@ extern u8       D_801F12D8[];
 void            func_801EFD5C(void);
 void            func_801F06AC(void);
 void            func_801F091C(void);
+u32             func_801F1110(void);
 
 void                func_801F0ED0(void);
 void                func_801F116C(void);

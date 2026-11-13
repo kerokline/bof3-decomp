@@ -289,7 +289,35 @@ MATCH void func_801F037C(void) {
     }
 }
 
-INCLUDE_ASM(func_801F0494);
+MATCH void func_801F0494(void) {
+    u8  slot;
+    u8  i;
+    u32 row;
+
+    if (g_Task->param.unk_0B == 0) {
+        SND_QueueSelectionFx(0x101);
+        slot                               = Battle_AllocEffect(1, 78);
+        g_BattleEffects[slot].target.party = g_BattleEffectBattler;
+        g_BattleEffects[slot].header.mode  = 0;
+        g_BattleEffectBattler->param.unk_0B += 1;
+        slot                               = Battle_AllocEffect(1, 78);
+        g_BattleEffects[slot].target.party = g_BattleEffectBattler;
+        g_BattleEffects[slot].header.mode  = 1;
+        g_BattleEffects[slot].arg.unk_09   = 46;
+        g_BattleEffectBattler->param.unk_0B += 1;
+        for (i = 0; i < 64; i++) {
+            slot                                 = func_801F1110();
+            row                                  = slot << 5;
+            FIELD(PartyMember*, D_801F12D8, row) = g_BattleEffectBattler;
+            D_801F12BC[row + 1]                  = 0;
+            D_801F12BC[row + 4]                  = i;
+            D_801F12BC[row + 5]                  = ((i & 1) << 4) + (rand() & 0xF) + 24;
+            g_BattleEffectBattler->param.unk_0B += 1;
+        }
+        Battle_ApplyDamageFlags(g_Battle.target_selector, 0x10);
+    }
+    g_Task->header.step += 1;
+}
 
 #include "overlays/bmagic/Effect_TickOnTimerNegative.h"
 

@@ -55,7 +55,40 @@ MATCH void func_801EF080(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF188);
+MATCH void func_801EF188(void) {
+    PartyMember* target;
+    VECTOR       pos;
+
+    if (g_FrameCount & 1) {
+        g_Task->timer += 1;
+    }
+    if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+        target = (PartyMember*)&g_BattleEnemyBattlers[g_Task->unk_04];
+    } else {
+        target = &g_Game.members[g_Task->unk_04];
+    }
+    pos.vx = (target->pos.x.fixed >> 9) - 0x4000;
+    pos.vy = (target->pos.y.fixed >> 9) - 0x4000;
+    pos.vz = (COORD_INT(target->pos.z) + 0xC0) >> 1;
+    if (func_801DB524(g_Task->unk_03) & BYTE_MASK) {
+        g_Task->unk_0C      = (target->pos.x.fixed >> 9) - 0x4000;
+        g_Task->unk_10      = (target->pos.y.fixed >> 9) - 0x4000;
+        g_Task->unk_14      = (COORD_INT(target->pos.z) + 0xC0) >> 1;
+        g_Task->header.step = 0xB;
+    }
+    func_800AF3A0(pos, 0x40);
+    if (func_800AF66C((BattleRange*)target, 0x8000)) {
+        g_Battle.state |= BATTLE_STATE_DAMAGE_APPLIED;
+        Battle_MarkDamaged(g_Task->unk_03);
+        SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_AREA, 0x03));
+        g_Task->unk_0C = ratan2(g_BattleEffectBattler->pos.x.fixed - g_Task->pos.x.fixed, g_BattleEffectBattler->pos.y.fixed - g_Task->pos.y.fixed);
+        g_Task->unk_14 = 0x40;
+        g_Task->unk_20 = -8;
+        g_Task->header.step += 1;
+    }
+    Battle_ProjectRange();
+    func_801EF79C(g_Task->param.unk_0B, 0);
+}
 
 MATCH void func_801EF3C4(void) {
     s32          angle;

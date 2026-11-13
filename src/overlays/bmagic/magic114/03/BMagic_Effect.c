@@ -211,6 +211,39 @@ MATCH void func_801F0E4C(void) {
     func_8014D290();
 }
 
-INCLUDE_ASM(func_801F0E90);
+MATCH void func_801F0E90(void) {
+    SVECTOR      pos;
+    SVECTOR      rot;
+    MATRIX       matrix;
+    long         flags;
+    PartyMember* battler;
+    PartyMember* work;
+
+    PushMatrix();
+    if (g_Task->facing & 1) {
+        rot.vx = 0x400;
+        rot.vy = 0;
+    } else {
+        rot.vx = 0;
+        rot.vy = 0x400;
+    }
+    rot.vz         = 0;
+    g_Task->unk_0C = 0xC000;
+    g_Task->unk_10 = 0;
+    func_801DD350(g_Task);
+    battler                = g_BattleEffectBattler;
+    work                   = g_Task;
+    work->pos.x.fixed      = battler->pos.x.fixed + work->unk_0C;
+    work->pos.y.fixed      = battler->pos.y.fixed + work->unk_10;
+    COORD_INT(work->pos.z) = COORD_INT(battler->pos.z) + 0x200;
+    pos.vx                 = (work->pos.x.fixed >> 9) - 0x4000;
+    pos.vy                 = (work->pos.y.fixed >> 9) - 0x4000;
+    pos.vz                 = -COORD_INT(work->pos.z) / 2;
+    RotTrans(&pos, (VECTOR*)matrix.t, &flags);
+    RotMatrix(&rot, &matrix);
+    MulMatrix2(&g_CameraMatrix, &matrix);
+    SetRotMatrix(&matrix);
+    SetTransMatrix(&matrix);
+}
 
 INCLUDE_ASM(func_801F0FBC);

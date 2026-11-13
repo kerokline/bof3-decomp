@@ -40,7 +40,43 @@ MATCH void func_801EECE0(void) {
     }
 }
 
-INCLUDE_ASM(func_801EEE24);
+MATCH void func_801EEE24(void) {
+    u8           timer;
+    u32          slot;
+    PartyMember* work;
+    u8           facing;
+
+    timer          = g_Task->unk_09 + 1;
+    g_Task->unk_09 = timer;
+    if (timer == 16) {
+        slot                                   = Battle_AllocEffect(1, 3) & BYTE_MASK;
+        work                                   = g_Task;
+        g_BattleEffects[slot].header.mode      = 0;
+        g_BattleEffects[slot].unk_0B           = 0;
+        g_BattleEffects[slot].target.party     = work;
+        facing                                 = g_BattleEffectBattler->facing;
+        g_BattleEffects[slot].arg.unk_09       = 0;
+        g_BattleEffects[slot].unk_0A           = 0;
+        g_BattleEffects[slot].unk_08           = (facing + 2) & 3;
+        g_BattleEffects[slot].pos.x            = g_Task->pos.x;
+        g_BattleEffects[slot].pos.y            = g_Task->pos.y;
+        COORD_INT(g_BattleEffects[slot].pos.z) = COORD_INT(g_Task->pos.z);
+        slot                                   = Battle_AllocEffect(1, 3) & BYTE_MASK;
+        work                                   = g_Task;
+        g_BattleEffects[slot].header.mode      = 0;
+        g_BattleEffects[slot].unk_0B           = 1;
+        g_BattleEffects[slot].target.party     = work;
+        facing                                 = g_BattleEffectBattler->facing;
+        g_BattleEffects[slot].arg.unk_09       = 0;
+        g_BattleEffects[slot].unk_0A           = 0;
+        g_BattleEffects[slot].unk_08           = (facing + 2) & 3;
+        g_BattleEffects[slot].pos.x            = g_Task->pos.x;
+        g_BattleEffects[slot].pos.y            = g_Task->pos.y;
+        COORD_INT(g_BattleEffects[slot].pos.z) = COORD_INT(g_Task->pos.z);
+        SND_PlayCue(EMI_CUE_ID(SND_BANK_COMMON, 1));
+        g_Task->header.mode += 1;
+    }
+}
 
 MATCH void func_801EF000(void) {
     u32          slot;

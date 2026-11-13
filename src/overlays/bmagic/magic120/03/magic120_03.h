@@ -7,6 +7,8 @@
 
 extern Callback D_801F0CB0[];
 
+extern u8 D_801F0D0C[];
+
 void func_800B0118(void);
 
 /* The z half of an enemy battler row: func_801F08AC loads it unsigned (lhu),

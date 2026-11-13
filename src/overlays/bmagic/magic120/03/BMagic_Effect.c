@@ -98,7 +98,52 @@ INCLUDE_ASM(BMagic_DrawWhelpBreath);
 
 #include "overlays/bmagic/BMagic_RunStep.h"
 
-INCLUDE_ASM(func_801EFDD4);
+MATCH void func_801EFDD4(void) {
+    PartyMember* work;
+    u32          i;
+
+    g_Task->facing = g_BattleEffectBattler->facing;
+    WorldPos_Copy(&g_Task->pos, &g_BattleEffectBattler->pos);
+    g_Task->unk_25    = 29;
+    g_Task->unk_26    = 0;
+    g_Task->unk_27    = 0xA1;
+    g_Task->unk_28    = 0;
+    g_Task->unk_2A    = g_BattleEffectBattler->facing & 1;
+    g_Task->unk_29    = 3;
+    g_Task->unk_24    = 4;
+    work              = g_Task;
+    work->unk_2B      = 0;
+    work->unk_2C.half = 0;
+    switch (g_Task->param.unk_0B) {
+        case 0:
+            g_Task->header.step += 1;
+            if (g_Task->facing & 2) {
+                g_Task->unk_29 = 4;
+                g_Task->unk_2A = ~g_Task->facing & 1;
+                Actor_SelectScript(3);
+            } else {
+                Actor_SelectScript(0);
+            }
+            break;
+        case 1:
+            g_Task->unk_09      = 120;
+            g_Task->header.step = 2;
+            Actor_SelectScript(1);
+            break;
+        case 2:
+            for (i = 0; i < 6; i++) {
+                D_801F0D0C[i] = 0;
+            }
+            g_Task->unk_09      = 0;
+            g_Task->header.step = 3;
+            break;
+        case 3:
+            g_Task->unk_09      = 0;
+            g_Task->timer       = 80;
+            g_Task->header.step = 5;
+            break;
+    }
+}
 
 MATCH void func_801F0008(void) {
     func_8014D290();

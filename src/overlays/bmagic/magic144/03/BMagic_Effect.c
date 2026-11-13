@@ -241,7 +241,40 @@ MATCH void func_801F00A0(void) {
 
 #include "overlays/bmagic/Effect_TickCounter.h"
 
-INCLUDE_ASM(func_801F01D0);
+#include "overlays/bmagic/Effect_TickCounter.h"
+
+MATCH void func_801F01D0(void) {
+    POLY_G3* prim;
+    s32      i;
+    s32      tpage;
+
+    D_1F800000.view.effect.params[0] = (rand() & 0xF) + 0x40;
+    D_1F800000.view.effect.params[7] = g_Task->unk_09 * 10;
+    for (i = 0; i < 8; i++) {
+        if (GetGraphType() == 1 || GetGraphType() == 2) {
+            tpage = 0xA5;
+        } else {
+            tpage = 0x35;
+        }
+        SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+        prim = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 1);
+        prim->x0 = g_Task->unk_2E.half;
+        prim->y0 = g_Task->unk_30.half;
+        prim->x1 = g_Task->unk_2E.half + FIXED_MUL(rsin(i << 9), D_1F800000.view.effect.params[0]);
+        prim->y1 = g_Task->unk_30.half + FIXED_MUL(rcos(i << 9), D_1F800000.view.effect.params[0]);
+        prim->x2 = g_Task->unk_2E.half + FIXED_MUL(rsin((i + 1) << 9), D_1F800000.view.effect.params[0]);
+        prim->y2 = g_Task->unk_30.half + FIXED_MUL(rcos((i + 1) << 9), D_1F800000.view.effect.params[0]);
+        prim->r0 = D_1F800000.view.effect.params[7];
+        prim->g0 = D_1F800000.view.effect.params[7] / 5;
+        prim->b0 = D_1F800000.view.effect.params[7] / 5;
+        setRGB1(prim, 1, 1, 1);
+        setRGB2(prim, 1, 1, 1);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_G3));
+    }
+}
 
 /* func_801F046C */
 #include "overlays/bmagic/BMagic_AllocEffect.h"

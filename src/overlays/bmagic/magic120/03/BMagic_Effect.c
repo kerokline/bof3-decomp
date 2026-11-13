@@ -219,7 +219,50 @@ MATCH void func_801F0224(void) {
     }
 }
 
-INCLUDE_ASM(func_801F0274);
+MATCH void func_801F0274(void) {
+    PartyMember* work;
+    s32          tpage;
+    u32          j;
+    u32          i;
+    u8           enemy;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(3, sizeof(DR_MODE));
+    for (j = 0; j < 3; j++) {
+        for (i = 0; i < 8; i++) {
+            enemy = i;
+            if (Battle_SlotIsBlocked((i + BATTLE_PARTY_CHARACTERS_COUNT) & BYTE_MASK) != 0) {
+                continue;
+            }
+            g_Task->param.unk_0B = j;
+            g_Task->timer        = enemy;
+            work                 = g_Task;
+            work->unk_0C         = D_801F0CE4[j].x;
+            work->unk_10         = D_801F0CE4[j].y;
+            func_801DD350(work);
+            g_Task->pos.x.fixed = g_BattleEnemyBattlers[i].pos.x.fixed + g_Task->unk_0C;
+            g_Task->pos.y.fixed = g_BattleEnemyBattlers[i].pos.y.fixed + g_Task->unk_10;
+            g_Task->pos.z.fixed = g_BattleEnemyBattlers[i].pos.z.fixed + D_801F0CE4[j].z;
+            g_Task->facing      = g_BattleEnemyBattlers[i].unk_08;
+            func_801F078C();
+            func_801F04B0();
+            PopMatrix();
+        }
+    }
+    for (j = 0; j < 6; j++) {
+        if (j * 3 < g_Task->unk_09) {
+            D_801F0D0C[j]++;
+        }
+        if (g_Task->header.step == 3) {
+            D_801F0D0C[j] &= 0xF;
+        }
+    }
+}
 
 INCLUDE_ASM(func_801F04B0);
 

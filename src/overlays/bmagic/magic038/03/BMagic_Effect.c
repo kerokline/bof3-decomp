@@ -70,7 +70,31 @@ INCLUDE_ASM(func_801EF1AC);
 
 INCLUDE_ASM(func_801EF3BC);
 
-INCLUDE_ASM(func_801EF590);
+/* Circles the effect round the battler on its two counters, bobbing it by a radius of 0x800, and at
+ * the 256th step darkens it and advances the step. */
+MATCH void func_801EF590(void) {
+    PartyMember* work;
+    s8           tint;
+
+    Actor_StepAnimLoop();
+    work                             = g_Task;
+    D_1F800000.view.scenario.math_00 = (++work->unk_0C & 0x7F) << 5;
+    g_Task->pos.x.fixed              = g_BattleEffectBattler->pos.x.fixed + FIXED_MUL(rsin(D_1F800000.view.scenario.math_00), 0x20000);
+    g_Task->pos.y.fixed              = g_BattleEffectBattler->pos.y.fixed + FIXED_MUL(rcos(D_1F800000.view.scenario.math_00), 0x20000);
+    work                             = g_Task;
+    D_1F800000.view.scenario.math_00 = (++work->unk_14 & 0x3F) << 6;
+    D_1F800000.view.scenario.math_04 = 0x800;
+    g_Task->pos.z.fixed              = g_BattleEffectBattler->pos.z.fixed + rsin(D_1F800000.view.scenario.math_00) * D_1F800000.view.scenario.math_04;
+    if (g_Task->unk_0C == 0x100) {
+        g_Task->header.flags |= 0x20;
+        g_Task->unk_5C = 1;
+        tint           = -0x40;
+        g_Task->unk_5D = tint;
+        g_Task->unk_5E = tint;
+        g_Task->unk_5F = tint;
+        g_Task->header.step += 1;
+    }
+}
 
 INCLUDE_ASM(func_801EF710);
 

@@ -73,7 +73,36 @@ MATCH void func_801EF14C(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF28C);
+MATCH void func_801EF28C(void) {
+    s16* angle;
+
+    g_Task->param.unk_0B++;
+    angle                            = &D_1F800000.view.effect.params[2];
+    *angle                           = g_Task->unk_14 + ((rsin((g_Task->param.unk_0B & 0x3F) << 6) * 128) >> 12);
+    D_1F800000.view.effect.params[0] = g_Task->unk_0C;
+    g_Task->unk_2E.half += FIXED_MUL(rsin(*angle), D_1F800000.view.effect.params[0]);
+    g_Task->unk_30.half += FIXED_MUL(rcos(*angle), D_1F800000.view.effect.params[0]);
+    D_1F800000.view.effect.params[3] = g_Task->unk_2E.half;
+    D_1F800000.view.effect.params[4] = g_Task->unk_30.half;
+    if (g_Task->timer < g_Task->unk_03 + 6) {
+        g_Task->timer += 2;
+    }
+    if (--g_Task->unk_09 == 0) {
+        if (g_FrameCount & 1) {
+            if (g_Task->header.mode & 1) {
+                SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0x00));
+            } else {
+                SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0x01));
+            }
+        }
+        g_Task->param.unk_0B = 0;
+        g_Task->header.step++;
+    }
+    if (g_Task->unk_2E.signed_half < 320 && g_Task->unk_30.signed_half < 240 && g_Task->unk_2E.signed_half > 0 && g_Task->unk_30.signed_half > 0) {
+        func_801EF584();
+        func_801EF750();
+    }
+}
 
 MATCH void func_801EF4AC(void) {
     u8 timer;

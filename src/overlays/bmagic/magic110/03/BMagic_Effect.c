@@ -6,7 +6,45 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/Effect_DispatchMode.h"
 
-INCLUDE_ASM(func_801EEC94);
+MATCH void func_801EEC94(void) {
+    PartyMember* work;
+    u32          slot;
+    s32          i;
+    u16*         src;
+    u16*         dst;
+
+    Battle_CenterCamera();
+    g_Task->facing       = g_BattleEffectBattler->facing;
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 0x58;
+    g_Task->header.mode += 1;
+    slot                               = Battle_AllocEffect(1, 16) & BYTE_MASK;
+    g_BattleEffects[slot].target.party = g_Task;
+    g_BattleEffects[slot].header.mode  = 1;
+    g_Task->param.unk_0B += 1;
+    slot                               = Battle_AllocEffect(1, 16) & BYTE_MASK;
+    work                               = g_Task;
+    g_BattleEffects[slot].header.mode  = 0;
+    g_BattleEffects[slot].arg.unk_09   = 0x28;
+    g_BattleEffects[slot].target.party = work;
+    g_Task->param.unk_0B += 1;
+    g_Task->param.unk_0B += 1;
+    /* Copies arena palette rows 26 and 2 into the work copy with STP set, then restores the color 0 of each. */
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    for (i = 0; i < 256; i++) {
+        dst[i] = src[i] | 0x8000;
+    }
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 2 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA_33C00);
+    for (i = 0; i < 16; i++) {
+        dst[i] = src[i] | 0x8000;
+    }
+    g_GfxPalettePending                                      = 1;
+    *MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW) = *MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    *MEM_PTR(u16, AREA_PALETTE_WORK + 2 * AREA_PALETTE_ROW)  = *MEM_PTR(u16, AREA_PALETTE_ARENA_33C00);
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0));
+}
 
 MATCH void func_801EEE68(void) {
     if (g_Task->param.unk_0B == 2) {

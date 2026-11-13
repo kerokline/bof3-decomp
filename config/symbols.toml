@@ -1200,7 +1200,10 @@ Battle_MarkDamaged = { addr = 0x800A9820, type = "func", source = "Marks the sel
 
 ["emi/bmagic/magic110/03"]
 Battle_MarkDamaged = { addr = 0x800A9820, type = "func", source = "Marks the selected battlers as damaged." }
+Battle_CenterCamera = { addr = 0x800AFD9C, type = "func", source = "Centres the battle camera on the living battlers." }
+Battle_AllocEffect = { addr = 0x801E590C, alias = true, source = "Claims a free battle effect slot." }
 g_BattleEffectBattler = { addr = 0x801EB4E0, source = "the battler the running effect acts on; Battle_UpdateEffects stores it for each effect step (emi/battle/battle/03 owns the cell)" }
+g_BattleEffects = { addr = 0x801EC330, alias = true, source = "Battle effect work records (stride 0x78); Battle_AllocEffect claims a free one by setting bit 0 of header.flags." }
 Effect_DispatchMode = { addr = 0x801EEC1C, type = "func", source = "Runs the handler that header.mode (byte 0x01) selects from the six-handler table at the module head in magic110 (Ragnarok)." }
 Effect_StartPlaying = { addr = 0x801EF114, type = "func", source = "Raises BATTLE_STATE_EFFECT_PLAYING and clears the effect work record in magic110 (Ragnarok)." }
 BMagic_DispatchEffectMode = { addr = 0x801EF3F8, type = "func", source = "Runs the handler that header.mode (byte 0x01) selects from the effect handlers of magic110." }

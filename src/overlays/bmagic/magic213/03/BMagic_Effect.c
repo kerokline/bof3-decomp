@@ -6,7 +6,56 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/Effect_RunSlotsWithSetup.h"
 
-INCLUDE_ASM(func_801EED04);
+MATCH void func_801EED04(void) {
+    PartyMember* work;
+    u16*         dst;
+    u16*         src;
+    u32          slot;
+    u8           index;
+    u8           i;
+
+    for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+        BMAGIC_EFFECT_SLOTS[i].header.flags = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.step  = 0;
+    }
+    g_Task->param.unk_0B = 0;
+    g_Task->header.mode += 1;
+    if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+        for (i = 0; i < 8; i++) {
+            index = i + BATTLE_PARTY_CHARACTERS_COUNT;
+            if (!(func_801DB524(index) & BYTE_MASK)) {
+                slot                               = Battle_AllocEffect(1, 0x6B) & BYTE_MASK;
+                work                               = g_Task;
+                g_BattleEffects[slot].header.mode  = 0;
+                g_BattleEffects[slot].unk_04       = index;
+                g_BattleEffects[slot].target.party = work;
+                g_BattleEffects[slot].arg.unk_09   = g_Task->param.unk_0B * 16 + 1;
+                g_Task->param.unk_0B += 1;
+            }
+        }
+    } else {
+        for (i = 0; i < BATTLE_PARTY_CHARACTERS_COUNT; i++) {
+            if (!(func_801DB524(i) & BYTE_MASK)) {
+                slot                               = Battle_AllocEffect(1, 0x6B) & BYTE_MASK;
+                work                               = g_Task;
+                g_BattleEffects[slot].header.mode  = 0;
+                g_BattleEffects[slot].unk_04       = i;
+                g_BattleEffects[slot].target.party = work;
+                g_BattleEffects[slot].arg.unk_09   = g_Task->param.unk_0B * 16 + 1;
+                g_Task->param.unk_0B += 1;
+            }
+        }
+    }
+    i   = 0;
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    for (; i < 16; i++) {
+        dst[i] = src[i];
+    }
+    g_GfxPalettePending = 1;
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0x00));
+}
 
 #include "overlays/bmagic/Effect_StartOnZeroTick.h"
 

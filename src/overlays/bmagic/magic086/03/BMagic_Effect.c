@@ -188,4 +188,30 @@ MATCH void func_801F0154(void) {
     }
 }
 
-INCLUDE_ASM(func_801F01A8);
+MATCH void func_801F01A8(void) {
+    LINE_G3* prim;
+    s32      tpage;
+    long     depth;
+    long     flag;
+
+    D_1F800014[0].vx = D_1F800014[1].vx = D_1F800014[2].vx = rsin(g_Task->param.unk_0B << 9) >> 5;
+    D_1F800014[0].vy = D_1F800014[1].vy = D_1F800014[2].vy = rcos(g_Task->param.unk_0B << 9) >> 5;
+    D_1F800014[0].vz                                       = 32;
+    D_1F800014[1].vz                                       = 24;
+    D_1F800014[2].vz                                       = 0;
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+    prim = (LINE_G3*)g_GfxPrimCursor;
+    SetLineG3(prim);
+    SetSemiTrans(prim, 1);
+    RotTransPers3(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, &depth, &flag);
+    setRGB0(prim, 0x40, 0x40, 0x40);
+    setRGB1(prim, 0xC0, 0x80, 0x80);
+    setRGB2(prim, 1, 1, 1);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(LINE_G3));
+}

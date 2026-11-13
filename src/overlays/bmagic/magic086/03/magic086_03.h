@@ -6,6 +6,7 @@
 #include "overlays/bmagic/bmagic.h"
 
 extern BMagicEffectFuncs D_801EEC04;
+extern SVECTOR           D_1F800014[];
 extern Callback          D_801F0360[];
 
 void func_801EF424(void);

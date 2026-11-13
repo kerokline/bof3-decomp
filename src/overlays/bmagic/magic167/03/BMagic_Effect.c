@@ -138,7 +138,55 @@ MATCH void func_801EF4B0(void) {
     GFX_AddDitheredDrawMode(5, tpage);
 }
 
-INCLUDE_ASM(func_801EF708);
+MATCH void func_801EF708(void) {
+    POLY_G4* poly;
+    s32      tpage;
+    s32      i;
+    long     depth;
+    long     flag;
+    s32*     shade;
+
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
+    GFX_AddDitheredDrawMode(5, tpage);
+    D_1F800014[1].vx = (rsin(0) * 3U) >> 6;
+    D_1F800014[1].vy = (rcos(0) * 3U) >> 6;
+    D_1F800014[3].vx = (u32)rsin(0) >> 4;
+    D_1F800014[3].vy = (u32)rcos(0) >> 4;
+    for (i = 1; i < 17; i++) {
+        D_1F800014[0].vx = D_1F800014[1].vx;
+        D_1F800014[0].vy = D_1F800014[1].vy;
+        D_1F800014[2].vx = D_1F800014[3].vx;
+        D_1F800014[2].vy = D_1F800014[3].vy;
+        D_1F800014[1].vx = (rsin(i << 8) * 3U) >> 6;
+        D_1F800014[1].vy = (rcos(i << 8) * 3U) >> 6;
+        D_1F800014[3].vx = (u32)rsin(i << 8) >> 4;
+        D_1F800014[3].vy = (u32)rcos(i << 8) >> 4;
+        D_1F800014[3].vz = 0;
+        D_1F800014[2].vz = 0;
+        D_1F800014[1].vz = 0;
+        D_1F800014[0].vz = 0;
+        poly             = (POLY_G4*)g_GfxPrimCursor;
+        SetPolyG4(poly);
+        SetSemiTrans(poly, 1);
+        RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&poly->x0, (long*)&poly->x1, (long*)&poly->x2, (long*)&poly->x3, &depth, &flag);
+        shade    = &D_1F800004;
+        poly->r0 = *shade;
+        poly->g0 = *shade / 2;
+        poly->b0 = 1;
+        poly->r1 = *shade;
+        poly->g1 = *shade / 2;
+        poly->b1 = 1;
+        poly->r2 = 1;
+        poly->g2 = 1;
+        poly->b2 = 1;
+        poly->r3 = 1;
+        poly->g3 = 1;
+        poly->b3 = 1;
+        GFX_AddPrim(5, sizeof(POLY_G4));
+    }
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0x25 : 0x15;
+    GFX_AddDitheredDrawMode(5, tpage);
+}
 
 MATCH void func_801EF9B8(void) {
     SYS_DISPATCH_BYTE(D_801F08C4, g_Task->header.step);

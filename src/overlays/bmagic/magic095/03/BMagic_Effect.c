@@ -13,7 +13,43 @@ MATCH void func_801EEC18(void) {
     PopMatrix();
 }
 
-INCLUDE_ASM(func_801EEC9C);
+MATCH void func_801EEC9C(void) {
+    PartyMember* actor;
+    s8*          jitter;
+    u8           slot;
+    u32          i;
+
+    actor               = g_Battle.selected_actor;
+    g_Task->unk_2E.half = actor->unk_2E.half;
+    g_Task->unk_30.half = actor->unk_30.half;
+    g_Task->pos.x.fixed = actor->pos.x.fixed;
+    g_Task->pos.y.fixed = actor->pos.y.fixed;
+    g_Task->pos.z.fixed = actor->pos.z.fixed;
+    jitter              = D_801F065C;
+    do {
+        if (rand() & 1) {
+            *jitter = -(rand() & 0xF);
+        } else {
+            *jitter = rand() & 0xF;
+        }
+        jitter++;
+    } while (jitter < &D_801F065C[56]);
+    for (i = 0; i < 12; i++) {
+        slot                               = Battle_AllocEffect(1, 23);
+        g_BattleEffects[slot].target.party = g_Task;
+        g_BattleEffects[slot].unk_08       = actor->facing;
+        g_BattleEffects[slot].pos.x.fixed  = g_Task->pos.x.fixed;
+        g_BattleEffects[slot].pos.y.fixed  = g_Task->pos.y.fixed;
+        g_BattleEffects[slot].pos.z.fixed  = g_Task->pos.z.fixed;
+        g_BattleEffects[slot].arg.unk_09   = 48 - i * 4;
+        g_BattleEffects[slot].unk_0B       = i;
+        g_BattleEffects[slot].unk_0A       = 0;
+    }
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0));
+    g_Task->unk_09 = 0;
+    g_Task->timer  = 0;
+    g_Task->header.mode += 1;
+}
 
 MATCH void func_801EEE60(void) {
     u32          slot;

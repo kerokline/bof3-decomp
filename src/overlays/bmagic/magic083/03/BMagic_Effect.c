@@ -49,7 +49,38 @@ MATCH void func_801EF1DC(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF2F8);
+MATCH void func_801EF2F8(void) {
+    PartyMember* owner;
+    u8           slot;
+    u8           base;
+    u8           i;
+
+    if (g_PaletteFades[g_Task->timer].offset.red != 8) {
+        g_PaletteFades[g_Task->timer].offset.red++;
+        g_PaletteFades[g_Task->timer].offset.green++;
+        g_PaletteFades[g_Task->timer].offset.blue++;
+    }
+    if (++g_Task->unk_09 == 16) {
+        base                 = g_Task->param.unk_0B;
+        g_Task->param.unk_0B = 0;
+        for (i = 0; i < 3; i++) {
+            slot = BMagic_AllocEffect();
+            if (slot != 0xFF) {
+                owner                                  = g_Task;
+                BMAGIC_EFFECT_SLOTS[slot].header.mode  = 0;
+                BMAGIC_EFFECT_SLOTS[slot].header.step  = 0;
+                BMAGIC_EFFECT_SLOTS[slot].unk_03       = base + (i << 4);
+                BMAGIC_EFFECT_SLOTS[slot].target.party = owner;
+                BMAGIC_EFFECT_SLOTS[slot].unk_04       = g_Task->unk_04;
+                BMAGIC_EFFECT_SLOTS[slot].unk_0B       = i * 10;
+                BMAGIC_EFFECT_SLOTS[slot].arg.unk_09   = i * 8 + 1;
+                BMAGIC_EFFECT_SLOTS[slot].unk_0A       = 1;
+                g_Task->param.unk_0B++;
+            }
+        }
+        g_Task->header.step++;
+    }
+}
 
 #include "overlays/bmagic/Effect_StepOnZeroTick.h"
 

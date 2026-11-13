@@ -9,7 +9,58 @@ MATCH void func_801EEC04(void) {
     SYS_DISPATCH_TASK(handlers, 1, g_Task);
 }
 
-INCLUDE_ASM(func_801EEC5C);
+MATCH void func_801EEC5C(void) {
+    PartyMember* battler;
+    PartyMember* task;
+    PartyMember* owner;
+    u16*         dst;
+    u16*         src;
+    u16*         dst2;
+    u16*         src2;
+    u16*         dst3;
+    u16*         src3;
+    u32          slot;
+    u32          i;
+
+    g_Task->facing = g_BattleEffectBattler->facing;
+    battler        = g_BattleEffectBattler;
+    task           = g_Task;
+    WorldPos_Copy(&task->pos, &battler->pos);
+    slot                               = Battle_AllocEffect(1, 56) & BYTE_MASK;
+    owner                              = g_Task;
+    g_BattleEffects[slot].header.mode  = 0;
+    g_BattleEffects[slot].arg.unk_09   = 4;
+    g_BattleEffects[slot].target.party = owner;
+    i                                  = 1;
+    dst                                = &MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW)[1];
+    src                                = &MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW)[1];
+    for (; i < 16; i++) {
+        *dst++ = *src++ | 0x8000;
+    }
+    i    = 1;
+    src2 = &MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW)[1];
+    dst2 = &MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW)[1];
+    for (; i < 16; i++) {
+        dst2[16] = src2[16];
+        dst2++;
+        src2++;
+    }
+    i    = 1;
+    src3 = &MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW)[1];
+    dst3 = &MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW)[1];
+    for (; i < 16; i++) {
+        dst3[32] = src3[32] | 0x8000;
+        dst3++;
+        src3++;
+    }
+    MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW)[0]  = 0;
+    MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW)[16] = 0;
+    MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW)[32] = 0;
+    g_GfxPalettePending                                         = 1;
+    g_Task->param.unk_0B                                        = 0;
+    g_Task->unk_09                                              = 0;
+    g_Task->header.mode++;
+}
 
 #include "overlays/bmagic/Effect_PlayOnIdleTick.h"
 

@@ -15,7 +15,30 @@ MATCH void func_801EEC24(void) {
     }
 }
 
-INCLUDE_ASM(func_801EECE0);
+MATCH void func_801EECE0(void) {
+    u8   i;
+    u16* dst;
+    u16* src;
+
+    if ((g_Battle.target_selector < BATTLE_PARTY_CHARACTERS_COUNT && g_Battle.active_battler < BATTLE_PARTY_CHARACTERS_COUNT) ||
+        (g_Battle.target_selector >= BATTLE_PARTY_CHARACTERS_COUNT && g_Battle.active_battler >= BATTLE_PARTY_CHARACTERS_COUNT)) {
+        Battle_MarkDamaged(g_Battle.target_selector);
+        g_Battle.state |= BATTLE_STATE_EFFECT_PLAYING;
+        func_801E5988();
+    } else {
+        i = 0;
+        WorldPos_Copy(&g_Task->pos, &g_Battle.selected_actor->pos);
+        dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+        src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+        for (; i < 16; i++) {
+            dst[i] = src[i] | 0x8000;
+        }
+        g_GfxPalettePending  = 1;
+        g_Task->param.unk_0B = 0;
+        g_Task->unk_09       = 0;
+        g_Task->header.mode += 1;
+    }
+}
 
 INCLUDE_ASM(func_801EEE24);
 

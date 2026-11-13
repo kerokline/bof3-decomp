@@ -101,7 +101,26 @@ MATCH void func_801EF174(void) {
     func_801EF590(D_801F0B8C, 112, 172);
 }
 
-INCLUDE_ASM(func_801EF2DC);
+MATCH void func_801EF2DC(void) {
+    u8 slot;
+
+    slot = g_Battle.target_selector - BATTLE_PARTY_CHARACTERS_COUNT;
+    if (g_BattleEnemyBattlers[slot].unk_7F != 0) {
+        func_801EF924(g_BattleEnemyBattlers[slot].name, 112, 48);
+        func_801EFB00(g_BattleEnemyBattlers[slot].exp, 112, 100);
+        func_801EF590(D_801F0B6C, 176, 100);
+        func_801EFB00(g_BattleEnemyBattlers[slot].zenny, 112, 120);
+    } else {
+        func_801EF924(g_BattleEnemyBattlers[slot].name, 112, 48);
+        func_801EF590(D_801F0B88, 156, 100);
+        func_801EF590(D_801F0B6C, 176, 100);
+        func_801EF590(D_801F0B88, 156, 120);
+    }
+    func_801EF590(D_801F0B70, 176, 120);
+    func_801EF76C(D_801F0B74, 90, 138);
+    func_801EF470(g_BattleEnemyBattlers[slot].drops[0].item & BYTE_MASK, g_BattleEnemyBattlers[slot].drops[0].item >> 8, 152);
+    func_801EF470(g_BattleEnemyBattlers[slot].drops[1].item & BYTE_MASK, g_BattleEnemyBattlers[slot].drops[1].item >> 8, 172);
+}
 
 MATCH void func_801EF470(u8 item_id, u8 category, s32 y) {
     /* FAKE: the record pointer must stay in s0 through the switch; an unpinned local scales the table index in v1, and the best pure-C body differs in 11 instructions at the same 0x120-byte size. */

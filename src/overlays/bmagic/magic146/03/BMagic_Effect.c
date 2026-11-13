@@ -38,7 +38,39 @@ MATCH void func_801EF090(void) {
     SYS_DISPATCH_TASK(D_801EF9B8, 2, g_Task);
 }
 
-INCLUDE_ASM(func_801EF0D4);
+MATCH void func_801EF0D4(void) {
+    PartyMember* battler;
+    PartyMember* task;
+    PartyMember* owner;
+    u8           slot;
+    u8           i;
+
+    if (--g_Task->unk_09 == 0) {
+        if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+            battler = (PartyMember*)(g_BattleEnemies + g_Task->unk_04 * BATTLE_ENEMY_STRIDE);
+        } else {
+            battler = &g_Game.members[g_Task->unk_04];
+        }
+        SND_QueueSelectionFx(0x100);
+        g_Task->facing = battler->facing;
+        task           = g_Task;
+        WorldPos_Copy(&task->pos, &battler->pos);
+        task->param.unk_0B = 0;
+        g_Task->header.step++;
+        for (i = 0; i < 3; i++) {
+            slot = BMagic_AllocEffect();
+            if (slot != 0xFF) {
+                owner                                  = g_Task;
+                BMAGIC_EFFECT_SLOTS[slot].header.mode  = 0;
+                BMAGIC_EFFECT_SLOTS[slot].unk_0B       = i;
+                BMAGIC_EFFECT_SLOTS[slot].arg.unk_09   = i * 2 + 1;
+                BMAGIC_EFFECT_SLOTS[slot].target.party = owner;
+                g_Task->param.unk_0B++;
+            }
+        }
+        Battle_ApplyDamageFlags(g_Task->unk_04, 0x10);
+    }
+}
 
 #include "overlays/bmagic/Effect_FinishOnZeroTick.h"
 

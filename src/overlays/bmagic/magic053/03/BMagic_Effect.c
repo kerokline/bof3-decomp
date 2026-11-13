@@ -25,7 +25,54 @@ MATCH void func_801EEC10(void) {
     }
 }
 
-INCLUDE_ASM(func_801EED18);
+MATCH void func_801EED18(void) {
+    PartyMember* owner;
+    s32          i;
+    u8           slot;
+
+    for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+        BMAGIC_EFFECT_SLOTS[i].header.flags = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.step  = 0;
+    }
+    Battle_CenterCamera();
+    Battle_ProjectRange();
+    if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+        if (!BATTLER_IS_PLAYER(g_Battle.active_battler)) {
+            g_Task->facing = D_8014637C->facing;
+        } else {
+            g_Task->facing = D_8014637C->facing ^ 2;
+        }
+    } else {
+        if (BATTLER_IS_PLAYER(g_Battle.active_battler)) {
+            g_Task->facing = D_8014637C->facing;
+        } else {
+            g_Task->facing = D_8014637C->facing ^ 2;
+        }
+    }
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 16;
+    g_Task->header.mode += 1;
+    for (i = 0; i < 8; i++) {
+        slot                               = Battle_AllocEffect(1, 94);
+        owner                              = g_Task;
+        g_BattleEffects[slot].header.mode  = 0;
+        g_BattleEffects[slot].target.party = owner;
+        g_BattleEffects[slot].unk_04       = D_801F0548[i] >> 4;
+        g_BattleEffects[slot].unk_0B       = i;
+        g_BattleEffects[slot].arg.unk_09   = D_801F0548[i] + 1;
+        g_Task->param.unk_0B += 1;
+    }
+    for (i = 0; i < 256; i++) {
+        MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW)[i] = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW)[i] | 0x8000;
+    }
+    for (i = 0; i < 16; i++) {
+        MEM_PTR(u16, AREA_PALETTE_WORK + 2 * AREA_PALETTE_ROW)[i] = MEM_PTR(u16, AREA_PALETTE_ARENA_33C00)[i] | 0x8000;
+    }
+    *MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW) = *MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    *MEM_PTR(u16, AREA_PALETTE_WORK + 2 * AREA_PALETTE_ROW)  = *MEM_PTR(u16, AREA_PALETTE_ARENA_33C00);
+    g_GfxPalettePending                                      = 1;
+}
 
 #include "overlays/bmagic/Effect_RequestTargetOnTimerZero.h"
 

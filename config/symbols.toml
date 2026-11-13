@@ -608,6 +608,7 @@ D_801EFC64 = { addr = 0x801EFC64, source = "Mode handlers of the magic055 effect
 ["emi/bmagic/magic056/03"]
 Battle_ApplyDamageFlags = { addr = 0x800A9610, type = "func", source = "Applies the damage flags to the selected battlers." }
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true, source = "Marks the selected battlers as damaged." }
+Battle_CenterCamera = { addr = 0x800AFD9C, type = "func", source = "Centres the battle camera on the living battlers." }
 g_GameState = { addr = 0x80146250, alias = true, source = "The member of g_Game that the running mode works on; the current member of g_Game." }
 Battle_AllocEffect = { addr = 0x801E590C, alias = true, source = "Claims a free battle effect slot." }
 g_BattleEnemies = { addr = 0x801EB2E8, alias = true, source = "The enemy battlers." }

@@ -6,7 +6,58 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/BMagic_DispatchMode.h"
 
-INCLUDE_ASM(func_801EEC94);
+/* Starts the effect: centres the camera, queues a copy of the acting battler as effect\n0x55 in mode 3, sets STP on colours 1 to 15 of the first two palettes of work row 26\nand clears their colour 0, then takes the battler handler and marks it busy. */
+MATCH void func_801EEC94(void) {
+    PartyMember*     work;
+    u16*             dst;
+    u16*             src;
+    u32              i;
+    u32              index;
+    u8               active;
+    BattleWorkImage* slot;
+    BattleWorkImage* row;
+    u32              enemy;
+    PartyMember*     member;
+
+    Battle_CenterCamera();
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 0;
+    g_Task->header.mode += 1;
+    func_800AEF98(8, 0);
+    index  = Battle_AllocEffect(1, 0x55) & BYTE_MASK;
+    active = g_Battle.active_battler;
+    if (BATTLER_IS_PLAYER(active)) {
+        slot   = (BattleWorkImage*)&g_BattleEffects[index];
+        member = &g_Game.members[active];
+        *slot  = *(BattleWorkImage*)member;
+    } else {
+        slot  = (BattleWorkImage*)&g_BattleEffects[index];
+        enemy = active - BATTLE_PARTY_CHARACTERS_COUNT;
+        row   = (BattleWorkImage*)&g_BattleEnemyBattlers[enemy];
+        *slot = *row;
+    }
+    work                                 = g_Task;
+    g_BattleEffects[index].header.mode   = 3;
+    g_BattleEffects[index].unk_06        = 1;
+    g_BattleEffects[index].header.step   = 0;
+    g_BattleEffects[index].handler_index = 0x55;
+    g_BattleEffects[index].target.party  = work;
+    g_Task->param.unk_0B += 1;
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    for (i = 1; i < 16; i++) {
+        dst[i]      = src[i] | 0x8000;
+        dst[i + 16] = src[i + 16] | 0x8000;
+    }
+    *MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW)        = 0;
+    *MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW + 0x20) = 0;
+    g_GfxPalettePending                                             = 1;
+    g_Task->unk_27                                                  = func_800AFB48(g_BattleEffectBattler);
+    g_Task->unk_28                                                  = g_BattleEffectBattler->unk_28;
+    g_Task->unk_24                                                  = g_BattleEffectBattler->unk_24;
+    func_800AF8F0(g_Task);
+    g_BattleEffectBattler->header.flags |= PARTY_MEMBER_FLAG_HANDLER_BUSY;
+}
 
 MATCH s32 func_801EEF3C(void) {
     if (g_Task->param.unk_0B == 0) {

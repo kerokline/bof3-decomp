@@ -124,7 +124,36 @@ INCLUDE_ASM(func_801EF1FC);
 
 INCLUDE_ASM(func_801EF804);
 
-INCLUDE_ASM(func_801EFDDC);
+MATCH void func_801EFDDC(void) {
+    POLY_G3* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+
+    D_1F800000.view.scenario.math_00 = 0x1C0;
+    D_1F800014[2].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.scenario.math_00);
+    D_1F800014[2].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.scenario.math_00);
+    for (i = 1; i <= 16; i++) {
+        D_1F800014[0].vx = 0;
+        D_1F800014[0].vy = 0;
+        D_1F800014[0].vz = 0;
+        D_1F800014[1].vz = 0;
+        D_1F800014[1].vx = D_1F800014[2].vx;
+        D_1F800014[1].vy = D_1F800014[2].vy;
+        D_1F800014[2].vx = FIXED_MUL(rsin(i << 8), D_1F800000.view.scenario.math_00);
+        D_1F800014[2].vy = FIXED_MUL(rcos(i << 8), D_1F800000.view.scenario.math_00);
+        D_1F800014[2].vz = 0;
+        SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, getTPage(0, 1, 320, 256), 0);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+        prim                             = GFX_BeginPolyG3(1);
+        D_1F800000.view.scenario.math_08 = g_Task->timer * 8;
+        setRGB0(prim, D_1F800000.view.scenario.math_08, D_1F800000.view.scenario.math_08, D_1F800000.view.scenario.math_08);
+        setRGB1(prim, 1, 1, 1);
+        setRGB2(prim, 1, 1, 1);
+        RotTransPers3(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, &depth, &flag);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_G3));
+    }
+}
 
 extern Callback D_801F0654[];
 

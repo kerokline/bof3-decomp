@@ -148,7 +148,32 @@ MATCH void func_801EF890(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF960);
+MATCH void func_801EF960(void) {
+    PartyMember* battler;
+    s32          speed;
+    u8           i;
+    u8           slot;
+
+    speed = g_Task->unk_20;
+    if (speed != 1) {
+        g_Task->unk_20 = speed - 2;
+    }
+    g_Task->unk_14 -= g_Task->unk_20;
+    if (g_Task->unk_14 < 0x30) {
+        Battle_ApplyDamageFlags(g_Battle.target_selector, 0x10);
+        SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0x01));
+        for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+            slot                                   = BMagic_AllocEffect();
+            battler                                = g_BattleEffectBattler;
+            BMAGIC_EFFECT_SLOTS[slot].header.mode  = 0;
+            BMAGIC_EFFECT_SLOTS[slot].unk_0B       = i;
+            BMAGIC_EFFECT_SLOTS[slot].target.party = battler;
+            BMAGIC_EFFECT_SLOTS[slot].arg.unk_09   = (i / 6) * 8 + (rand() & 7) + 1;
+            g_BattleEffectBattler->param.unk_0B += 1;
+        }
+        g_Task->header.step += 1;
+    }
+}
 
 MATCH void func_801EFAB0(void) {
     s32 level;

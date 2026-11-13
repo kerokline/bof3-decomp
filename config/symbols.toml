@@ -1354,6 +1354,7 @@ Actor_Clear = { addr = 0x801F088C, type = "func", source = "Clears the effect wo
 g_BMagicEffectModes = { addr = 0x801F08DC, source = "Handlers of magic124 (ThundrBreath), run by header.mode (byte 0x01)." }
 
 ["emi/bmagic/magic125/03"]
+Battle_ApplyDamageFlags = { addr = 0x800A9610, type = "func", source = "Applies the damage flags to the selected battlers." }
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true, source = "Marks the selected battlers as damaged." }
 Battle_CenterCamera = { addr = 0x800AFD9C, type = "func", source = "Centres the battle camera on the living battlers." }
 Battle_AllocEffect = { addr = 0x801E590C, alias = true }

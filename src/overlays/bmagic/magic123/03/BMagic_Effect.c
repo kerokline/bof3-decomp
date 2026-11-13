@@ -40,7 +40,66 @@ MATCH void func_801EEC04(void) {
     GFX_AddPrim(3, sizeof(DR_MODE));
 }
 
-INCLUDE_ASM(func_801EEDAC);
+MATCH void func_801EEDAC(void) {
+    PartyMember* owner;
+    u32          i;
+    u8           slot;
+
+    for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+        BMAGIC_EFFECT_SLOTS[i].header.flags = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.step  = 0;
+    }
+    g_Task->facing = g_BattleEffectBattler->facing;
+    Battle_CenterCamera();
+    Battle_ProjectRange();
+    D_1F800000.view.effect.params[5] = g_Task->unk_2E.half;
+    D_1F800000.view.effect.params[6] = g_Task->unk_30.half;
+    g_Task->pos.x.fixed              = g_BattleEffectBattler->pos.x.fixed;
+    g_Task->pos.y.fixed              = g_BattleEffectBattler->pos.y.fixed;
+    g_Task->pos.z                    = g_BattleEffectBattler->pos.z;
+    Battle_ProjectRange();
+    if (g_Battle.active_battler < 3) {
+        func_800B0118();
+    } else {
+        switch (g_Task->facing) {
+            case 0:
+                g_Task->unk_0C = 0x29;
+                g_Task->unk_10 = -0xD;
+                break;
+            case 1:
+                g_Task->unk_0C = -0x29;
+                g_Task->unk_10 = -0xD;
+                break;
+            case 2:
+                g_Task->unk_0C = -0x26;
+                g_Task->unk_10 = -0x26;
+                break;
+            default:
+                g_Task->unk_0C = 0x26;
+                g_Task->unk_10 = -0x26;
+                break;
+        }
+    }
+    g_Task->unk_2E.half += g_Task->unk_0C;
+    g_Task->unk_30.half += g_Task->unk_10;
+    D_1F800000.view.effect.params[3] = g_Task->unk_2E.half;
+    D_1F800000.view.effect.params[4] = g_Task->unk_30.half;
+    g_Task->unk_14                   = ratan2(D_1F800000.view.effect.params[5] - D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[6] - D_1F800000.view.effect.params[4]);
+    g_Task->param.unk_0B             = 0;
+    for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+        slot                                   = BMagic_AllocEffect();
+        owner                                  = g_Task;
+        BMAGIC_EFFECT_SLOTS[slot].header.mode  = i & 1;
+        BMAGIC_EFFECT_SLOTS[slot].arg.unk_09   = (i >> 2) * 3 + 1;
+        BMAGIC_EFFECT_SLOTS[slot].target.party = owner;
+        g_Task->param.unk_0B++;
+    }
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0x02));
+    Battle_ApplyDamageFlags(g_Battle.target_selector, 0x10);
+    g_Task->unk_09 = 0;
+    g_Task->header.mode++;
+}
 
 #include "overlays/bmagic/Effect_PlayOnZeroTick.h"
 

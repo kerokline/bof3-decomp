@@ -25,7 +25,39 @@ MATCH void func_801EEC10(void) {
     }
 }
 
-INCLUDE_ASM(func_801EED18);
+MATCH void func_801EED18(void) {
+    u16          i;
+    u8           slot;
+    u32          member;
+    PartyMember* work;
+
+    for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+        BMAGIC_EFFECT_SLOTS[i].header.flags = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.step  = 0;
+    }
+    Battle_CenterCamera();
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 56;
+    g_Task->header.mode += 1;
+    if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+        g_Task->header.mode = 2;
+        return;
+    }
+    for (i = 0; i < BATTLE_PARTY_CHARACTERS_COUNT; i++) {
+        member = i;
+        if (g_Game.members[member].header.flags & PARTY_MEMBER_FLAG_OCCUPIED) {
+            slot                               = Battle_AllocEffect(1, 106);
+            work                               = g_Task;
+            g_BattleEffects[slot].unk_0B       = member << 4;
+            g_BattleEffects[slot].header.mode  = 0;
+            g_BattleEffects[slot].unk_04       = i;
+            g_BattleEffects[slot].arg.unk_09   = 60;
+            g_BattleEffects[slot].target.party = work;
+            g_Task->param.unk_0B += 1;
+        }
+    }
+}
 
 #include "overlays/bmagic/Effect_RequestTargetOnTimerZero.h"
 

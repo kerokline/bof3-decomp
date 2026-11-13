@@ -260,4 +260,33 @@ MATCH void Effect_SetActorMatrix2(void) {
     BMAGIC_SET_ACTOR_MATRIX();
 }
 
-INCLUDE_ASM(func_801F01E8);
+MATCH void func_801F01E8(void) {
+    POLY_FT4* prim;
+    long      depth;
+    long      flag;
+
+    prim = (POLY_FT4*)g_GfxPrimCursor;
+    SetPolyFT4(prim);
+    SetSemiTrans(prim, 1);
+    D_1F800000.view.effect.params[0] = g_Task->unk_09 * 3;
+    D_1F800000.view.effect.params[2] = g_Task->timer * 2;
+    D_1F800014[0].vx                 = FIXED_MUL(rcos(ANGLE_45), D_1F800000.view.effect.params[0]);
+    D_1F800014[0].vy                 = FIXED_MUL(rsin(ANGLE_45), D_1F800000.view.effect.params[0]);
+    D_1F800014[0].vz                 = 0;
+    D_1F800014[1].vx                 = FIXED_MUL(rcos(1536), D_1F800000.view.effect.params[0]);
+    D_1F800014[1].vy                 = FIXED_MUL(rsin(1536), D_1F800000.view.effect.params[0]);
+    D_1F800014[1].vz                 = 0;
+    D_1F800014[2].vx                 = FIXED_MUL(rcos(3584), D_1F800000.view.effect.params[0]);
+    D_1F800014[2].vy                 = FIXED_MUL(rsin(3584), D_1F800000.view.effect.params[0]);
+    D_1F800014[2].vz                 = 0;
+    D_1F800014[3].vx                 = FIXED_MUL(rcos(2560), D_1F800000.view.effect.params[0]);
+    D_1F800014[3].vy                 = FIXED_MUL(rsin(2560), D_1F800000.view.effect.params[0]);
+    D_1F800014[3].vz                 = 0;
+    setTPage(prim, 0, 1, 832, 256);
+    /* FAKE: a volatile store keeps the clut write ahead of the texture-point stores; the plain setClut sinks it below them. */
+    VOL(u16, prim->clut) = GetClut(0, 482);
+    setUV4(prim, 0, 128, 32, 128, 0, 160, 32, 160);
+    setRGB0(prim, LOHU(D_1F800000.view.effect.params[2]), LOHU(D_1F800000.view.effect.params[2]), LOHU(D_1F800000.view.effect.params[2]));
+    RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+    GFX_AddPrim(3, sizeof(POLY_FT4));
+}

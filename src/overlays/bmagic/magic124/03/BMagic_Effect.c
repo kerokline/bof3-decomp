@@ -6,7 +6,38 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 INCLUDE_ASM(func_801EEC14);
 
-INCLUDE_ASM(func_801EEDD8);
+MATCH void func_801EEDD8(void) {
+    PartyMember* task;
+    u32          slot;
+    u32          i;
+
+    for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+        BMAGIC_EFFECT_SLOTS[i].header.flags = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.step  = 0;
+    }
+    g_Task->facing = g_BattleEffectBattler->facing;
+    WorldPos_Copy(&g_Task->pos, &g_BattleEffectBattler->pos);
+    Battle_ProjectRange();
+    func_800B0118();
+    g_Task->unk_2E.half += g_Task->unk_0C;
+    g_Task->unk_30.half += g_Task->unk_10;
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 8;
+    g_Task->timer        = 16;
+    g_Task->header.mode++;
+    for (i = 0; i < 32; i++) {
+        slot                                   = BMagic_AllocEffect() & BYTE_MASK;
+        task                                   = g_Task;
+        BMAGIC_EFFECT_SLOTS[slot].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[slot].unk_04       = i;
+        BMAGIC_EFFECT_SLOTS[slot].unk_0B       = 0;
+        BMAGIC_EFFECT_SLOTS[slot].arg.unk_09   = i * 4 + 1;
+        BMAGIC_EFFECT_SLOTS[slot].target.party = task;
+        g_Task->param.unk_0B++;
+    }
+    SND_QueueSelectionFx(0x100);
+}
 
 #include "overlays/bmagic/Effect_RequestTargetOnTimerZero.h"
 

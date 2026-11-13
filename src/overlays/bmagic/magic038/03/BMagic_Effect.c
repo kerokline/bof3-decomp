@@ -50,7 +50,47 @@ MATCH void func_801EEC70(void) {
     SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0));
 }
 
-INCLUDE_ASM(func_801EEE14);
+MATCH void func_801EEE14(void) {
+    u8           i;
+    u8           slot;
+    PartyMember* work;
+
+    if (g_Task->param.unk_0B == 0) {
+        SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 1));
+        if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+            for (i = 0; i < 8; i++) {
+                if (!Battle_SlotIsBlocked((u8)(i + BATTLE_PARTY_CHARACTERS_COUNT))) {
+                    slot                               = Battle_AllocEffect(1, 89);
+                    work                               = g_Task;
+                    g_BattleEffects[slot].header.mode  = 1;
+                    g_BattleEffects[slot].unk_03       = i;
+                    g_BattleEffects[slot].unk_04       = 2;
+                    g_BattleEffects[slot].target.party = work;
+                    g_BattleEffects[slot].pos.x        = g_BattleEnemyBattlers[i].pos.x;
+                    g_BattleEffects[slot].pos.y        = g_BattleEnemyBattlers[i].pos.y;
+                    g_BattleEffects[slot].pos.z        = g_BattleEnemyBattlers[i].pos.z;
+                    g_Task->param.unk_0B += 1;
+                }
+            }
+        } else {
+            for (i = 0; i < BATTLE_PARTY_CHARACTERS_COUNT; i++) {
+                if (!Battle_SlotIsBlocked(i)) {
+                    slot                               = Battle_AllocEffect(1, 89);
+                    work                               = g_Task;
+                    g_BattleEffects[slot].header.mode  = 1;
+                    g_BattleEffects[slot].unk_04       = 2;
+                    g_BattleEffects[slot].unk_03       = i;
+                    g_BattleEffects[slot].target.party = work;
+                    g_BattleEffects[slot].pos.x        = g_Game.members[i].pos.x;
+                    g_BattleEffects[slot].pos.y        = g_Game.members[i].pos.y;
+                    g_BattleEffects[slot].pos.z        = g_Game.members[i].pos.z;
+                    g_Task->param.unk_0B += 1;
+                }
+            }
+        }
+        g_Task->header.mode += 1;
+    }
+}
 
 #include "overlays/bmagic/Effect_StartOnZeroTick.h"
 

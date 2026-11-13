@@ -356,7 +356,38 @@ MATCH void func_801F0494(void) {
 
 #include "overlays/bmagic/Effect_TickOnTimerNegative.h"
 
-INCLUDE_ASM(func_801F06AC);
+MATCH void func_801F06AC(void) {
+    POLY_G3* prim;
+    s32      i;
+    s32      tpage;
+
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(3, sizeof(DR_MODE));
+    D_1F800000.view.effect.params[2] = 0;
+    D_1F800000.view.effect.params[0] = 24;
+    D_1F800000.view.effect.params[6] = g_Task->unk_2E.half;
+    D_1F800000.view.effect.params[7] = g_Task->unk_30.half;
+    D_1F800000.view.effect.params[3] = g_Task->unk_09 * D_801F1298[g_Task->param.unk_0B].red;
+    D_1F800000.view.effect.params[4] = g_Task->unk_09;
+    D_1F800000.view.effect.params[5] = g_Task->unk_09 * D_801F1298[g_Task->param.unk_0B].blue;
+    for (i = 0; i < 16; i++) {
+        prim = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 1);
+        prim->x0                         = D_1F800000.view.effect.params[6];
+        prim->y0                         = D_1F800000.view.effect.params[7];
+        prim->x1                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->y1                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800000.view.effect.params[2] = (i + 1) << 8;
+        prim->x2                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->y2                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        setRGB0(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5]);
+        setRGB1(prim, 1, 1, 1);
+        setRGB2(prim, 1, 1, 1);
+        GFX_AddPrim(3, sizeof(POLY_G3));
+    }
+}
 
 MATCH void func_801F091C(void) {
     SYS_DISPATCH_TASK((g_BMagicEffectModes + 19), 1, D_801F22BC);

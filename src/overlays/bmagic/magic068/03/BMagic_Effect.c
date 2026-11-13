@@ -109,6 +109,32 @@ MATCH void func_801EF9D0(void) {
     }
 }
 
-INCLUDE_ASM(func_801EFA48);
+MATCH void func_801EFA48(void) {
+    POLY_FT4* prim;
+    s32       tpage;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x25;
+    } else {
+        tpage = 0x15;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(2, sizeof(DR_MODE));
+    prim = (POLY_FT4*)g_GfxPrimCursor;
+    SetPolyFT4(prim);
+    prim->x0 = g_Task->unk_2E.half - 12;
+    prim->y0 = g_Task->unk_30.half - 12;
+    prim->x1 = g_Task->unk_2E.half + 12;
+    prim->y1 = g_Task->unk_30.half - 12;
+    prim->x2 = g_Task->unk_2E.half - 12;
+    prim->y2 = g_Task->unk_30.half + 12;
+    prim->x3 = g_Task->unk_2E.half + 12;
+    prim->y3 = g_Task->unk_30.half + 12;
+    setRGB0(prim, 128, 128, 128);
+    prim->tpage = GetTPage(0, 0, 960, 0);
+    prim->clut  = GetClut(0, 480);
+    setUV4(prim, g_Task->param.unk_0B, 36, g_Task->param.unk_0B + 11, 36, g_Task->param.unk_0B, 46, g_Task->param.unk_0B + 11, 46);
+    GFX_AddPrim(2, sizeof(POLY_FT4));
+}
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"

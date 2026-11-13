@@ -199,7 +199,39 @@ INCLUDE_ASM(func_801F038C);
 
 INCLUDE_ASM(func_801F050C);
 
-INCLUDE_ASM(func_801F0BA8);
+MATCH void func_801F0BA8(s32 radius) {
+    POLY_G3* poly;
+    s32      tpage;
+    s32      i;
+
+    D_1F800000.view.effect.params[0] = radius;
+    i                                = 0;
+    do {
+        tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
+        SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+        poly = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(poly);
+        SetSemiTrans(poly, 1);
+        poly->x0 = g_Task->unk_2E.half;
+        poly->y0 = g_Task->unk_30.half;
+        poly->x1 = g_Task->unk_2E.half + ((rsin(i << 9) * D_1F800000.view.effect.params[0]) >> 12);
+        poly->y1 = g_Task->unk_30.half + ((rcos(i << 9) * D_1F800000.view.effect.params[0]) >> 12);
+        poly->x2 = g_Task->unk_2E.half + ((rsin((i + 1) << 9) * D_1F800000.view.effect.params[0]) >> 12);
+        poly->y2 = g_Task->unk_30.half + ((rcos((i + 1) << 9) * D_1F800000.view.effect.params[0]) >> 12);
+        poly->r0 = 0x80;
+        poly->g0 = 0x80;
+        poly->b0 = 0x80;
+        poly->r1 = 1;
+        poly->g1 = 1;
+        poly->b1 = 1;
+        poly->r2 = 1;
+        poly->g2 = 1;
+        poly->b2 = 1;
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_G3));
+        i++;
+    } while (i < 8);
+}
 
 /* func_801F0DC0 */
 #include "overlays/bmagic/BMagic_AllocEffect.h"

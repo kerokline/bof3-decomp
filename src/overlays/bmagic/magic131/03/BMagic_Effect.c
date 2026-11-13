@@ -5,7 +5,42 @@
 __asm__(".include \"include/match/macro.inc\"\n");
 #endif
 
-INCLUDE_ASM(func_801EEC24);
+MATCH void func_801EEC24(void) {
+    Callback     handlers[8];
+    PartyMember* saved_battler;
+    s32          tpage;
+    u8           i;
+
+    __builtin_memcpy(handlers, D_801EEC04, sizeof(handlers));
+    SYS_DISPATCH_BYTE(handlers, g_Task->header.mode);
+    if (GetGraphType() == 1) {
+        tpage = 0x125;
+    } else if (GetGraphType() == 2) {
+        tpage = 0x125;
+    } else {
+        tpage = 0x55;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(2, sizeof(DR_MODE));
+    for (i = 0; i < ARRAY_COUNT(D_801F1CA0); i++) {
+        if (D_801F1CA0[i].header.flags & BMAGIC_EFFECT_IN_USE) {
+            saved_battler         = g_BattleEffectBattler;
+            D_801F24E0            = &D_801F1CA0[i];
+            g_BattleEffectBattler = D_801F1CA0[i].battler;
+            func_801F10F4();
+            g_BattleEffectBattler = saved_battler;
+        }
+    }
+    if (GetGraphType() == 1) {
+        tpage = 0x25;
+    } else if (GetGraphType() == 2) {
+        tpage = 0x25;
+    } else {
+        tpage = 0x15;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(2, sizeof(DR_MODE));
+}
 
 MATCH void func_801EEDEC(void) {
     PartyMember* target;

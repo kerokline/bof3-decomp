@@ -99,7 +99,36 @@ MATCH void func_801EF060(void) {
 
 #include "overlays/bmagic/Effect_CountDownAndPlay.h"
 
-INCLUDE_ASM(func_801EF128);
+MATCH void func_801EF128(void) {
+    s32 values[8];
+    s32 pos_x;
+    s32 pos_y;
+    u8* prim;
+    u32 i;
+    u32 row;
+
+    func_801EF6A8();
+    prim = g_GfxPrimCursor;
+    i    = 0;
+    do {
+        row            = i & 3;
+        g_Task->unk_0C = D_801F11F4[row][0] * g_Task->timer;
+        g_Task->unk_10 = D_801F11F4[row][1] * g_Task->timer;
+        func_801DD350(g_Task);
+        g_Task->pos.x.fixed = g_Task->unk_0C;
+        g_Task->pos.y.fixed = g_Task->unk_10;
+        g_Task->unk_0C      = D_801F11F4[row + 1][0] * g_Task->timer;
+        g_Task->unk_10      = D_801F11F4[row + 1][1] * g_Task->timer;
+        func_801DD350(g_Task);
+        g_Task->param.unk_0B = i;
+        func_801EF280(values);
+        i++;
+    } while (i < 8);
+    pos_x = g_BattleEffectBattler->pos.x.fixed;
+    pos_y = g_BattleEffectBattler->pos.y.fixed;
+    func_800AF0F8(pos_x, pos_y, values, prim, 8, 0x1C, 2);
+    PopMatrix();
+}
 
 INCLUDE_ASM(func_801EF280);
 

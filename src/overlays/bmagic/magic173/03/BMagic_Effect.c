@@ -59,7 +59,60 @@ MATCH void func_801EEE34(void) {
     }
 }
 
-INCLUDE_ASM(func_801EEEEC);
+MATCH void func_801EEEEC(void) {
+    PartyMember* target;
+    u8           battler;
+    u8           kind;
+    PartyMember* work;
+
+    target         = g_Battle.selected_actor;
+    g_Task->facing = g_BattleEffectBattler->facing;
+    battler        = g_Battle.active_battler;
+    if (battler < BATTLE_PARTY_CHARACTERS_COUNT) {
+        g_Task->unk_0C = 0x4000;
+        g_Task->unk_10 = 0;
+        g_Task->unk_14 = 0xC00000;
+    } else {
+        kind = g_BattleEnemyBattlers[battler - BATTLE_PARTY_CHARACTERS_COUNT].enemy_id.byte.kind;
+        switch (kind) {
+            case 0x61:
+                g_Task->unk_0C = 0x38000;
+                g_Task->unk_10 = 0;
+                g_Task->unk_14 = 0;
+                break;
+            case 0x6C:
+                work = g_Task;
+                if (work->facing & 2) {
+                    work->unk_0C = 0x20000;
+                } else {
+                    work->unk_0C = 0x30000;
+                }
+                work->unk_10 = 0;
+                work->unk_14 = 0x800000;
+                break;
+            default:
+                g_Task->unk_0C = 0x10000;
+                g_Task->unk_10 = 0;
+                g_Task->unk_14 = 0x800000;
+                break;
+        }
+    }
+    func_801DD350(g_Task);
+    g_Task->pos.x.fixed = g_BattleEffectBattler->pos.x.fixed + g_Task->unk_0C;
+    g_Task->pos.y.fixed = g_BattleEffectBattler->pos.y.fixed + g_Task->unk_10;
+    g_Task->pos.z.fixed = g_BattleEffectBattler->pos.z.fixed + g_Task->unk_14;
+    g_Task->unk_0C      = ratan2(target->pos.x.fixed - g_Task->pos.x.fixed, target->pos.y.fixed - g_Task->pos.y.fixed);
+    g_Task->unk_10      = 0;
+    Battle_ProjectRange();
+    BMagic_Trail[g_Task->unk_04][0].x = g_Task->unk_2E.half;
+    BMagic_Trail[g_Task->unk_04][0].y = g_Task->unk_30.half;
+    BMagic_Trail[g_Task->unk_04][1].x = g_Task->unk_2E.half;
+    BMagic_Trail[g_Task->unk_04][1].y = g_Task->unk_30.half;
+    g_Task->param.unk_0B              = 0;
+    g_Task->unk_09                    = 16;
+    g_Task->timer                     = 1;
+    g_Task->header.step++;
+}
 
 INCLUDE_ASM(func_801EF148);
 

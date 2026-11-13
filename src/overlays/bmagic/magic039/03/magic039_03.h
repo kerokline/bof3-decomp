@@ -15,5 +15,9 @@ extern Magic039Steps     D_801EEC28;
 extern BMagicEffectFuncs D_801EEC10;
 
 void func_801EF758(void);
+s32  func_801EEF3C(void);
+
+/* The start phase each of the eight pieces adds to 9, indexed by piece. */
+extern u8 D_801F041C[];
 
 #endif

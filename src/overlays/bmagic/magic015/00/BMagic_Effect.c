@@ -46,7 +46,35 @@ MATCH void func_801EF644(void) {
     SYS_DISPATCH_TASK(table.steps, 1, g_Task);
 }
 
-INCLUDE_ASM(func_801EF6B0);
+#include "overlays/bmagic/Effect_CopyActiveBattlerToSlot.h"
+
+MATCH void func_801EF6B0(void) {
+    PartyMember* work;
+    u32          index;
+
+    g_Task->facing             = g_BattleEffectBattler->facing;
+    g_Task->pos.x.fixed        = g_BattleEffectBattler->pos.x.fixed;
+    g_Task->pos.y.fixed        = g_BattleEffectBattler->pos.y.fixed;
+    g_Task->pos.z.part.integer = g_BattleEffectBattler->pos.z.part.integer;
+    g_Task->param.unk_0B       = 1;
+    func_800AEF98(8, 0);
+    index = Battle_AllocEffect(1, 35);
+    Effect_CopyActiveBattlerToSlot(index);
+    work                                             = g_Task;
+    g_BattleEffects[index & BYTE_MASK].header.mode   = 3;
+    g_BattleEffects[index & BYTE_MASK].unk_06        = 1;
+    g_BattleEffects[index & BYTE_MASK].header.step   = 0;
+    g_BattleEffects[index & BYTE_MASK].handler_index = 35;
+    g_BattleEffects[index & BYTE_MASK].arg.unk_09    = 0;
+    g_BattleEffects[index & BYTE_MASK].target.party  = work;
+    g_Task->unk_27                                   = func_800AFB48(g_BattleEffectBattler);
+    g_Task->unk_28                                   = g_BattleEffectBattler->unk_28;
+    g_Task->unk_24                                   = g_BattleEffectBattler->unk_24;
+    func_800AF8F0(g_Task);
+    func_800AFAB8(g_Task);
+    g_BattleEffectBattler->header.flags |= PARTY_MEMBER_FLAG_HANDLER_BUSY;
+    g_Task->header.mode++;
+}
 
 MATCH void func_801EF93C(void) {
     if (g_Task->param.unk_0B == 0) {

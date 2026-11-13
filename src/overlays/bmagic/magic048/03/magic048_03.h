@@ -3,6 +3,9 @@
 
 /* The bmagic/magic048/03 overlay. Only this image includes the file. */
 
+/* 0x1F800000 scratchpad */
+#define GAME_SCRATCH_BASE_WORD
+
 #include "overlays/bmagic/bmagic.h"
 
 extern Callback D_801EF81C[];

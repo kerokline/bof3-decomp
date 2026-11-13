@@ -124,4 +124,34 @@ MATCH void func_801EF5C8(void) {
     BMAGIC_PROJECT_ACTOR_MATRIX(g_Task);
 }
 
-INCLUDE_ASM(func_801EF6A0);
+MATCH void func_801EF6A0(void) {
+    u8   i;
+    s32* sum;
+    s32* enemy_sum;
+    s32* party_sum;
+
+    /* The effect takes the mean z of the unblocked battlers on the targeted side; the scratchpad keeps the sum and the count. */
+    sum            = &D_1F800000;
+    SP_REF(s32, 4) = 0;
+    *sum           = 0;
+    if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+        i         = 0;
+        enemy_sum = sum;
+        for (; i < 8; i++) {
+            if (!Battle_SlotIsBlocked((u8)(i + BATTLE_PARTY_CHARACTERS_COUNT))) {
+                enemy_sum[0] += COORD_INT(g_BattleEnemyBattlers[i].pos.z);
+                enemy_sum[1] += 1;
+            }
+        }
+    } else {
+        i         = 0;
+        party_sum = sum;
+        for (; i < BATTLE_PARTY_CHARACTERS_COUNT; i++) {
+            if (!Battle_SlotIsBlocked(i)) {
+                party_sum[0] += COORD_INT(g_Game.members[i].pos.z);
+                party_sum[1] += 1;
+            }
+        }
+    }
+    COORD_INT(g_Task->pos.z) = SP_REF(s32, 0) / SP_REF(s32, 4);
+}

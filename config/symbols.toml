@@ -1036,6 +1036,7 @@ g_BMagicEffectModes = { addr = 0x801F089C, source = "Handlers of magic093 (Infer
 D_801F08C4 = { addr = 0x801F08C4, source = "Step handlers of the magic093 effect, run by header.step (byte 0x02) from func_801EFE5C." }
 
 ["emi/bmagic/magic094/03"]
+D_1F800000_WORD = { addr = 0x1F800000, type = "s32", alias = true, source = "The scratchpad base 0x1F800000 as one word: func_801EF710 stages the ring radius there for its rsin and rcos scaling." }
 Battle_ApplyDamageFlags = { addr = 0x800A9610, type = "func", source = "Applies the damage flags to the selected battlers." }
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true, source = "Marks the selected battlers as damaged." }
 Battle_AllocEffect = { addr = 0x801E590C, type = "func", alias = true, source = "Claims a free battle effect slot." }

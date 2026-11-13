@@ -207,7 +207,67 @@ MATCH void func_801EF488(void) {
 
 INCLUDE_ASM(func_801EF6AC);
 
-INCLUDE_ASM(func_801EF7FC);
+MATCH void func_801EF7FC(void) {
+    PartyMember* work;
+    PartyMember* task;
+    PartyMember* actor;
+    u8           count;
+    u8           i;
+
+    count          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = count;
+    if (count != 0) {
+        return;
+    }
+    if (g_Battle.scroll_dir == 0 || g_Battle.scroll_dir == 3) {
+        g_Task->unk_2E.half = 0x3D;
+        g_Task->unk_30.half = 0x46;
+        g_Task->unk_0C      = -4;
+        g_Task->unk_10      = -4;
+        g_Task->unk_18      = -1;
+        g_Task->unk_1C      = -1;
+        g_Task->unk_2A      = 1;
+    } else {
+        g_Task->unk_2E.half = 0x103;
+        g_Task->unk_30.half = 0x46;
+        g_Task->unk_0C      = 4;
+        g_Task->unk_10      = -4;
+        g_Task->unk_18      = 1;
+        g_Task->unk_1C      = -1;
+        g_Task->unk_2A      = 0;
+    }
+    work = g_Task;
+    for (i = 0; i < 16; i++) {
+        work->unk_0C += work->unk_18;
+        work->unk_10 += work->unk_1C;
+        work->unk_2E.half += work->unk_0C;
+        work->unk_30.half += work->unk_10;
+    }
+    task           = g_Task;
+    task->unk_0C   = ~task->unk_0C + 1;
+    task->unk_25   = 5;
+    task->unk_10   = ~task->unk_10 + 1;
+    g_Task->unk_26 = 0;
+    g_Task->unk_27 = 2;
+    g_Task->unk_28 = 1;
+    g_Task->unk_24 = 0x80;
+    actor          = g_Task;
+    actor->unk_48  = 0;
+    actor->scale.x = 0x10000;
+    actor->scale.y = 0x10000;
+    g_Task->header.flags |= ACTOR_FLAG_SEMI_TRANSPARENT;
+    g_Task->unk_5C      = 0;
+    g_Task->unk_5D      = 0;
+    g_Task->unk_5E      = 0;
+    g_Task->unk_5F      = 0;
+    g_Task->unk_29      = 2;
+    g_Task->unk_2C.half = 0;
+    g_Task->unk_2B      = 0;
+    Actor_SelectScript(0);
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0x01));
+    g_Task->unk_09 = 0x10;
+    g_Task->header.step += 1;
+}
 
 MATCH void func_801EFA68(void) {
     u8 count;

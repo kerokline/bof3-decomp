@@ -101,7 +101,46 @@ INCLUDE_ASM(func_801EF4FC);
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"
 
-INCLUDE_ASM(func_801EFB3C);
+MATCH void func_801EFB3C(void) {
+    POLY_G3* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      tpage;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+    D_1F800000.view.effect.params[0] = g_Task->timer * 16 + 16;
+    D_1F800000.view.effect.params[5] = g_Task->timer * 8;
+    D_1F800000.view.effect.params[6] = g_Task->timer * 9;
+    D_1F800000.view.effect.params[7] = g_Task->timer * 7;
+    D_1F800014[2].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.effect.params[0]);
+    D_1F800014[2].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.effect.params[0]);
+    D_1F800014[2].vz                 = 0;
+    D_1F800014[1].vz                 = 0;
+    D_1F800014[0].vz                 = 0;
+    for (i = 1; i <= 8; i++) {
+        prim = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 1);
+        D_1F800014[0].vx = 0;
+        D_1F800014[0].vy = 0;
+        D_1F800014[1].vx = D_1F800014[2].vx;
+        D_1F800014[1].vy = D_1F800014[2].vy;
+        D_1F800014[2].vx = FIXED_MUL(rsin(i << 9), D_1F800000.view.effect.params[0]);
+        D_1F800014[2].vy = FIXED_MUL(rcos(i << 9), D_1F800000.view.effect.params[0]);
+        RotTransPers3(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, &depth, &flag);
+        setRGB0(prim, D_1F800000.view.effect.params[7], D_1F800000.view.effect.params[7], D_1F800000.view.effect.params[5]);
+        setRGB1(prim, D_1F800000.view.effect.params[6], D_1F800000.view.effect.params[7], D_1F800000.view.effect.params[6]);
+        setRGB2(prim, D_1F800000.view.effect.params[6], D_1F800000.view.effect.params[7], D_1F800000.view.effect.params[6]);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_G3));
+    }
+}
 
 /* The glow ring scratch: the inner and outer radius and the inner-edge red and green, then the quad corners
  * (D_1F800014). */

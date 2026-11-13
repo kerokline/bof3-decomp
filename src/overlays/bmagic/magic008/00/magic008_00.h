@@ -55,6 +55,8 @@ u8                        func_800AED5C(s32 arg0, u32 battler_index);
 u32                       func_800AFB48(PartyMember* record);
 void                      func_800AF8F0(PartyMember* record);
 void                      func_800AFAB8(PartyMember* record);
+/* The sprite upload queue: its count and the source, row and page of each entry. */
+extern u16                D_80145A54[];
 
 /* The columns of g_BattleEffects: the retail code forms one slot base per store. */
 extern BattleEffectByteColumn   D_801EC331[];

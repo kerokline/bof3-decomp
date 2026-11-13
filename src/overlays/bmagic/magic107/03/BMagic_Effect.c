@@ -98,7 +98,40 @@ MATCH void func_801EEFD4(void) {
     BMAGIC_PROJECT_ACTOR_MATRIX(g_Task);
 }
 
-INCLUDE_ASM(func_801EF0E4);
+MATCH void func_801EF0E4(void) {
+    LINE_G3* prim;
+    long     depth;
+    long     flag;
+    s32      tpage;
+    s32*     shade;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+    prim = (LINE_G3*)g_GfxPrimCursor;
+    SetLineG3(prim);
+    SetSemiTrans(prim, 1);
+    D_1F800000.view.effect.vectors[0].vy = 0;
+    D_1F800014[0].vx                     = 0;
+    D_1F800000.view.effect.vectors[0].vz = 0;
+    D_1F800000.view.effect.vectors[1].vy = 0;
+    D_1F800014[1].vx                     = 0;
+    D_1F800000.view.effect.vectors[1].vz = 0x170;
+    D_1F800000.view.effect.vectors[2].vy = 0;
+    D_1F800014[2].vx                     = 0;
+    D_1F800000.view.effect.vectors[2].vz = 0x180;
+    RotTransPers3(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, &depth, &flag);
+    shade  = &D_1F80000C;
+    *shade = g_Task->timer * 6;
+    setRGB0(prim, *shade, *shade, *shade);
+    setRGB1(prim, *shade, *shade, *shade);
+    setRGB2(prim, 1, 1, 1);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(LINE_G3));
+}
 
 INCLUDE_ASM(func_801EF290);
 

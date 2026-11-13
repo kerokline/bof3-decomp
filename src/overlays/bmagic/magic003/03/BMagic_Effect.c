@@ -403,7 +403,28 @@ MATCH void func_801F0078(void) {
 
 INCLUDE_ASM(func_801F0164);
 
-INCLUDE_ASM(func_801F03F0);
+MATCH void func_801F03F0(s32 dir) {
+    POLY_FT4* prim;
+    s32       tpage;
+    u16       x;
+    u16       y;
+    s32       u;
+
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0x25 : 0x15;
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(2, sizeof(DR_MODE));
+    prim = (POLY_FT4*)g_GfxPrimCursor;
+    x    = g_Task->unk_2E.half;
+    y    = g_Task->unk_30.half;
+    SetPolyFT4(prim);
+    setXY4(prim, x, y, x + 12, y, x, y + 12, x + 12, y + 12);
+    prim->tpage = GetTPage(0, 0, 0x3C0, 0);
+    prim->clut  = GetClut(D_801F0AD4[(u8)dir], 0x1E0);
+    u           = ((u8)dir + 15) * 12;
+    setUV4(prim, u, 0x30, u + 12, 0x30, u, 0x3C, u + 12, 0x3C);
+    setRGB0(prim, 0x80, 0x80, 0x80);
+    GFX_AddPrim(2, sizeof(POLY_FT4));
+}
 
 INCLUDE_ASM(func_801F0550);
 

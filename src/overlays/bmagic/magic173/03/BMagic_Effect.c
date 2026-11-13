@@ -114,7 +114,57 @@ MATCH void func_801EEEEC(void) {
     g_Task->header.step++;
 }
 
-INCLUDE_ASM(func_801EF148);
+MATCH void func_801EF148(void) {
+    VECTOR       pos;
+    PartyMember* target;
+    PartyMember* battler;
+    s32          diff;
+    u32          slot;
+    u8           count;
+
+    count = g_Task->timer;
+    if (count < 8) {
+        g_Task->timer = count + 1;
+    }
+    target = g_Battle.selected_actor;
+    pos.vx = (target->pos.x.fixed >> 9) - 0x4000;
+    pos.vy = (target->pos.y.fixed >> 9) - 0x4000;
+    pos.vz = (target->pos.z.fixed + 0x800000) >> 17;
+    func_800AF3A0(pos, 0xC0);
+    g_Task->unk_10 = g_Task->unk_0C;
+    g_Task->unk_0C = ratan2(target->pos.x.fixed - g_Task->pos.x.fixed, target->pos.y.fixed - g_Task->pos.y.fixed);
+    if (func_800AF66C((BattleRange*)target, 0x8000) != 0) {
+        g_Task->pos.x.fixed = target->pos.x.fixed;
+        g_Task->pos.y.fixed = target->pos.y.fixed;
+        g_Task->header.step++;
+    } else {
+        diff           = (g_Task->unk_10 & 0xFFF) - (g_Task->unk_0C & 0xFFF);
+        g_Task->unk_10 = diff;
+        if (diff < 0) {
+            g_Task->unk_10 = ~diff + 1;
+        }
+        if ((u32)(g_Task->unk_10 - 0x601) < 0x3FF) {
+            g_Task->pos.x.fixed = target->pos.x.fixed;
+            g_Task->pos.y.fixed = target->pos.y.fixed;
+            g_Task->header.step++;
+        }
+    }
+    Battle_ProjectRange();
+    Effect_RecordTrail();
+    if (g_Task->header.step != 1 && g_Task->unk_04 == 0) {
+        Battle_ApplyDamageFlags(g_Battle.target_selector, 0x10);
+    }
+    if (g_Task->header.step == 2) {
+        slot                               = Battle_AllocEffect(1, 24) & BYTE_MASK;
+        battler                            = g_BattleEffectBattler;
+        g_BattleEffects[slot].header.mode  = 1;
+        g_BattleEffects[slot].target.party = battler;
+        g_BattleEffects[slot].pos.x.fixed  = g_Task->pos.x.fixed;
+        g_BattleEffects[slot].pos.y.fixed  = g_Task->pos.y.fixed;
+        g_BattleEffects[slot].pos.z.fixed  = g_Task->pos.z.fixed;
+        g_BattleEffectBattler->param.unk_0B++;
+    }
+}
 
 MATCH void func_801EF3D8(void) {
     u8 timer;

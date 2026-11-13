@@ -1706,6 +1706,7 @@ Effect_TickOnTimerNegative = { addr = 0x801EF770, type = "func", source = "Count
 g_BMagicEffectModes = { addr = 0x801F0B74, source = "Handlers of magic172 (Magic Ball), run by header.mode (byte 0x01)." }
 
 ["emi/bmagic/magic173/03"]
+Battle_ApplyDamageFlags = { addr = 0x800A9610, alias = true }
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true, source = "Marks the selected battlers as damaged." }
 Battle_ProjectRange = { addr = 0x800AF764, type = "func", source = "Projects the battle range to the screen." }
 Battle_AllocEffect = { addr = 0x801E590C, alias = true, source = "Claims a free battle effect slot." }

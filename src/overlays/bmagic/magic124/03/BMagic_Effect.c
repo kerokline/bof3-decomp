@@ -80,7 +80,40 @@ MATCH void func_801EEFF0(void) {
 
 #include "overlays/bmagic/Effect_PlayOnZeroTick.h"
 
-INCLUDE_ASM(func_801EF0B0);
+MATCH void func_801EF0B0(void) {
+    POLY_G3* poly;
+    s32      radius;
+    u8       red;
+    u8       green;
+    u8       blue;
+    u8       i;
+
+    i    = 0;
+    blue = red = green = g_Task->timer * 15;
+    radius             = (rand() & 3) | 0x20;
+    do {
+        poly = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(poly);
+        SetSemiTrans(poly, 1);
+        poly->x0 = g_Task->unk_2E.half;
+        poly->y0 = g_Task->unk_30.half;
+        poly->x1 = g_Task->unk_2E.half + ((rsin(i << 9) * radius) >> 12);
+        poly->y1 = g_Task->unk_30.half + ((rcos(i << 9) * radius) >> 12);
+        poly->x2 = g_Task->unk_2E.half + ((rsin((i + 1) << 9) * radius) >> 12);
+        poly->y2 = g_Task->unk_30.half + ((rcos((i + 1) << 9) * radius) >> 12);
+        poly->r0 = red;
+        poly->g0 = green;
+        poly->b0 = blue;
+        poly->r1 = 1;
+        poly->g1 = 1;
+        poly->b1 = 1;
+        poly->r2 = 1;
+        poly->g2 = 1;
+        poly->b2 = 1;
+        GFX_AddPrim(3, sizeof(POLY_G3));
+        i++;
+    } while (i < 8);
+}
 
 MATCH void func_801EF268(void) {
 }

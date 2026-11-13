@@ -13,6 +13,6 @@ void            func_801EFA00(void);
 
 void func_801F03E0(void);
 
-void func_801F0A84(s32 arg0);
+void func_801F0A84(s32 radius);
 
 #endif

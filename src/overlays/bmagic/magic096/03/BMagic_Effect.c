@@ -150,4 +150,30 @@ MATCH void BMagic_DrawGlowRing(void) {
     }
 }
 
-INCLUDE_ASM(func_801F0164);
+MATCH void func_801F0164(void) {
+    u8 i;
+
+    MAGIC096_SUM_X = MAGIC096_SUM_Y = MAGIC096_SUM_Z = MAGIC096_SUM_COUNT = 0;
+    if (g_Battle.target_selector & 0x40) {
+        for (i = 0; i < 8; i++) {
+            if (Battle_SlotIsBlocked((u8)(i + 3)) == 0) {
+                MAGIC096_SUM_X += (g_BattleEnemyBattlers[i].pos.x.fixed >> 9) - 0x4000;
+                MAGIC096_SUM_Y += (g_BattleEnemyBattlers[i].pos.y.fixed >> 9) - 0x4000;
+                MAGIC096_SUM_Z += COORD_INT(g_BattleEnemyBattlers[i].pos.z);
+                MAGIC096_SUM_COUNT += 1;
+            }
+        }
+    } else {
+        for (i = 0; i < 3; i++) {
+            if (Battle_SlotIsBlocked(i) == 0) {
+                MAGIC096_SUM_X += (g_Game.members[i].pos.x.fixed >> 9) - 0x4000;
+                MAGIC096_SUM_Y += (g_Game.members[i].pos.y.fixed >> 9) - 0x4000;
+                MAGIC096_SUM_Z += COORD_INT(g_Game.members[i].pos.z);
+                MAGIC096_SUM_COUNT += 1;
+            }
+        }
+    }
+    g_Task->pos.x.fixed      = (MAGIC096_SUM_X / MAGIC096_SUM_COUNT + 0x4000) << 9;
+    g_Task->pos.y.fixed      = (MAGIC096_SUM_Y / MAGIC096_SUM_COUNT + 0x4000) << 9;
+    COORD_INT(g_Task->pos.z) = MAGIC096_SUM_Z / MAGIC096_SUM_COUNT;
+}

@@ -6,8 +6,15 @@
 #include "overlays/bmagic/bmagic.h"
 
 extern SVECTOR D_1F800014[];
-void           BMagic_DrawGlowRing(void);
-void           func_801F0164(void);
+
+/* The scratch words func_801F0164 sums the screen x, y and height of the living targets into, and their count; the
+ * effect view names only halfwords there, so the words go through the scratch math word view. */
+#define MAGIC096_SUM_X     D_1F800000.view.scenario.math_00
+#define MAGIC096_SUM_Y     D_1F800000.view.scenario.math_04
+#define MAGIC096_SUM_Z     D_1F800000.view.scenario.math_08
+#define MAGIC096_SUM_COUNT D_1F800000.view.scenario.math_0C
+void BMagic_DrawGlowRing(void);
+void func_801F0164(void);
 
 #define MAGIC096_STEP_COUNT 5
 

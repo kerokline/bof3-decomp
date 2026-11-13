@@ -16,7 +16,23 @@ INCLUDE_ASM(func_801EEC5C);
 /* func_801EEE68 */
 #include "overlays/bmagic/BMagic_DispatchEffectMode.h"
 
-INCLUDE_ASM(BMagic_UpdateDragonBreath);
+MATCH void BMagic_UpdateDragonBreath(void) {
+    SYS_DISPATCH_TASK((g_BMagicEffectModes + 1), 2, g_Task);
+    if (g_Task->header.flags != 0 && g_Task->header.step != 0) {
+        if ((g_FrameCount & 0x7) == 0) {
+            g_Task->unk_5D = RANDOM_MASK(1);
+            g_Task->unk_5E = RANDOM_MASK(3);
+            g_Task->unk_5F = RANDOM_MASK(3);
+        }
+        func_801F0198(g_Task->unk_5D + 3);
+        func_801F0198(g_Task->unk_5E + 7);
+        func_801F0198(11 - g_Task->unk_5F);
+        func_801F06E8(4 - g_Task->unk_5D);
+        func_801F06E8(g_Task->unk_5F + 8);
+        func_801F06E8(12 - g_Task->unk_5E);
+        BMagic_DrawDragonBreath();
+    }
+}
 
 INCLUDE_ASM(func_801EF03C);
 

@@ -6,5 +6,8 @@
 #include "overlays/bmagic/bmagic.h"
 
 void func_801EEE08(void);
+void func_801F0198(u8 arg0);
+void func_801F06E8(u8 arg0);
+void BMagic_DrawDragonBreath(void);
 
 #endif

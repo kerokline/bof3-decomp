@@ -111,7 +111,36 @@ MATCH void func_801EF8A8(void) {
 
 #include "overlays/bmagic/Effect_DrawRings.h"
 
-INCLUDE_ASM(func_801EFA60);
+MATCH void func_801EFA60(void) {
+    s16* angle;
+    s32  speed;
+    u8   count;
+    u8   phase;
+
+    count          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = count;
+    if (!(count & BYTE_MASK)) {
+        if (g_Task->param.unk_0B == 0) {
+            SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0x01));
+        }
+        g_Task->unk_0C      = 8;
+        angle               = &D_1F800000.view.effect.params[2];
+        phase               = g_Task->param.unk_0B & 0xF;
+        *angle              = phase << 8;
+        g_Task->pos.x.fixed = g_BattleEffectBattler->pos.x.fixed + rsin(phase << 8) * g_Task->unk_0C;
+        g_Task->pos.y.fixed = g_BattleEffectBattler->pos.y.fixed + rcos(*angle) * g_Task->unk_0C;
+        g_Task->pos.z.fixed = g_BattleEffectBattler->pos.z.fixed + 0x800000;
+        speed               = ((rand() & 3) << 20) + 0x200000;
+        g_Task->unk_14      = speed;
+        g_Task->unk_20      = speed / 16;
+        g_Task->unk_5D      = (RANDOM_MASK(7)) + 6;
+        g_Task->unk_5E      = (RANDOM_MASK(7)) + 6;
+        g_Task->unk_5F      = (RANDOM_MASK(7)) + 6;
+        g_Task->unk_09      = 0;
+        g_Task->timer       = 16;
+        g_Task->header.step += 1;
+    }
+}
 
 MATCH void func_801EFC30(void) {
     s32  phase;

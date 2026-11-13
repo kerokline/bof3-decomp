@@ -7,6 +7,7 @@
 
 extern Magic068SharedSteps D_801EEC04;
 extern u8                  D_801EC2E4;
+extern u16                 D_801EFCA4[][3];
 
 void func_801EF55C(void);
 

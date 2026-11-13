@@ -57,7 +57,48 @@ MATCH void func_801EF4EC(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF55C);
+MATCH void func_801EF55C(void) {
+    TILE* prim;
+    s32   tpage;
+    s32   i;
+
+    if (GetGraphType() == 1) {
+        tpage = 0x25;
+    } else if (GetGraphType() == 2) {
+        tpage = 0x25;
+    } else {
+        tpage = 0x15;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(0, sizeof(DR_MODE));
+    D_1F800000.view.scenario.math_00 = 0xE8;
+    D_1F800000.view.scenario.math_04 = g_Task->unk_09;
+    for (i = 0; i < 6; i++) {
+        if ((g_Task->param.unk_0B >> i) & 1) {
+            prim = (TILE*)g_GfxPrimCursor;
+            SetTile(prim);
+            prim->x0 = D_1F800000.view.scenario.math_00;
+            prim->y0 = D_1F800000.view.scenario.math_04;
+            D_1F800000.view.scenario.math_00 += 10;
+            prim->w  = 8;
+            prim->h  = 12;
+            prim->r0 = D_801EFCA4[i][0];
+            prim->g0 = D_801EFCA4[i][1];
+            prim->b0 = D_801EFCA4[i][2];
+            GFX_AddPrim(0, sizeof(TILE));
+        }
+    }
+    if (g_Task->param.unk_0B == 0) {
+        prim = (TILE*)g_GfxPrimCursor;
+        SetTile(prim);
+        prim->x0 = D_1F800000.view.scenario.math_00;
+        prim->y0 = D_1F800000.view.scenario.math_04;
+        prim->w  = 8;
+        prim->h  = 12;
+        setRGB0(prim, 0x60, 0x60, 0x60);
+        GFX_AddPrim(0, sizeof(TILE));
+    }
+}
 
 /* func_801EF73C */
 #include "overlays/bmagic/BMagic_DispatchEffectMode.h"

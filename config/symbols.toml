@@ -1517,6 +1517,7 @@ g_BMagicEffectModes = { addr = 0x801EF414, source = "Handlers of magic145 (Notin
 
 ["emi/bmagic/magic146/03"]
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true, source = "Marks the selected battlers as damaged." }
+Battle_ProjectRange = { addr = 0x800AF764, type = "func", source = "Projects the battle range to the screen." }
 g_BattleEffectBattler = { addr = 0x801EB4E0, source = "the battler the running effect acts on; Battle_UpdateEffects stores it for each effect step (emi/battle/battle/03 owns the cell)" }
 D_801EEC04 = { addr = 0x801EEC04, type = "Magic146Steps", source = "Step handlers of magic146, run by header.mode (byte 0x01) from func_801EEC10." }
 Effect_NextStepOnZeroTick = { addr = 0x801EEFD0, type = "func", source = "Advances header.mode (byte 0x01) when the effect ticker (byte 0x0B) is zero in magic146 (Noting)." }

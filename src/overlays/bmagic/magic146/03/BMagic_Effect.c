@@ -53,7 +53,27 @@ MATCH void func_801EF340(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF3B8);
+MATCH void func_801EF3B8(void) {
+    PartyMember* battler;
+    PartyMember* work;
+
+    if (--g_Task->unk_09 == 0) {
+        g_Task->facing = g_BattleEffectBattler->facing;
+        battler        = g_BattleEffectBattler;
+        work           = g_Task;
+        WorldPos_Copy(&work->pos, &battler->pos);
+        work->unk_0C = D_801EF9D0[work->param.unk_0B].x;
+        work->unk_10 = D_801EF9D0[work->param.unk_0B].y;
+        func_801DD350(work);
+        g_Task->pos.x.fixed += g_Task->unk_0C;
+        g_Task->pos.y.fixed += g_Task->unk_10;
+        g_Task->pos.z.fixed += D_801EF9D0[g_Task->param.unk_0B].z;
+        Battle_ProjectRange();
+        g_Task->unk_09 = 0;
+        g_Task->timer  = 0;
+        g_Task->header.step++;
+    }
+}
 
 #include "overlays/bmagic/Effect_CountUpTimersByTwoNextStep.h"
 

@@ -6,7 +6,69 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/BMagic_DispatchMode.h"
 
-INCLUDE_ASM(func_801EEC70);
+MATCH void func_801EEC70(void) {
+    u32          slot;
+    u32          i;
+    PartyMember* work;
+    PartyMember* battler;
+
+    g_Task->facing = g_BattleEffectBattler->facing;
+    WorldPos_Copy(&g_Task->pos, &g_BattleEffectBattler->pos);
+    slot                               = Battle_AllocEffect(1, 15) & BYTE_MASK;
+    work                               = g_Task;
+    g_BattleEffects[slot].header.mode  = 0;
+    g_BattleEffects[slot].arg.unk_09   = 4;
+    g_BattleEffects[slot].target.party = work;
+    slot                               = Battle_AllocEffect(1, 15) & BYTE_MASK;
+    battler                            = g_BattleEffectBattler;
+    g_BattleEffects[slot].header.mode  = 1;
+    g_BattleEffects[slot].unk_0B       = 0;
+    g_BattleEffects[slot].target.party = battler;
+    if (!(g_Task->facing & 2)) {
+        PartyMember* owner;
+
+        slot                               = Battle_AllocEffect(1, 15) & BYTE_MASK;
+        owner                              = g_BattleEffectBattler;
+        g_BattleEffects[slot].header.mode  = 1;
+        g_BattleEffects[slot].unk_0B       = 1;
+        g_BattleEffects[slot].target.party = owner;
+    }
+    {
+        u16* row;
+        u16* arena;
+
+        for (i = 1, row = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW) + 1, arena = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW) + 1; i < 16; i++) {
+            *row++ = *arena++ | 0x8000;
+        }
+    }
+    {
+        u16* arena;
+        u16* row;
+
+        for (i = 1, arena = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW) + 1, row = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW) + 1; i < 16; i++) {
+            row[16] = arena[16];
+            arena++;
+            row++;
+        }
+    }
+    {
+        u16* arena;
+        u16* row;
+
+        for (i = 1, arena = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW) + 1, row = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW) + 1; i < 16; i++) {
+            row[32] = arena[32] | 0x8000;
+            arena++;
+            row++;
+        }
+    }
+    MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW)[0]  = 0;
+    MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW)[16] = 0;
+    MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW)[32] = 0;
+    g_GfxPalettePending                                         = 1;
+    g_Task->param.unk_0B                                        = 0;
+    g_Task->unk_09                                              = 0;
+    g_Task->header.mode += 1;
+}
 
 MATCH void func_801EEEC8(void) {
     u32          slot;

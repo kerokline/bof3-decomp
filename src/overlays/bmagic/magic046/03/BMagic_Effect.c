@@ -137,17 +137,17 @@ MATCH void func_801EF3B8(void) {
         default:
             g_Task->unk_0C = 0x6000;
             g_Task->unk_10 = 0;
-            g_Task->unk_14 = 0x400000;
+            g_Task->unk_14 = TO_COORD(64);
             break;
         case 0x10:
             g_Task->unk_0C = 0x10000;
             g_Task->unk_10 = 0;
-            g_Task->unk_14 = 0x800000;
+            g_Task->unk_14 = TO_COORD(128);
             break;
         case 0x72:
             g_Task->unk_0C = 0x1C000;
             g_Task->unk_10 = 0;
-            g_Task->unk_14 = 0x1000000;
+            g_Task->unk_14 = TO_COORD(256);
             break;
     }
     func_801DD350(g_Task);

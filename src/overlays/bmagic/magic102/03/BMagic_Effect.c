@@ -70,13 +70,13 @@ MATCH void func_801EFEFC(ScenePart* parts, s32 shift_x, s32 shift_y) {
             gte_rtpt();
             if (parts[n + 4].raw & 0x4000) {
                 /* Per-arm: keeps the constant's load inside the loop. */
-                mask = 0x40000000;
+                mask = 1 << 30;
                 ot   = 4;
                 if (parts[n + 4].raw & mask) {
                     ot = 7;
                 }
             } else {
-                mask = 0x40000000;
+                mask = 1 << 30;
                 ot   = 6;
                 if (!(parts[n + 4].raw & mask)) {
                     ot = g_AreaDrawMode;

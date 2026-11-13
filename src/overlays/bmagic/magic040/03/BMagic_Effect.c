@@ -6,7 +6,43 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/BMagic_DispatchMode.h"
 
-INCLUDE_ASM(func_801EEC80);
+MATCH void func_801EEC80(void) {
+    PartyMember* battler;
+    PartyMember* work;
+    PartyMember* task;
+    PartyMember* owner;
+    u16*         dst;
+    u16*         src;
+    u8           slot;
+    u8           i;
+
+    g_Task->facing = g_BattleEffectBattler->facing;
+    battler        = g_BattleEffectBattler;
+    work           = g_Task;
+    WorldPos_Copy(&work->pos, &battler->pos);
+    work->param.unk_0B = 0;
+    g_Task->header.mode++;
+    slot                               = Battle_AllocEffect(1, 60);
+    task                               = g_Task;
+    g_BattleEffects[slot].header.mode  = 0;
+    g_BattleEffects[slot].target.party = task;
+    g_Task->param.unk_0B++;
+    slot                               = Battle_AllocEffect(1, 60);
+    owner                              = g_Task;
+    g_BattleEffects[slot].header.mode  = 1;
+    g_BattleEffects[slot].target.party = owner;
+    g_Task->param.unk_0B++;
+    i   = 0;
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    do {
+        dst[i]      = src[i];
+        dst[i + 16] = src[i + 16];
+        i++;
+    } while (i < 16);
+    g_GfxPalettePending = 1;
+    SND_QueueSelectionFx(0x100);
+}
 
 INCLUDE_ASM(func_801EEDFC);
 

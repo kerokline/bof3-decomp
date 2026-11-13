@@ -8,7 +8,28 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 INCLUDE_ASM(func_801EEC94);
 
-INCLUDE_ASM(func_801EEF3C);
+MATCH s32 func_801EEF3C(void) {
+    if (g_Task->param.unk_0B == 0) {
+        g_BattleEffectBattler->header.flags &= ~0x40;
+        func_800AFC54();
+        func_800AEF98(0x1C, 0);
+        Battle_MarkDamaged(g_Battle.target_selector);
+        if (g_Battle.active_battler < BATTLE_PARTY_CHARACTERS_COUNT) {
+            g_Game.members[g_Battle.active_battler].header.mode = 6;
+            g_Game.members[g_Battle.active_battler].header.step = 4;
+            g_Game.members[g_Battle.active_battler].chr.hp      = 0;
+            g_Game.members[g_Battle.active_battler].chr.status  = STATUS_KO;
+            GFX_FreePaletteFadeTarget(&g_Game.members[g_Battle.active_battler]);
+        } else {
+            ENEMY_COMBATANT(g_Battle.active_battler).header.mode = 6;
+            ENEMY_COMBATANT(g_Battle.active_battler).header.step = 4;
+            ENEMY_COMBATANT(g_Battle.active_battler).hp          = 0;
+            ENEMY_COMBATANT(g_Battle.active_battler).status      = STATUS_KO;
+            GFX_FreePaletteFadeTarget(g_BattleEnemies + g_Battle.active_battler * BATTLE_ENEMY_STRIDE);
+        }
+        g_Task->header.mode += 1;
+    }
+}
 
 #include "shared/Effect_StartPlaying.h"
 

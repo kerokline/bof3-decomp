@@ -1090,6 +1090,8 @@ Effect_DrawBolt = { addr = 0x801F0568, type = "func", source = "Draws the lightn
 g_BMagicEffectModes = { addr = 0x801F0AC0, source = "Handlers of magic097 (Jolt), run by header.mode (byte 0x01)." }
 
 ["emi/bmagic/magic098/03"]
+D_1F800000_HALF = { addr = 0x1F800000, type = "s16", alias = true, source = "The scratchpad base 0x1F800000 as signed halfwords; the magic effects read and set its first halfword as a vertical offset." }
+D_1F800014_HALF = { addr = 0x1F800014, type = "s16", alias = true, source = "The four projected SVECTORs at 0x1F800014 (D_1F800014) read as signed halfwords; RotTransPers4 writes the vertices." }
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true, source = "Marks the selected battlers as damaged." }
 Battle_AllocEffect = { addr = 0x801E590C, alias = true }
 g_BattleEffectBattler = { addr = 0x801EB4E0, source = "the battler the running effect acts on; Battle_UpdateEffects stores it for each effect step (emi/battle/battle/03 owns the cell)" }

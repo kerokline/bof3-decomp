@@ -57,7 +57,62 @@ INCLUDE_ASM(func_801EF1B4);
 
 INCLUDE_ASM(func_801EF5D4);
 
-INCLUDE_ASM(func_801EFE24);
+/* Draws the lightning bolt of the effect as LINE_G2 segments under one draw mode chosen by the graph type: the
+ * longer-radius halfword copy of Effect_DrawBolt.h that sorts every segment into the cell of the effect position. */
+MATCH void func_801EFE24(void) {
+    LINE_G2* primitive;
+    s16*     d;
+    s16*     cell;
+    s16*     vec;
+    long     p;
+    long     flag;
+    u8       page;
+    s32      tpage;
+    s32      i;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+    d          = D_1F800000_HALF;
+    vec        = D_1F800014_HALF;
+    d[0]       = 0x80;
+    D_1F800002 = ((g_Task->param.unk_0B + 2) & 0xF) << 8;
+    D_1F800008 = g_Task->timer;
+    i          = 1;
+    D_1F800004 = RANDOM_MASK(0x3F);
+    vec[0]     = 0;
+    D_1F800016 = FIXED_MUL(rsin(D_1F800002), d[0]);
+    D_1F800018 = 0;
+    if (i < D_1F800008) {
+        cell = d + 1;
+        do {
+            primitive = (LINE_G2*)g_GfxPrimCursor;
+            SetLineG2(primitive);
+            SetSemiTrans(primitive, 1);
+            RotTransPers(D_1F800014, (long*)&primitive->x0, &p, &flag);
+            if RANDOM_MASK (1) {
+                D_1F800000_HALF[0] = RANDOM_MASK(0x1F) + 0xA0;
+            } else {
+                D_1F800000_HALF[0] = 0xA0 - RANDOM_MASK(0x1F);
+            }
+            page    = (g_Task->param.unk_0B + i + 2) & 0xF;
+            vec[0]  = 0;
+            cell[0] = page << 8;
+            vec[1]  = FIXED_MUL(rsin(page << 8), cell[-1]);
+            vec[2]  = -(i << 6);
+            RotTransPers((SVECTOR*)vec, (long*)&primitive->x1, &p, &flag);
+            setRGB0(primitive, cell[1], cell[1], 32);
+            cell[1] = (rand() + 0x40) & 0x3F;
+            setRGB1(primitive, cell[1], cell[1], 32);
+            Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(LINE_G2));
+            i++;
+        } while (i < cell[3]);
+    }
+}
 
 #include "overlays/bmagic/BMagic_DrawFlickerRing.h"
 

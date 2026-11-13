@@ -25,7 +25,59 @@ MATCH void func_801EEC10(void) {
     }
 }
 
-INCLUDE_ASM(func_801EED18);
+MATCH void func_801EED18(void) {
+    PartyMember* owner;
+    u16*         dst;
+    u16*         src;
+    u8           slot;
+    u8           index;
+    u8           i;
+
+    for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+        BMAGIC_EFFECT_SLOTS[i].header.flags = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.step  = 0;
+    }
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 8;
+    g_Task->header.mode++;
+    if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+        for (i = 0; i < 8; i++) {
+            index = i + 3;
+            if (!(Battle_SlotIsBlocked(index) & BYTE_MASK)) {
+                slot                               = Battle_AllocEffect(1, 109) & BYTE_MASK;
+                owner                              = g_Task;
+                g_BattleEffects[slot].header.mode  = 0;
+                g_BattleEffects[slot].unk_04       = index;
+                g_BattleEffects[slot].target.party = owner;
+                g_BattleEffects[slot].unk_0B       = g_Task->param.unk_0B;
+                g_BattleEffects[slot].arg.unk_09   = (g_Task->param.unk_0B << 4) + 1;
+                g_Task->param.unk_0B++;
+            }
+        }
+    } else {
+        for (i = 0; i < 3; i++) {
+            if (!(Battle_SlotIsBlocked(i) & BYTE_MASK)) {
+                slot                               = Battle_AllocEffect(1, 109) & BYTE_MASK;
+                owner                              = g_Task;
+                g_BattleEffects[slot].header.mode  = 0;
+                g_BattleEffects[slot].unk_04       = i;
+                g_BattleEffects[slot].target.party = owner;
+                g_BattleEffects[slot].unk_0B       = g_Task->param.unk_0B;
+                g_BattleEffects[slot].arg.unk_09   = (g_Task->param.unk_0B << 4) + 1;
+                g_Task->param.unk_0B++;
+            }
+        }
+    }
+    i   = 1;
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    for (; i < 16; i++) {
+        dst[i + 32] = src[i + 32] | 0x8000;
+    }
+    MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW)[32] = 0;
+    g_GfxPalettePending                                         = 1;
+}
 
 #include "overlays/bmagic/Effect_NextStepOnZeroTick.h"
 

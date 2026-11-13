@@ -120,7 +120,67 @@ MATCH void func_801EF1B0(void) {
     EFFECT_OFFSET_BY_TARGET_POSE(D_801EFC24, D_801EFBCC, D_801EFB74);
 }
 
-INCLUDE_ASM(func_801EF380);
+/* Draws rays out from the effect point at two angles, start and start + 16: a bright one of the full radius and a dimmer pair two thirds as long, one pixel above and below it. */
+MATCH void func_801EF380(u8 start, u16 radius) {
+    LINE_G2* line;
+    s32      tpage;
+    u8       i;
+
+    D_1F800000.view.effect.params[0] = g_Task->unk_2E.half;
+    D_1F800000.view.effect.params[1] = g_Task->unk_30.half;
+    tpage                            = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
+    GFX_AddDitheredDrawMode(3, tpage);
+    for (i = start; i < start + 32; i += 16) {
+        line = (LINE_G2*)g_GfxPrimCursor;
+        SetLineG2(line);
+        SetSemiTrans(line, 1);
+        D_1F800000.view.effect.params[4] = (i & 0x1F) << 7;
+        line->x0                         = D_1F800000.view.effect.params[0];
+        line->y0                         = D_1F800000.view.effect.params[1];
+        line->x1                         = D_1F800000.view.effect.params[0] + ((rcos(D_1F800000.view.effect.params[4]) * radius) >> 12);
+        line->y1                         = D_1F800000.view.effect.params[1] + ((rsin(D_1F800000.view.effect.params[4]) * radius) >> 12);
+        line->r0                         = 0xC0;
+        line->g0                         = 0xC0;
+        line->b0                         = 0xC0;
+        line->r1                         = 1;
+        line->g1                         = 1;
+        line->b1                         = 1;
+        GFX_AddPrim(3, sizeof(LINE_G2));
+        D_1F800000.view.effect.params[2] = radius / 3 * 2;
+        line                             = (LINE_G2*)g_GfxPrimCursor;
+        SetLineG2(line);
+        SetSemiTrans(line, 1);
+        D_1F800000.view.effect.params[4] = (i & 0x1F) << 7;
+        line->x0                         = D_1F800000.view.effect.params[0];
+        line->y0                         = D_1F800000.view.effect.params[1] - 1;
+        line->x1                         = D_1F800000.view.effect.params[0] + ((rcos(D_1F800000.view.effect.params[4]) * D_1F800000.view.effect.params[2]) >> 12);
+        line->y1                         = D_1F800000.view.effect.params[1] + ((rsin(D_1F800000.view.effect.params[4]) * D_1F800000.view.effect.params[2]) >> 12) - 1;
+        line->r0                         = 0x80;
+        line->g0                         = 0x80;
+        line->b0                         = 0x80;
+        line->r1                         = 1;
+        line->g1                         = 1;
+        line->b1                         = 1;
+        GFX_AddPrim(3, sizeof(LINE_G2));
+        line = (LINE_G2*)g_GfxPrimCursor;
+        SetLineG2(line);
+        SetSemiTrans(line, 1);
+        D_1F800000.view.effect.params[4] = (i & 0x1F) << 7;
+        line->x0                         = D_1F800000.view.effect.params[0];
+        line->y0                         = D_1F800000.view.effect.params[1] + 1;
+        line->x1                         = D_1F800000.view.effect.params[0] + ((rcos(D_1F800000.view.effect.params[4]) * D_1F800000.view.effect.params[2]) >> 12);
+        line->y1                         = D_1F800000.view.effect.params[1] + ((rsin(D_1F800000.view.effect.params[4]) * D_1F800000.view.effect.params[2]) >> 12) + 1;
+        line->r0                         = 0x80;
+        line->g0                         = 0x80;
+        line->b0                         = 0x80;
+        line->r1                         = 1;
+        line->g1                         = 1;
+        line->b1                         = 1;
+        GFX_AddPrim(3, sizeof(LINE_G2));
+    }
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0x25 : 0x15;
+    GFX_AddDitheredDrawMode(3, tpage);
+}
 
 MATCH void func_801EF71C(u8 start, u16 radius) {
     LINE_G2* line;

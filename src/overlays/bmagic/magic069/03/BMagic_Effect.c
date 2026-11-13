@@ -174,7 +174,34 @@ MATCH void func_801EF520(void) {
     SYS_DISPATCH_TASK(g_BMagicEffectModes + 10, 2, g_Task);
 }
 
-INCLUDE_ASM(func_801EF564);
+MATCH void func_801EF564(void) {
+    PartyMember* battler;
+    u8           slot;
+    u16          y;
+
+    if (g_Task->param.unk_0B < BATTLE_PARTY_CHARACTERS_COUNT) {
+        battler = &g_Game.members[g_Task->param.unk_0B];
+    } else {
+        battler = (PartyMember*)(g_BattleEnemies + g_Task->param.unk_0B * BATTLE_ENEMY_STRIDE);
+    }
+    GFX_FreePaletteFadeTarget(battler);
+    g_Task->timer       = GFX_AllocPaletteFade(battler, 0, 0, 0, 1);
+    g_Task->unk_2E.half = battler->unk_2E.half - 32;
+    y                   = battler->unk_30.half - 12;
+    g_Task->unk_30.half = y;
+    slot                = g_Task->param.unk_0B;
+    if (slot < BATTLE_PARTY_CHARACTERS_COUNT) {
+        if (g_Game.members[slot].facing < 2) {
+            g_Task->unk_30.half = y - s_BattlePanelYOffsets[g_Game.members[slot].chr.character_id * 2];
+        } else {
+            g_Task->unk_30.half = y - D_801EB109[g_Game.members[slot].chr.character_id * 2];
+        }
+    } else {
+        g_Task->unk_30.half = y - ENCOUNTER_ENEMIES[g_BattleEnemyBattlers[slot - BATTLE_PARTY_CHARACTERS_COUNT].kind].height;
+    }
+    g_Task->unk_09 = 0;
+    g_Task->header.step += 1;
+}
 
 INCLUDE_ASM(func_801EF724);
 

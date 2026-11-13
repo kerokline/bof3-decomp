@@ -6,7 +6,73 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/Effect_RunSlotsWithSetup.h"
 
-INCLUDE_ASM(func_801EED04);
+/* Clears the effect slot table, then spawns one effect on each selectable battler of the targeted side at its position, and copies the first 32 colours of palette row 26 back from the arena. */
+MATCH void func_801EED04(void) {
+    PartyMember* owner;
+    u16*         dst;
+    u16*         src;
+    u8           slot;
+    u8           count;
+    u8           index;
+    u8           i;
+
+    count = 0;
+    for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+        BMAGIC_EFFECT_SLOTS[i].header.flags = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.step  = 0;
+    }
+    g_Task->unk_04       = func_801EF0CC();
+    g_Task->param.unk_0B = 0;
+    g_Task->header.mode++;
+    if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+        for (i = 0; i < 8; i++) {
+            index = i + 3;
+            if (!(Battle_SlotIsBlocked(index) & BYTE_MASK)) {
+                slot                               = Battle_AllocEffect(1, 34) & BYTE_MASK;
+                owner                              = g_Task;
+                g_BattleEffects[slot].header.mode  = 0;
+                g_BattleEffects[slot].unk_03       = i;
+                g_BattleEffects[slot].target.party = owner;
+                g_BattleEffects[slot].unk_04       = g_Task->unk_04;
+                g_BattleEffects[slot].unk_0B       = count;
+                g_BattleEffects[slot].arg.unk_09   = (count * 16) + 1;
+                g_BattleEffects[slot].pos.x.fixed  = g_BattleEnemyBattlers[i].pos.x.fixed;
+                g_BattleEffects[slot].pos.y.fixed  = g_BattleEnemyBattlers[i].pos.y.fixed;
+                g_BattleEffects[slot].pos.z.fixed  = g_BattleEnemyBattlers[i].pos.z.fixed;
+                g_Task->param.unk_0B++;
+                count++;
+            }
+        }
+    } else {
+        for (i = 0; i < 3; i++) {
+            if (!(Battle_SlotIsBlocked(i) & BYTE_MASK)) {
+                slot                               = Battle_AllocEffect(1, 34) & BYTE_MASK;
+                owner                              = g_Task;
+                g_BattleEffects[slot].header.mode  = 0;
+                g_BattleEffects[slot].unk_03       = i;
+                g_BattleEffects[slot].target.party = owner;
+                g_BattleEffects[slot].unk_04       = g_Task->unk_04;
+                g_BattleEffects[slot].unk_0B       = count;
+                g_BattleEffects[slot].arg.unk_09   = (count * 16) + 1;
+                g_BattleEffects[slot].pos.x.fixed  = g_Game.members[i].pos.x.fixed;
+                g_BattleEffects[slot].pos.y.fixed  = g_Game.members[i].pos.y.fixed;
+                g_BattleEffects[slot].pos.z.fixed  = g_Game.members[i].pos.z.fixed;
+                g_Task->param.unk_0B++;
+                count++;
+            }
+        }
+    }
+    i   = 0;
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    for (; i < 16; i++) {
+        dst[i]      = src[i];
+        dst[i + 16] = src[i + 16];
+    }
+    g_GfxPalettePending = 1;
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0));
+}
 
 #include "overlays/bmagic/Effect_StartOnZeroTick.h"
 

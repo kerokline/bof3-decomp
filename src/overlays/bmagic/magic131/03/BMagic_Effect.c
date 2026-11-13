@@ -532,7 +532,37 @@ MATCH void func_801F1748(void) {
     MAGIC131_ORBIT_CLOSE(D_801F1C54, 6);
 }
 
-INCLUDE_ASM(func_801F1844);
+MATCH void func_801F1844(void) {
+    POLY_G3* prim;
+    s32      shade;
+    u8       i;
+
+    D_1F800000.view.effect.params[0] = D_801F24E0->unk_06 + (rand() & 3);
+    if (D_801F24E0->header.mode != 0) {
+        shade = ((rand() & 3) + 4) * D_801F24E0->timer_05;
+    } else {
+        shade = D_801F24E0->timer_05 * 14;
+    }
+    D_1F800000.view.effect.params[6] = D_801F24E0->unk_20;
+    D_1F800000.view.effect.params[7] = D_801F24E0->unk_22;
+    for (i = 0; i < 8; i++) {
+        prim = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 1);
+        prim->x0                         = D_1F800000.view.effect.params[6];
+        prim->y0                         = D_1F800000.view.effect.params[7];
+        D_1F800000.view.effect.params[3] = (i << 9) & 0xFFF;
+        prim->x1                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin(D_1F800000.view.effect.params[3]), D_1F800000.view.effect.params[0]);
+        prim->y1                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos(D_1F800000.view.effect.params[3]), D_1F800000.view.effect.params[0]);
+        D_1F800000.view.effect.params[3] = ((i + 1) << 9) & 0xFFF;
+        prim->x2                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin(D_1F800000.view.effect.params[3]), D_1F800000.view.effect.params[0]);
+        prim->y2                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos(D_1F800000.view.effect.params[3]), D_1F800000.view.effect.params[0]);
+        setRGB0(prim, shade, shade, shade);
+        setRGB1(prim, 1, 1, 1);
+        setRGB2(prim, 1, 1, 1);
+        GFX_AddPrim(2, sizeof(POLY_G3));
+    }
+}
 
 MATCH u8 func_801F1A58(void) {
     u8 i;

@@ -59,6 +59,48 @@ void                      func_800AFAB8(PartyMember* record);
 extern u16                D_80145A54[];
 s32                       func_801DB524(u8);
 
+/* Unless the target check fails, a target still standing makes the caster play its hit script (a party
+ * caster also drops its last queued sprite upload) and the effect advances; a failed check marks the
+ * battler and jumps to ABORT_STEP. A statement macro: the member declares u8 count. */
+/* func_801F1474, func_801F18F4 */
+#define MAGIC008_HIT_OR_ABORT(ABORT_STEP)                                                                           \
+    if (!(func_801DB524(g_Battle.target_selector) & BYTE_MASK)) {                                                   \
+        if (g_Battle.target_selector < BATTLE_PARTY_CHARACTERS_COUNT) {                                             \
+            if (g_Game.members[g_Battle.target_selector].header.mode != 6) {                                        \
+                if (g_Battle.active_battler < BATTLE_PARTY_CHARACTERS_COUNT) {                                      \
+                    Actor_SelectScript(g_Task->facing + 12);                                                        \
+                    count                = --D_80145A00;                                                            \
+                    (&D_80145A04)[count] = 0;                                                                       \
+                    D_80145A54[count]    = 0;                                                                       \
+                    (&D_80145A7C)[count] = 0;                                                                       \
+                } else {                                                                                            \
+                    g_Task->unk_4B = 0xFF;                                                                          \
+                    func_801E257C(g_Battle.active_battler, 2);                                                      \
+                }                                                                                                   \
+                g_Task->unk_09 = func_800AFF98();                                                                   \
+                g_Task->header.step++;                                                                              \
+            }                                                                                                       \
+        } else {                                                                                                    \
+            if (g_BattleEnemyBattlers[g_Battle.target_selector - BATTLE_PARTY_CHARACTERS_COUNT].header.mode != 6) { \
+                if (g_Battle.active_battler < BATTLE_PARTY_CHARACTERS_COUNT) {                                      \
+                    Actor_SelectScript(g_Task->facing + 12);                                                        \
+                    count                = --D_80145A00;                                                            \
+                    (&D_80145A04)[count] = 0;                                                                       \
+                    D_80145A54[count]    = 0;                                                                       \
+                    (&D_80145A7C)[count] = 0;                                                                       \
+                } else {                                                                                            \
+                    g_Task->unk_4B = 0xFF;                                                                          \
+                    func_801E257C(g_Battle.active_battler, 2);                                                      \
+                }                                                                                                   \
+                g_Task->unk_09 = func_800AFF98();                                                                   \
+                g_Task->header.step++;                                                                              \
+            }                                                                                                       \
+        }                                                                                                           \
+    } else {                                                                                                        \
+        g_BattleEffectBattler->param.unk_0B = 0xFF;                                                                 \
+        g_Task->header.step                 = (ABORT_STEP);                                                         \
+    }
+
 /* The columns of g_BattleEffects: the retail code forms one slot base per store. */
 extern BattleEffectByteColumn   D_801EC331[];
 extern BattleEffectByteColumn   D_801EC332[];

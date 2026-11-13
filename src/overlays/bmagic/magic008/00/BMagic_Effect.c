@@ -599,42 +599,7 @@ MATCH void func_801F1474(void) {
     FAKE_STACK_PADS(u8, 16);
     u8 count;
 
-    if (!(func_801DB524(g_Battle.target_selector) & BYTE_MASK)) {
-        if (g_Battle.target_selector < BATTLE_PARTY_CHARACTERS_COUNT) {
-            if (g_Game.members[g_Battle.target_selector].header.mode != 6) {
-                if (g_Battle.active_battler < BATTLE_PARTY_CHARACTERS_COUNT) {
-                    Actor_SelectScript(g_Task->facing + 12);
-                    count                = --D_80145A00;
-                    (&D_80145A04)[count] = 0;
-                    D_80145A54[count]    = 0;
-                    (&D_80145A7C)[count] = 0;
-                } else {
-                    g_Task->unk_4B = 0xFF;
-                    func_801E257C(g_Battle.active_battler, 2);
-                }
-                g_Task->unk_09 = func_800AFF98();
-                g_Task->header.step++;
-            }
-        } else {
-            if (g_BattleEnemyBattlers[g_Battle.target_selector - BATTLE_PARTY_CHARACTERS_COUNT].header.mode != 6) {
-                if (g_Battle.active_battler < BATTLE_PARTY_CHARACTERS_COUNT) {
-                    Actor_SelectScript(g_Task->facing + 12);
-                    count                = --D_80145A00;
-                    (&D_80145A04)[count] = 0;
-                    D_80145A54[count]    = 0;
-                    (&D_80145A7C)[count] = 0;
-                } else {
-                    g_Task->unk_4B = 0xFF;
-                    func_801E257C(g_Battle.active_battler, 2);
-                }
-                g_Task->unk_09 = func_800AFF98();
-                g_Task->header.step++;
-            }
-        }
-    } else {
-        g_BattleEffectBattler->param.unk_0B = 0xFF;
-        g_Task->header.step                 = 6;
-    }
+    MAGIC008_HIT_OR_ABORT(6);
 }
 
 MATCH void func_801F16E8(void) {
@@ -677,7 +642,17 @@ MATCH void func_801F1880(void) {
     }
 }
 
-INCLUDE_ASM(func_801F18F4);
+MATCH void func_801F18F4(void) {
+    /* FAKE: retail reserves 16 bytes of frame that no statement uses; pure C differs only in that frame. */
+    FAKE_STACK_PADS(u8, 16);
+    u8 count;
+
+    MAGIC008_HIT_OR_ABORT(9);
+    if (g_Task->header.step != 9 && g_Battle.action_id == 11 && (rand() & 7) == 0) {
+        g_BattleEffectBattler->param.unk_0B = 0xFF;
+        g_Task->header.step                 = 9;
+    }
+}
 
 MATCH void func_801F1BCC(void) {
     func_801E5988();

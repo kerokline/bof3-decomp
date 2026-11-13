@@ -6,7 +6,47 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/func_801EEC20.h"
 
-INCLUDE_ASM(func_801EECA4);
+MATCH void func_801EECA4(void) {
+    PartyMember* actor;
+    u8           slot;
+    u8           i;
+    u16*         src;
+    u16*         dst;
+
+    actor                = g_Battle.selected_actor;
+    g_Task->pos.x.fixed  = actor->pos.x.fixed;
+    g_Task->pos.y.fixed  = actor->pos.y.fixed;
+    g_Task->pos.z.fixed  = actor->pos.z.fixed;
+    g_Task->unk_04       = func_801EF34C();
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 16;
+    g_Task->header.mode += 1;
+    slot                               = Battle_AllocEffect(1, 32);
+    g_BattleEffects[slot].target.party = g_Task;
+    g_BattleEffects[slot].header.mode  = 0;
+    g_BattleEffects[slot].arg.unk_09   = 0;
+    g_BattleEffects[slot].unk_0A       = 0;
+    g_BattleEffects[slot].pos.x.fixed  = g_Task->pos.x.fixed;
+    g_BattleEffects[slot].pos.y.fixed  = g_Task->pos.y.fixed;
+    g_BattleEffects[slot].pos.z.fixed  = g_Task->pos.z.fixed;
+    g_Task->param.unk_0B += 1;
+    slot                               = Battle_AllocEffect(1, 32);
+    g_BattleEffects[slot].target.party = g_Task;
+    g_BattleEffects[slot].header.mode  = 1;
+    g_BattleEffects[slot].unk_04       = g_Task->unk_04;
+    g_BattleEffects[slot].arg.unk_09   = g_Task->unk_09;
+    g_BattleEffects[slot].unk_0A       = 16;
+    g_BattleEffects[slot].pos.x.fixed  = g_Task->pos.x.fixed;
+    g_BattleEffects[slot].pos.y.fixed  = g_Task->pos.y.fixed;
+    g_BattleEffects[slot].pos.z.fixed  = g_Task->pos.z.fixed;
+    g_Task->param.unk_0B += 1;
+    for (i = 0, dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW), src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW); i < 16; i++) {
+        dst[i]      = src[i];
+        dst[i + 16] = src[i + 16];
+    }
+    g_GfxPalettePending = 1;
+    SND_QueueSelectionFx(0x100);
+}
 
 MATCH void func_801EEEF4(void) {
     PartyMember* battler;

@@ -4,6 +4,8 @@
 /* The bmagic/magic088/03 overlay. Only this image includes the file. */
 
 #include "overlays/bmagic/bmagic.h"
+
+s32 func_801EF34C(void);
 #include "overlays/battle/battle/15/battle_15.h"
 
 extern Callback D_801EEC04[];

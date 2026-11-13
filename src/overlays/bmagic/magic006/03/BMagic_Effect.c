@@ -125,7 +125,33 @@ MATCH void func_801EF118(void) {
     g_Task->header.step += 1;
 }
 
-INCLUDE_ASM(func_801EF298);
+MATCH void func_801EF298(void) {
+    u8 slot;
+    u8 i;
+
+    if (g_Task->param.unk_0B == 0) {
+        i = 0;
+        do {
+            slot                               = Battle_AllocEffect(1, 0x53);
+            g_BattleEffects[slot].target.party = g_BattleEffectBattler;
+            g_BattleEffects[slot].header.mode  = 1;
+            g_BattleEffects[slot].unk_0B       = i;
+            i++;
+            g_BattleEffects[slot].arg.unk_09 = (rand() & 0xF) + 1;
+            g_BattleEffectBattler->param.unk_0B += 1;
+        } while (i < 8);
+        slot                               = Battle_AllocEffect(1, 0x53);
+        g_BattleEffects[slot].target.party = g_BattleEffectBattler;
+        g_BattleEffects[slot].header.mode  = 2;
+        g_BattleEffectBattler->param.unk_0B += 1;
+        SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0x02));
+        g_Task->unk_09 = 0x10;
+        g_Task->header.step += 1;
+    } else {
+        g_BattleEffectBattler->param.unk_0B -= 1;
+        func_801E5988();
+    }
+}
 
 #include "overlays/bmagic/Effect_TickOnTimerZero.h"
 

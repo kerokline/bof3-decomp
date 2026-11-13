@@ -133,7 +133,43 @@ MATCH void func_801F0178(void) {
     }
 }
 
-INCLUDE_ASM(func_801F023C);
+MATCH void func_801F023C(void) {
+    PartyMember* saved;
+    PartyMember* task;
+    u8           slot;
+    u8           count;
+
+    count          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = count;
+    if (count == 0) {
+        slot                               = Battle_AllocEffect(1, 0x55);
+        g_BattleEffects[slot].target.party = g_BattleEffectBattler;
+        g_BattleEffects[slot].header.mode  = 0;
+        g_BattleEffectBattler->param.unk_0B += 1;
+        slot                               = Battle_AllocEffect(1, 0x55);
+        g_BattleEffects[slot].target.party = g_BattleEffectBattler;
+        g_BattleEffects[slot].header.mode  = 2;
+        g_BattleEffectBattler->param.unk_0B += 1;
+        SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0));
+        if (g_Battle.active_battler < BATTLE_PARTY_CHARACTERS_COUNT) {
+            saved       = g_GameState;
+            g_GameState = &g_Game.members[g_Battle.active_battler];
+            func_801DD858(0);
+            g_GameState = saved;
+        }
+        if (g_Battle.active_battler < BATTLE_PARTY_CHARACTERS_COUNT) {
+            task = g_Task;
+            TASK_SET(&g_Game.members[g_Battle.active_battler]);
+            Actor_SelectScript(g_Task->facing + 16);
+            TASK_SET(task);
+            Actor_SelectScript(task->facing + 16);
+        } else {
+            func_801E257C(g_Battle.active_battler, 4);
+        }
+        g_Task->unk_09 = 30;
+        g_Task->header.step += 1;
+    }
+}
 
 MATCH void func_801F042C(void) {
     u8 count;

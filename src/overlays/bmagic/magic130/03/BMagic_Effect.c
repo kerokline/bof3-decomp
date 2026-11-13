@@ -155,4 +155,36 @@ MATCH void func_801EF4D4(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF730);
+MATCH void func_801EF730(void) {
+    POLY_G4* prim;
+    s32      i;
+
+    D_1F800000.view.effect.params[0] = g_Task->unk_14;
+    D_1F800000.view.effect.params[1] = g_Task->unk_14 * 2 + (rand() & 7);
+    D_1F800014[0].vx                 = g_Task->unk_2E.half + FIXED_MUL(rsin(0), D_1F800000.view.effect.params[1]);
+    D_1F800014[0].vy                 = g_Task->unk_30.half + FIXED_MUL(rcos(0), D_1F800000.view.effect.params[1]);
+    D_1F800014[1].vx                 = g_Task->unk_2E.half + FIXED_MUL(rsin(0), D_1F800000.view.effect.params[0]);
+    D_1F800014[1].vy                 = g_Task->unk_30.half + FIXED_MUL(rcos(0), D_1F800000.view.effect.params[0]);
+    for (i = 1; i < 9; i++) {
+        prim = (POLY_G4*)g_GfxPrimCursor;
+        SetPolyG4(prim);
+        SetSemiTrans(prim, 1);
+        prim->x0 = D_1F800014[0].vx;
+        prim->y0 = D_1F800014[0].vy;
+        prim->x2 = D_1F800014[1].vx;
+        prim->y2 = D_1F800014[1].vy;
+        prim->x1 = D_1F800014[0].vx = g_Task->unk_2E.half + FIXED_MUL(rsin(i << 9), D_1F800000.view.effect.params[1]);
+        prim->y1 = D_1F800014[0].vy = g_Task->unk_30.half + FIXED_MUL(rcos(i << 9), D_1F800000.view.effect.params[1]);
+        prim->x3 = D_1F800014[1].vx = g_Task->unk_2E.half + FIXED_MUL(rsin(i << 9), D_1F800000.view.effect.params[0]);
+        prim->y3 = D_1F800014[1].vy = g_Task->unk_30.half + FIXED_MUL(rcos(i << 9), D_1F800000.view.effect.params[0]);
+        setRGB0(prim, 1, 1, 1);
+        setRGB1(prim, 1, 1, 1);
+        prim->r2 = D_1F800000.view.effect.params[3];
+        prim->g2 = D_1F800000.view.effect.params[4];
+        prim->b2 = D_1F800000.view.effect.params[5];
+        prim->r3 = D_1F800000.view.effect.params[3];
+        prim->g3 = D_1F800000.view.effect.params[4];
+        prim->b3 = D_1F800000.view.effect.params[5];
+        GFX_AddPrim(2, sizeof(POLY_G4));
+    }
+}

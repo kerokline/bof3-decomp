@@ -96,7 +96,47 @@ MATCH void func_801EF31C(void) {
 
 #include "overlays/bmagic/Effect_TickOnTimerZero.h"
 
-INCLUDE_ASM(func_801EF4B0);
+MATCH void func_801EF4B0(void) {
+    POLY_G3* poly;
+    s32      tpage;
+    s32      i;
+    long     flag;
+    long     depth;
+    s32*     shade;
+
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
+    GFX_AddDitheredDrawMode(5, tpage);
+    D_1F800014[2].vx = (rsin(0) * 3U) >> 6;
+    D_1F800014[2].vy = (rcos(0) * 3U) >> 6;
+    for (i = 1; i < 17; i++) {
+        D_1F800014[0].vx = 0;
+        D_1F800014[0].vy = 0;
+        D_1F800014[1].vx = D_1F800014[2].vx;
+        D_1F800014[1].vy = D_1F800014[2].vy;
+        D_1F800014[2].vx = (rsin(i << 8) * 3U) >> 6;
+        D_1F800014[2].vy = (rcos(i << 8) * 3U) >> 6;
+        D_1F800014[2].vz = 0;
+        D_1F800014[1].vz = 0;
+        D_1F800014[0].vz = 0;
+        poly             = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(poly);
+        SetSemiTrans(poly, 1);
+        RotTransPers3(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], (long*)&poly->x0, (long*)&poly->x1, (long*)&poly->x2, &depth, &flag);
+        shade    = &D_1F800004;
+        poly->r0 = *shade;
+        poly->g0 = *shade;
+        poly->b0 = *shade;
+        poly->r1 = *shade;
+        poly->g1 = *shade / 2;
+        poly->b1 = 1;
+        poly->r2 = *shade;
+        poly->g2 = *shade / 2;
+        poly->b2 = 1;
+        GFX_AddPrim(5, sizeof(POLY_G3));
+    }
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0x25 : 0x15;
+    GFX_AddDitheredDrawMode(5, tpage);
+}
 
 INCLUDE_ASM(func_801EF708);
 

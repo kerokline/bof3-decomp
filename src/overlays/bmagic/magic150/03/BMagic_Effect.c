@@ -64,7 +64,46 @@ INCLUDE_ASM(func_801EEF80);
 
 #include "shared/Effect_StartPlaying.h"
 
-INCLUDE_ASM(func_801EF040);
+MATCH void func_801EF040(void) {
+    POLY_F4* prim;
+    DVECTOR  screen;
+    s32      pos[3];
+    u16      angle;
+    u8       i;
+
+    angle = 0;
+    for (i = 0; i < 16; i++) {
+        prim = (POLY_F4*)g_GfxPrimCursor;
+        SetPolyF4(prim);
+        SetSemiTrans(prim, 1);
+        pos[0] = D_801EFA9C.origin[0];
+        pos[1] = D_801EFA9C.origin[1] + ((D_801EFA9C.radius * rcos(angle)) >> 4);
+        pos[2] = D_801EFA9C.origin[2] + ((D_801EFA9C.radius * rsin(angle)) << 4);
+        Area_ProjectPoint(pos, &screen);
+        prim->x0 = screen.vx;
+        prim->y0 = screen.vy;
+        pos[0]   = D_801EFA9C.origin[0] + TO_COORD(16);
+        Area_ProjectPoint(pos, &screen);
+        prim->x1 = screen.vx;
+        prim->y1 = screen.vy;
+        angle += 0x100;
+        pos[0] = D_801EFA9C.origin[0];
+        pos[1] = D_801EFA9C.origin[1] + ((D_801EFA9C.radius * rcos(angle)) >> 4);
+        pos[2] = D_801EFA9C.origin[2] + ((D_801EFA9C.radius * rsin(angle)) << 4);
+        Area_ProjectPoint(pos, &screen);
+        prim->x2 = screen.vx;
+        prim->y2 = screen.vy;
+        pos[0]   = D_801EFA9C.origin[0] + TO_COORD(16);
+        Area_ProjectPoint(pos, &screen);
+        prim->x3 = screen.vx;
+        prim->y3 = screen.vy;
+        setRGB0(prim, 128, 0, 0);
+        /* FAKE: retail tests the whole return register, as for a call with no prototype; the shared s16 prototype adds a sign extension. */
+        if (((s32 (*)(Point2D*, Point2D*, Point2D*))func_801AFF90)((Point2D*)&prim->x0, (Point2D*)&prim->x1, (Point2D*)&prim->x2) < 0) {
+            GFX_AddPrim(1, sizeof(POLY_F4));
+        }
+    }
+}
 
 MATCH void func_801EF254(void) {
     GFX_AddDrawMode(GetTPage(0, 1, 0x2C0, 0x100) & HALF_MASK);

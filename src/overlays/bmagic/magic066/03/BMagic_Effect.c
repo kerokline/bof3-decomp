@@ -173,7 +173,50 @@ MATCH void func_801EF930(void) {
 
 INCLUDE_ASM(func_801EF984);
 
-INCLUDE_ASM(func_801EFCC8);
+MATCH void func_801EFCC8(void) {
+    POLY_FT4* poly;
+    long      depth;
+    long      flag;
+    s32       i;
+
+    for (i = 0; i < 4; i++) {
+        if (i * 3 < g_Task->unk_09 && D_801F00B0[i] < 16) {
+            poly = (POLY_FT4*)g_GfxPrimCursor;
+            SetPolyFT4(poly);
+            SetSemiTrans(poly, 1);
+            D_1F800000.view.effect.params[0] = D_801F00B0[i] * 4 + 50;
+            D_1F800000.view.effect.params[2] = D_801F00B0[i] * 15;
+            D_1F800014[0].vx                 = (rcos(0x200) * D_1F800000.view.effect.params[0]) >> 12;
+            D_1F800014[0].vy                 = (rsin(0x200) * D_1F800000.view.effect.params[0]) >> 12;
+            D_1F800014[0].vz                 = -D_1F800000.view.effect.params[2];
+            D_1F800014[1].vx                 = (rcos(0x600) * D_1F800000.view.effect.params[0]) >> 12;
+            D_1F800014[1].vy                 = (rsin(0x600) * D_1F800000.view.effect.params[0]) >> 12;
+            D_1F800014[1].vz                 = -D_1F800000.view.effect.params[2];
+            D_1F800014[2].vx                 = (rcos(0xE00) * D_1F800000.view.effect.params[0]) >> 12;
+            D_1F800014[2].vy                 = (rsin(0xE00) * D_1F800000.view.effect.params[0]) >> 12;
+            D_1F800014[2].vz                 = -D_1F800000.view.effect.params[2];
+            D_1F800014[3].vx                 = (rcos(0xA00) * D_1F800000.view.effect.params[0]) >> 12;
+            D_1F800014[3].vy                 = (rsin(0xA00) * D_1F800000.view.effect.params[0]) >> 12;
+            D_1F800014[3].vz                 = -D_1F800000.view.effect.params[2];
+            poly->tpage                      = GetTPage(0, 1, 0x340, 0x100);
+            poly->clut                       = GetClut(0, 0x1E2);
+            poly->u0                         = 0;
+            poly->v0                         = 0;
+            poly->u1                         = 0x20;
+            poly->v1                         = 0;
+            poly->u2                         = 0;
+            poly->v2                         = 0x20;
+            poly->u3                         = 0x20;
+            poly->v3                         = 0x20;
+            D_1F800000.view.effect.params[1] = 0x41 - (D_801F00B0[i] >> 1) * 4;
+            poly->r0                         = D_1F800000.view.effect.params[1];
+            poly->g0                         = D_1F800000.view.effect.params[1];
+            poly->b0                         = D_1F800000.view.effect.params[1];
+            RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&poly->x0, (long*)&poly->x1, (long*)&poly->x2, (long*)&poly->x3, &depth, &flag);
+            GFX_AddPrim(3, sizeof(POLY_FT4));
+        }
+    }
+}
 
 MATCH void func_801EFFB0(void) {
     SVECTOR pos;

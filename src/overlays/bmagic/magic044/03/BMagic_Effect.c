@@ -61,7 +61,45 @@ MATCH void func_801EEE44(void) {
 
 INCLUDE_ASM(func_801EEEFC);
 
-INCLUDE_ASM(func_801EF138);
+MATCH void func_801EF138(void) {
+    VECTOR       pos;
+    PartyMember* actor;
+    s32          diff;
+    u8           count;
+
+    count = g_Task->timer;
+    if (count < 16) {
+        g_Task->timer = count + 1;
+    }
+    actor  = g_Battle.selected_actor;
+    pos.vx = (actor->pos.x.fixed >> 9) - 0x4000;
+    pos.vy = (actor->pos.y.fixed >> 9) - 0x4000;
+    pos.vz = (actor->pos.z.fixed + 0x800000) >> 17;
+    func_800AF3A0(pos, 0xC0);
+    g_Task->unk_10 = g_Task->unk_0C;
+    g_Task->unk_0C = ratan2(actor->pos.x.fixed - g_Task->pos.x.fixed, actor->pos.y.fixed - g_Task->pos.y.fixed);
+    if (func_800AF66C((BattleRange*)actor, 0x8000) != 0) {
+        g_Task->pos.x.fixed = actor->pos.x.fixed;
+        g_Task->pos.y.fixed = actor->pos.y.fixed;
+        g_Task->header.step += 1;
+    } else {
+        diff           = (g_Task->unk_10 & 0xFFF) - (g_Task->unk_0C & 0xFFF);
+        g_Task->unk_10 = diff;
+        if (diff < 0) {
+            g_Task->unk_10 = ~diff + 1;
+        }
+        if ((u32)(g_Task->unk_10 - 0x601) < 0x3FF) {
+            g_Task->pos.x.fixed = actor->pos.x.fixed;
+            g_Task->pos.y.fixed = actor->pos.y.fixed;
+            g_Task->header.step += 1;
+        }
+    }
+    Battle_ProjectRange();
+    Effect_RecordTrail();
+    if (g_Task->header.step != 1 && g_Task->unk_04 == 0) {
+        Battle_ApplyDamageFlags(g_Battle.target_selector, 0x10);
+    }
+}
 
 MATCH void func_801EF320(void) {
     PartyMember* work;

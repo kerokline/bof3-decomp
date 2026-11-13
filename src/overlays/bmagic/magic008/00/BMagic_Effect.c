@@ -233,7 +233,44 @@ MATCH void func_801EFD30(void) {
     SYS_DISPATCH_TASK(handlers.steps, 1, g_Task);
 }
 
-INCLUDE_ASM(func_801EFD90);
+MATCH void func_801EFD90(void) {
+    BattleEffect* slot;
+    PartyMember*  work;
+    u32           index;
+    u8            active;
+    u8            i;
+    u16*          dst;
+    u16*          src;
+    PartyMember*  actor;
+
+    g_Task->facing       = g_BattleEffectBattler->facing;
+    actor                = g_BattleEffectBattler;
+    work                 = g_Task;
+    work->pos.x.fixed    = actor->pos.x.fixed;
+    work->pos.y.fixed    = actor->pos.y.fixed;
+    work->pos.z.fixed    = actor->pos.z.fixed;
+    g_Task->unk_04       = func_801F0230();
+    g_Task->param.unk_0B = 0;
+    g_Task->header.mode += 1;
+    func_800AEF98(0xC, 2);
+    BMAGIC_ALLOC_BATTLER_EFFECT();
+    work                                             = g_Task;
+    g_BattleEffects[index & BYTE_MASK].header.mode   = 2;
+    g_BattleEffects[index & BYTE_MASK].unk_06        = 1;
+    g_BattleEffects[index & BYTE_MASK].header.step   = 0;
+    g_BattleEffects[index & BYTE_MASK].handler_index = 31;
+    g_BattleEffects[index & BYTE_MASK].target.party  = work;
+    g_Task->param.unk_0B += 1;
+    g_BattleEffectBattler->header.flags |= PARTY_MEMBER_FLAG_HANDLER_BUSY;
+    i   = 0;
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    for (; i < 16; i++) {
+        dst[i]      = src[i];
+        dst[i + 16] = src[i + 16];
+    }
+    g_GfxPalettePending = 1;
+}
 
 MATCH void func_801F0018(void) {
     PartyMember* actor;

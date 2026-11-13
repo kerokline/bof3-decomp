@@ -107,5 +107,7 @@ extern BattleEffectByteColumn   D_801EC332[];
 extern BattleEffectByteColumn   D_801EC335[];
 extern BattleEffectByteColumn   D_801EC336[];
 extern BattleEffectTargetColumn D_801EC3A4[];
+/* Defined later in this image; the result lands in the effect work +0x04. */
+u32                             func_801F0230(void);
 
 #endif

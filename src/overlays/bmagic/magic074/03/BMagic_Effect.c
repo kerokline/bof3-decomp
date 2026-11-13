@@ -21,7 +21,7 @@ MATCH void func_801EEC28(void) {
     }
 }
 
-INCLUDE_ASM(func_801EED18);
+#include "overlays/bmagic/func_801EED18.h"
 
 #include "overlays/bmagic/Effect_StartOnZeroTick.h"
 

@@ -807,9 +807,12 @@ Effect_DrawSparkleDisc = { addr = 0x801EFCDC, type = "func", source = "Draws the
 
 ["emi/bmagic/magic073/03"]
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true, source = "Marks the selected battlers as damaged." }
+Battle_SlotIsBlocked = { addr = 0x801DB524, alias = true, source = "Tells whether a battler slot can not be selected." }
+Battle_AllocEffect = { addr = 0x801E590C, alias = true, source = "Claims a free battle effect slot." }
 g_BattleEnemies = { addr = 0x801EB2E8, alias = true, source = "The enemy battlers." }
 g_BattleEffectBattler = { addr = 0x801EB4E0, source = "the battler the running effect acts on; Battle_UpdateEffects stores it for each effect step (emi/battle/battle/03 owns the cell)" }
 g_BattleEnemyBattlers = { addr = 0x801EB630, type = "EnemyBattler", size = 0x8C0, source = "Battle enemy battlers, one per enemy slot." }
+g_BattleEffects = { addr = 0x801EC330, alias = true, source = "Battle effect work records (stride 0x78); Battle_AllocEffect claims a free one by setting bit 0 of header.flags." }
 D_801EEC1C = { addr = 0x801EEC1C, type = "Magic073Steps", source = "Step handlers of magic073, run by header.step (byte 0x02) from func_801EF768." }
 BMagic_DispatchEffectMode = { addr = 0x801EEFB0, type = "func", source = "Runs the handler that header.mode (byte 0x01) selects from the effect handlers of magic073." }
 Effect_ReplaceSlotPaletteFade = { addr = 0x801EF2DC, type = "func", source = "Replaces the palette fade of the battler that the effect slot byte (0x04) names, party slots first and then enemy slots: when the effect timer (byte 0x09) reaches zero it frees the old fade, allocates a new one into the timer, restarts the effect timer at 8 and advances header.step; one body shared with the other bmagic overlays" }
@@ -826,9 +829,12 @@ D_801F21F0 = { addr = 0x801F21F0, source = "Work record of the magic073 sway eff
 
 ["emi/bmagic/magic074/03"]
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true, source = "Marks the selected battlers as damaged." }
+Battle_SlotIsBlocked = { addr = 0x801DB524, alias = true, source = "Tells whether a battler slot can not be selected." }
+Battle_AllocEffect = { addr = 0x801E590C, alias = true, source = "Claims a free battle effect slot." }
 g_BattleEnemies = { addr = 0x801EB2E8, alias = true, source = "The enemy battlers." }
 g_BattleEffectBattler = { addr = 0x801EB4E0, source = "the battler the running effect acts on; Battle_UpdateEffects stores it for each effect step (emi/battle/battle/03 owns the cell)" }
 g_BattleEnemyBattlers = { addr = 0x801EB630, type = "EnemyBattler", size = 0x8C0, source = "Battle enemy battlers, one per enemy slot." }
+g_BattleEffects = { addr = 0x801EC330, alias = true, source = "Battle effect work records (stride 0x78); Battle_AllocEffect claims a free one by setting bit 0 of header.flags." }
 D_801EEC1C = { addr = 0x801EEC1C, type = "Magic074Steps", source = "Step handlers of magic074, run by header.step (byte 0x02) from func_801EF754." }
 Effect_StartOnZeroTick = { addr = 0x801EEF50, type = "func", source = "When the effect ticker (byte 0x0B) is zero raises BATTLE_STATE_EFFECT_PLAYING and clears the effect in magic074 (Vigor)." }
 BMagic_DispatchEffectMode = { addr = 0x801EEF9C, type = "func", source = "Runs the handler that header.mode (byte 0x01) selects from the effect handlers of magic074." }

@@ -17,6 +17,10 @@ extern BMagicEffectWork D_801F055C[];
 #define BMAGIC_EFFECT_SLOTS D_801F055C
 #define BMAGIC_EFFECT_COUNT 160
 
+/* The handler index and byte 0x04 of the palette fades func_801EED18 spawns. */
+#define FADE_SPAWN_HANDLER  0x24
+#define FADE_SPAWN_UNK_04   1
+
 #define MAGIC074_STEP_COUNT 3
 
 typedef struct Magic074Steps {

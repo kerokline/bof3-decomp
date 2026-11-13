@@ -53,7 +53,31 @@ MATCH void func_801EF058(void) {
     SYS_DISPATCH_TASK(handlers.steps, 1, g_Task);
 }
 
-INCLUDE_ASM(func_801EF0B8);
+MATCH void func_801EF0B8(void) {
+    BattleEffect* slot;
+    PartyMember*  work;
+    u32           index;
+    u8            active;
+
+    g_Task->facing = g_BattleEffectBattler->facing;
+    WorldPos_Copy(&g_Task->pos, &g_BattleEffectBattler->pos);
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 0;
+    g_Task->header.mode += 1;
+    func_800AEF98(0xC, 2);
+    BMAGIC_ALLOC_BATTLER_EFFECT();
+    work                                             = g_Task;
+    g_BattleEffects[index & BYTE_MASK].header.mode   = 1;
+    g_BattleEffects[index & BYTE_MASK].unk_06        = 1;
+    g_BattleEffects[index & BYTE_MASK].header.step   = 0;
+    g_BattleEffects[index & BYTE_MASK].handler_index = 31;
+    g_BattleEffects[index & BYTE_MASK].target.party  = work;
+    g_Task->unk_27                                   = func_800AFB48(g_BattleEffectBattler);
+    g_Task->unk_28                                   = g_BattleEffectBattler->unk_28;
+    g_Task->unk_24                                   = g_BattleEffectBattler->unk_24;
+    func_800AF8F0(g_Task);
+    func_800AFAB8(g_Task);
+}
 
 MATCH void func_801EF324(void) {
     u16* battle_flags;

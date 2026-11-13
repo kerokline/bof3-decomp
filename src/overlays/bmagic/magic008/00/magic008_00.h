@@ -51,6 +51,10 @@ extern Magic008Steps      D_801EECC8;
 extern Point2DL           D_801F1C04[];
 extern u8                 D_800B6BF0[];
 u8                        func_800AED5C(s32 arg0, u32 battler_index);
+/* The battle/battle/15 sprite-cell routines, called with a battler or the effect work record. */
+u32                       func_800AFB48(PartyMember* record);
+void                      func_800AF8F0(PartyMember* record);
+void                      func_800AFAB8(PartyMember* record);
 
 /* The columns of g_BattleEffects: the retail code forms one slot base per store. */
 extern BattleEffectByteColumn   D_801EC331[];

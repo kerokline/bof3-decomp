@@ -43,8 +43,17 @@ extern u8                       D_801F0B04[];
 extern BattleEffectTargetColumn D_801EC3A4[];
 void                            func_801F03F0(s32 dir);
 extern u8                       D_801F0AD4[];
+
+/* A palette fade colour: the signed red, green and blue steps. */
+typedef struct Magic003FadeColor {
+    s8 red;
+    s8 green;
+    s8 blue;
+} Magic003FadeColor;
+
+extern Magic003FadeColor D_801F0A78[];
 /* The effect slot table BMagic_AllocEffect scans, and its row count. */
-extern BattleEffect             D_801F0B38[];
+extern BattleEffect      D_801F0B38[];
 #define BMAGIC_EFFECT_SLOTS D_801F0B38
 #define BMAGIC_EFFECT_COUNT 32
 

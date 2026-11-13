@@ -278,7 +278,35 @@ MATCH void func_801EF708(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF7A8);
+MATCH void func_801EF7A8(void) {
+    s32 x;
+    s32 y;
+    u32 z;
+    u8  timer;
+
+    timer          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = timer;
+    if (!(timer & BYTE_MASK)) {
+        x               = g_Task->pos.x.fixed;
+        y               = g_Task->pos.y.fixed;
+        z               = g_Task->pos.z.fixed;
+        g_Task->unk_0C  = 0x2000;
+        g_Task->unk_14  = 0x300000;
+        g_Task->unk_10  = 0;
+        g_Task->unk_20  = -0x80000;
+        g_Task->unk_18  = x;
+        g_Task->unk_1C  = y;
+        g_Task->scale.y = z;
+        func_801DD350(g_Task);
+        g_Task->header.flags |= 0x20;
+        g_Task->unk_5C = 3;
+        g_Task->unk_5D = -(g_Task->param.unk_0B << 4);
+        g_Task->unk_5F = -(g_Task->param.unk_0B << 4);
+        g_Task->unk_5E = -(g_Task->param.unk_0B << 4);
+        GFX_AllocPaletteFade(g_Task, D_801F0A78[g_Task->param.unk_0B].red, D_801F0A78[g_Task->param.unk_0B].green, D_801F0A78[g_Task->param.unk_0B].blue, 1);
+        g_Task->header.step += 1;
+    }
+}
 
 MATCH void func_801EF918(void) {
     g_Task->pos.x.fixed += g_Task->unk_0C;

@@ -49,6 +49,8 @@ extern BMagicEffectFuncs   D_801EEC94;
 extern Magic008EarlySteps D_801EECAC;
 extern Magic008Steps      D_801EECC8;
 extern Point2DL           D_801F1C04[];
+extern u8                 D_800B6BF0[];
+u8                        func_800AED5C(s32 arg0, u32 battler_index);
 
 /* The columns of g_BattleEffects: the retail code forms one slot base per store. */
 extern BattleEffectByteColumn   D_801EC331[];

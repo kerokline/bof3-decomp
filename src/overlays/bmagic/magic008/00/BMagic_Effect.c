@@ -182,7 +182,40 @@ MATCH void func_801EFD30(void) {
 
 INCLUDE_ASM(func_801EFD90);
 
-INCLUDE_ASM(func_801F0018);
+MATCH void func_801F0018(void) {
+    PartyMember* actor;
+    PartyMember* work;
+    u8           slot;
+
+    if (g_Task->param.unk_0B != 0) {
+        return;
+    }
+    if (g_Task->unk_04 != 0xFF) {
+        actor               = g_Battle.selected_actor;
+        g_Task->pos.x.fixed = actor->pos.x.fixed;
+        g_Task->pos.y.fixed = actor->pos.y.fixed;
+        g_Task->pos.z.fixed = actor->pos.z.fixed;
+        if (func_800AED5C(D_800B6BF0[g_Task->unk_04 & 3], g_Battle.target_selector) & BYTE_MASK) {
+            slot                               = Battle_AllocEffect(1, 72);
+            g_BattleEffects[slot].target.party = g_Task;
+            g_BattleEffects[slot].unk_04       = g_Task->unk_04;
+            g_BattleEffects[slot].arg.unk_09   = 21;
+            g_BattleEffects[slot].unk_0A       = 8;
+            g_Task->param.unk_0B++;
+        } else {
+            slot                               = Battle_AllocEffect(1, 72) & BYTE_MASK;
+            work                               = g_Task;
+            g_BattleEffects[slot].unk_04       = 8;
+            g_BattleEffects[slot].arg.unk_09   = 21;
+            g_BattleEffects[slot].unk_0A       = 8;
+            g_BattleEffects[slot].target.party = work;
+            g_Task->param.unk_0B++;
+        }
+    }
+    func_800AEF98(4, 0);
+    g_BattleEffectBattler->header.flags &= 0xBF;
+    g_Task->header.mode++;
+}
 
 #include "overlays/bmagic/Effect_StartOnZeroTick.h"
 

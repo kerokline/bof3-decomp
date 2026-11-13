@@ -8,7 +8,34 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 INCLUDE_ASM(func_801EEC88);
 
-INCLUDE_ASM(func_801EED60);
+MATCH void func_801EED60(void) {
+    PartyMember* saved;
+    u8           slot;
+
+    if ((g_FrameCount & 7) == 0) {
+        slot = Battle_AllocEffect(1, 0x56);
+        if (slot != 0xFF) {
+            g_BattleEffects[slot].header.mode = 0;
+            g_BattleEffects[slot].header.step = 0;
+            g_BattleEffects[slot].unk_2E      = 220;
+            g_BattleEffects[slot].unk_30      = 250;
+            if (g_Task->unk_09 & 1) {
+                g_BattleEffects[slot].unk_2E += 20;
+            }
+            g_BattleEffects[slot].unk_0A       = g_Task->unk_09;
+            g_BattleEffects[slot].target.party = g_Task;
+            g_Task->unk_09 += 1;
+            g_Task->param.unk_0B += 1;
+        }
+        if (g_Task->unk_09 == 6) {
+            g_Task->header.mode += 1;
+        }
+        saved  = g_Task;
+        g_Task = g_BattleEffectBattler;
+        Actor_StepAnimLoop();
+        g_Task = saved;
+    }
+}
 
 MATCH void func_801EEED8(void) {
     PartyMember* saved_work;

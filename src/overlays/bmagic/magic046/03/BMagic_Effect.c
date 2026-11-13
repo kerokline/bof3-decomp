@@ -90,7 +90,43 @@ MATCH void func_801EF324(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF3B8);
+MATCH void func_801EF3B8(void) {
+    PartyMember* work;
+    PartyMember* actor;
+    s32          angle;
+
+    Battle_CenterCamera();
+    angle          = ratan2(g_Task->pos.x.fixed - g_BattleEffectBattler->pos.x.fixed, g_Task->pos.y.fixed - g_BattleEffectBattler->pos.y.fixed);
+    g_Task->facing = g_BattleEffectBattler->facing;
+    switch (g_BattleEnemyBattlers[g_Battle.active_battler - 3].enemy_id.byte.kind) {
+        /* FAKE: retail compare tree needs a third case above 0x72 on the default body; the bytes keep no value for it. */
+        case 0x73:
+        default:
+            g_Task->unk_0C = 0x6000;
+            g_Task->unk_10 = 0;
+            g_Task->unk_14 = 0x400000;
+            break;
+        case 0x10:
+            g_Task->unk_0C = 0x10000;
+            g_Task->unk_10 = 0;
+            g_Task->unk_14 = 0x800000;
+            break;
+        case 0x72:
+            g_Task->unk_0C = 0x1C000;
+            g_Task->unk_10 = 0;
+            g_Task->unk_14 = 0x1000000;
+            break;
+    }
+    func_801DD350(g_Task);
+    work              = g_Task;
+    actor             = g_BattleEffectBattler;
+    work->pos.x.fixed = actor->pos.x.fixed + work->unk_0C;
+    work->pos.y.fixed = actor->pos.y.fixed + work->unk_10;
+    work->pos.z.fixed = actor->pos.z.fixed + work->unk_14;
+    work->unk_09      = 0;
+    work->unk_14      = angle & 0xFFF;
+    g_Task->header.step++;
+}
 
 MATCH void func_801EF540(void) {
     s32 angle;

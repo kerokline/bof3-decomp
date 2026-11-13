@@ -8,7 +8,52 @@ MATCH void func_801EEC04(void) {
     ACTOR_RUN_MODE_HANDLER(func_801EEC5C, func_801EEE30);
 }
 
-INCLUDE_ASM(func_801EEC5C);
+MATCH void func_801EEC5C(void) {
+    u8           i;
+    u8           slot;
+    PartyMember* actor;
+    u16*         dst;
+    u16*         src;
+
+    actor                = g_Battle.selected_actor;
+    g_Task->unk_2E.half  = actor->unk_2E.half;
+    g_Task->unk_30.half  = actor->unk_30.half;
+    g_Task->param.unk_0B = 0;
+    g_Task->header.mode += 1;
+    for (i = 0; i < 3; i++) {
+        PartyMember* work;
+
+        slot                               = Battle_AllocEffect(1, 57);
+        work                               = g_Task;
+        g_BattleEffects[slot].header.mode  = 0;
+        g_BattleEffects[slot].unk_0B       = i;
+        g_BattleEffects[slot].arg.unk_09   = i + 1;
+        g_BattleEffects[slot].target.party = work;
+        g_Task->param.unk_0B += 1;
+    }
+    for (i = 0; i < 3; i++) {
+        PartyMember* work;
+
+        slot                               = Battle_AllocEffect(1, 57);
+        work                               = g_Task;
+        g_BattleEffects[slot].header.mode  = 1;
+        g_BattleEffects[slot].unk_0B       = i;
+        g_BattleEffects[slot].arg.unk_09   = i + 1;
+        g_BattleEffects[slot].target.party = work;
+        g_Task->param.unk_0B += 1;
+    }
+    /* Copies the first three CLUTs of arena palette row 26 into the work copy. */
+    i   = 0;
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    for (; i < 16; i++) {
+        dst[i]      = src[i];
+        dst[i + 16] = src[i + 16];
+        dst[i + 32] = src[i + 32];
+    }
+    g_GfxPalettePending = 1;
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0));
+}
 
 #include "overlays/bmagic/Effect_PlayOnZeroTick.h"
 

@@ -5,6 +5,11 @@
 
 #include "overlays/bmagic/bmagic.h"
 
+extern SVECTOR D_1F800014[];
+/* The ring radius, a word at scratch 0x00: the effect view names only halfwords there, so the word goes through
+ * the scratch math word view. */
+#define MAGIC219_RING_RADIUS D_1F800000.view.scenario.math_00
+
 /* The effect slot table BMagic_AllocEffect scans, and its row count. */
 extern Callback     D_801EFA04[];
 extern BattleEffect D_801EFA14[];

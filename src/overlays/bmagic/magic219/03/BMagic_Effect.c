@@ -144,7 +144,39 @@ MATCH void func_801EF5DC(void) {
 
 #include "overlays/bmagic/Effect_SetActiveActorMatrix.h"
 
-INCLUDE_ASM(func_801EF71C);
+MATCH void func_801EF71C(void) {
+    POLY_G3* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      tpage;
+
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0x125 : 0x55;
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(5, sizeof(DR_MODE));
+    MAGIC219_RING_RADIUS = g_Task->timer << 4;
+    D_1F800014[2].vx     = FIXED_MUL(rsin(0), MAGIC219_RING_RADIUS);
+    D_1F800014[2].vy     = FIXED_MUL(rcos(0), MAGIC219_RING_RADIUS);
+    D_1F800014[2].vz     = 0;
+    D_1F800014[1].vz     = 0;
+    D_1F800014[0].vz     = 0;
+    for (i = 1; i <= 16; i++) {
+        prim = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 1);
+        D_1F800014[0].vx = 0;
+        D_1F800014[0].vy = 0;
+        D_1F800014[1].vx = D_1F800014[2].vx;
+        D_1F800014[1].vy = D_1F800014[2].vy;
+        D_1F800014[2].vx = FIXED_MUL(rsin(i << 8), MAGIC219_RING_RADIUS);
+        D_1F800014[2].vy = FIXED_MUL(rcos(i << 8), MAGIC219_RING_RADIUS);
+        RotTransPers3(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, &depth, &flag);
+        setRGB0(prim, 0x60, 0x60, 0x60);
+        setRGB1(prim, 1, 1, 1);
+        setRGB2(prim, 1, 1, 1);
+        GFX_AddPrim(5, sizeof(POLY_G3));
+    }
+}
 
 /* func_801EF934 */
 #include "overlays/bmagic/BMagic_AllocEffect.h"

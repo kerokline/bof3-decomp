@@ -26,7 +26,47 @@ MATCH void func_801EEC18(void) {
     }
 }
 
-INCLUDE_ASM(func_801EED30);
+MATCH void func_801EED30(void) {
+    PartyMember* actor;
+    PartyMember* work;
+    u16*         src;
+    u16*         dst;
+    u8           slot;
+    u8           i;
+
+    for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+        BMAGIC_EFFECT_SLOTS[i].header.flags = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.step  = 0;
+    }
+    actor                = g_BattleSelectedActor;
+    g_Task->facing       = actor->facing;
+    g_Task->pos.x.fixed  = actor->pos.x.fixed;
+    g_Task->pos.y.fixed  = actor->pos.y.fixed;
+    g_Task->pos.z.fixed  = actor->pos.z.fixed;
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 9;
+    g_Task->header.mode += 1;
+    for (i = 0; i < 8; i++) {
+        slot = BMagic_AllocEffect();
+        if (slot != 0xFF) {
+            work                                   = g_Task;
+            BMAGIC_EFFECT_SLOTS[slot].unk_0B       = i;
+            BMAGIC_EFFECT_SLOTS[slot].arg.unk_09   = i * 8 + 1;
+            BMAGIC_EFFECT_SLOTS[slot].target.party = work;
+            g_Task->param.unk_0B += 1;
+        }
+    }
+    i   = 0;
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    for (; i < 16; i++) {
+        dst[i]      = src[i];
+        dst[i + 16] = src[i + 16];
+    }
+    g_GfxPalettePending = 1;
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0x00));
+}
 
 MATCH void func_801EEEF0(void) {
     PartyMember* battler;

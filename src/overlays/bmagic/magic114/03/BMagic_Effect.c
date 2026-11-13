@@ -131,7 +131,35 @@ MATCH void func_801EF7B8(void) {
 
 INCLUDE_ASM(func_801EF7FC);
 
-INCLUDE_ASM(func_801EF8C0);
+MATCH void func_801EF8C0(void) {
+    u8 slot;
+    u8 count;
+
+    func_801EFA80();
+    slot                                   = Battle_AllocEffect(1, 7);
+    g_BattleEffects[slot].target.party     = g_BattleEffectBattler;
+    g_BattleEffects[slot].header.mode      = 2;
+    g_BattleEffects[slot].unk_08           = g_BattleEffectBattler->facing;
+    g_BattleEffects[slot].pos.x.fixed      = g_AreaScrollTargetX + g_Task->unk_0C;
+    g_BattleEffects[slot].pos.y.fixed      = g_AreaScrollTargetY + g_Task->unk_10;
+    COORD_INT(g_BattleEffects[slot].pos.z) = g_Task->unk_14;
+    if (g_Task->unk_09 == 0) {
+        slot                                   = Battle_AllocEffect(1, 7);
+        g_BattleEffects[slot].header.mode      = 1;
+        g_BattleEffects[slot].target.party     = g_BattleEffectBattler;
+        g_BattleEffects[slot].unk_08           = g_Task->facing;
+        g_BattleEffects[slot].unk_0C           = g_Task->unk_0C;
+        g_BattleEffects[slot].unk_10           = g_Task->unk_10;
+        COORD_INT(g_BattleEffects[slot].pos.z) = g_Task->unk_14;
+        g_BattleEffects[slot].arg.unk_09       = 0x10;
+        g_BattleEffects[slot].unk_0B           = 0;
+    }
+    count          = g_Task->unk_09 + 1;
+    g_Task->unk_09 = count;
+    if (count >= 13) {
+        func_801E5988();
+    }
+}
 
 INCLUDE_ASM(func_801EFA80);
 

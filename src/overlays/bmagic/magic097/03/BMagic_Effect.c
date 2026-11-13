@@ -8,7 +8,15 @@ MATCH void func_801EEC04(void) {
     BMagic_DispatchTaskPair(func_801EEC5C, func_801EEF38);
 }
 
-INCLUDE_ASM(func_801EEC5C);
+#include "overlays/bmagic/BMagic_SpawnAtTargets.h"
+
+MATCH void func_801EEC5C(void) {
+    u32          i;
+    u32          slot;
+    PartyMember* work;
+
+    BMAGIC_SPAWN_AT_TARGETS(20);
+}
 
 #include "overlays/bmagic/Effect_StartOnZeroTick.h"
 

@@ -9,4 +9,6 @@ void func_801EF5D4(s32 band_height, u16 radius, u16 jitter_mask);
 void func_801EFE24(void);
 void func_801F00C4(void);
 
+s32 func_801DB524(u8);
+
 #endif

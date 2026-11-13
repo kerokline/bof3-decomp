@@ -160,7 +160,27 @@ MATCH void func_801EF67C(void) {
 
 INCLUDE_ASM(func_801EF7D4);
 
-INCLUDE_ASM(func_801EFCA0);
+MATCH void func_801EFCA0(void) {
+    POLY_F4*      prim;
+    s32           tpage;
+    volatile s32* shade;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = ((g_Task->param.unk_0B & 3) << 7) | 0x25;
+    } else {
+        tpage = ((g_Task->param.unk_0B & 3) << 5) | 0x15;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim((u8)g_Task->unk_29, sizeof(DR_MODE));
+    prim = (POLY_F4*)g_GfxPrimCursor;
+    SetPolyF4(prim);
+    SetSemiTrans(prim, g_Task->param.unk_0B);
+    shade  = &D_1F80000C;
+    *shade = g_Task->timer * 15 + 15;
+    setXY4(prim, 0, 0, 0x13F, 0, 0, 0xEF, 0x13F, 0xEF);
+    setRGB0(prim, *shade, *shade, *shade);
+    GFX_AddPrim((u8)g_Task->unk_29, sizeof(POLY_F4));
+}
 
 MATCH void func_801EFE0C(void) {
     SYS_DISPATCH_TASK(D_801F03AC, 1, g_Task);

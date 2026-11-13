@@ -13,6 +13,7 @@ typedef struct Magic225Steps {
 } Magic225Steps;
 
 extern Magic225Steps D_801EEC04;
+extern s32           D_1F80000C;
 extern Callback      D_801F0398[];
 extern Callback      D_801F03AC[];
 /* The effect slot table BMagic_AllocEffect scans, and its row count. */

@@ -472,7 +472,46 @@ MATCH void func_801F03F0(s32 dir) {
     GFX_AddPrim(2, sizeof(POLY_FT4));
 }
 
-INCLUDE_ASM(func_801F0550);
+MATCH void func_801F0550(s32 value) {
+    POLY_FT4* prim;
+    s32       tpage;
+    u16       x;
+    u16       y;
+    u8        ones;
+    u8        tens;
+    s32       u;
+    u16       left;
+
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0x25 : 0x15;
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(2, sizeof(DR_MODE));
+    tens = (u8)value / 10;
+    ones = (u8)value % 10;
+    prim = (POLY_FT4*)g_GfxPrimCursor;
+    x    = g_Task->unk_2E.half;
+    y    = g_Task->unk_30.half;
+    left = x - 66;
+    SetPolyFT4(prim);
+    setXY4(prim, left, y, x - 54, y, left, y + 12, x - 54, y + 12);
+    prim->tpage = GetTPage(0, 0, 0x3C0, 0);
+    prim->clut  = GetClut(0, 0x1E0);
+    u           = ones * 12;
+    setUV4(prim, u + 72, 24, u + 84, 24, u + 72, 36, u + 84, 36);
+    setRGB0(prim, 0x80, 0x80, 0x80);
+    GFX_AddPrim(2, sizeof(POLY_FT4));
+    left = x - 78;
+    if (tens != 0) {
+        prim = (POLY_FT4*)g_GfxPrimCursor;
+        SetPolyFT4(prim);
+        setXY4(prim, left, y, x - 66, y, left, y + 12, x - 66, y + 12);
+        prim->tpage = GetTPage(0, 0, 0x3C0, 0);
+        prim->clut  = GetClut(0, 0x1E0);
+        u           = tens * 12;
+        setUV4(prim, u + 72, 24, u + 84, 24, u + 72, 36, u + 84, 36);
+        setRGB0(prim, 0x80, 0x80, 0x80);
+        GFX_AddPrim(2, sizeof(POLY_FT4));
+    }
+}
 
 MATCH void func_801F07B0(s32 index) {
     TILE* tile;

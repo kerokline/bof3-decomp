@@ -288,7 +288,49 @@ MATCH void func_801F03E0(void) {
     } while (i < 8);
 }
 
-INCLUDE_ASM(func_801F05B4);
+MATCH void func_801F05B4(void) {
+    POLY_G4* poly;
+    s32      outer;
+    s32      inner;
+    u8       red;
+    u8       green;
+    u8       blue;
+    u8       i;
+
+    red   = g_Task->unk_09 * (s8)g_Task->unk_5D;
+    green = g_Task->unk_09 * (s8)g_Task->unk_5E;
+    i     = 0;
+    outer = g_Task->timer * 3;
+    inner = g_Task->timer * 2;
+    blue  = g_Task->unk_09 * (s8)g_Task->unk_5F;
+    do {
+        poly = (POLY_G4*)g_GfxPrimCursor;
+        SetPolyG4(poly);
+        SetSemiTrans(poly, 1);
+        poly->x0 = g_Task->unk_2E.half + ((rsin(i << 9) * outer) >> 12);
+        poly->y0 = g_Task->unk_30.half + ((rcos(i << 9) * outer) >> 12);
+        poly->x1 = g_Task->unk_2E.half + ((rsin((i + 1) << 9) * outer) >> 12);
+        poly->y1 = g_Task->unk_30.half + ((rcos((i + 1) << 9) * outer) >> 12);
+        poly->x2 = g_Task->unk_2E.half + ((rsin(i << 9) * inner) >> 12);
+        poly->y2 = g_Task->unk_30.half + ((rcos(i << 9) * inner) >> 12);
+        poly->x3 = g_Task->unk_2E.half + ((rsin((i + 1) << 9) * inner) >> 12);
+        poly->y3 = g_Task->unk_30.half + ((rcos((i + 1) << 9) * inner) >> 12);
+        poly->r0 = 1;
+        poly->g0 = 1;
+        poly->b0 = 1;
+        poly->r1 = 1;
+        poly->g1 = 1;
+        poly->b1 = 1;
+        poly->r2 = red;
+        poly->g2 = green;
+        poly->b2 = blue;
+        poly->r3 = red;
+        poly->g3 = green;
+        poly->b3 = blue;
+        GFX_AddPrim(3, sizeof(POLY_G4));
+        i++;
+    } while (i < 8);
+}
 
 /* func_801F0828 */
 #include "overlays/bmagic/BMagic_AllocEffect.h"

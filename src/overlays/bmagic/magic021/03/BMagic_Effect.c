@@ -25,7 +25,47 @@ MATCH void func_801EEC28(void) {
     }
 }
 
-INCLUDE_ASM(func_801EED30);
+MATCH void func_801EED30(void) {
+    BattleEffect* slot;
+    PartyMember*  work;
+    u32           index;
+    u8            active;
+    u32           i;
+
+    for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+        BMAGIC_EFFECT_SLOTS[i].header.flags = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.step  = 0;
+    }
+    g_Task->param.unk_0B = 0;
+    g_Task->header.mode += 1;
+    func_800AEF98(0xC, 2);
+    index  = Battle_AllocEffect(1, 9) & BYTE_MASK;
+    active = g_Battle.active_battler;
+    if (BATTLER_IS_PLAYER(active)) {
+        BattleWorkImage* row;
+
+        row                     = (BattleWorkImage*)&g_Game.members[active];
+        slot                    = &g_BattleEffects[index];
+        *(BattleWorkImage*)slot = *row;
+    } else {
+        BattleWorkImage* row;
+        u32              enemy;
+
+        slot                    = &g_BattleEffects[index];
+        enemy                   = active - BATTLE_PARTY_CHARACTERS_COUNT;
+        row                     = (BattleWorkImage*)&g_BattleEnemyBattlers[enemy];
+        *(BattleWorkImage*)slot = *row;
+    }
+    work                                 = g_Task;
+    g_BattleEffects[index].unk_06        = 1;
+    g_BattleEffects[index].header.mode   = 0;
+    g_BattleEffects[index].header.step   = 0;
+    g_BattleEffects[index].handler_index = 9;
+    g_BattleEffects[index].target.party  = work;
+    g_Task->param.unk_0B += 1;
+    g_BattleEffectBattler->header.flags |= PARTY_MEMBER_FLAG_HANDLER_BUSY;
+}
 
 #include "overlays/bmagic/Effect_ReleaseActiveBattlerOnTickerZero.h"
 

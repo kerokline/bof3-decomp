@@ -117,7 +117,48 @@ MATCH void func_801EF148(void) {
 
 INCLUDE_ASM(func_801EF258);
 
-INCLUDE_ASM(func_801EF508);
+MATCH void func_801EF508(void) {
+    POLY_G4* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      x;
+    s32      y;
+
+    D_1F800000.view.effect.params[0] = g_Task->unk_14;
+    D_1F800014[1].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.effect.params[0]);
+    D_1F800014[1].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.effect.params[0]);
+    D_1F800000.view.effect.params[3] = (s8)g_Task->unk_5D * g_Task->unk_09;
+    D_1F800000.view.effect.params[4] = (s8)g_Task->unk_5E * g_Task->unk_09;
+    D_1F800000.view.effect.params[5] = (s8)g_Task->unk_5F * g_Task->unk_09;
+    for (i = 1; i <= 32; i++) {
+        D_1F800014[0].vx = D_1F800014[1].vx;
+        D_1F800014[0].vy = D_1F800014[1].vy;
+        D_1F800014[0].vz = -0x300;
+        D_1F800014[2].vx = D_1F800014[1].vx;
+        D_1F800014[2].vy = D_1F800014[1].vy;
+        D_1F800014[2].vz = 0;
+        D_1F800014[1].vx = FIXED_MUL(rsin(i << 7), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vy = FIXED_MUL(rcos(i << 7), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vz = -0x300;
+        D_1F800014[3].vx = D_1F800014[1].vx;
+        D_1F800014[3].vy = D_1F800014[1].vy;
+        D_1F800014[3].vz = 0;
+        x                = (D_1F800014[1].vx << 9) + g_Task->pos.x.fixed;
+        y                = (D_1F800014[1].vy << 9) + g_Task->pos.y.fixed;
+        SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, (GetGraphType() == 1 || GetGraphType() == 2) ? 0xA5 : 0x35, 0);
+        Area_AddCellPrim(x, y, 0, sizeof(DR_MODE));
+        prim = (POLY_G4*)g_GfxPrimCursor;
+        SetPolyG4(prim);
+        SetSemiTrans(prim, 1);
+        setRGB0(prim, 1, 1, 1);
+        setRGB1(prim, 1, 1, 1);
+        setRGB2(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5]);
+        setRGB3(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5]);
+        RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+        Area_AddCellPrim(x, y, 0, sizeof(POLY_G4));
+    }
+}
 
 MATCH void func_801EF808(void) {
     SYS_DISPATCH_BYTE(D_801F05EC, g_Task->header.step);

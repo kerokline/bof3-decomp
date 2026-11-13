@@ -211,7 +211,38 @@ MATCH void Effect_CountDownTimer(void) {
     BMagic_CountDownEffectTimer(8);
 }
 
-INCLUDE_ASM(func_801F0308);
+MATCH void func_801F0308(void) {
+    POLY_G4* prim;
+    s32      tpage;
+
+    D_1F800000.view.effect.params[2] = g_Task->unk_09;
+    D_1F800000.view.effect.params[3] = g_Task->timer;
+    D_1F800000.view.effect.params[0] = g_Task->unk_2E.half;
+    D_1F800000.view.effect.params[1] = g_Task->unk_30.half;
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 0, sizeof(DR_MODE));
+    prim = (POLY_G4*)g_GfxPrimCursor;
+    SetPolyG4(prim);
+    SetSemiTrans(prim, 1);
+    prim->x0 = D_1F800000.view.effect.params[0] - D_1F800000.view.effect.params[3];
+    prim->y0 = D_1F800000.view.effect.params[1] - D_1F800000.view.effect.params[2];
+    prim->x1 = D_1F800000.view.effect.params[0] + D_1F800000.view.effect.params[3];
+    prim->y1 = D_1F800000.view.effect.params[1] - D_1F800000.view.effect.params[2];
+    prim->x2 = D_1F800000.view.effect.params[0] - D_1F800000.view.effect.params[3];
+    prim->y2 = D_1F800000.view.effect.params[1];
+    prim->x3 = D_1F800000.view.effect.params[0] + D_1F800000.view.effect.params[3];
+    prim->y3 = D_1F800000.view.effect.params[1];
+    setRGB0(prim, 1, 1, 1);
+    setRGB1(prim, 1, 1, 1);
+    setRGB2(prim, 0x80, 0x20, 1);
+    setRGB3(prim, 0x80, 0x20, 1);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 0, sizeof(POLY_G4));
+}
 
 MATCH void func_801F04F4(void) {
     Magic006SecondSteps handlers;

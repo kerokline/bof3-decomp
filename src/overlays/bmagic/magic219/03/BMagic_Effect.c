@@ -105,7 +105,49 @@ MATCH void func_801EF068(void) {
     g_ScriptTable = AREA_SCRIPT_TABLE;
 }
 
-INCLUDE_ASM(func_801EF118);
+MATCH void func_801EF118(void) {
+    PartyMember* cell;
+    u8           timer;
+
+    timer          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = timer;
+    if (timer == 0) {
+        cell           = D_8014637C;
+        g_Task->facing = cell->facing;
+        g_Task->unk_0C = 0x20000;
+        g_Task->unk_10 = 0;
+        func_801DD350(g_Task);
+        g_Task->pos.x.fixed  = cell->pos.x.fixed + g_Task->unk_0C;
+        g_Task->pos.y.fixed  = cell->pos.y.fixed + g_Task->unk_10;
+        g_Task->pos.z.fixed  = cell->pos.z.fixed + 0x800000;
+        MAGIC219_RING_RADIUS = (g_Task->param.unk_0B >> 3) * 16 + 32;
+        MAGIC219_ORBIT_ANGLE = (((g_Task->param.unk_0B & 7) * 2 + (g_Task->param.unk_0B >> 3)) & 0xF) << 8;
+        g_Task->unk_0C       = g_BattleEffectBattler->pos.x.fixed + rsin(MAGIC219_ORBIT_ANGLE) * MAGIC219_RING_RADIUS;
+        g_Task->unk_10       = g_BattleEffectBattler->pos.y.fixed + rcos(MAGIC219_ORBIT_ANGLE) * MAGIC219_RING_RADIUS;
+        g_Task->unk_14       = g_BattleEffectBattler->pos.z.fixed;
+        g_Task->unk_25       = 29;
+        g_Task->unk_26       = 0xC0;
+        g_Task->scale.x      = 0x10000;
+        g_Task->scale.y      = 0x10000;
+        g_Task->unk_48       = 0;
+        g_Task->unk_27       = 2;
+        g_Task->unk_28       = 1;
+        g_Task->unk_24       = 0;
+        g_Task->unk_5C       = 0;
+        g_Task->unk_5D       = 0;
+        g_Task->unk_5E       = 0;
+        g_Task->unk_5F       = 0;
+        g_Task->unk_2A       = 0;
+        g_Task->unk_29       = 4;
+        g_Task->unk_2C.half  = 0;
+        g_Task->unk_2B       = 0;
+        Actor_SelectScript(0);
+        g_Task->unk_18 = ratan2(g_Task->unk_0C - g_Task->pos.x.fixed, g_Task->unk_10 - g_Task->pos.y.fixed);
+        g_Task->unk_09 = 3;
+        g_Task->timer  = 4;
+        g_Task->header.step += 1;
+    }
+}
 
 INCLUDE_ASM(func_801EF3CC);
 

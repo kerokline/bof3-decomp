@@ -1701,7 +1701,10 @@ BMagic_Trail = { addr = 0x801F09B0, source = "Trail position buffer for magic173
 
 ["emi/bmagic/magic213/03"]
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true, source = "Marks the selected battlers as damaged." }
+GFX_AllocPaletteFade = { addr = 0x8019651C, alias = true }
+GFX_FreePaletteFadeTarget = { addr = 0x80196718, alias = true }
 g_BattleEffectBattler = { addr = 0x801EB4E0, source = "the battler the running effect acts on; Battle_UpdateEffects stores it for each effect step (emi/battle/battle/03 owns the cell)" }
+g_BattleEnemyBattlers = { addr = 0x801EB630, alias = true }
 Effect_StartOnZeroTick = { addr = 0x801EEF74, type = "func", source = "When the effect ticker (byte 0x0B) is zero raises BATTLE_STATE_EFFECT_PLAYING and clears the effect in magic213 (Noting)." }
 BMagic_DispatchEffectMode = { addr = 0x801EEFC0, type = "func", source = "Runs the handler that header.mode (byte 0x01) selects from the effect handlers of magic213." }
 Effect_TickOnZeroTick = { addr = 0x801EF490, type = "func", source = "When the effect ticker (byte 0x0B) is zero lowers the ticker of battler g_BattleEffectBattler and clears the effect in magic213 (Noting)." }

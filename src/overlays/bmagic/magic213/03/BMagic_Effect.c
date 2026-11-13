@@ -17,7 +17,44 @@ MATCH void func_801EF004(void) {
     SYS_DISPATCH_TASK(D_801EF8A4, 2, g_Task);
 }
 
-INCLUDE_ASM(func_801EF048);
+MATCH void func_801EF048(void) {
+    PartyMember* battler;
+    PartyMember* work;
+    u8           count;
+    u8           slot;
+    u8           i;
+
+    count          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = count;
+    if (count != 0) {
+        return;
+    }
+    if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+        battler = (PartyMember*)&ENEMY_COMBATANT(g_Task->unk_04);
+    } else {
+        battler = &g_Game.members[g_Task->unk_04];
+    }
+    g_Task->pos.x.fixed  = battler->pos.x.fixed;
+    g_Task->pos.y.fixed  = battler->pos.y.fixed;
+    g_Task->pos.z.fixed  = battler->pos.z.fixed;
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 0x10;
+    g_Task->timer        = 0;
+    g_Task->header.step += 1;
+    for (i = 0; i < 7; i++) {
+        slot = BMagic_AllocEffect();
+        if (slot != 0xFF) {
+            work                                   = g_Task;
+            BMAGIC_EFFECT_SLOTS[slot].header.mode  = 0;
+            BMAGIC_EFFECT_SLOTS[slot].unk_0B       = i;
+            BMAGIC_EFFECT_SLOTS[slot].arg.unk_09   = i * 4 + 1;
+            BMAGIC_EFFECT_SLOTS[slot].target.party = work;
+            g_Task->param.unk_0B += 1;
+        }
+    }
+    GFX_FreePaletteFadeTarget(battler);
+    g_Task->timer = GFX_AllocPaletteFade(battler, 0, 0, 0, 1);
+}
 
 INCLUDE_ASM(func_801EF23C);
 

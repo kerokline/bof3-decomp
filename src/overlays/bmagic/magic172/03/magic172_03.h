@@ -18,8 +18,15 @@ typedef struct Magic172Shade {
 
 extern Magic172Shade D_801F0B9C[];
 
-void func_800AF3A0(VECTOR pos, s16 step);
-void func_801EEDD8(void);
-void func_801F0908(void);
+void            func_800AF3A0(VECTOR pos, s16 step);
+void            func_801EEDD8(void);
+void            func_801EF7CC(void);
+void            func_801EFA2C(void);
+void            func_801EFD04(void);
+void            func_801EFFE8(void);
+void            func_801F02C8(s32 angle, s32 count);
+void            func_801F05E8(s32 angle, s32 count);
+extern Callback D_801F0B7C[];
+void            func_801F0908(void);
 
 #endif

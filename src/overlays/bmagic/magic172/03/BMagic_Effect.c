@@ -48,7 +48,55 @@ MATCH void func_801EEC5C(void) {
 /* func_801EEE38 */
 #include "overlays/bmagic/BMagic_DispatchEffectMode.h"
 
-INCLUDE_ASM(func_801EEE7C);
+MATCH void func_801EEE7C(void) {
+    SYS_DISPATCH_BYTE(D_801F0B7C, g_Task->header.step);
+    if (g_Task->header.flags != 0) {
+        switch (g_Task->header.step) {
+            case 1:
+            default:
+                Battle_ProjectRange();
+                func_801F02C8(rand() & 0x1FF, 3);
+                func_801F05E8((rand() & 0x1FF) + 0x333, 3);
+                func_801F02C8((rand() & 0x1FF) + 0x666, 3);
+                func_801F05E8((rand() & 0x1FF) + 0x999, 3);
+                func_801F02C8((rand() & 0x1FF) + 0xCCC, 3);
+                func_801EF7CC();
+                func_801EFA2C();
+                break;
+            case 2:
+                Battle_ProjectRange();
+                func_801F02C8(rand() & 0x1FF, 7);
+                func_801F05E8((rand() & 0x1FF) + 0x333, 7);
+                func_801F02C8((rand() & 0x1FF) + 0x666, 7);
+                func_801F05E8((rand() & 0x1FF) + 0x999, 7);
+                func_801F02C8((rand() & 0x1FF) + 0xCCC, 7);
+                func_801F02C8((rand() & 0x1FF) + 0x400, 15);
+                func_801F02C8((rand() & 0x1FF) + 0x800, 15);
+                func_801F02C8((rand() & 0x1FF) + 0xC14, 15);
+                func_801EF7CC();
+                func_801EFA2C();
+                func_801EFD04();
+                func_801EFFE8();
+                break;
+            case 3:
+                Battle_ProjectRange();
+                func_801EFD04();
+                func_801EFFE8();
+                break;
+            case 4:
+                Battle_ProjectRange();
+                func_801F02C8(rand() & 0x1FF, 3);
+                func_801F05E8((rand() & 0x1FF) + 0x333, 3);
+                func_801F02C8((rand() & 0x1FF) + 0x666, 3);
+                func_801F05E8((rand() & 0x1FF) + 0x999, 3);
+                func_801F02C8((rand() & 0x1FF) + 0xCCC, 3);
+                func_801F02C8((rand() & 0x1FF) + 0x400, 7);
+                func_801F02C8((rand() & 0x1FF) + 0x800, 7);
+                func_801F02C8((rand() & 0x1FF) + 0xC14, 7);
+                break;
+        }
+    }
+}
 
 INCLUDE_ASM(func_801EF158);
 

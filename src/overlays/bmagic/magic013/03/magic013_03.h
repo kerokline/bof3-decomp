@@ -11,6 +11,7 @@ extern s32 D_1F800004;
 
 extern Callback     D_801F03C0[];
 extern Callback     D_801F03DC[];
+extern u8           D_801F03D4[];
 extern SVECTOR      D_1F800014[];
 /* The effect slot table BMagic_AllocEffect scans, and its row count. */
 extern BattleEffect D_801F03E4[];

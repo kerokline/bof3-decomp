@@ -6,7 +6,73 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/Effect_RunSlotsWithSetup.h"
 
-INCLUDE_ASM(func_801EED04);
+MATCH void func_801EED04(void) {
+    PartyMember* owner;
+    u16*         dst;
+    u16*         src;
+    u32          i;
+    u32          slot;
+
+    for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+        BMAGIC_EFFECT_SLOTS[i].header.flags = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.step  = 0;
+    }
+    func_801F0670();
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 0;
+    g_Task->header.mode++;
+    if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+        for (i = 0; i < 8; i++) {
+            if (!Battle_SlotIsBlocked((u8)(i + 3))) {
+                slot                               = Battle_AllocEffect(1, 77) & BYTE_MASK;
+                owner                              = g_Task;
+                g_BattleEffects[slot].header.mode  = 0;
+                g_BattleEffects[slot].unk_03       = i;
+                g_BattleEffects[slot].arg.unk_09   = 16;
+                g_BattleEffects[slot].target.party = owner;
+                g_Task->unk_09++;
+            }
+        }
+    } else {
+        for (i = 0; i < 3; i++) {
+            if (!Battle_SlotIsBlocked((u8)i)) {
+                slot                               = Battle_AllocEffect(1, 77) & BYTE_MASK;
+                owner                              = g_Task;
+                g_BattleEffects[slot].header.mode  = 0;
+                g_BattleEffects[slot].unk_03       = i;
+                g_BattleEffects[slot].arg.unk_09   = 16;
+                g_BattleEffects[slot].target.party = owner;
+                g_Task->unk_09++;
+            }
+        }
+    }
+    for (i = 0; i < 8; i++) {
+        slot                                   = BMagic_AllocEffect() & BYTE_MASK;
+        owner                                  = g_Task;
+        BMAGIC_EFFECT_SLOTS[slot].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[slot].unk_04       = i;
+        BMAGIC_EFFECT_SLOTS[slot].target.party = owner;
+        g_Task->param.unk_0B++;
+    }
+    for (i = 0; i < 16; i++) {
+        slot                                   = BMagic_AllocEffect() & BYTE_MASK;
+        owner                                  = g_Task;
+        BMAGIC_EFFECT_SLOTS[slot].header.mode  = 1;
+        BMAGIC_EFFECT_SLOTS[slot].unk_0B       = i;
+        BMAGIC_EFFECT_SLOTS[slot].arg.unk_09   = i * 8 + 24;
+        BMAGIC_EFFECT_SLOTS[slot].target.party = owner;
+        g_Task->param.unk_0B++;
+    }
+    i   = 0;
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    for (; i < 256; i++) {
+        *dst++ = *src++ | 0x8000;
+    }
+    g_GfxPalettePending = 1;
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0x00));
+}
 
 /* Starts the effect once bytes 0x09 and 0x0B of the work record are both zero. */
 MATCH void func_801EF02C(void) {

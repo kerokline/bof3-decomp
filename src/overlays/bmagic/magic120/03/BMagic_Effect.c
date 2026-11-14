@@ -326,7 +326,53 @@ MATCH void func_801F0274(void) {
     }
 }
 
-INCLUDE_ASM(func_801F04B0);
+/* Draw a textured quad for each of the six breath puffs that has started and has not run out:
+ * the quad widens and rises and its shade fades as the puff counter grows. */
+MATCH void func_801F04B0(void) {
+    POLY_FT4* prim;
+    long      depth;
+    long      flag;
+    s32       i;
+    s32       z;
+
+    for (i = 0; i < 6; i++) {
+        if (i * 3 < g_Task->unk_09 && D_801F0D0C[i] < 16) {
+            prim = (POLY_FT4*)g_GfxPrimCursor;
+            SetPolyFT4(prim);
+            SetSemiTrans(prim, 1);
+            D_1F800000.view.effect.params[0] = D_801F0D0C[i] * 4 + 50;
+            z                                = D_801F0D0C[i] * 15;
+            D_1F800014[0].vx                 = FIXED_MUL(rcos(512), D_1F800000.view.effect.params[0]);
+            D_1F800014[0].vy                 = FIXED_MUL(rsin(512), D_1F800000.view.effect.params[0]);
+            D_1F800014[0].vz                 = z;
+            D_1F800014[1].vx                 = FIXED_MUL(rcos(1536), D_1F800000.view.effect.params[0]);
+            D_1F800014[1].vy                 = FIXED_MUL(rsin(1536), D_1F800000.view.effect.params[0]);
+            D_1F800014[1].vz                 = z;
+            D_1F800014[2].vx                 = FIXED_MUL(rcos(3584), D_1F800000.view.effect.params[0]);
+            D_1F800014[2].vy                 = FIXED_MUL(rsin(3584), D_1F800000.view.effect.params[0]);
+            D_1F800014[2].vz                 = z;
+            D_1F800014[3].vx                 = FIXED_MUL(rcos(2560), D_1F800000.view.effect.params[0]);
+            D_1F800014[3].vy                 = FIXED_MUL(rsin(2560), D_1F800000.view.effect.params[0]);
+            D_1F800014[3].vz                 = z;
+            prim->tpage                      = GetTPage(0, 1, 832, 256);
+            prim->clut                       = GetClut(32, 506);
+            prim->u0                         = 8;
+            prim->v0                         = 64;
+            prim->u1                         = 40;
+            prim->v1                         = 64;
+            prim->u2                         = 8;
+            prim->v2                         = 96;
+            prim->u3                         = 40;
+            prim->v3                         = 96;
+            D_1F800000.view.effect.params[3] = 97 - D_801F0D0C[i] * 6;
+            prim->r0                         = D_1F800000.view.effect.params[3];
+            prim->g0                         = D_1F800000.view.effect.params[3];
+            prim->b0                         = D_1F800000.view.effect.params[3];
+            RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+            GFX_AddPrim(3, sizeof(POLY_FT4));
+        }
+    }
+}
 
 MATCH void func_801F078C(void) {
     SVECTOR pos;
@@ -374,52 +420,6 @@ MATCH void func_801F08AC(void) {
     }
 }
 
-#ifdef NON_MATCHING
-extern u8 D_801F0D08[];
-
-NON_MATCHING void func_801F0974(void) {
-    POLY_G3* prim;
-    long     depth;
-    long     flag;
-    s32      tpage;
-    s32      angle;
-
-    D_1F800000.view.effect.params[0] = (g_FrameCount & 0x3F) + 0x100;
-    if (GetGraphType() == 1 || GetGraphType() == 2) {
-        tpage = 0x325;
-    } else {
-        tpage = 0xD5;
-    }
-    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
-    GFX_AddPrim(5, sizeof(DR_MODE));
-    prim = (POLY_G3*)g_GfxPrimCursor;
-    SetPolyG3(prim);
-    SetSemiTrans(prim, 1);
-    D_1F800014[0].vx = 0;
-    D_1F800014[0].vy = 0;
-    D_1F800014[0].vz = 0;
-    angle            = ((D_801F0D08[g_Task->facing] - 6) & 0x3F) << 6;
-    D_1F800014[1].vx = FIXED_MUL(rsin(angle), D_1F800000.view.effect.params[0]);
-    D_1F800014[1].vy = FIXED_MUL(rcos(angle), D_1F800000.view.effect.params[0]);
-    D_1F800014[1].vz = 0;
-    angle            = ((D_801F0D08[g_Task->facing] + 6) & 0x3F) << 6;
-    D_1F800014[2].vx = FIXED_MUL(rsin(angle), D_1F800000.view.effect.params[0]);
-    D_1F800014[2].vy = FIXED_MUL(rcos(angle), D_1F800000.view.effect.params[0]);
-    D_1F800014[2].vz = 0;
-    prim->r0         = g_Task->unk_09 * 10 + 1;
-    prim->g0         = g_Task->unk_09 * 10 + 1;
-    prim->b0         = g_Task->unk_09 * 10 + 1;
-    prim->r1         = 1;
-    prim->g1         = 1;
-    prim->b1         = 1;
-    prim->r2         = 1;
-    prim->g2         = 1;
-    prim->b2         = 1;
-    RotTransPers3(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, &depth, &flag);
-    GFX_AddPrim(5, sizeof(POLY_G3));
-}
-#else
 INCLUDE_ASM(func_801F0974);
-#endif
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"

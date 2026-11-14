@@ -5,8 +5,47 @@ __asm__(".include \"include/match/macro.inc\"\n");
 #endif
 
 #include "overlays/bmagic/Effect_DispatchMode.h"
+#include "overlays/bmagic/Effect_CopyActiveBattlerToSlot.h"
 
-INCLUDE_ASM(func_801EECC0);
+/* Start the disembowel effect: four copies of the caster in modes counting down from 4,
+ * one more in mode 0, then the caster sprite cell and the camera. */
+MATCH void func_801EECC0(void) {
+    u32 index;
+    s32 i;
+
+    g_Task->facing = g_BattleEffectBattler->facing;
+    WorldPos_Copy(&g_Task->pos, &g_BattleEffectBattler->pos);
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 0;
+    g_Task->header.mode += 1;
+    func_800AEF98(0xC, 2);
+    for (i = 0; (u32)(i & BYTE_MASK) < 4; i++) {
+        index = Battle_AllocEffect(1, 0x2E);
+        Effect_CopyActiveBattlerToSlot(index);
+        g_BattleEffects[index & BYTE_MASK].target.party  = g_Task;
+        g_BattleEffects[index & BYTE_MASK].header.mode   = 1;
+        g_BattleEffects[index & BYTE_MASK].handler_index = 0x2E;
+        g_BattleEffects[index & BYTE_MASK].header.step   = 0;
+        g_BattleEffects[index & BYTE_MASK].unk_06        = 1;
+        g_BattleEffects[index & BYTE_MASK].arg.unk_09    = (i ^ 3) + 1;
+        g_BattleEffects[index & BYTE_MASK].unk_0B        = i ^ 3;
+    }
+    index = Battle_AllocEffect(1, 0x2E);
+    Effect_CopyActiveBattlerToSlot(index);
+    g_BattleEffects[index & BYTE_MASK].target.party  = g_Task;
+    g_BattleEffects[index & BYTE_MASK].unk_06        = 1;
+    g_BattleEffects[index & BYTE_MASK].header.mode   = 0;
+    g_BattleEffects[index & BYTE_MASK].header.step   = 0;
+    g_BattleEffects[index & BYTE_MASK].handler_index = 0x2E;
+    g_Task->unk_27                                   = func_800AFB48(g_BattleEffectBattler);
+    g_Task->unk_28                                   = g_BattleEffectBattler->unk_28;
+    g_Task->unk_24                                   = g_BattleEffectBattler->unk_24;
+    func_800AF8F0(g_Task);
+    if (g_Battle.active_battler < BATTLE_PARTY_CHARACTERS_COUNT) {
+        func_800AFC98(2, 0);
+    }
+    g_BattleEffectBattler->header.flags |= PARTY_MEMBER_FLAG_HANDLER_BUSY;
+}
 
 MATCH void func_801EF0F8(void) {
     PartyMember* work;

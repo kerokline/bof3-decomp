@@ -242,7 +242,53 @@ MATCH void func_801F01C8(void) {
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"
 
-INCLUDE_ASM(func_801F0334);
+/* Draw the magic220 glow as a textured diamond around the effect, its shade set by the timer. */
+MATCH void func_801F0334(void) {
+    POLY_FT4* prim;
+    long      depth;
+    long      flag;
+    s32       tpage;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+    prim = (POLY_FT4*)g_GfxPrimCursor;
+    SetPolyFT4(prim);
+    SetSemiTrans(prim, 1);
+    D_1F800000.view.effect.params[0] = 0x100;
+    D_1F800000.view.effect.params[5] = g_Task->timer * 6;
+    D_1F800014[0].vx                 = FIXED_MUL(rcos(ANGLE_45), D_1F800000.view.effect.params[0]);
+    D_1F800014[0].vy                 = FIXED_MUL(rsin(ANGLE_45), D_1F800000.view.effect.params[0]);
+    D_1F800014[0].vz                 = 0;
+    D_1F800014[1].vx                 = FIXED_MUL(rcos(1536), D_1F800000.view.effect.params[0]);
+    D_1F800014[1].vy                 = FIXED_MUL(rsin(1536), D_1F800000.view.effect.params[0]);
+    D_1F800014[1].vz                 = 0;
+    D_1F800014[2].vx                 = FIXED_MUL(rcos(3584), D_1F800000.view.effect.params[0]);
+    D_1F800014[2].vy                 = FIXED_MUL(rsin(3584), D_1F800000.view.effect.params[0]);
+    D_1F800014[2].vz                 = 0;
+    D_1F800014[3].vx                 = FIXED_MUL(rcos(2560), D_1F800000.view.effect.params[0]);
+    D_1F800014[3].vy                 = FIXED_MUL(rsin(2560), D_1F800000.view.effect.params[0]);
+    D_1F800014[3].vz                 = 0;
+    prim->tpage                      = GetTPage(0, 1, 832, 256);
+    prim->clut                       = GetClut(0, 482);
+    prim->u0                         = 0;
+    prim->v0                         = 128;
+    prim->u1                         = 32;
+    prim->v1                         = 128;
+    prim->u2                         = 0;
+    prim->v2                         = 160;
+    prim->u3                         = 32;
+    prim->v3                         = 160;
+    prim->r0                         = D_1F800000.view.effect.params[5];
+    prim->g0                         = D_1F800000.view.effect.params[5];
+    prim->b0                         = D_1F800000.view.effect.params[5];
+    RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_FT4));
+}
 
 /* func_801F0628 */
 #include "overlays/bmagic/BMagic_AllocEffect.h"

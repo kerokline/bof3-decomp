@@ -182,7 +182,51 @@ MATCH void Effect_CountDownTimer(void) {
     BMagic_CountDownEffectTimer(8);
 }
 
-INCLUDE_ASM(func_801EF758);
+/* Draw the effect as a shaded box above its screen point, white at the top edge and tinted
+ * at the bottom by the colour row the effect picks. */
+MATCH void func_801EF758(void) {
+    POLY_G4* prim;
+    s32      tpage;
+
+    D_1F800000.view.effect.params[3] = g_Task->unk_09;
+    D_1F800000.view.effect.params[4] = g_Task->timer;
+    D_1F800000.view.effect.params[5] = g_Task->unk_2E.half;
+    D_1F800000.view.effect.params[6] = g_Task->unk_30.half;
+    D_1F800000.view.effect.params[0] = D_801F040C[g_Task->unk_04][0];
+    D_1F800000.view.effect.params[1] = D_801F040C[g_Task->unk_04][1];
+    D_1F800000.view.effect.params[2] = D_801F040C[g_Task->unk_04][2];
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 0, sizeof(DR_MODE));
+    prim = (POLY_G4*)g_GfxPrimCursor;
+    SetPolyG4(prim);
+    SetSemiTrans(prim, 1);
+    prim->x0 = D_1F800000.view.effect.params[5] - D_1F800000.view.effect.params[4];
+    prim->y0 = D_1F800000.view.effect.params[6] - D_1F800000.view.effect.params[3];
+    prim->x1 = D_1F800000.view.effect.params[5] + D_1F800000.view.effect.params[4];
+    prim->y1 = D_1F800000.view.effect.params[6] - D_1F800000.view.effect.params[3];
+    prim->x2 = D_1F800000.view.effect.params[5] - D_1F800000.view.effect.params[4];
+    prim->y2 = D_1F800000.view.effect.params[6];
+    prim->x3 = D_1F800000.view.effect.params[5] + D_1F800000.view.effect.params[4];
+    prim->y3 = D_1F800000.view.effect.params[6];
+    prim->r0 = 1;
+    prim->g0 = 1;
+    prim->b0 = 1;
+    prim->r1 = 1;
+    prim->g1 = 1;
+    prim->b1 = 1;
+    prim->r2 = D_1F800000.view.effect.params[0];
+    prim->g2 = D_1F800000.view.effect.params[1];
+    prim->b2 = D_1F800000.view.effect.params[2];
+    prim->r3 = D_1F800000.view.effect.params[0];
+    prim->g3 = D_1F800000.view.effect.params[1];
+    prim->b3 = D_1F800000.view.effect.params[2];
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 0, sizeof(POLY_G4));
+}
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"
 

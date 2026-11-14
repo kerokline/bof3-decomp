@@ -27,7 +27,93 @@ MATCH void func_801EF218(void) {
     g_AreaCameraRefreshCount = 2;
 }
 
-INCLUDE_ASM(func_801EF2B8);
+/* Rolls a sine wave over the ground: per step of unk_09, the rise of 16 bands is added to the corner heights of the
+ * map cells in front of the caster from the target cell (scaled down by D_801F0C9C) and to D_801F0CCC, then every
+ * party member or enemy, field actor and type-0x17 actor slot is set back on the ground at its stored height.
+ * Shakes the camera, and advances header.mode once D_801F0CCC is all zero and unk_09 has reached 0x5B. */
+MATCH void func_801EF2B8(void) {
+    s32 i;
+    s32 j;
+    s32 rise;
+    s32 fall;
+
+    for (i = 0; i < 16; i++) {
+        rise = (rsin(((g_Task->unk_09 << 7) + (i << 8)) & 0xFFF) >> 8) - (rsin((((g_Task->unk_09 - 1) << 7) + (i << 8)) & 0xFFF) >> 8);
+        fall = (rsin(((g_Task->unk_09 << 7) + ((i + 1) << 8)) & 0xFFF) >> 8) - (rsin((((g_Task->unk_09 - 1) << 7) + ((i + 1) << 8)) & 0xFFF) >> 8);
+        if (i == 0) {
+            rise = 0;
+        }
+        if (i == 15) {
+            fall = 0;
+        }
+        for (j = 0; j < 14; j++) {
+            if (D_801F0CBC & 1) {
+                if (D_801F0CC8 + j < 0 || D_801F0CC8 + j >= g_AreaMapBundle.height || D_801F0CC4 + i < 0 || D_801F0CC4 + i >= MAP_BUNDLE_WIDTH) {
+                    continue;
+                }
+                MAP_CELL_CORNER(D_801F0CC8 + j, D_801F0CC4 + i, 0) += rise / D_801F0C9C[D_801F0CBC >> 1][j];
+                MAP_CELL_CORNER(D_801F0CC8 + j, D_801F0CC4 + i, 2) += rise / D_801F0C9C[D_801F0CBC >> 1][j + 1];
+                MAP_CELL_CORNER(D_801F0CC8 + j, D_801F0CC4 + i, 1) += fall / D_801F0C9C[D_801F0CBC >> 1][j];
+                MAP_CELL_CORNER(D_801F0CC8 + j, D_801F0CC4 + i, 3) += fall / D_801F0C9C[D_801F0CBC >> 1][j + 1];
+            } else {
+                if (D_801F0CC8 + i < 0 || D_801F0CC8 + i >= g_AreaMapBundle.height || D_801F0CC4 + j < 0 || D_801F0CC4 + j >= MAP_BUNDLE_WIDTH) {
+                    continue;
+                }
+                MAP_CELL_CORNER(D_801F0CC8 + i, D_801F0CC4 + j, 0) += rise / D_801F0C9C[D_801F0CBC >> 1][j];
+                MAP_CELL_CORNER(D_801F0CC8 + i, D_801F0CC4 + j, 1) += rise / D_801F0C9C[D_801F0CBC >> 1][j + 1];
+                MAP_CELL_CORNER(D_801F0CC8 + i, D_801F0CC4 + j, 2) += fall / D_801F0C9C[D_801F0CBC >> 1][j];
+                MAP_CELL_CORNER(D_801F0CC8 + i, D_801F0CC4 + j, 3) += fall / D_801F0C9C[D_801F0CBC >> 1][j + 1];
+            }
+            D_801F0DCC[i][j] = D_801F0CCC[i][j];
+            D_801F0CCC[i][j] += rise / D_801F0C9C[D_801F0CBC >> 1][j];
+        }
+    }
+    if (g_Battle.target_selector & BATTLE_TARGET_PARTY_SIDE) {
+        for (i = 0; i < 3; i++) {
+            if (g_Game.members[i].header.flags) {
+                COORD_INT(g_Game.members[i].pos.z) = D_801F0ECC[i] + Area_SampleHeight(g_BattleEffects[i].pos.x.fixed, g_BattleEffects[i].pos.y.fixed);
+            }
+        }
+    } else {
+        for (i = 0; i < 8; i++) {
+            if (!(func_801DB524(i + 3) & BYTE_MASK)) {
+                if (D_801F0CC0 && D_801F0F50[i] > Area_SampleHeight(g_BattleEffects[i + 3].pos.x.fixed, g_BattleEffects[i + 3].pos.y.fixed)) {
+                    COORD_INT(g_BattleEnemyBattlers[i].pos.z) = D_801F0F50[i];
+                } else {
+                    COORD_INT(g_BattleEnemyBattlers[i].pos.z) = D_801F0F40[i] + Area_SampleHeight(g_BattleEffects[i + 3].pos.x.fixed, g_BattleEffects[i + 3].pos.y.fixed);
+                }
+            }
+        }
+    }
+    for (i = 0; i < 30; i++) {
+        if (g_Actors[i].header.flags) {
+            COORD_INT(g_Actors[i].pos.z) = D_801F0ED4[i] + Area_SampleHeight(g_Actors[i].pos.x.fixed, g_Actors[i].pos.y.fixed);
+        }
+    }
+    for (i = 0; i < 4; i++) {
+        if (D_80147A58[i].header.flags) {
+            COORD_INT(D_80147A58[i].pos.z) = D_801F0F10[i] + Area_SampleHeight(D_80147A58[i].pos.x.fixed, D_80147A58[i].pos.y.fixed);
+        }
+    }
+    for (i = 0; i < 20; i++) {
+        if (g_ActorSlots[i].header.flags && g_ActorSlots[i].type == 0x17) {
+            COORD_INT(g_ActorSlots[i].pos.z) = D_801F0F18[i] + Area_SampleHeight(g_ActorSlots[i].pos.x.fixed, g_ActorSlots[i].pos.y.fixed);
+        }
+    }
+    g_AreaCameraRefreshCount = 2;
+    g_AreaCameraOffsetY      = (((g_FrameCount & 1) * 2) - 1) * 8;
+    g_Task->unk_09++;
+    for (i = 0; i < 16; i++) {
+        for (j = 0; j < 14; j++) {
+            if (D_801F0CCC[i][j] != 0) {
+                return;
+            }
+        }
+    }
+    if (g_Task->unk_09 >= 0x5B) {
+        g_Task->header.mode++;
+    }
+}
 
 INCLUDE_ASM(func_801EFD7C);
 

@@ -248,7 +248,28 @@ MATCH void func_801F007C(void) {
     func_801E5988();
 }
 
-INCLUDE_ASM(func_801F009C);
+/* Run the magic064 step, then draw every live ring under one draw mode. */
+MATCH void func_801F009C(void) {
+    Magic064RingSteps handlers;
+    s32               tpage;
+    u16               i;
+
+    handlers = D_801EEC5C;
+    SYS_DISPATCH_BYTE(handlers.steps, g_Task->header.step);
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x8F;
+    } else {
+        tpage = 0x2F;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 0, tpage, 0);
+    GFX_AddPrim(2, sizeof(DR_MODE));
+    for (i = 0; i < MAGIC064_RING_COUNT; i++) {
+        if (D_801F13B4[i].unk_00 != 0) {
+            D_801F28B4 = &D_801F13B4[i];
+            func_801F0448();
+        }
+    }
+}
 
 MATCH void func_801F01C4(void) {
     g_Task->param.unk_0B = 0;

@@ -45,9 +45,22 @@ typedef struct Magic064Ring {
 
 extern Magic064Ring* D_801F28B4;
 
+/* The 0xC0 rings; func_801F009C runs each live one through D_801F28B4. */
+#define MAGIC064_RING_COUNT 0xC0
+
+extern Magic064Ring D_801F13B4[MAGIC064_RING_COUNT];
+
+/* The five step handlers of func_801F009C, copied to the stack and run by header.step. */
+#define MAGIC064_RING_STEP_COUNT 5
+
+typedef struct Magic064RingSteps {
+    Callback steps[MAGIC064_RING_STEP_COUNT];
+} Magic064RingSteps;
+
+extern Magic064RingSteps D_801EEC5C;
+
 /* The screen offset of the ring centre from a battler, by facing. */
 extern s8 D_801F138C[][2];
-extern u8 D_801F13B4[];
 
 /* One sprite cell's texture coordinates: u and v of the cell in the effect's texture page. */
 typedef UPoint2D Magic064SpriteUv;
@@ -59,6 +72,7 @@ void func_801F001C(void);
 void func_801F04A0(void);
 
 void func_801F03D8(void);
+void func_801F0448(void);
 void func_801F0B8C(s16 x0, s16 y0, s16 x1, s16 y1);
 void func_801F0EEC(u32 sprite, s32 blend, s32 color);
 void func_801F103C(void);

@@ -528,42 +528,7 @@ MATCH void func_801F0DA4(void) {
     }
 }
 
-MATCH void func_801F0ED0(void) {
-    POLY_FT4* prim;
-    s32       tpage;
-
-    D_1F800000.view.effect.params[0] = D_801F22BC->slot;
-    D_1F800000.view.effect.params[1] = D_801F22BC->slot * 4;
-    D_1F800000.view.effect.params[2] = D_801F22BC->pad_06 * 6;
-    D_1F800000.view.effect.params[6] = ((s16*)&D_801F22BC->unk_0C)[0];
-    D_1F800000.view.effect.params[7] = ((s16*)&D_801F22BC->unk_0C)[1];
-    tpage                            = GetGraphType() == 1 || GetGraphType() == 2 ? 0x2A5 : 0xB5;
-    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
-    Area_AddCellPrim(D_801F22BC->unk_10, D_801F22BC->unk_14, 2, sizeof(DR_MODE));
-    prim = (POLY_FT4*)g_GfxPrimCursor;
-    SetPolyFT4(prim);
-    SetSemiTrans(prim, 1);
-    prim->x0 = D_1F800000.view.effect.params[6] - D_1F800000.view.effect.params[0];
-    prim->y0 = D_1F800000.view.effect.params[7] - D_1F800000.view.effect.params[1];
-    prim->x1 = D_1F800000.view.effect.params[6] + D_1F800000.view.effect.params[0];
-    prim->y1 = D_1F800000.view.effect.params[7] - D_1F800000.view.effect.params[1];
-    prim->x2 = D_1F800000.view.effect.params[6] - D_1F800000.view.effect.params[0];
-    prim->y2 = D_1F800000.view.effect.params[7];
-    prim->x3 = D_1F800000.view.effect.params[6] + D_1F800000.view.effect.params[0];
-    prim->y3 = D_1F800000.view.effect.params[7];
-    setTPage(prim, 0, 1, 832, 256);
-    setClut(prim, 0, 506);
-    prim->u0 = 88;
-    prim->v0 = 8;
-    prim->u1 = 104;
-    prim->v1 = 8;
-    prim->u2 = 88;
-    prim->v2 = 72;
-    prim->u3 = 104;
-    prim->v3 = 72;
-    setRGB0(prim, D_1F800000.view.effect.params[2], D_1F800000.view.effect.params[2], D_1F800000.view.effect.params[2]);
-    Area_AddCellPrim(D_801F22BC->unk_10, D_801F22BC->unk_14, 2, sizeof(POLY_FT4));
-}
+INCLUDE_ASM(func_801F0ED0);
 
 MATCH u32 func_801F1110(void) {
     u8 index;

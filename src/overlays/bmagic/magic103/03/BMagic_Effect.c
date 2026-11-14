@@ -101,7 +101,57 @@ MATCH void func_801EF094(void) {
 
 INCLUDE_ASM(func_801EF1D8);
 
-INCLUDE_ASM(func_801EF7CC);
+/* Draw the magic103 shaded ring band. Retail writes both radii to params[0], so the inner
+ * edge uses whatever params[1] holds. */
+MATCH void func_801EF7CC(void) {
+    POLY_G4* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      tpage;
+    s32      scale;
+
+    scale                            = rcos(0x800) * 6;
+    D_1F800000.view.effect.params[0] = FIXED_MUL(scale, g_Task->unk_09 + 0xE1);
+    scale                            = rcos(0x800) * 6;
+    D_1F800000.view.effect.params[0] = FIXED_MUL(scale, g_Task->unk_09 + 0xE0);
+    D_1F800014[1].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.effect.params[0]);
+    D_1F800014[1].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.effect.params[0]);
+    D_1F800014[3].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.effect.params[1]);
+    D_1F800014[3].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.effect.params[1]);
+    if (GetGraphType() == 1) {
+        tpage = 0xA5;
+    } else if (GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(5, sizeof(DR_MODE));
+
+    for (i = 1; i <= 32; i++) {
+        prim                             = GFX_BeginPolyG4(1);
+        D_1F800014[0].vx                 = D_1F800014[1].vx;
+        D_1F800014[0].vy                 = D_1F800014[1].vy;
+        D_1F800014[0].vz                 = 0;
+        D_1F800014[1].vx                 = FIXED_MUL(rsin(i << 8), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vy                 = FIXED_MUL(rcos(i << 8), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vz                 = 0;
+        D_1F800014[2].vx                 = D_1F800014[3].vx;
+        D_1F800014[2].vy                 = D_1F800014[3].vy;
+        D_1F800014[2].vz                 = 0;
+        D_1F800014[3].vx                 = FIXED_MUL(rsin(i << 8), D_1F800000.view.effect.params[1]);
+        D_1F800014[3].vy                 = FIXED_MUL(rcos(i << 8), D_1F800000.view.effect.params[1]);
+        D_1F800014[3].vz                 = 0;
+        D_1F800000.view.effect.params[3] = 0x29 - g_Task->unk_09;
+        setRGB0(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3]);
+        setRGB1(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3]);
+        setRGB2(prim, 1, 1, 1);
+        setRGB3(prim, 1, 1, 1);
+        RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+        GFX_AddPrim(5, sizeof(POLY_G4));
+    }
+}
 
 MATCH void func_801EFB10(void) {
     SYS_DISPATCH_BYTE(D_801F07C4, g_Task->header.step);

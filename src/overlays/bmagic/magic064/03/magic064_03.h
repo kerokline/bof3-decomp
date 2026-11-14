@@ -44,7 +44,10 @@ typedef struct Magic064Ring {
 } Magic064Ring;
 
 extern Magic064Ring* D_801F28B4;
-extern u8            D_801F13B4[];
+
+/* The screen offset of the ring centre from a battler, by facing. */
+extern s8 D_801F138C[][2];
+extern u8 D_801F13B4[];
 
 /* One sprite cell's texture coordinates: u and v of the cell in the effect's texture page. */
 typedef UPoint2D Magic064SpriteUv;

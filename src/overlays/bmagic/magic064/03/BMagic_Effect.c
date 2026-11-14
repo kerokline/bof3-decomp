@@ -332,7 +332,18 @@ MATCH void func_801F0448(void) {
     table[D_801F28B4->mode]();
 }
 
-INCLUDE_ASM(func_801F04A0);
+/* Start the magic064 ring at the active battler: a random angle, both radii at the effect ticker,
+ * their speeds, and the centre at the battler screen point plus its facing offset. */
+MATCH void func_801F04A0(void) {
+    D_801F28B4->angle       = rand() & 0xFFF;
+    D_801F28B4->inner.fixed = TO_COORD(g_Task->param.unk_0B);
+    D_801F28B4->outer.fixed = TO_COORD(g_Task->param.unk_0B);
+    D_801F28B4->inner_speed = 0x32000;
+    D_801F28B4->outer_speed = 0x19800;
+    D_801F28B4->x           = BATTLE_ACTIVE_PARTY.unk_2E.signed_half + D_801F138C[BATTLE_ACTIVE_PARTY.facing][0];
+    D_801F28B4->y           = BATTLE_ACTIVE_PARTY.unk_30.signed_half + D_801F138C[BATTLE_ACTIVE_PARTY.facing][1];
+    D_801F28B4->mode += 1;
+}
 
 /* Spread the magic064 ring: grow both radii by their speeds, raise the speeds by a quarter and
  * draw five spokes between the radii; past an outer radius of 448 the ring ends. */

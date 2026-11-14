@@ -6,7 +6,57 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/Effect_RunSlotsWithSetup.h"
 
-INCLUDE_ASM(func_801EED04);
+/* Clears the effect slot table and spawns one effect 0x27 at each selectable battler, the enemies
+ * (raised by the enemy kind's height) when the target selector holds 0x40 and the party otherwise,
+ * each starting 8 frames after the one before by slot; then sets STP on colours 1 to 15 of work
+ * palette row 26 from arena row 0. */
+MATCH void func_801EED04(void) {
+    u8 i;
+    u8 slot;
+    u8 battler;
+
+    g_Task->param.unk_0B = 0;
+    for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
+        BMAGIC_EFFECT_SLOTS[i].header.flags = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.mode  = 0;
+        BMAGIC_EFFECT_SLOTS[i].header.step  = 0;
+    }
+    if (g_Battle.target_selector & 0x40) {
+        for (i = 0; i < 8; i++) {
+            battler = i + BATTLE_PARTY_CHARACTERS_COUNT;
+            if (!Battle_SlotIsBlocked(battler)) {
+                slot                               = Battle_AllocEffect(1, 0x27);
+                g_BattleEffects[slot].target.party = g_Task;
+                g_BattleEffects[slot].unk_04       = g_Task->param.unk_0B;
+                g_BattleEffects[slot].arg.unk_09   = i * 8 + 1;
+                g_BattleEffects[slot].pos.x.fixed  = g_BattleEnemyBattlers[i].pos.x.fixed;
+                g_BattleEffects[slot].pos.y.fixed  = g_BattleEnemyBattlers[i].pos.y.fixed;
+                g_BattleEffects[slot].pos.z.fixed  = g_BattleEnemyBattlers[i].pos.z.fixed + 0x800000;
+                g_BattleEffects[slot].pos.z.part.integer += ENCOUNTER_ENEMIES[g_BattleEnemyBattlers[i].kind].height;
+                g_Task->param.unk_0B += 1;
+            }
+        }
+    } else {
+        for (i = 0; i < BATTLE_PARTY_CHARACTERS_COUNT; i++) {
+            if (!Battle_SlotIsBlocked(i)) {
+                slot                               = Battle_AllocEffect(1, 0x27);
+                g_BattleEffects[slot].target.party = g_Task;
+                g_BattleEffects[slot].unk_04       = g_Task->param.unk_0B;
+                g_BattleEffects[slot].arg.unk_09   = i * 8 + 1;
+                g_BattleEffects[slot].pos.x.fixed  = g_Game.members[i].pos.x.fixed;
+                g_BattleEffects[slot].pos.y.fixed  = g_Game.members[i].pos.y.fixed;
+                g_BattleEffects[slot].pos.z.fixed  = g_Game.members[i].pos.z.fixed + 0x800000;
+                g_Task->param.unk_0B += 1;
+            }
+        }
+    }
+    for (i = 1; i < 16; i++) {
+        MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW)[i] = MEM_PTR(u16, AREA_PALETTE_ARENA)[i] | 0x8000;
+    }
+    g_GfxPalettePending                                      = 1;
+    *MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW) = *MEM_PTR(u16, AREA_PALETTE_ARENA);
+    g_Task->header.mode += 1;
+}
 
 #include "overlays/bmagic/Effect_PlayOnZeroTick.h"
 

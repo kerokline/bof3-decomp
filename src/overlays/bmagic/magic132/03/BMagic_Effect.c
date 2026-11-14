@@ -179,6 +179,73 @@ MATCH void func_801EF4A4(void) {
     BMAGIC_PROJECT_ACTOR_MATRIX(g_Task);
 }
 
-INCLUDE_ASM(func_801EF5B0);
+/* Draw the magic132 breath as a strip of 63 textured quads whose height follows a sine wave
+ * running with the effect ticker, its texture rows cycling with the timer. */
+MATCH void func_801EF5B0(void) {
+    POLY_FT4* prim;
+    long      depth;
+    long      flag;
+    s32       i;
+    s32       tpage;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x2A5;
+    } else {
+        tpage = 0xB5;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(2, sizeof(DR_MODE));
+    D_1F800000.view.effect.params[0] = g_Task->unk_20;
+    D_1F800000.view.effect.params[1] = (g_Task->param.unk_0B & 0x3F) << 7;
+    if (g_Task->header.step == 4) {
+        D_1F800000.view.effect.params[2] = (g_Task->unk_1C / 2) << 3;
+    } else {
+        D_1F800000.view.effect.params[2] = 0x80;
+    }
+    D_1F800014[2].vx = 0;
+    D_1F800014[2].vy = 0;
+    D_1F800014[2].vz = FIXED_MUL(rsin(D_1F800000.view.effect.params[1]), D_1F800000.view.effect.params[0]);
+    for (i = 1; i < 64; i++) {
+        prim = (POLY_FT4*)g_GfxPrimCursor;
+        SetPolyFT4(prim);
+        SetSemiTrans(prim, 1);
+        D_1F800014[0].vx                 = 0;
+        D_1F800014[0].vy                 = D_1F800014[2].vy;
+        D_1F800014[0].vz                 = D_1F800014[2].vz;
+        D_1F800014[1].vx                 = 0xE00;
+        D_1F800014[1].vy                 = D_1F800014[2].vy;
+        D_1F800014[1].vz                 = D_1F800014[2].vz;
+        D_1F800000.view.effect.params[1] = ((g_Task->param.unk_0B + i) & 0x3F) << 7;
+        D_1F800014[2].vx                 = 0;
+        D_1F800014[2].vy                 = i << 6;
+        D_1F800014[2].vz                 = FIXED_MUL(rsin(D_1F800000.view.effect.params[1]), D_1F800000.view.effect.params[0]);
+        D_1F800014[3].vx                 = 0xE00;
+        D_1F800014[3].vy                 = D_1F800014[2].vy;
+        D_1F800014[3].vz                 = D_1F800014[2].vz;
+        prim->r0                         = D_1F800000.view.effect.params[2];
+        prim->g0                         = D_1F800000.view.effect.params[2];
+        prim->b0                         = D_1F800000.view.effect.params[2];
+        prim->tpage                      = GetTPage(1, 1, 832, 256);
+        prim->clut                       = GetClut(0, 506);
+        D_1F800000.view.effect.params[3] = ((g_Task->timer + i) % 14) * 16 + 8;
+        prim->u0                         = 8;
+        prim->v0                         = D_1F800000.view.effect.params[3];
+        prim->u1                         = 248;
+        prim->v1                         = D_1F800000.view.effect.params[3];
+        prim->u2                         = 8;
+        prim->v2                         = D_1F800000.view.effect.params[3] + 16;
+        prim->u3                         = 248;
+        prim->v3                         = D_1F800000.view.effect.params[3] + 16;
+        RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+        GFX_AddPrim(2, sizeof(POLY_FT4));
+    }
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x225;
+    } else {
+        tpage = 0x95;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(2, sizeof(DR_MODE));
+}
 
 INCLUDE_ASM(func_801EF914);

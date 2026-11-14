@@ -221,7 +221,56 @@ MATCH void func_801EFD74(void) {
     }
 }
 
-INCLUDE_ASM(func_801EFE20);
+/* Draw the magic103 tinted glow quad, turning with the effect timer (byte 0x09) around the
+ * effect screen point. */
+MATCH void func_801EFE20(void) {
+    POLY_GT4* prim;
+    s32       tpage;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 0, sizeof(DR_MODE));
+    prim = (POLY_GT4*)g_GfxPrimCursor;
+    SetPolyGT4(prim);
+    SetSemiTrans(prim, 1);
+    if (g_Task->header.step >= 2) {
+        D_1F800000.view.effect.params[0] = g_Task->unk_09 * 2;
+    } else {
+        D_1F800000.view.effect.params[0] = (g_Task->unk_09 - 8) / 4 + 0x10;
+    }
+    D_1F800000.view.effect.params[3] = g_Task->timer * 8;
+    D_1F800000.view.effect.params[4] = g_Task->timer * 7;
+    D_1F800000.view.effect.params[5] = g_Task->timer * 4;
+    D_1F800000.view.effect.params[6] = g_Task->unk_2E.half;
+    D_1F800000.view.effect.params[7] = g_Task->unk_30.half;
+    prim->x0                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin((u8)(g_Task->unk_09 + 0x80) << 4), D_1F800000.view.effect.params[0]);
+    prim->y0                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos((u8)(g_Task->unk_09 + 0x80) << 4), D_1F800000.view.effect.params[0]);
+    prim->x1                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin((u8)(g_Task->unk_09 + 0x40) << 4), D_1F800000.view.effect.params[0]);
+    prim->y1                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos((u8)(g_Task->unk_09 + 0x40) << 4), D_1F800000.view.effect.params[0]);
+    prim->x2                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin((u8)(g_Task->unk_09 + 0xC0) << 4), D_1F800000.view.effect.params[0]);
+    prim->y2                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos((u8)(g_Task->unk_09 + 0xC0) << 4), D_1F800000.view.effect.params[0]);
+    prim->x3                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin(g_Task->unk_09 << 4), D_1F800000.view.effect.params[0]);
+    prim->y3                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos(g_Task->unk_09 << 4), D_1F800000.view.effect.params[0]);
+    prim->tpage                      = GetTPage(0, 1, 832, 256);
+    prim->clut                       = GetClut(16, 506);
+    prim->u0                         = 1;
+    prim->v0                         = 1;
+    prim->u1                         = 31;
+    prim->v1                         = 1;
+    prim->u2                         = 1;
+    prim->v2                         = 31;
+    prim->u3                         = 31;
+    prim->v3                         = 31;
+    setRGB0(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5]);
+    setRGB1(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5]);
+    setRGB2(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5]);
+    setRGB3(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5]);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 0, sizeof(POLY_GT4));
+}
 
 MATCH void func_801F02BC(void) {
     SYS_DISPATCH_BYTE(D_801F07D4, g_Task->header.step);

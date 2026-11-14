@@ -159,7 +159,7 @@ INCLUDE_ASM(func_801EF180);
 #endif
 
 /* Draws a fan of projected LINE_F2 rays, one per count up to the effect counter 0x09: each ray swings by an
- * eighth of a turn more and shortens with the timer; in mode 5 the rays turn semi-transparent and fade. */
+ * thirty-second of a turn more and its x falls with the timer; in mode 5 the rays turn semi-transparent and fade. */
 MATCH void func_801EF2D4(void) {
     LINE_F2* prim;
     long     p;

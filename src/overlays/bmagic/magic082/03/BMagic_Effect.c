@@ -6,7 +6,62 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/Effect_DispatchMode.h"
 
-INCLUDE_ASM(func_801EEC94);
+MATCH void func_801EEC94(void) {
+    u8           i;
+    u8           slot;
+    PartyMember* actor;
+    u16*         dst;
+    u16*         src;
+
+    actor          = g_Battle.selected_actor;
+    g_Task->facing = actor->facing;
+    WorldPos_Copy(&g_Task->pos, &actor->pos);
+    g_Task->unk_04       = func_801EF3A0();
+    g_Task->param.unk_0B = 0;
+    g_Task->unk_09       = 16;
+    g_Task->header.mode += 1;
+    slot = Battle_AllocEffect(1, 5);
+    {
+        PartyMember* work;
+
+        work                               = g_Task;
+        g_BattleEffects[slot].header.mode  = 0;
+        g_BattleEffects[slot].target.party = work;
+        g_BattleEffects[slot].unk_04       = g_Task->unk_04;
+        g_BattleEffects[slot].arg.unk_09   = 0;
+    }
+    {
+        PartyMember* work;
+
+        work                        = g_Task;
+        g_BattleEffects[slot].pos.x = work->pos.x;
+        g_BattleEffects[slot].pos.y = work->pos.y;
+        g_BattleEffects[slot].pos.z = work->pos.z;
+        work->param.unk_0B += 1;
+    }
+    for (i = 0; i < 4; i++) {
+        PartyMember* work;
+
+        slot                               = Battle_AllocEffect(1, 5);
+        work                               = g_Task;
+        g_BattleEffects[slot].header.mode  = 1;
+        g_BattleEffects[slot].target.party = work;
+        g_BattleEffects[slot].unk_04       = g_Task->unk_04;
+        g_BattleEffects[slot].unk_0B       = i * 8;
+        g_BattleEffects[slot].arg.unk_09   = i * 8 + 1;
+        g_BattleEffects[slot].unk_0A       = g_Task->unk_09;
+        g_Task->param.unk_0B += 1;
+    }
+    i   = 0;
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 26 * AREA_PALETTE_ROW);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 26 * AREA_PALETTE_ROW);
+    for (; i < 16; i++) {
+        dst[i]      = src[i];
+        dst[i + 16] = src[i + 16];
+    }
+    g_GfxPalettePending = 1;
+    SND_QueueSelectionFx(EMI_CUE_ID(SND_BANK_COMMON, 0));
+}
 
 #include "overlays/bmagic/Effect_ReplacePaletteFade.h"
 

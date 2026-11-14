@@ -207,7 +207,53 @@ MATCH void func_801EF660(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF7E8);
+/* Draw the magic046 glow quad around the effect, its radius growing with the timer. */
+MATCH void func_801EF7E8(void) {
+    POLY_GT4* prim;
+    s32       tpage;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+    prim = (POLY_GT4*)g_GfxPrimCursor;
+    SetPolyGT4(prim);
+    SetSemiTrans(prim, 1);
+    if (g_Task->unk_09 < 8) {
+        D_1F800000.view.effect.params[0] = (g_Task->unk_09 + 1) * 6;
+    } else {
+        D_1F800000.view.effect.params[0] = g_Task->unk_09 * 2 + 0x20;
+    }
+    D_1F800000.view.effect.params[4] = g_Task->timer * 20;
+    D_1F800000.view.effect.params[2] = g_Task->unk_2E.half;
+    D_1F800000.view.effect.params[3] = g_Task->unk_30.half;
+    prim->x0                         = D_1F800000.view.effect.params[2] + FIXED_MUL(rsin(0xC00), D_1F800000.view.effect.params[0]);
+    prim->y0                         = D_1F800000.view.effect.params[3] + FIXED_MUL(rcos(0xC00), D_1F800000.view.effect.params[0]);
+    prim->x1                         = D_1F800000.view.effect.params[2] + FIXED_MUL(rsin(0x800), D_1F800000.view.effect.params[0]);
+    prim->y1                         = D_1F800000.view.effect.params[3] + FIXED_MUL(rcos(0x800), D_1F800000.view.effect.params[0]);
+    prim->x2                         = D_1F800000.view.effect.params[2] + FIXED_MUL(rsin(0), D_1F800000.view.effect.params[0]);
+    prim->y2                         = D_1F800000.view.effect.params[3] + FIXED_MUL(rcos(0), D_1F800000.view.effect.params[0]);
+    prim->x3                         = D_1F800000.view.effect.params[2] + FIXED_MUL(rsin(0x400), D_1F800000.view.effect.params[0]);
+    prim->y3                         = D_1F800000.view.effect.params[3] + FIXED_MUL(rcos(0x400), D_1F800000.view.effect.params[0]);
+    prim->tpage                      = GetTPage(0, 1, 832, 256);
+    prim->clut                       = GetClut(0, 506);
+    prim->u0                         = 1;
+    prim->v0                         = 1;
+    prim->u1                         = 31;
+    prim->v1                         = 1;
+    prim->u2                         = 1;
+    prim->v2                         = 31;
+    prim->u3                         = 31;
+    prim->v3                         = 31;
+    setRGB0(prim, D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[4]);
+    setRGB1(prim, D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[4]);
+    setRGB2(prim, D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[4]);
+    setRGB3(prim, D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[4]);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_GT4));
+}
 
 MATCH void func_801EFB90(void) {
     SVECTOR pos;

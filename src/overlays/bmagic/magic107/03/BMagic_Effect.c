@@ -185,7 +185,66 @@ MATCH void func_801EF290(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF544);
+MATCH void func_801EF544(void) {
+    POLY_F4* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      row;
+    s32      semi;
+    s32      tpage;
+
+    semi = g_Task->header.mode & 1;
+    if (GetGraphType() == 1) {
+        tpage = (semi << 7) | 0x25;
+    } else if (GetGraphType() == 2) {
+        tpage = (semi << 7) | 0x25;
+    } else {
+        tpage = (semi << 5) | 0x15;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+    D_1F800000.view.scenario.math_00 = 32;
+    for (row = 8; row >= 5; row--) {
+        D_1F800014[1].vx = FIXED_MUL(rsin(0), FIXED_MUL(rcos((row - 1) << 8), D_1F800000.view.scenario.math_00));
+        D_1F800014[1].vy = FIXED_MUL(rcos(0), FIXED_MUL(rcos((row - 1) << 8), D_1F800000.view.scenario.math_00));
+        D_1F800014[1].vz = FIXED_MUL(rsin((row - 1) << 8), D_1F800000.view.scenario.math_00) + 448;
+        D_1F800014[3].vx = FIXED_MUL(rsin(0), FIXED_MUL(rcos(row << 8), D_1F800000.view.scenario.math_00));
+        D_1F800014[3].vy = FIXED_MUL(rcos(0), FIXED_MUL(rcos(row << 8), D_1F800000.view.scenario.math_00));
+        D_1F800014[3].vz = FIXED_MUL(rsin(row << 8), D_1F800000.view.scenario.math_00) + 448;
+        for (i = 1; i <= 16; i++) {
+            D_1F800014[0].vx = D_1F800014[1].vx;
+            D_1F800014[0].vy = D_1F800014[1].vy;
+            D_1F800014[0].vz = D_1F800014[1].vz;
+            D_1F800014[1].vx = FIXED_MUL(rsin(i << 8), FIXED_MUL(rcos((row - 1) << 8), D_1F800000.view.scenario.math_00));
+            D_1F800014[1].vy = FIXED_MUL(rcos(i << 8), FIXED_MUL(rcos((row - 1) << 8), D_1F800000.view.scenario.math_00));
+            D_1F800014[1].vz = FIXED_MUL(rsin((row - 1) << 8), D_1F800000.view.scenario.math_00) + 448;
+            D_1F800014[2].vx = D_1F800014[3].vx;
+            D_1F800014[2].vy = D_1F800014[3].vy;
+            D_1F800014[2].vz = D_1F800014[3].vz;
+            D_1F800014[3].vx = FIXED_MUL(rsin(i << 8), FIXED_MUL(rcos(row << 8), D_1F800000.view.scenario.math_00));
+            D_1F800014[3].vy = FIXED_MUL(rcos(i << 8), FIXED_MUL(rcos(row << 8), D_1F800000.view.scenario.math_00));
+            D_1F800014[3].vz = FIXED_MUL(rsin(row << 8), D_1F800000.view.scenario.math_00) + 448;
+            if (i >= 5) {
+                prim = (POLY_F4*)g_GfxPrimCursor;
+                SetPolyF4(prim);
+                SetSemiTrans(prim, semi);
+                RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+                if (g_Task->header.mode & 1) {
+                    setRGB0(prim, g_Task->timer * 6, 1, 1);
+                } else {
+                    if (i < 8) {
+                        D_1F800000.view.scenario.math_0C = i * 16 + 1;
+                    } else {
+                        D_1F800000.view.scenario.math_0C = 129 - (i - 8) * 16;
+                    }
+                    setRGB0(prim, 192, D_1F800000.view.scenario.math_0C, 1);
+                }
+                Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_F4));
+            }
+        }
+    }
+}
 
 #include "overlays/bmagic/Effect_SetActorMatrixQuarterRoll.h"
 

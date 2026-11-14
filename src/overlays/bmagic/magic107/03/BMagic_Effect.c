@@ -191,6 +191,50 @@ INCLUDE_ASM(func_801EF544);
 
 INCLUDE_ASM(func_801EFAE0);
 
-INCLUDE_ASM(func_801EFEA8);
+MATCH void func_801EFEA8(void) {
+    LINE_G4* prim;
+    long     depth;
+    long     flag;
+    s32      tpage;
+    u32      count;
+    u32      span;
+    u32      step;
+
+    count                            = g_Task->timer >> 2;
+    D_1F800000.view.scenario.math_0C = count * 12 + 1;
+    span                             = count + 1;
+    for (step = g_Task->unk_09 & 0x3F; step != ((g_Task->unk_09 - span) & 0x3F); step = (step - 1) & 0x3F) {
+        D_1F800000.view.scenario.math_08 = FIXED_MUL(rsin(step << 6), 512) + 0x400;
+        D_1F800014[0].vx                 = 0;
+        D_1F800014[0].vy                 = FIXED_MUL(rcos(D_1F800000.view.scenario.math_08), D_1F800000.view.scenario.math_00);
+        D_1F800014[0].vz                 = FIXED_MUL(rsin(D_1F800000.view.scenario.math_08), D_1F800000.view.scenario.math_00);
+        D_1F800014[1].vx                 = 0;
+        D_1F800014[1].vy                 = (u32)rcos(D_1F800000.view.scenario.math_08) >> 8;
+        D_1F800014[1].vz                 = (u32)rsin(D_1F800000.view.scenario.math_08) >> 8;
+        D_1F800014[2].vx                 = 0;
+        D_1F800014[2].vy                 = (u32)(rcos(D_1F800000.view.scenario.math_08) * 21) >> 8;
+        D_1F800014[2].vz                 = (u32)(rsin(D_1F800000.view.scenario.math_08) * 21) >> 8;
+        D_1F800014[3].vx                 = 0;
+        D_1F800014[3].vy                 = (u32)(rcos(D_1F800000.view.scenario.math_08) * 3) >> 5;
+        D_1F800014[3].vz                 = (u32)(rsin(D_1F800000.view.scenario.math_08) * 3) >> 5;
+        if (GetGraphType() == 1 || GetGraphType() == 2) {
+            tpage = 0xA5;
+        } else {
+            tpage = 0x35;
+        }
+        SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+        prim = (LINE_G4*)g_GfxPrimCursor;
+        SetLineG4(prim);
+        SetSemiTrans(prim, 1);
+        RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+        setRGB0(prim, 1, 1, 1);
+        setRGB1(prim, D_1F800000.view.scenario.math_0C, D_1F800000.view.scenario.math_0C, D_1F800000.view.scenario.math_0C);
+        setRGB2(prim, D_1F800000.view.scenario.math_0C, D_1F800000.view.scenario.math_0C, D_1F800000.view.scenario.math_0C);
+        setRGB3(prim, 1, 1, 1);
+        D_1F800000.view.scenario.math_0C -= 12;
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(LINE_G4));
+    }
+}
 
 INCLUDE_ASM(func_801F01AC);

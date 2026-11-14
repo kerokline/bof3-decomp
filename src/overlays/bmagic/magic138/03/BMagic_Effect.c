@@ -66,7 +66,50 @@ MATCH void func_801EEFA4(void) {
     g_ScriptTable = AREA_SCRIPT_TABLE;
 }
 
-INCLUDE_ASM(func_801EF04C);
+MATCH void func_801EF04C(void) {
+    s32 left;
+
+    if (g_Battle.active_battler < 3) {
+        if (g_BattleEffectBattler->unk_09 & 1) {
+            left           = g_Task->unk_2E.signed_half - 40;
+            g_Task->unk_0C = ((g_Game.members[g_Battle.active_battler].unk_2E.signed_half - left) << 4) / 8;
+            g_Task->unk_10 = ((g_Game.members[g_Battle.active_battler].unk_30.signed_half - g_Task->unk_30.signed_half) << 4) / 8;
+        } else {
+            left           = g_Task->unk_2E.signed_half - 20;
+            g_Task->unk_0C = ((g_Game.members[g_Battle.active_battler].unk_2E.signed_half - left) << 4) / 8;
+            g_Task->unk_10 = ((g_Game.members[g_Battle.active_battler].unk_30.signed_half - g_Task->unk_30.signed_half) << 4) / 8;
+        }
+    } else {
+        if (g_BattleEffectBattler->unk_09 & 1) {
+            left           = g_Task->unk_2E.signed_half - 40;
+            g_Task->unk_0C = ((g_BattleEnemyBattlers[g_Battle.active_battler - 3].unk_2E - left) << 4) / 8;
+            g_Task->unk_10 = ((g_BattleEnemyBattlers[g_Battle.active_battler - 3].unk_30 - g_Task->unk_30.signed_half) << 4) / 8;
+        } else {
+            left           = g_Task->unk_2E.signed_half - 20;
+            g_Task->unk_0C = ((g_BattleEnemyBattlers[g_Battle.active_battler - 3].unk_2E - left) << 4) / 8;
+            g_Task->unk_10 = ((g_BattleEnemyBattlers[g_Battle.active_battler - 3].unk_30 - g_Task->unk_30.signed_half) << 4) / 8;
+        }
+    }
+    g_Task->unk_18      = g_Task->unk_2E.signed_half << 4;
+    g_Task->unk_1C      = g_Task->unk_30.signed_half << 4;
+    g_Task->unk_25      = 30;
+    g_Task->unk_26      = 0;
+    g_Task->unk_48      = 1;
+    g_Task->unk_27      = 0xA0;
+    g_Task->unk_28      = 0;
+    g_Task->unk_24      = 0x84;
+    g_Task->unk_5D      = 0;
+    g_Task->unk_5E      = 0;
+    g_Task->unk_5F      = 0;
+    g_Task->unk_5C      = 0;
+    g_Task->unk_2A      = 0;
+    g_Task->unk_29      = 3;
+    g_Task->unk_2C.half = 0;
+    g_Task->unk_2B      = 0;
+    Actor_SelectScript((g_Battle.target_selector - 3) & 1);
+    g_Task->unk_09 = 3;
+    g_Task->header.step += 1;
+}
 
 MATCH void func_801EF3A0(void) {
     u8 slot;

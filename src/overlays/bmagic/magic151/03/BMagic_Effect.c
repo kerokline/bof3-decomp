@@ -417,7 +417,62 @@ MATCH void func_801F026C(void) {
     }
 }
 
-INCLUDE_ASM(func_801F0648);
+MATCH void func_801F0648(void) {
+    POLY_G4* prim;
+    long     depth;
+    long     flag;
+    s32      tpage;
+    s32      x;
+    s32      y;
+    u8       i;
+
+    D_1F800000.view.effect.params[5] = (s8)g_Task->unk_5E * 12;
+    D_1F800000.view.effect.params[6] = (s8)g_Task->unk_5E * 8;
+    D_1F800000.view.effect.params[0] = g_Task->unk_09 * 16;
+    D_1F800000.view.effect.params[2] = FIXED_MUL(rsin(0x400), D_1F800000.view.effect.params[0]);
+    D_1F800000.view.effect.params[4] = FIXED_MUL(rcos(0x400), D_1F800000.view.effect.params[0]);
+    D_1F800000.view.effect.params[0] = g_Task->unk_09 * 18;
+    D_1F800000.view.effect.params[7] = ((s8)g_Task->unk_5F + RANDOM_MASK(3)) * 32;
+    D_1F800000.view.effect.params[1] = FIXED_MUL(rsin(D_1F800000.view.effect.params[7]), D_1F800000.view.effect.params[0]);
+    D_1F800000.view.effect.params[3] = FIXED_MUL(rcos(D_1F800000.view.effect.params[7]), D_1F800000.view.effect.params[0]);
+    D_1F800014[1].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.effect.params[1]);
+    D_1F800014[1].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.effect.params[1]);
+    D_1F800014[0].vz                 = D_1F800000.view.effect.params[3];
+    D_1F800014[1].vz                 = D_1F800000.view.effect.params[3];
+    D_1F800014[3].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.effect.params[2]);
+    D_1F800014[3].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.effect.params[2]);
+    D_1F800014[2].vz                 = D_1F800000.view.effect.params[4];
+    D_1F800014[3].vz                 = D_1F800000.view.effect.params[4];
+    for (i = 1; i <= 16; i++) {
+        D_1F800000.view.effect.params[7] = (i & 15) * 256;
+        D_1F800014[0].vx                 = D_1F800014[1].vx;
+        D_1F800014[0].vy                 = D_1F800014[1].vy;
+        D_1F800014[1].vx                 = FIXED_MUL(rsin(D_1F800000.view.effect.params[7]), D_1F800000.view.effect.params[1]);
+        D_1F800014[1].vy                 = FIXED_MUL(rcos(D_1F800000.view.effect.params[7]), D_1F800000.view.effect.params[1]);
+        D_1F800014[2].vx                 = D_1F800014[3].vx;
+        D_1F800014[2].vy                 = D_1F800014[3].vy;
+        D_1F800014[3].vx                 = FIXED_MUL(rsin(D_1F800000.view.effect.params[7]), D_1F800000.view.effect.params[2]);
+        D_1F800014[3].vy                 = FIXED_MUL(rcos(D_1F800000.view.effect.params[7]), D_1F800000.view.effect.params[2]);
+        x                                = (D_1F800014[3].vx << 9) + g_Task->pos.x.fixed;
+        y                                = (D_1F800014[3].vy << 9) + g_Task->pos.y.fixed;
+        if (GetGraphType() == 1 || GetGraphType() == 2) {
+            tpage = 0xA5;
+        } else {
+            tpage = 0x35;
+        }
+        SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+        Area_AddCellPrim(x, y, 1, sizeof(DR_MODE));
+        prim = (POLY_G4*)g_GfxPrimCursor;
+        SetPolyG4(prim);
+        SetSemiTrans(prim, 1);
+        RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+        setRGB0(prim, 1, 1, 1);
+        setRGB1(prim, 1, 1, 1);
+        setRGB2(prim, D_1F800000.view.effect.params[5], D_1F800000.view.effect.params[6], D_1F800000.view.effect.params[5]);
+        setRGB3(prim, D_1F800000.view.effect.params[5], D_1F800000.view.effect.params[6], D_1F800000.view.effect.params[5]);
+        Area_AddCellPrim(x, y, 1, sizeof(POLY_G4));
+    }
+}
 
 /* Draws the glow ring step header.step selects: sets the actor matrix, advances the effect timers and
  * passes the slot's draw row to func_801F0D0C while the step is running. */

@@ -333,7 +333,64 @@ MATCH void func_801F015C(void) {
     }
 }
 
-INCLUDE_ASM(func_801F01F0);
+MATCH void func_801F01F0(void) {
+    POLY_GT4* prim;
+    s32       tpage;
+    u8        shade;
+
+    shade                            = g_Task->param.unk_0B * 8;
+    D_1F800000.view.effect.params[6] = g_Task->unk_09;
+    D_1F800000.view.effect.params[7] = g_Task->timer;
+    D_1F800000.view.effect.params[3] = g_Task->unk_2E.half;
+    D_1F800000.view.effect.params[4] = g_Task->unk_30.half;
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x2A5;
+    } else {
+        tpage = 0xB5;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 0, sizeof(DR_MODE));
+
+    prim = (POLY_GT4*)g_GfxPrimCursor;
+    SetPolyGT4(prim);
+    SetSemiTrans(prim, 1);
+    prim->x0 = D_1F800000.view.effect.params[3] - D_1F800000.view.effect.params[7];
+    prim->y0 = D_1F800000.view.effect.params[4] - D_1F800000.view.effect.params[6];
+    prim->x1 = D_1F800000.view.effect.params[3] + D_1F800000.view.effect.params[7];
+    prim->y1 = D_1F800000.view.effect.params[4] - D_1F800000.view.effect.params[6];
+    prim->x2 = D_1F800000.view.effect.params[3] - D_1F800000.view.effect.params[7];
+    prim->y2 = D_1F800000.view.effect.params[4];
+    prim->x3 = D_1F800000.view.effect.params[3] + D_1F800000.view.effect.params[7];
+    prim->y3 = D_1F800000.view.effect.params[4];
+    setRGB0(prim, shade, shade, shade);
+    setRGB1(prim, shade, shade, shade);
+    setRGB2(prim, shade, shade, shade);
+    setRGB3(prim, shade, shade, shade);
+    prim->tpage = GetTPage(1, 1, 832, 256);
+    prim->clut  = GetClut(0, 506);
+    setUV4(prim, 0x40, 0x40, 0xC0, 0x40, 0x40, 0xFF, 0xC0, 0xFF);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 0, sizeof(POLY_GT4));
+
+    prim = (POLY_GT4*)g_GfxPrimCursor;
+    SetPolyGT4(prim);
+    SetSemiTrans(prim, 1);
+    prim->x0 = D_1F800000.view.effect.params[3] - D_1F800000.view.effect.params[7];
+    prim->y0 = D_1F800000.view.effect.params[4] - D_1F800000.view.effect.params[6] - 16;
+    prim->x1 = D_1F800000.view.effect.params[3] + D_1F800000.view.effect.params[7];
+    prim->y1 = D_1F800000.view.effect.params[4] - D_1F800000.view.effect.params[6] - 16;
+    prim->x2 = D_1F800000.view.effect.params[3] - D_1F800000.view.effect.params[7];
+    prim->y2 = D_1F800000.view.effect.params[4] - D_1F800000.view.effect.params[6];
+    prim->x3 = D_1F800000.view.effect.params[3] + D_1F800000.view.effect.params[7];
+    prim->y3 = D_1F800000.view.effect.params[4] - D_1F800000.view.effect.params[6];
+    setRGB0(prim, 1, 1, 1);
+    setRGB1(prim, 1, 1, 1);
+    setRGB2(prim, shade, shade, shade);
+    setRGB3(prim, shade, shade, shade);
+    prim->tpage = GetTPage(1, 1, 832, 256);
+    prim->clut  = GetClut(0, 506);
+    setUV4(prim, 0x40, 0x30, 0xC0, 0x30, 0x40, 0x40, 0xC0, 0x40);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 0, sizeof(POLY_GT4));
+}
 
 /* func_801F05BC */
 #include "overlays/bmagic/BMagic_AllocEffect.h"

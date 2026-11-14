@@ -237,7 +237,56 @@ MATCH void func_801EF8E4(void) {
     Effect_CountUpTimer();
 }
 
-INCLUDE_ASM(func_801EF944);
+/* Draw the magic113 orbit as up to 32 projected line segments; in step 2 the lines turn
+ * semi-transparent and fade with the effect timer. */
+MATCH void func_801EF944(void) {
+    LINE_F2* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      tpage;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(5, sizeof(DR_MODE));
+    D_1F800014[0].vx = FIXED_MUL(rsin(0), s_Magic113OrbitRadius);
+    D_1F800014[0].vy = FIXED_MUL(rcos(0), s_Magic113OrbitRadius);
+    D_1F800014[0].vz = 0;
+    for (i = 1; i <= 32; i++) {
+        if (i < g_Task->unk_09) {
+            prim = (LINE_F2*)g_GfxPrimCursor;
+            SetLineF2(prim);
+            if (g_Task->header.step == 2) {
+                SetSemiTrans(prim, 1);
+            }
+            RotTransPers(&D_1F800014[0], (long*)&prim->x0, &depth, &flag);
+            D_1F800014[0].vx = FIXED_MUL(rsin(i << 7), s_Magic113OrbitRadius);
+            D_1F800014[0].vy = FIXED_MUL(rcos(i << 7), s_Magic113OrbitRadius);
+            D_1F800014[0].vz = 0;
+            RotTransPers(&D_1F800014[0], (long*)&prim->x1, &depth, &flag);
+            prim->r0 = 240;
+            prim->g0 = 170;
+            prim->b0 = 200;
+            if (g_Task->header.step == 2) {
+                prim->r0 = 240 - g_Task->timer * 20;
+                prim->g0 = 170 - g_Task->timer * 14;
+                prim->b0 = 200 - g_Task->timer * 16;
+            }
+            GFX_AddPrim(5, sizeof(LINE_F2));
+        }
+    }
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x25;
+    } else {
+        tpage = 0x15;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(5, sizeof(DR_MODE));
+}
 
 MATCH void func_801EFC28(void) {
     SYS_DISPATCH_BYTE(D_801F0BC0, g_Task->header.step);

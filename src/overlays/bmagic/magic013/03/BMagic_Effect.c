@@ -280,7 +280,24 @@ MATCH void func_801EFE80(void) {
     }
 }
 
-INCLUDE_ASM(func_801EFF88);
+MATCH void func_801EFF88(void) {
+    s32* angle_cell;
+
+    angle_cell  = &D_1F800004;
+    *angle_cell = g_Task->param.unk_0B << 7;
+    g_Task->pos.x.fixed += (rsin(*angle_cell) * 0x400) >> 9;
+    g_Task->pos.y.fixed += (rcos(*angle_cell) * 0x400) >> 9;
+    g_Task->unk_14 += g_Task->unk_20;
+    COORD_INT(g_Task->pos.z) += g_Task->unk_14;
+    if (--g_Task->unk_09 == 0) {
+        g_BattleEffectBattler->param.unk_0B -= 1;
+        g_Task->header.flags = 0;
+        g_Task->header.mode  = 0;
+        g_Task->header.step  = 0;
+        g_Task->unk_03       = 0;
+        g_Task->unk_04       = 0;
+    }
+}
 
 MATCH void func_801F00A8(void) {
     SVECTOR pos;

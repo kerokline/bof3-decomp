@@ -178,6 +178,22 @@ MATCH void func_801EF3A8(void) {
 
 INCLUDE_ASM(BMagic_DrawDragonBreath);
 
-INCLUDE_ASM(func_801F0198);
+MATCH void func_801F0198(u8 count) {
+    LINE_F2* line;
+    s32      tpage;
+    s32      i;
+    s32      run;
+    s32      wave;
 
-INCLUDE_ASM(func_801F06E8);
+    MAGIC121_DRAW_BOLT(count, 0x400);
+}
+
+MATCH void func_801F06E8(u8 count) {
+    LINE_F2* line;
+    s32      tpage;
+    s32      i;
+    s32      run;
+    s32      wave;
+
+    MAGIC121_DRAW_BOLT(count, -0x400);
+}

@@ -68,7 +68,71 @@ MATCH void func_801EEEE4(void) {
     }
 }
 
-INCLUDE_ASM(func_801EEFB8);
+MATCH void func_801EEFB8(void) {
+    u8 timer;
+
+    timer          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = timer;
+    if (!(timer & BYTE_MASK)) {
+        g_Task->facing = g_BattleEffectBattler->facing;
+        g_Task->unk_0C = D_801F0408[g_Task->unk_04].x;
+        g_Task->unk_10 = D_801F0408[g_Task->unk_04].y;
+        func_801DD350(g_Task);
+        g_Task->pos.x.fixed = g_BattleEffectBattler->pos.x.fixed + g_Task->unk_0C;
+        g_Task->pos.y.fixed = g_BattleEffectBattler->pos.y.fixed + g_Task->unk_10;
+        g_Task->pos.z.fixed = g_BattleEffectBattler->pos.z.fixed;
+        switch (g_Task->facing) {
+            case 0:
+                if (!(g_Task->unk_04 & 1)) {
+                    g_Task->unk_18 = (rand() & 0xFF) + 0xE80;
+                } else {
+                    g_Task->unk_18 = (rand() & 0xFF) + 0x80;
+                }
+                g_Task->unk_1C = ((rand() & 0xFF) - 0x80) & 0xFFF;
+                if (!(rand() & 0xF)) {
+                    g_Task->unk_18 = (rand() & 0xFF) - 0x80;
+                }
+                break;
+            case 1:
+                if (!(g_Task->unk_04 & 1)) {
+                    g_Task->unk_1C = (rand() & 0xFF) + 0xE80;
+                } else {
+                    g_Task->unk_1C = (rand() & 0xFF) + 0x80;
+                }
+                g_Task->unk_18 = ((rand() & 0xFF) - 0x80) & 0xFFF;
+                if (!(rand() & 0xF)) {
+                    g_Task->unk_1C = (rand() & 0xFF) - 0x80;
+                }
+                break;
+            case 2:
+                if (g_Task->unk_04 & 1) {
+                    g_Task->unk_18 = (rand() & 0xFF) + 0xE80;
+                } else {
+                    g_Task->unk_18 = (rand() & 0xFF) + 0x80;
+                }
+                g_Task->unk_1C = ((rand() & 0xFF) - 0x80) & 0xFFF;
+                if (!(rand() & 0xF)) {
+                    g_Task->unk_18 = (rand() & 0xFF) - 0x80;
+                }
+                break;
+            case 3:
+                if (g_Task->unk_04 & 1) {
+                    g_Task->unk_1C = (rand() & 0xFF) + 0xE80;
+                } else {
+                    g_Task->unk_1C = (rand() & 0xFF) + 0x80;
+                }
+                g_Task->unk_18 = ((rand() & 0xFF) - 0x80) & 0xFFF;
+                if (!(rand() & 0xF)) {
+                    g_Task->unk_1C = (rand() & 0xFF) - 0x80;
+                }
+                break;
+        }
+        g_Task->param.unk_0B = 30 - D_801F0498[g_Task->unk_04];
+        g_Task->unk_09       = 0;
+        g_Task->timer        = 0;
+        g_Task->header.step += 1;
+    }
+}
 
 MATCH void func_801EF2CC(void) {
     g_Task->unk_09 += 2;

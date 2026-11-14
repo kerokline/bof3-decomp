@@ -15,7 +15,7 @@ MATCH void func_801EEC04(void) {
         if (D_801F12BC[(u8)count].header.flags & 0x1) {
             saved                 = g_BattleEffectBattler;
             swap                  = D_801F12BC[(u8)count].battler;
-            D_801F22BC            = (PartyMember*)&D_801F12BC[(u8)count];
+            D_801F22BC            = &D_801F12BC[(u8)count];
             g_BattleEffectBattler = swap;
             func_801F091C();
             g_BattleEffectBattler = saved;
@@ -273,9 +273,9 @@ MATCH void func_801EFD5C(void) {
     SetPolyGT4(prim);
     SetSemiTrans(prim, 1);
     prim->x0 = D_1F800000.view.effect.params[6] - D_1F800000.view.effect.params[0];
-    prim->y0 = D_1F800000.view.effect.params[7] - (s16)(D_1F800000.view.effect.params[1] + 16);
+    prim->y0 = -(D_1F800000.view.effect.params[1] + 16) + D_1F800000.view.effect.params[7];
     prim->x1 = D_1F800000.view.effect.params[6] + D_1F800000.view.effect.params[0];
-    prim->y1 = D_1F800000.view.effect.params[7] - (s16)(D_1F800000.view.effect.params[1] + 16);
+    prim->y1 = -(D_1F800000.view.effect.params[1] + 16) + D_1F800000.view.effect.params[7];
     prim->x2 = D_1F800000.view.effect.params[6] - D_1F800000.view.effect.params[0];
     prim->y2 = D_1F800000.view.effect.params[7] - 16;
     prim->x3 = D_1F800000.view.effect.params[6] + D_1F800000.view.effect.params[0];

@@ -16,7 +16,6 @@ typedef struct Magic056Steps {
 extern Magic056Steps D_801EEC10;
 extern Callback      D_801F0754[];
 void                 func_801EF4C0(void);
-void                 func_800AFC54(void);
 u8                   func_800AFB48(PartyMember* battler);
 void                 func_800AF8F0(PartyMember* work);
 

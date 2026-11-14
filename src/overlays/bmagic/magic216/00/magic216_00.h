@@ -14,7 +14,8 @@ extern volatile u8 g_BattleActiveBattler;
 extern s8 D_801EF078[];
 
 bool Item_Add(s32 category, u8 item_id, u8 count, s32 unused);
-void func_801DE8C0(s32 arg0, s32 arg1, s32 arg2);
+/* Battle_AddMessage */
+void func_801DE8C0(s32 index, s32 record_kind, u8* text);
 void func_801EEF98(s32 index, s32 category);
 
 #endif

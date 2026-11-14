@@ -200,7 +200,7 @@ MATCH void func_801EF7A0(void) {
 INCLUDE_ASM(func_801EF7FC);
 
 /* Draw the magic021 ring as sixteen shaded quads between two radii around the effect,
- * tinted on the outer edge by the timer and dark on the inner one. */
+ * tinted on the inner edge by the timer and dark on the outer one. */
 MATCH void func_801EFA48(void) {
     POLY_G4* prim;
     s32      tpage;

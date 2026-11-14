@@ -203,7 +203,92 @@ MATCH void func_801EF1FC(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF804);
+/* Draws the same six-row ring as func_801EF1FC with semi-transparent gouraud quads: a quad lights
+ * once unk_09 passes 8r, 48 shades per step up to 0xC0 on its outer edge for the first four steps,
+ * then the inner edge fades in the same way. */
+MATCH void func_801EF804(void) {
+    POLY_G4* prim;
+    long     depth;
+    long     flag;
+    s32      row;
+    s32      i;
+    s32      x;
+    s32      y;
+    s32      tpage;
+    s32      fade;
+
+    for (row = 0; row < 6; row++) {
+        D_1F800000.view.scenario.math_04 = 0x100 - row * 41;
+        D_1F800000.view.scenario.math_00 = D_1F800000.view.scenario.math_04 + D_801F065C[row * 8];
+        D_1F800014[0].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.scenario.math_00);
+        D_1F800014[0].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.scenario.math_00);
+        D_1F800014[0].vz                 = -(D_801F065C[row * 8] + row * 72);
+        D_1F800000.view.scenario.math_04 = 0x100 - (row + 1) * 41;
+        D_1F800000.view.scenario.math_00 = D_1F800000.view.scenario.math_04 + D_801F065C[row * 8 + 8];
+        D_1F800014[1].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.scenario.math_00);
+        D_1F800014[1].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.scenario.math_00);
+        D_1F800014[1].vz                 = -((row + 1) * 72 + D_801F065C[row * 8 + 8]);
+        if (row == 5) {
+            D_1F800014[1].vy = 0;
+            D_1F800014[1].vx = 0;
+        }
+        for (i = 1; i < 9; i++) {
+            D_1F800014[2].vx                 = D_1F800014[0].vx;
+            D_1F800014[2].vy                 = D_1F800014[0].vy;
+            D_1F800014[2].vz                 = D_1F800014[0].vz;
+            D_1F800014[3].vx                 = D_1F800014[1].vx;
+            D_1F800014[3].vy                 = D_1F800014[1].vy;
+            D_1F800014[3].vz                 = D_1F800014[1].vz;
+            D_1F800000.view.scenario.math_04 = 0x100 - row * 41;
+            D_1F800000.view.scenario.math_00 = D_1F800000.view.scenario.math_04 + D_801F065C[row * 8 + (i & 7)];
+            D_1F800014[0].vx                 = FIXED_MUL(rsin(i << 9), D_1F800000.view.scenario.math_00);
+            D_1F800014[0].vy                 = FIXED_MUL(rcos(i << 9), D_1F800000.view.scenario.math_00);
+            D_1F800014[0].vz                 = -(D_801F065C[row * 8 + (i & 7)] + row * 72);
+            D_1F800000.view.scenario.math_04 = 0x100 - (row + 1) * 41;
+            D_1F800000.view.scenario.math_00 = D_1F800000.view.scenario.math_04 + D_801F065C[(row + 1) * 8 + (i & 7)];
+            D_1F800014[1].vx                 = FIXED_MUL(rsin(i << 9), D_1F800000.view.scenario.math_00);
+            D_1F800014[1].vy                 = FIXED_MUL(rcos(i << 9), D_1F800000.view.scenario.math_00);
+            D_1F800014[1].vz                 = -(D_801F065C[(row + 1) * 8 + (i & 7)] + (row + 1) * 72);
+            if (row == 5) {
+                D_1F800014[1].vy = 0;
+                D_1F800014[1].vx = 0;
+            }
+            x     = (D_1F800014[0].vx << 9) + g_Task->pos.x.fixed;
+            y     = (D_1F800014[0].vy << 9) + g_Task->pos.y.fixed;
+            tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
+            SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+            Area_AddCellPrim(x, y, 0, sizeof(DR_MODE));
+            prim = GFX_CURSOR(POLY_G4);
+            SetPolyG4(prim);
+            SetSemiTrans(prim, 1);
+            RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+            fade = g_Task->unk_09 - row * 8;
+            if (fade > 0) {
+                D_1F800000.view.scenario.math_08 = fade;
+                if (fade < 5) {
+                    D_1F800000.view.scenario.math_08 = fade * 48;
+                    if (D_1F800000.view.scenario.math_08 > 0xC0) {
+                        D_1F800000.view.scenario.math_08 = 0xC0;
+                    }
+                    setRGB0(prim, 1, 1, D_1F800000.view.scenario.math_08);
+                    setRGB1(prim, 1, 1, 1);
+                    setRGB2(prim, 1, 1, D_1F800000.view.scenario.math_08);
+                    setRGB3(prim, 1, 1, 1);
+                } else {
+                    D_1F800000.view.scenario.math_08 = (fade - 4) * 48;
+                    if (D_1F800000.view.scenario.math_08 > 0xC0) {
+                        D_1F800000.view.scenario.math_08 = 0xC0;
+                    }
+                    setRGB0(prim, 1, 1, 0xC0);
+                    setRGB1(prim, 1, 1, D_1F800000.view.scenario.math_08);
+                    setRGB2(prim, 1, 1, 0xC0);
+                    setRGB3(prim, 1, 1, D_1F800000.view.scenario.math_08);
+                }
+                Area_AddCellPrim(x, y, 0, sizeof(POLY_G4));
+            }
+        }
+    }
+}
 
 MATCH void func_801EFDDC(void) {
     POLY_G3* prim;

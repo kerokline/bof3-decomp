@@ -173,7 +173,53 @@ MATCH void func_801EFA54(void) {
     BMAGIC_PROJECT_ACTOR_MATRIX(g_Task);
 }
 
-INCLUDE_ASM(func_801EFB2C);
+MATCH void func_801EFB2C(void) {
+    POLY_G3* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      tpage;
+    s32      x;
+    s32      y;
+    s32      radius;
+
+    radius                           = rcos(0x800) * 30;
+    D_1F800000.view.effect.params[0] = radius * g_Task->unk_09 >> 12;
+    D_1F800014[2].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.effect.params[0]);
+    D_1F800014[2].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.effect.params[0]);
+    for (i = 1; i <= 32; i++) {
+        D_1F800014[0].vx = 0;
+        D_1F800014[0].vy = 0;
+        D_1F800014[0].vz = 0;
+        D_1F800014[1].vx = D_1F800014[2].vx;
+        D_1F800014[1].vy = D_1F800014[2].vy;
+        D_1F800014[1].vz = 0;
+        D_1F800014[2].vx = FIXED_MUL(rsin(i << 8), D_1F800000.view.effect.params[0]);
+        D_1F800014[2].vy = FIXED_MUL(rcos(i << 8), D_1F800000.view.effect.params[0]);
+        D_1F800014[2].vz = 0;
+        x                = (D_1F800014[2].vx >> 9) + g_Task->pos.x.fixed;
+        y                = (D_1F800014[2].vy >> 9) + g_Task->pos.y.fixed;
+        tpage            = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
+        SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+        Area_AddCellPrim(x, y, 2, sizeof(DR_MODE));
+        prim = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 1);
+        if (g_Task->header.step == 3) {
+            D_1F800000.view.effect.params[3] = 65 - g_Task->timer * 8;
+            setRGB0(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3], 1);
+        } else {
+            setRGB0(prim, 64, 64, 1);
+        }
+        setRGB1(prim, 1, 1, 1);
+        setRGB2(prim, 1, 1, 1);
+        RotTransPers3(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, &depth, &flag);
+        Area_AddCellPrim(x, y, 2, sizeof(POLY_G3));
+    }
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0x25 : 0x15;
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(5, sizeof(DR_MODE));
+}
 
 INCLUDE_ASM(func_801EFE34);
 

@@ -15,7 +15,7 @@ typedef struct Magic225Steps {
 
 extern Magic225Steps D_801EEC04;
 extern s32           D_1F80000C;
-/* The scratchpad from 0x1F800000 as words: func_801EF7D4 stages its two radii and its shade there. */
+/* The scratchpad base as words: func_801EF7D4 stages its two radii and its shade there. */
 extern s32           D_1F800000_WORD[];
 /* The RGB of each of the four corner glows func_801EF7D4 draws. */
 extern u8            D_801F038C[][3];

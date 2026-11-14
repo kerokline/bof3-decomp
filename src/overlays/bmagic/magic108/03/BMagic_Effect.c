@@ -158,7 +158,52 @@ NON_MATCHING void func_801EF180(void) {
 INCLUDE_ASM(func_801EF180);
 #endif
 
-INCLUDE_ASM(func_801EF2D4);
+/* Draws a fan of projected LINE_F2 rays, one per count up to the effect counter 0x09: each ray swings by an
+ * eighth of a turn more and shortens with the timer; in mode 5 the rays turn semi-transparent and fade. */
+MATCH void func_801EF2D4(void) {
+    LINE_F2* prim;
+    long     p;
+    long     flag;
+    s32      semi;
+    s32      tpage;
+    s32      i;
+
+    semi                             = g_Task->header.mode == 5;
+    D_1F800000.view.scenario.math_00 = 0;
+    D_1F800014[0].vx                 = g_Task->timer;
+    D_1F800014[0].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.scenario.math_00);
+    D_1F800014[0].vz                 = FIXED_MUL(rsin(0), D_1F800000.view.scenario.math_00);
+    for (i = 1; D_1F800000.view.scenario.math_00 < g_Task->unk_09; i++) {
+        if (GetGraphType() == 1 || GetGraphType() == 2) {
+            tpage = ((semi & 3) << 7) | 0x25;
+        } else {
+            tpage = ((semi & 3) << 5) | 0x15;
+        }
+        SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 0, sizeof(DR_MODE));
+        prim = (LINE_F2*)g_GfxPrimCursor;
+        SetLineF2(prim);
+        SetSemiTrans(prim, semi);
+        RotTransPers(&D_1F800014[0], (long*)&prim->x0, &p, &flag);
+        if (i < g_Task->timer) {
+            D_1F800014[0].vx = g_Task->timer - i;
+        } else {
+            D_1F800014[0].vx = 0;
+        }
+        D_1F800014[0].vy = FIXED_MUL(rcos(i << 7), D_1F800000.view.scenario.math_00);
+        D_1F800014[0].vz = FIXED_MUL(rsin(i << 7), D_1F800000.view.scenario.math_00);
+        RotTransPers(&D_1F800014[0], (long*)&prim->x1, &p, &flag);
+        if (g_Task->header.mode == 5) {
+            D_1F800000.view.scenario.math_04 = 0x60 - (g_Task->timer - 0x60) * 3;
+            D_1F800000.view.scenario.math_0C = 0x40 - (g_Task->timer - 0x60) * 2;
+            setRGB0(prim, D_1F800000.view.scenario.math_0C, D_1F800000.view.scenario.math_04, D_1F800000.view.scenario.math_0C);
+        } else {
+            setRGB0(prim, 0x80, 0xC0, 0x80);
+        }
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 0, sizeof(LINE_F2));
+        D_1F800000.view.scenario.math_00++;
+    }
+}
 
 MATCH void func_801EF5C0(void) {
     SVECTOR pos;

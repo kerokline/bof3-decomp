@@ -99,7 +99,87 @@ MATCH void func_801EF094(void) {
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"
 
-INCLUDE_ASM(func_801EF1D8);
+/* Draws an eight-band textured dome: band 24 down to 17 is a ring of 32 semi-transparent GT4 quads between the
+ * radii and heights that rcos and rsin of the band give for the scratch radius word 0, each quad placed in its area
+ * cell; v scrolls with timer and the shades fade in by row as unk_09 grows. */
+MATCH void func_801EF1D8(void) {
+    POLY_GT4* prim;
+    long      depth;
+    long      flag;
+    s32       tpage;
+    s32       band;
+    s32       row;
+    s32       i;
+    s32       x;
+    s32       y;
+
+    for (band = 24, row = 1; band >= 17; band--, row++) {
+        D_1F800000.view.effect.params[3] = 0x81;
+        D_1F800000.view.effect.params[4] = 0x81;
+        if (row - 1 < g_Task->unk_09 - 16) {
+            D_1F800000.view.effect.params[3] = g_Task->unk_09 - 15 - row;
+            if (D_1F800000.view.effect.params[3] < 17) {
+                D_1F800000.view.effect.params[3] = 0x81 - D_1F800000.view.effect.params[3] * 8;
+            } else {
+                D_1F800000.view.effect.params[3] = 1;
+            }
+        }
+        if (row < g_Task->unk_09 - 16) {
+            D_1F800000.view.effect.params[4] = g_Task->unk_09 - 16 - row;
+            if (D_1F800000.view.effect.params[4] < 17) {
+                D_1F800000.view.effect.params[4] = 0x81 - D_1F800000.view.effect.params[4] * 8;
+            } else {
+                D_1F800000.view.effect.params[4] = 1;
+            }
+        }
+        D_1F800000.view.effect.params[1] = FIXED_MUL(rcos((band - 1) << 7), D_1F800000.view.effect.params[0]);
+        D_1F800000.view.effect.params[2] = FIXED_MUL(rcos(band << 7), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.effect.params[1]);
+        D_1F800014[1].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.effect.params[1]);
+        D_1F800014[1].vz = D_1F800014[0].vz = FIXED_MUL(rsin((band - 1) << 7), D_1F800000.view.effect.params[0]);
+        D_1F800014[3].vx                    = FIXED_MUL(rsin(0), D_1F800000.view.effect.params[2]);
+        D_1F800014[3].vy                    = FIXED_MUL(rcos(0), D_1F800000.view.effect.params[2]);
+        D_1F800014[3].vz = D_1F800014[2].vz = FIXED_MUL(rsin(band << 7), D_1F800000.view.effect.params[0]);
+        for (i = 1; i <= 32; i++) {
+            D_1F800014[0].vx = D_1F800014[1].vx;
+            D_1F800014[0].vy = D_1F800014[1].vy;
+            D_1F800014[1].vx = FIXED_MUL(rsin(i << 7), D_1F800000.view.effect.params[1]);
+            D_1F800014[1].vy = FIXED_MUL(rcos(i << 7), D_1F800000.view.effect.params[1]);
+            D_1F800014[2].vx = D_1F800014[3].vx;
+            D_1F800014[2].vy = D_1F800014[3].vy;
+            D_1F800014[3].vx = FIXED_MUL(rsin(i << 7), D_1F800000.view.effect.params[2]);
+            D_1F800014[3].vy = FIXED_MUL(rcos(i << 7), D_1F800000.view.effect.params[2]);
+            x                = (D_1F800014[3].vx << 9) + g_Task->pos.x.fixed;
+            y                = (D_1F800014[3].vy << 9) + g_Task->pos.y.fixed;
+            if (GetGraphType() == 1 || GetGraphType() == 2) {
+                tpage = 0xA5;
+            } else {
+                tpage = 0x35;
+            }
+            SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+            Area_AddCellPrim(x, y, 2, sizeof(DR_MODE));
+            prim = (POLY_GT4*)g_GfxPrimCursor;
+            SetPolyGT4(prim);
+            SetSemiTrans(prim, 1);
+            RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+            prim->tpage = GetTPage(0, 1, 0x340, 0x100);
+            prim->clut  = GetClut(0, 0x1FA);
+            prim->u0    = i * 8;
+            prim->v0    = (band - 16) * 8 + 32 + g_Task->timer * 4;
+            prim->u1    = i * 8 + 8;
+            prim->v1    = (band - 16) * 8 + 32 + g_Task->timer * 4;
+            prim->u2    = i * 8;
+            prim->v2    = g_Task->timer * 4 + (band - 16) * 8 + 0x28;
+            prim->u3    = i * 8 + 8;
+            prim->v3    = g_Task->timer * 4 + (band - 16) * 8 + 0x28;
+            setRGB0(prim, LOHU(D_1F800000.view.effect.params[4]), LOHU(D_1F800000.view.effect.params[4]), LOHU(D_1F800000.view.effect.params[4]));
+            setRGB1(prim, LOHU(D_1F800000.view.effect.params[4]), LOHU(D_1F800000.view.effect.params[4]), LOHU(D_1F800000.view.effect.params[4]));
+            setRGB2(prim, LOHU(D_1F800000.view.effect.params[3]), LOHU(D_1F800000.view.effect.params[3]), LOHU(D_1F800000.view.effect.params[3]));
+            setRGB3(prim, LOHU(D_1F800000.view.effect.params[3]), LOHU(D_1F800000.view.effect.params[3]), LOHU(D_1F800000.view.effect.params[3]));
+            Area_AddCellPrim(x, y, 2, sizeof(POLY_GT4));
+        }
+    }
+}
 
 /* Draw the magic103 shaded ring band. Retail writes both radii to params[0], so the inner
  * edge uses whatever params[1] holds. */

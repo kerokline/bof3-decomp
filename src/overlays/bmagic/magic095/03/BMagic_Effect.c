@@ -120,7 +120,88 @@ MATCH void func_801EF070(void) {
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"
 
-INCLUDE_ASM(func_801EF1FC);
+/* Draws a six-row ring of semi-transparent gouraud line quads around the effect, eight steps per
+ * turn: row r runs from radius 0x100 - 41r (plus the row table) at z -(72r + table) to the next row,
+ * the last row closing to the centre. A quad lights once unk_09 passes 7r, 6 shades per step up to
+ * 0x30, alternating its lit edge between odd and even steps. */
+MATCH void func_801EF1FC(void) {
+    LINE_G4* prim;
+    long     depth;
+    long     flag;
+    s32      row;
+    s32      i;
+    s32      x;
+    s32      y;
+    s32      tpage;
+    s32      fade;
+
+    for (row = 0; row < 6; row++) {
+        D_1F800000.view.scenario.math_04 = 0x100 - row * 41;
+        D_1F800000.view.scenario.math_00 = D_1F800000.view.scenario.math_04 + D_801F065C[row * 8];
+        D_1F800014[0].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.scenario.math_00);
+        D_1F800014[0].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.scenario.math_00);
+        D_1F800014[0].vz                 = -(D_801F065C[row * 8] + row * 72);
+        D_1F800000.view.scenario.math_04 = 0x100 - (row + 1) * 41;
+        D_1F800000.view.scenario.math_00 = D_1F800000.view.scenario.math_04 + D_801F065C[row * 8 + 8];
+        D_1F800014[1].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.scenario.math_00);
+        D_1F800014[1].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.scenario.math_00);
+        D_1F800014[1].vz                 = -((row + 1) * 72 + D_801F065C[row * 8 + 8]);
+        if (row == 5) {
+            D_1F800014[1].vy = 0;
+            D_1F800014[1].vx = 0;
+        }
+        for (i = 1; i < 9; i++) {
+            D_1F800014[2].vx                 = D_1F800014[1].vx;
+            D_1F800014[2].vy                 = D_1F800014[1].vy;
+            D_1F800014[2].vz                 = D_1F800014[1].vz;
+            D_1F800014[3].vx                 = D_1F800014[0].vx;
+            D_1F800014[3].vy                 = D_1F800014[0].vy;
+            D_1F800014[3].vz                 = D_1F800014[0].vz;
+            D_1F800000.view.scenario.math_04 = 0x100 - row * 41;
+            D_1F800000.view.scenario.math_00 = D_1F800000.view.scenario.math_04 + D_801F065C[row * 8 + (i & 7)];
+            D_1F800014[0].vx                 = FIXED_MUL(rsin(i << 9), D_1F800000.view.scenario.math_00);
+            D_1F800014[0].vy                 = FIXED_MUL(rcos(i << 9), D_1F800000.view.scenario.math_00);
+            D_1F800014[0].vz                 = -(D_801F065C[row * 8 + (i & 7)] + row * 72);
+            D_1F800000.view.scenario.math_04 = 0x100 - (row + 1) * 41;
+            D_1F800000.view.scenario.math_00 = D_1F800000.view.scenario.math_04 + D_801F065C[(row + 1) * 8 + (i & 7)];
+            D_1F800014[1].vx                 = FIXED_MUL(rsin(i << 9), D_1F800000.view.scenario.math_00);
+            D_1F800014[1].vy                 = FIXED_MUL(rcos(i << 9), D_1F800000.view.scenario.math_00);
+            D_1F800014[1].vz                 = -(D_801F065C[(row + 1) * 8 + (i & 7)] + (row + 1) * 72);
+            if (row == 5) {
+                D_1F800014[1].vy = 0;
+                D_1F800014[1].vx = 0;
+            }
+            x     = (D_1F800014[0].vx << 9) + g_Task->pos.x.fixed;
+            y     = (D_1F800014[0].vy << 9) + g_Task->pos.y.fixed;
+            tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
+            SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+            Area_AddCellPrim(x, y, 0, sizeof(DR_MODE));
+            prim = GFX_CURSOR(LINE_G4);
+            SetLineG4(prim);
+            SetSemiTrans(prim, 1);
+            RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+            fade = g_Task->unk_09 - row * 7;
+            if (fade > 0) {
+                D_1F800000.view.scenario.math_08 = fade * 6;
+                if (D_1F800000.view.scenario.math_08 > 0x30) {
+                    D_1F800000.view.scenario.math_08 = 0x30;
+                }
+                if (i & 1) {
+                    setRGB0(prim, D_1F800000.view.scenario.math_08, D_1F800000.view.scenario.math_08, D_1F800000.view.scenario.math_08);
+                    setRGB1(prim, 1, 1, 1);
+                    setRGB2(prim, D_1F800000.view.scenario.math_08, D_1F800000.view.scenario.math_08, D_1F800000.view.scenario.math_08);
+                    setRGB3(prim, 1, 1, 1);
+                } else {
+                    setRGB0(prim, 1, 1, 1);
+                    setRGB1(prim, D_1F800000.view.scenario.math_08, D_1F800000.view.scenario.math_08, D_1F800000.view.scenario.math_08);
+                    setRGB2(prim, 1, 1, 1);
+                    setRGB3(prim, D_1F800000.view.scenario.math_08, D_1F800000.view.scenario.math_08, D_1F800000.view.scenario.math_08);
+                }
+                Area_AddCellPrim(x, y, 0, sizeof(LINE_G4));
+            }
+        }
+    }
+}
 
 INCLUDE_ASM(func_801EF804);
 

@@ -255,8 +255,8 @@ MATCH void func_801EF4EC(void) {
     GFX_AddPrim(3, sizeof(DR_MODE));
 }
 
-/* Draws the trail as a ribbon twelve units wide in two passes, one side of the centreline each: the near edge black,
- * the far edge shaded 0x61 falling by 12 per segment on one side and 0x81 falling by 16 on the other. */
+/* Draws the trail as a ribbon twelve units wide in two passes, one side of the centreline each: the outer edge near
+ * black, the centreline shaded 0x61 falling by 12 per segment on one side and 0x81 falling by 16 on the other. */
 MATCH void func_801EFA34(void) {
     POLY_G4* prim;
     s32      tpage;

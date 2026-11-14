@@ -145,7 +145,29 @@ MATCH void func_801EF1F0(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF36C);
+MATCH void func_801EF36C(void) {
+    s32 limit;
+    u8  count;
+
+    g_Task->pos.x.fixed += g_Task->unk_0C;
+    g_Task->pos.y.fixed += g_Task->unk_10;
+    limit          = g_Task->timer == 1 ? 12 : 16;
+    count          = g_Task->unk_09 + 2;
+    g_Task->unk_09 = count;
+    if (count == limit) {
+        if (--g_Task->timer == 0) {
+            Battle_MarkDamaged(g_Battle.target_selector);
+            SND_QueueSelectionFx(0x201);
+            g_BattleEffectBattler->param.unk_0B -= 1;
+            g_Task->header.step += 1;
+        } else {
+            g_Task->unk_0C = -0x6000;
+            g_Task->unk_10 = 0;
+            func_801DD350(g_Task);
+            g_Task->header.step -= 1;
+        }
+    }
+}
 
 MATCH void func_801EF484(void) {
     PartyMember* work;

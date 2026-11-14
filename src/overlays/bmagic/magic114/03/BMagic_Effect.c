@@ -283,7 +283,82 @@ INCLUDE_ASM(func_801F0004);
 
 INCLUDE_ASM(func_801F04D4);
 
-INCLUDE_ASM(func_801F093C);
+MATCH void func_801F093C(void) {
+    POLY_G4* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      tpage;
+    s32      left;
+    s32      x;
+    s32      y;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x125;
+    } else {
+        tpage = 0x55;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(5, sizeof(DR_MODE));
+    g_Task->unk_0C = -0x30000;
+    g_Task->unk_10 = 0;
+    func_801DD350(g_Task);
+    x                = g_Task->pos.x.fixed + g_Task->unk_0C;
+    y                = g_Task->pos.y.fixed + g_Task->unk_10;
+    D_1F800014[1].vx = (x >> 9) - 0x4000;
+    D_1F800014[1].vy = (y >> 9) - 0x4000;
+    g_Task->unk_0C   = -0x50000;
+    g_Task->unk_10   = 0;
+    func_801DD350(g_Task);
+    x                = g_Task->pos.x.fixed + g_Task->unk_0C;
+    y                = g_Task->pos.y.fixed + g_Task->unk_10;
+    D_1F800014[3].vx = (x >> 9) - 0x4000;
+    D_1F800014[3].vy = (y >> 9) - 0x4000;
+    D_1F800014[0].vz = D_1F800014[1].vz = D_1F800014[2].vz = D_1F800014[3].vz = -COORD_INT(g_Task->pos.z) / 2;
+    for (i = 1; i < g_Task->unk_14; i++) {
+        if (i >= 56) {
+            break;
+        }
+        prim = (POLY_G4*)g_GfxPrimCursor;
+        SetPolyG4(prim);
+        SetSemiTrans(prim, 1);
+        D_1F800014[0].vx = D_1F800014[1].vx;
+        D_1F800014[0].vy = D_1F800014[1].vy;
+        D_1F800014[2].vx = D_1F800014[3].vx;
+        D_1F800014[2].vy = D_1F800014[3].vy;
+        left             = g_Task->unk_14 - i;
+        if (left < 8) {
+            g_Task->unk_0C = -((left * 3) << 13);
+        } else {
+            g_Task->unk_0C = -0x30000;
+        }
+        g_Task->unk_10 = i * -0x8000;
+        func_801DD350(g_Task);
+        x                = g_Task->pos.x.fixed + g_Task->unk_0C;
+        y                = g_Task->pos.y.fixed + g_Task->unk_10;
+        D_1F800014[1].vx = (x >> 9) - 0x4000;
+        D_1F800014[1].vy = (y >> 9) - 0x4000;
+        left             = g_Task->unk_14 - i;
+        if (left < 8) {
+            g_Task->unk_0C = -((left * 5) << 13);
+        } else {
+            g_Task->unk_0C = -0x50000;
+        }
+        g_Task->unk_10 = i * -0x8000;
+        func_801DD350(g_Task);
+        x                = g_Task->pos.x.fixed + g_Task->unk_0C;
+        y                = g_Task->pos.y.fixed + g_Task->unk_10;
+        D_1F800014[3].vx = (x >> 9) - 0x4000;
+        D_1F800014[3].vy = (y >> 9) - 0x4000;
+        RotAverage4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+        D_1F800000.view.effect.params[1] = g_Task->unk_09 << 2;
+        setRGB0(prim, D_1F800000.view.effect.params[1], D_1F800000.view.effect.params[1], D_1F800000.view.effect.params[1]);
+        setRGB1(prim, D_1F800000.view.effect.params[1], D_1F800000.view.effect.params[1], D_1F800000.view.effect.params[1]);
+        setRGB2(prim, 1, 1, 1);
+        setRGB3(prim, 1, 1, 1);
+        GFX_AddPrim(5, sizeof(POLY_G4));
+    }
+}
 
 MATCH void func_801F0D08(void) {
     g_ScriptTable = BMAGIC_SCRIPT_TABLE;

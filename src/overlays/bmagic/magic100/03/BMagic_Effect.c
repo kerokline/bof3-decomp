@@ -204,4 +204,49 @@ MATCH void func_801EF8E8(void) {
     Camera_SetModelMatrix(&rot, &matrix);
 }
 
-INCLUDE_ASM(func_801EF9D4);
+MATCH void func_801EF9D4(void) {
+    POLY_G4* prim;
+    long     depth;
+    long     flag;
+    s32      tpage;
+    s32      i;
+    s16      phase;
+
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0x125 : 0x55;
+    GFX_AddDitheredDrawMode(5, tpage);
+    D_1F800000.view.effect.params[1] = g_Task->unk_1C - 0x20;
+    D_1F800000.view.effect.params[0] = D_1F800000.view.effect.params[1] + FIXED_MUL(rsin(0), D_1F800000.view.effect.params[1] / 2);
+    phase                            = (g_Task->unk_20 / 64) & 0x3F;
+    D_1F800000.view.effect.params[4] = phase;
+    D_1F800000.view.effect.params[2] = g_Task->timer * 2;
+    D_1F800000.view.effect.params[5] = phase << 6;
+    D_1F800014[1].vx                 = FIXED_MUL(rsin(phase << 6), D_1F800000.view.effect.params[0]);
+    D_1F800014[1].vy                 = FIXED_MUL(rcos(D_1F800000.view.effect.params[5]), D_1F800000.view.effect.params[0]);
+    D_1F800014[3].vx                 = FIXED_MUL(rsin(D_1F800000.view.effect.params[5]), D_1F800000.view.effect.params[1]);
+    D_1F800014[3].vy                 = FIXED_MUL(rcos(D_1F800000.view.effect.params[5]), D_1F800000.view.effect.params[1]);
+    for (i = 1; i < 32; i++) {
+        D_1F800000.view.effect.params[5] = ((i + D_1F800000.view.effect.params[4]) & 0x3F) * 64;
+        D_1F800000.view.effect.params[0] = D_1F800000.view.effect.params[1] + FIXED_MUL(rsin(i << 6), D_1F800000.view.effect.params[1] / 2);
+        D_1F800014[0].vx                 = D_1F800014[1].vx;
+        D_1F800014[0].vy                 = D_1F800014[1].vy;
+        D_1F800014[0].vz                 = 0;
+        D_1F800014[1].vx                 = FIXED_MUL(rsin(D_1F800000.view.effect.params[5]), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vy                 = FIXED_MUL(rcos(D_1F800000.view.effect.params[5]), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vz                 = 0;
+        D_1F800014[2].vx                 = D_1F800014[3].vx;
+        D_1F800014[2].vy                 = D_1F800014[3].vy;
+        D_1F800014[2].vz                 = 0;
+        D_1F800014[3].vx                 = FIXED_MUL(rsin(D_1F800000.view.effect.params[5]), D_1F800000.view.effect.params[1]);
+        D_1F800014[3].vy                 = FIXED_MUL(rcos(D_1F800000.view.effect.params[5]), D_1F800000.view.effect.params[1]);
+        D_1F800014[3].vz                 = 0;
+        prim                             = GFX_BeginPolyG4(1);
+        setRGB0(prim, D_1F800000.view.effect.params[2], D_1F800000.view.effect.params[2], D_1F800000.view.effect.params[2]);
+        setRGB1(prim, D_1F800000.view.effect.params[2], D_1F800000.view.effect.params[2], D_1F800000.view.effect.params[2]);
+        setRGB2(prim, 1, 1, 1);
+        setRGB3(prim, 1, 1, 1);
+        RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+        GFX_AddPrim(5, sizeof(POLY_G4));
+    }
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0x25 : 0x15;
+    GFX_AddDitheredDrawMode(5, tpage);
+}

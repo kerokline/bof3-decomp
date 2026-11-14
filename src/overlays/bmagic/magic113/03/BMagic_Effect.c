@@ -423,7 +423,79 @@ MATCH void func_801F026C(void) {
     }
 }
 
-INCLUDE_ASM(func_801F02CC);
+/* Draw the magic113 wall as up to 32 shaded quads rising from the ring, each one cell-sorted at
+ * its own outer corner; the height falls off over the last 16 and flickers while it is full. */
+MATCH void func_801F02CC(void) {
+    POLY_G4* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      x;
+    s32      y;
+    s32      tpage;
+
+    if (g_Task->unk_09 < 16) {
+        D_1F800000.view.scenario.math_08 = g_Task->unk_09 * 32;
+    } else {
+        D_1F800000.view.scenario.math_08 = 0x200;
+    }
+    D_1F800014[1].vx = FIXED_MUL(rcos(0), 304);
+    D_1F800014[1].vy = FIXED_MUL(rsin(0), 304);
+    D_1F800014[1].vz = g_Task->timer * 8 - D_1F800000.view.scenario.math_08;
+    D_1F800014[3].vx = FIXED_MUL(rcos(0), 304);
+    D_1F800014[3].vy = FIXED_MUL(rsin(0), 304);
+    D_1F800014[3].vz = 0;
+    for (i = 1; i <= 32; i++) {
+        if (i < g_Task->unk_09) {
+            if (g_Task->unk_09 - i < 16) {
+                D_1F800000.view.scenario.math_08 = (g_Task->unk_09 - i) * 32;
+            } else {
+                D_1F800000.view.scenario.math_08 = (rand() & 0x3F) + 0x200;
+                if (i == 32) {
+                    D_1F800000.view.scenario.math_08 = 0x200;
+                }
+            }
+            D_1F800014[0].vx = D_1F800014[1].vx;
+            D_1F800014[0].vy = D_1F800014[1].vy;
+            D_1F800014[0].vz = D_1F800014[1].vz;
+            D_1F800014[2].vx = D_1F800014[3].vx;
+            D_1F800014[2].vy = D_1F800014[3].vy;
+            D_1F800014[2].vz = 0;
+            D_1F800014[1].vx = FIXED_MUL(rcos(i << 7), 304);
+            D_1F800014[1].vy = FIXED_MUL(rsin(i << 7), 304);
+            D_1F800014[1].vz = g_Task->timer * 8 - D_1F800000.view.scenario.math_08;
+            D_1F800014[3].vx = FIXED_MUL(rcos(i << 7), 304);
+            D_1F800014[3].vy = FIXED_MUL(rsin(i << 7), 304);
+            D_1F800014[3].vz = 0;
+            x                = (D_1F800014[3].vx << 9) + g_Task->pos.x.fixed;
+            y                = (D_1F800014[3].vy << 9) + g_Task->pos.y.fixed;
+            if (GetGraphType() == 1 || GetGraphType() == 2) {
+                tpage = 0xA5;
+            } else {
+                tpage = 0x35;
+            }
+            SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+            Area_AddCellPrim(x, y, 0, sizeof(DR_MODE));
+            prim = (POLY_G4*)g_GfxPrimCursor;
+            SetPolyG4(prim);
+            SetSemiTrans(prim, 1);
+            D_1F800000.view.scenario.math_04 = 32 - g_Task->timer * 2;
+            setRGB0(prim, 1, 1, 1);
+            setRGB1(prim, 1, 1, 1);
+            setRGB2(prim, 192 - g_Task->timer * 12, D_1F800000.view.scenario.math_04, D_1F800000.view.scenario.math_04);
+            setRGB3(prim, 192 - g_Task->timer * 12, D_1F800000.view.scenario.math_04, D_1F800000.view.scenario.math_04);
+            RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+            Area_AddCellPrim(x, y, 0, sizeof(POLY_G4));
+        }
+    }
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x25;
+    } else {
+        tpage = 0x15;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(3, sizeof(DR_MODE));
+}
 
 MATCH void func_801F0764(void) {
     GFX_AddDitheredDrawMode(3, getTPage(1, 1, 320, 256));

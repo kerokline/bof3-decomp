@@ -189,7 +189,58 @@ INCLUDE_ASM(func_801EF544);
 
 #include "overlays/bmagic/Effect_SetActorMatrixQuarterRoll.h"
 
-INCLUDE_ASM(func_801EFAE0);
+MATCH void func_801EFAE0(void) {
+    POLY_G4* prim;
+    long     depth;
+    long     flag;
+    s32      tpage;
+    u32      span;
+    u32      step;
+
+    D_1F800000.view.scenario.math_0C = (g_Task->timer >> 1) * 4 + 1;
+    D_1F800000.view.scenario.math_00 = 384;
+    D_1F800000.view.scenario.math_04 = 480;
+    step                             = g_Task->unk_09 & 0x3F;
+    span                             = (g_Task->timer >> 1) + 1;
+    D_1F800000.view.scenario.math_08 = FIXED_MUL(rsin(step << 6), 512) + 0x400;
+    D_1F800014[1].vx                 = 0;
+    D_1F800014[1].vy                 = FIXED_MUL(rcos(D_1F800000.view.scenario.math_08), D_1F800000.view.scenario.math_00);
+    D_1F800014[1].vz                 = FIXED_MUL(rsin(D_1F800000.view.scenario.math_08), D_1F800000.view.scenario.math_00);
+    D_1F800014[3].vx                 = 0;
+    D_1F800014[3].vy                 = FIXED_MUL(rcos(D_1F800000.view.scenario.math_08), D_1F800000.view.scenario.math_04);
+    D_1F800014[3].vz                 = FIXED_MUL(rsin(D_1F800000.view.scenario.math_08), D_1F800000.view.scenario.math_04);
+    for (step = (step - 1) & 0x3F; step != ((g_Task->unk_09 - span) & 0x3F); step = (step - 1) & 0x3F) {
+        D_1F800000.view.scenario.math_08 = FIXED_MUL(rsin(step << 6), 512) + 0x400;
+        D_1F800014[0].vx                 = 0;
+        D_1F800014[0].vy                 = D_1F800014[1].vy;
+        D_1F800014[0].vz                 = D_1F800014[1].vz;
+        D_1F800014[1].vx                 = 0;
+        D_1F800014[1].vy                 = FIXED_MUL(rcos(D_1F800000.view.scenario.math_08), D_1F800000.view.scenario.math_00);
+        D_1F800014[1].vz                 = FIXED_MUL(rsin(D_1F800000.view.scenario.math_08), D_1F800000.view.scenario.math_00);
+        D_1F800014[2].vx                 = 0;
+        D_1F800014[2].vy                 = D_1F800014[3].vy;
+        D_1F800014[2].vz                 = D_1F800014[3].vz;
+        D_1F800014[3].vx                 = 0;
+        D_1F800014[3].vy                 = FIXED_MUL(rcos(D_1F800000.view.scenario.math_08), D_1F800000.view.scenario.math_04);
+        D_1F800014[3].vz                 = FIXED_MUL(rsin(D_1F800000.view.scenario.math_08), D_1F800000.view.scenario.math_04);
+        if (GetGraphType() == 1 || GetGraphType() == 2) {
+            tpage = 0xA5;
+        } else {
+            tpage = 0x35;
+        }
+        SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+        prim = (POLY_G4*)g_GfxPrimCursor;
+        SetPolyG4(prim);
+        SetSemiTrans(prim, 1);
+        RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+        setRGB0(prim, D_1F800000.view.scenario.math_0C, 1, 1);
+        setRGB1(prim, D_1F800000.view.scenario.math_0C, 1, 1);
+        setRGB2(prim, D_1F800000.view.scenario.math_0C -= 4, 1, 1);
+        setRGB3(prim, D_1F800000.view.scenario.math_0C, 1, 1);
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_G4));
+    }
+}
 
 MATCH void func_801EFEA8(void) {
     LINE_G4* prim;

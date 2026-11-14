@@ -59,7 +59,20 @@ MATCH void func_801EECCC(void) {
 
 #include "overlays/bmagic/func_801EF1B8.h"
 
-INCLUDE_ASM(func_801EF240);
+#include "overlays/bmagic/func_801EF240.h"
+
+MATCH void func_801EF240(void) {
+    POLY_GT4* prim;
+    long      depth;
+    long      flag;
+    s32       i;
+    s32       tpage;
+    s32       x;
+    s32       y;
+    s32       phase;
+
+    BMAGIC_DRAW_RING_BAND(0x125, 0x55, 2);
+}
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"
 

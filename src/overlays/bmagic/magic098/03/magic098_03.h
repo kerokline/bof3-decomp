@@ -16,7 +16,7 @@ extern s16     D_1F800014_HALF[];
 extern s16     D_1F800016;
 extern s16     D_1F800018;
 
-void func_801EF5D4(s32 band_height, u16 radius, u16 jitter_mask);
+void func_801EF5D4(s16 band_height, u16 radius, u16 jitter_mask);
 void func_801EFE24(void);
 void func_801F00C4(void);
 

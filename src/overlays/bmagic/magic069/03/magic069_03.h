@@ -23,4 +23,7 @@ extern Callback D_801F0504[];
 void            func_801EFC00(void);
 void            func_801EFF14(void);
 
+/* The edge phases of the three triangles of each fan, in 64ths of a turn. */
+extern u8 D_801F0534[];
+
 #endif

@@ -322,7 +322,50 @@ MATCH void func_801EFA84(void) {
     GFX_AddPrim(2, sizeof(POLY_FT4));
 }
 
-INCLUDE_ASM(func_801EFC00);
+/* Draw four fans of three shaded triangles round the effect screen point, one per quarter turn
+ * at the timer radius; their red and green shades fade in by step. */
+MATCH void func_801EFC00(void) {
+    POLY_G3* prim;
+    s32      i;
+    s32      j;
+
+    D_1F800000.view.effect.params[0] = g_Task->timer;
+    D_1F800000.view.effect.params[1] = (g_Task->timer >> 2) + 1;
+    if (g_Task->header.step < 2) {
+        D_1F800000.view.effect.params[3] = 0x80 - g_Task->param.unk_0B * 48;
+        D_1F800000.view.effect.params[4] = 0x80 - g_Task->param.unk_0B * 48;
+    } else {
+        D_1F800000.view.effect.params[3] = g_Task->unk_09 * 6 + 0x80;
+        D_1F800000.view.effect.params[4] = 0x80 - g_Task->unk_09 * 6;
+    }
+    for (i = 0; i < 4; i++) {
+        D_1F800000.view.effect.params[6] = g_Task->unk_2E.half + FIXED_MUL(rsin(i << 10), D_1F800000.view.effect.params[0]);
+        D_1F800000.view.effect.params[7] = g_Task->unk_30.half + FIXED_MUL(rcos(i << 10), D_1F800000.view.effect.params[0]);
+        for (j = 0; j < 3; j++) {
+            prim = (POLY_G3*)g_GfxPrimCursor;
+            SetPolyG3(prim);
+            SetSemiTrans(prim, 1);
+            prim->x0                         = D_1F800000.view.effect.params[6];
+            prim->y0                         = D_1F800000.view.effect.params[7];
+            D_1F800000.view.effect.params[2] = ((D_801F0534[j] + i * 16) & 0x3F) << 6;
+            prim->x1                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[1]);
+            prim->y1                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[1]);
+            D_1F800000.view.effect.params[2] = ((D_801F0534[j + 1] + i * 16) & 0x3F) << 6;
+            prim->x2                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[1]);
+            prim->y2                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[1]);
+            prim->r0                         = D_1F800000.view.effect.params[3];
+            prim->g0                         = D_1F800000.view.effect.params[4];
+            prim->b0                         = 1;
+            prim->r1                         = D_1F800000.view.effect.params[3];
+            prim->g1                         = D_1F800000.view.effect.params[4];
+            prim->b1                         = 1;
+            prim->r2                         = D_1F800000.view.effect.params[3];
+            prim->g2                         = D_1F800000.view.effect.params[4];
+            prim->b2                         = 1;
+            GFX_AddPrim(3, sizeof(POLY_G3));
+        }
+    }
+}
 
 /* Draws a ring of the timer radius round the effect's screen point as 64 line segments, keeping
  * the middle half of every sixteen; the scratchpad holds the radius, angle, shade and centre. */

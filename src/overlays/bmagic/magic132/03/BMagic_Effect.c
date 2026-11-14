@@ -248,4 +248,75 @@ MATCH void func_801EF5B0(void) {
     GFX_AddPrim(2, sizeof(DR_MODE));
 }
 
-INCLUDE_ASM(func_801EF914);
+/* Draw the two magic132 breath bands as shaded quads along the sine wave of the effect ticker,
+ * red-tinted on the outer edge of each band and dark on the inner one. */
+MATCH void func_801EF914(void) {
+    POLY_G4* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      tpage;
+    s32      phase;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x2A5;
+    } else {
+        tpage = 0xB5;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(2, sizeof(DR_MODE));
+    if (g_Task->header.step == 4) {
+        D_1F800000.view.effect.params[2] = (g_Task->unk_1C / 2) << 3;
+    } else {
+        D_1F800000.view.effect.params[2] = 0x80;
+    }
+    D_1F800000.view.effect.params[0] = g_Task->unk_20;
+    phase                            = g_Task->param.unk_0B & 0x3F;
+    D_1F800014[2].vx                 = 0;
+    D_1F800014[2].vy                 = -0x80;
+    D_1F800000.view.effect.params[1] = phase << 7;
+    D_1F800014[2].vz                 = FIXED_MUL(rsin(D_1F800000.view.effect.params[1]), D_1F800000.view.effect.params[0]);
+    for (i = 1; i < 3; i++) {
+        prim = (POLY_G4*)g_GfxPrimCursor;
+        SetPolyG4(prim);
+        SetSemiTrans(prim, 1);
+        D_1F800014[0].vx                 = 0;
+        D_1F800014[0].vy                 = D_1F800014[2].vy;
+        D_1F800014[0].vz                 = D_1F800014[2].vz;
+        D_1F800014[1].vx                 = 0xC00;
+        D_1F800014[1].vy                 = D_1F800014[2].vy;
+        D_1F800014[1].vz                 = D_1F800014[2].vz;
+        D_1F800000.view.effect.params[1] = ((g_Task->param.unk_0B + i) & 0x3F) << 7;
+        D_1F800014[2].vx                 = 0;
+        D_1F800014[2].vy                 = (i - 1) << 6;
+        D_1F800014[2].vz                 = FIXED_MUL(rsin(D_1F800000.view.effect.params[1]), D_1F800000.view.effect.params[0]);
+        D_1F800014[3].vx                 = 0xC00;
+        D_1F800014[3].vy                 = D_1F800014[2].vy;
+        D_1F800014[3].vz                 = D_1F800014[2].vz;
+        if (g_Task->header.step == 4) {
+            D_1F800000.view.effect.params[2] = (g_Task->unk_1C / 2) * 12;
+        } else {
+            D_1F800000.view.effect.params[2] = 0xC0;
+        }
+        if (i == 1) {
+            setRGB0(prim, 1, 1, 1);
+            setRGB1(prim, 1, 1, 1);
+            setRGB2(prim, D_1F800000.view.effect.params[2], D_1F800000.view.effect.params[2] / 4, D_1F800000.view.effect.params[2] / 4);
+            setRGB3(prim, D_1F800000.view.effect.params[2], D_1F800000.view.effect.params[2] / 4, D_1F800000.view.effect.params[2] / 4);
+        } else {
+            setRGB0(prim, D_1F800000.view.effect.params[2], D_1F800000.view.effect.params[2] / 4, D_1F800000.view.effect.params[2] / 4);
+            setRGB1(prim, D_1F800000.view.effect.params[2], D_1F800000.view.effect.params[2] / 4, D_1F800000.view.effect.params[2] / 4);
+            setRGB2(prim, 1, 1, 1);
+            setRGB3(prim, 1, 1, 1);
+        }
+        RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+        GFX_AddPrim(2, sizeof(POLY_G4));
+    }
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x225;
+    } else {
+        tpage = 0x95;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(2, sizeof(DR_MODE));
+}

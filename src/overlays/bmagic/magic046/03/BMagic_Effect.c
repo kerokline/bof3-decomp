@@ -207,7 +207,8 @@ MATCH void func_801EF660(void) {
     }
 }
 
-/* Draw the magic046 glow quad around the effect, its radius growing with the timer. */
+/* Draw the magic046 glow quad around the effect: the radius grows with byte 0x09, the shade with
+ * the timer (byte 0x0A). */
 MATCH void func_801EF7E8(void) {
     POLY_GT4* prim;
     s32       tpage;

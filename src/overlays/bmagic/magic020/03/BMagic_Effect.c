@@ -7,8 +7,8 @@ __asm__(".include \"include/match/macro.inc\"\n");
 #include "overlays/bmagic/Effect_DispatchMode.h"
 #include "overlays/bmagic/Effect_CopyActiveBattlerToSlot.h"
 
-/* Start the disembowel effect: four copies of the caster in modes counting down from 4,
- * one more in mode 0, then the caster sprite cell and the camera. */
+/* Start the magic020 effect: four copies of the caster in mode 1 (arg 4 down to 1), one more
+ * in mode 0, then the caster sprite cell, and func_800AFC98(2, 0) for a party caster. */
 MATCH void func_801EECC0(void) {
     u32 index;
     s32 i;

@@ -45,4 +45,26 @@ void func_801F03D8(void);
 void func_801F0EEC(u32 sprite, s32 blend, s32 color);
 void func_801F103C(void);
 
+/* The field map renderer state this image rebuilds, declared as the engine declares it in
+ * src/engine/slus/slus.h. */
+typedef struct AreaCell {
+    u8  tile_x;
+    u8  tile_y;
+    u16 prim_id; /* low 12 bits: the g_AreaCellPrims row; upper bits are flags */
+} AreaCell;
+
+extern AreaCell g_AreaCells[56][28];
+extern POLY_FT4 g_AreaCellPrims[][2];
+extern u16      g_AreaCellPrimFreeIds[0x400];
+extern u16      g_AreaCellPrimFreeIndex;
+extern s16      g_AreaGridColCursor;
+extern s16      g_AreaGridRowCursor;
+extern u16      D_80149336;
+extern u8       D_8014933D;
+
+void Area_LoadCellRowsNext(void);
+void Area_LoadCellRowsPrev(void);
+void func_80154438(void);
+void BMagic_ProjectCell(s32 px, s32 py, AreaCell* out);
+
 #endif

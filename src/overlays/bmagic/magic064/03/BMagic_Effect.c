@@ -443,12 +443,67 @@ MATCH void func_801F0EEC(u32 sprite, s32 blend, s32 color) {
     Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 0, sizeof(SPRT));
 }
 
-INCLUDE_ASM(func_801F103C);
+/* Rebuild the field map view around the scroll target: clear the cell links, place the camera,
+ * stream the cell rows the remainder has passed and project every cell of the grid. */
+MATCH void func_801F103C(void) {
+    AreaCell* cell;
+    u16*      order;
+    s32       row;
+    s32       col;
 
-/* Report the map cell the projected point lands on: out[0] and out[1] receive
+    for (row = 0; row < 0x400; row++) {
+        for (col = 0; col < 2; col++) {
+            g_AreaCellPrims[row][col].pad1 = 0;
+            g_AreaCellPrims[row][col].pad2 = 0;
+        }
+    }
+    g_AreaCameraX     = 0x7FFF - (g_AreaScrollTargetX >> 8);
+    g_AreaCameraY     = 0x8000 - (g_AreaScrollTargetY >> 8);
+    g_AreaTileOriginX = (g_AreaScrollTargetX >> 16) - 24;
+    g_AreaTileOriginY = (g_AreaScrollTargetY >> 16) + 3;
+    D_8014933D        = 0;
+    if (g_AreaMapBundle.scroll_1E != 0) {
+        g_AreaTileRemainderY = g_AreaMapBundle.scroll_1E;
+    } else {
+        g_AreaTileRemainderY = -g_AreaCameraHeight * 2;
+    }
+    D_80149336 = 0;
+    while ((s16)g_AreaTileRemainderY >= 0x200) {
+        Area_LoadCellRowsNext();
+        g_AreaTileRemainderY -= 0x200;
+    }
+    while ((s16)g_AreaTileRemainderY < -0x1FF) {
+        Area_LoadCellRowsPrev();
+        g_AreaTileRemainderY += 0x200;
+    }
+    g_AreaCameraStep          = 0;
+    g_AreaCameraHeightStep    = 0;
+    g_AreaHeightOffsetEnabled = 0;
+    g_AreaCameraRefreshCount  = 3;
+    for (row = 0; row < 56; row++) {
+        for (col = 0; col < 28; col++) {
+            cell          = &g_AreaCells[row][col];
+            cell->prim_id = 0;
+            BMagic_ProjectCell(row, col, cell);
+        }
+    }
+    row   = 0x3FF;
+    order = &g_AreaCellPrimFreeIds[0x3FF];
+    for (; row >= 0; row--) {
+        *order = row;
+        order--;
+    }
+    g_AreaCellPrimFreeIndex = 1;
+    g_AreaGridColCursor     = 0x1B;
+    g_AreaGridRowCursor     = 0x37;
+    func_80154438();
+    Area_RunBundleOpcodes();
+}
+
+/* Report the map cell the projected point lands on: out receives
  * the cell, or zero when the probe leaves the map or hits an empty cell. */
 /* func_801F12B8 */
-MATCH void BMagic_ProjectCell(s32 px, s32 py, u8* out) {
+MATCH void BMagic_ProjectCell(s32 px, s32 py, AreaCell* out) {
     u8* buffer;
     s32 width;
     s32 x2;
@@ -467,14 +522,14 @@ MATCH void BMagic_ProjectCell(s32 px, s32 py, u8* out) {
                 if (y < g_AreaMapBundle.height - 1) {
                     value = *(u16*)(buffer + ((g_AreaMapBundle.grid_off4_02 * 4) + (x2 = x * 2) + (y * width * 2)));
                     if (value != 0) {
-                        out[0] = x;
-                        out[1] = y;
+                        out->tile_x = x;
+                        out->tile_y = y;
                         return;
                     }
                 }
             }
         }
     }
-    out[0] = 0;
-    out[1] = 0;
+    out->tile_x = 0;
+    out->tile_y = 0;
 }

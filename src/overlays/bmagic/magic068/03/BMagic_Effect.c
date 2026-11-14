@@ -22,7 +22,193 @@ MATCH void func_801EEC88(void) {
     g_Task->header.mode += 1;
 }
 
-INCLUDE_ASM(func_801EED50);
+MATCH void func_801EED50(void) {
+    s32 i;
+    s32 percent;
+    s32 adjust;
+    s16 score;
+    s16 party_count;
+    s16 party_levels;
+    s16 enemy_count;
+    s16 enemy_levels;
+    s16 level_gap;
+
+    adjust = 0;
+    score  = 0;
+    if (g_Task->param.unk_0B == 0) {
+        party_count  = 0;
+        party_levels = 0;
+        for (i = 0; i < 3; i++) {
+            if (g_Game.members[i].header.flags) {
+                if (g_Game.members[i].chr.status & STATUS_KO) {
+                    score -= 24;
+                } else {
+                    percent = g_Game.members[i].chr.hp * 100 / g_Game.members[i].chr.stats.max_hp;
+                    party_count++;
+                    party_levels += g_Game.members[i].chr.level;
+                    if (percent == 0) {
+                        adjust = -24;
+                    }
+                    if (percent > 0) {
+                        adjust = -21;
+                    }
+                    if (percent > 10) {
+                        adjust = -18;
+                    }
+                    if (percent > 20) {
+                        adjust = -15;
+                    }
+                    if (percent > 30) {
+                        adjust = -12;
+                    }
+                    if (percent > 40) {
+                        adjust = -9;
+                    }
+                    if (percent > 50) {
+                        adjust = -6;
+                    }
+                    if (percent > 60) {
+                        adjust = -3;
+                    }
+                    if (percent > 70) {
+                        adjust = 0;
+                    }
+                    score += adjust;
+                }
+            }
+        }
+        enemy_count  = 0;
+        enemy_levels = 0;
+        for (i = 0; i < 8; i++) {
+            if (func_801DB524(i + 3) == 0) {
+                percent = g_BattleEnemyBattlers[i].hp * 100 / g_BattleEnemyBattlers[i].stats.max_hp;
+                enemy_count++;
+                enemy_levels += g_BattleEnemyBattlers[i].level;
+                if (percent == 0) {
+                    adjust = 24;
+                }
+                if (percent > 0) {
+                    adjust = 21;
+                }
+                if (percent > 10) {
+                    adjust = 18;
+                }
+                if (percent > 20) {
+                    adjust = 15;
+                }
+                if (percent > 30) {
+                    adjust = 12;
+                }
+                if (percent > 40) {
+                    adjust = 9;
+                }
+                if (percent > 50) {
+                    adjust = 8;
+                }
+                if (percent > 60) {
+                    adjust = 3;
+                }
+                if (percent > 70) {
+                    adjust = 0;
+                }
+                score += adjust;
+            }
+        }
+        score += (g_Battle.enemy_count - enemy_count) * 8;
+        level_gap = party_levels / party_count - enemy_levels / enemy_count;
+        adjust    = 130;
+        if (level_gap < 21) {
+            adjust = 120;
+        }
+        if (level_gap < 16) {
+            adjust = 110;
+        }
+        if (level_gap < 11) {
+            adjust = 100;
+        }
+        if (level_gap < 8) {
+            adjust = 95;
+        }
+        if (level_gap < 6) {
+            adjust = 90;
+        }
+        if (level_gap < 4) {
+            adjust = 85;
+        }
+        if (level_gap < 2) {
+            adjust = 80;
+        }
+        if (level_gap < 0) {
+            adjust = 70;
+        }
+        if (level_gap < -2) {
+            adjust = 60;
+        }
+        if (level_gap < -4) {
+            adjust = 45;
+        }
+        if (level_gap < -6) {
+            adjust = 30;
+        }
+        if (level_gap < -9) {
+            adjust = 20;
+        }
+        if (level_gap < -14) {
+            adjust = 10;
+        }
+        if (level_gap < -19) {
+            adjust = 5;
+        }
+        score += adjust;
+        score += D_801EFC9F[party_count - enemy_count];
+        if (score < 0) {
+            score = 0;
+        }
+        if (score > 100) {
+            score = 100;
+        }
+        if (score > 90 && score <= 100) {
+            func_801DE8C0(1, 60, Message_GetText(0x3C));
+        }
+        if (score > 70 && score <= 90) {
+            func_801DE8C0(1, 60, Message_GetText(0x3D));
+        }
+        if (score > 50 && score <= 70) {
+            func_801DE8C0(1, 60, Message_GetText(0x3E));
+        }
+        if (score > 30 && score <= 50) {
+            func_801DE8C0(1, 60, Message_GetText(0x3F));
+        }
+        if (score <= 30) {
+            func_801DE8C0(1, 60, Message_GetText(0x40));
+        }
+        for (i = 0; i < 8; i++) {
+            if (func_801DB524(i + 3) == 0) {
+                if (g_BattleEnemyBattlers[i].stats.resistances[RES_INDEX_FIRE] < 2) {
+                    g_Task->param.unk_0B |= 1;
+                }
+                if (g_BattleEnemyBattlers[i].stats.resistances[RES_INDEX_FROST] < 2) {
+                    g_Task->param.unk_0B |= 2;
+                }
+                if (g_BattleEnemyBattlers[i].stats.resistances[RES_INDEX_ELECTRIC] < 2) {
+                    g_Task->param.unk_0B |= 4;
+                }
+                if (g_BattleEnemyBattlers[i].stats.resistances[RES_INDEX_WIND] < 2) {
+                    g_Task->param.unk_0B |= 8;
+                }
+                if (g_BattleEnemyBattlers[i].stats.resistances[RES_INDEX_EARTH] < 2) {
+                    g_Task->param.unk_0B |= 0x10;
+                }
+                if (g_BattleEnemyBattlers[i].stats.resistances[RES_INDEX_HOLY] < 4) {
+                    g_Task->param.unk_0B |= 0x20;
+                }
+            }
+        }
+        g_Task->unk_09 = 22;
+        g_Task->timer  = 4;
+        g_Task->header.mode += 1;
+    }
+}
 
 MATCH void func_801EF44C(void) {
     u8 timer;

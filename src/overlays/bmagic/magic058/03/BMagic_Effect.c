@@ -170,7 +170,61 @@ INCLUDE_ASM(func_801EF61C);
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"
 
-INCLUDE_ASM(func_801EF74C);
+MATCH void func_801EF74C(void) {
+    POLY_G4* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      tpage;
+
+    D_1F800000.view.effect.params[0] = g_Task->unk_0C + 0x80;
+    D_1F800000.view.effect.params[1] = g_Task->unk_0C;
+    D_1F800014[1].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.effect.params[0]);
+    D_1F800014[1].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.effect.params[0]);
+    D_1F800014[3].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.effect.params[1]);
+    D_1F800014[3].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.effect.params[1]);
+    if (GetGraphType() == 1) {
+        tpage = 0xA5;
+    } else if (GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(5, sizeof(DR_MODE));
+
+    for (i = 1; i <= 64; i++) {
+        prim             = GFX_BeginPolyG4(1);
+        D_1F800014[0].vx = D_1F800014[1].vx;
+        D_1F800014[0].vy = D_1F800014[1].vy;
+        D_1F800014[0].vz = 0;
+        D_1F800014[1].vx = FIXED_MUL(rsin(i << 6), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vy = FIXED_MUL(rcos(i << 6), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vz = 0;
+        D_1F800014[2].vx = D_1F800014[3].vx;
+        D_1F800014[2].vy = D_1F800014[3].vy;
+        D_1F800014[2].vz = 0;
+        D_1F800014[3].vx = FIXED_MUL(rsin(i << 6), D_1F800000.view.effect.params[1]);
+        D_1F800014[3].vy = FIXED_MUL(rcos(i << 6), D_1F800000.view.effect.params[1]);
+        D_1F800014[3].vz = 0;
+        setRGB0(prim, 0x60, 0x60, 0x60);
+        setRGB1(prim, 0x60, 0x60, 0x60);
+        setRGB2(prim, 1, 1, 1);
+        setRGB3(prim, 1, 1, 1);
+        RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+        GFX_AddPrim(5, sizeof(POLY_G4));
+    }
+
+    if (GetGraphType() == 1) {
+        tpage = 0x25;
+    } else if (GetGraphType() == 2) {
+        tpage = 0x25;
+    } else {
+        tpage = 0x15;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(5, sizeof(DR_MODE));
+}
 
 INCLUDE_ASM(func_801EFA78);
 

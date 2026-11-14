@@ -74,7 +74,45 @@ MATCH void func_801EEFC4(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF058);
+/* Aim the holocaust shot: project the target and the casting enemy to the screen and step
+ * from the caster towards the target over 16 frames. */
+MATCH void func_801EF058(void) {
+    u8 count;
+
+    count          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = count;
+    if (!(count & BYTE_MASK)) {
+        if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+            g_Task->pos.x.fixed = g_BattleEnemyBattlers[g_Task->unk_04].pos.x.fixed;
+            g_Task->pos.y.fixed = g_BattleEnemyBattlers[g_Task->unk_04].pos.y.fixed;
+            g_Task->pos.z.fixed = g_BattleEnemyBattlers[g_Task->unk_04].pos.z.fixed;
+        } else {
+            g_Task->pos.x.fixed = g_Game.members[g_Task->unk_04].pos.x.fixed;
+            g_Task->pos.y.fixed = g_Game.members[g_Task->unk_04].pos.y.fixed;
+            g_Task->pos.z.fixed = g_Game.members[g_Task->unk_04].pos.z.fixed;
+        }
+        g_Task->pos.x.fixed += TO_COORD(1);
+        Battle_ProjectRange();
+        D_1F800008[2]       = g_Task->unk_2E.half;
+        D_1F800008[3]       = g_Task->unk_30.half;
+        g_Task->pos.x.fixed = g_BattleEnemyBattlers[g_Battle.active_battler - BATTLE_PARTY_CHARACTERS_COUNT].pos.x.fixed;
+        g_Task->pos.y.fixed = g_BattleEnemyBattlers[g_Battle.active_battler - BATTLE_PARTY_CHARACTERS_COUNT].pos.y.fixed;
+        g_Task->pos.z.fixed = g_BattleEnemyBattlers[g_Battle.active_battler - BATTLE_PARTY_CHARACTERS_COUNT].pos.z.fixed;
+        g_Task->pos.x.fixed -= TO_COORD(1);
+        g_Task->pos.z.fixed += TO_COORD(0x360);
+        Battle_ProjectRange();
+        D_1F800008[0]  = g_Task->unk_2E.half;
+        D_1F800008[1]  = g_Task->unk_30.half;
+        g_Task->unk_0C = (D_1F800008[2] - D_1F800008[0]) / 16;
+        g_Task->unk_10 = (D_1F800008[3] - D_1F800008[1]) / 16;
+        g_Task->unk_14 = ratan2(D_1F800008[2] - D_1F800008[0], D_1F800008[3] - D_1F800008[1]) & 0xFFF;
+        g_Task->unk_5D = 0x10;
+        g_Task->unk_09 = 0x96;
+        g_Task->timer  = 0;
+        g_Task->header.step += 1;
+        SND_QueueSelectionFx(0x100);
+    }
+}
 
 #include "overlays/bmagic/Effect_CountUpTimerByTwoAndStep.h"
 

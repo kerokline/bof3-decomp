@@ -185,7 +185,75 @@ MATCH void func_801EF3D8(void) {
 /* func_801EF484 */
 #include "overlays/bmagic/Effect_FinishTrail.h"
 
-INCLUDE_ASM(func_801EF4EC);
+/* Draws the trail as a ribbon of POLY_G4 quads two units wide either side of each segment heading, from the first
+ * recorded point to the effect timer, the shade falling by 12 per segment. */
+MATCH void func_801EF4EC(void) {
+    POLY_G4* prim;
+    s32      tpage;
+    s32      i;
+    s32      next;
+
+    if (GetGraphType() == 1) {
+        tpage = 0xA5;
+    } else if (GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(3, sizeof(DR_MODE));
+    i = g_Task->param.unk_0B;
+    while (BMagic_Trail[g_Task->unk_04][i].x == -1) {
+        i++;
+    }
+    D_1F800000.view.effect.params[0] = 2;
+    next                             = i + 1;
+    D_1F800000.view.effect.params[6] = BMagic_Trail[g_Task->unk_04][i].x;
+    D_1F800000.view.effect.params[7] = BMagic_Trail[g_Task->unk_04][i].y;
+    D_1F800000.view.effect.params[4] = BMagic_Trail[g_Task->unk_04][next].x;
+    D_1F800000.view.effect.params[5] = BMagic_Trail[g_Task->unk_04][next].y;
+    D_1F800000.view.effect.params[1] = ratan2(D_1F800000.view.effect.params[4] - D_1F800000.view.effect.params[6], D_1F800000.view.effect.params[5] - D_1F800000.view.effect.params[7]);
+    D_1F800000.view.effect.params[4] = BMagic_Trail[g_Task->unk_04][i].x;
+    D_1F800000.view.effect.params[5] = BMagic_Trail[g_Task->unk_04][i].y;
+    for (i = next; i < g_Task->timer; i++) {
+        D_1F800000.view.effect.params[6] = D_1F800000.view.effect.params[4];
+        D_1F800000.view.effect.params[7] = D_1F800000.view.effect.params[5];
+        D_1F800000.view.effect.params[4] = BMagic_Trail[g_Task->unk_04][i].x;
+        D_1F800000.view.effect.params[5] = BMagic_Trail[g_Task->unk_04][i].y;
+        prim                             = (POLY_G4*)g_GfxPrimCursor;
+        SetPolyG4(prim);
+        SetSemiTrans(prim, 1);
+        D_1F800000.view.effect.params[2] = (D_1F800000.view.effect.params[1] + 0x400) & 0xFFF;
+        prim->x0                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->y0                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800000.view.effect.params[2] = (D_1F800000.view.effect.params[1] - 0x400) & 0xFFF;
+        prim->x2                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->y2                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800000.view.effect.params[1] = ratan2(D_1F800000.view.effect.params[4] - D_1F800000.view.effect.params[6], D_1F800000.view.effect.params[5] - D_1F800000.view.effect.params[7]);
+        D_1F800000.view.effect.params[2] = (D_1F800000.view.effect.params[1] + 0x400) & 0xFFF;
+        prim->x1                         = D_1F800000.view.effect.params[4] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->y1                         = D_1F800000.view.effect.params[5] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800000.view.effect.params[2] = (D_1F800000.view.effect.params[1] - 0x400) & 0xFFF;
+        prim->x3                         = D_1F800000.view.effect.params[4] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->y3                         = D_1F800000.view.effect.params[5] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800000.view.effect.params[3] = 0x61 - (i - 1) * 12;
+        setRGB0(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3], 1);
+        setRGB2(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3], 1);
+        D_1F800000.view.effect.params[3] = 0x61 - i * 12;
+        setRGB1(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3], 1);
+        setRGB3(prim, D_1F800000.view.effect.params[3], D_1F800000.view.effect.params[3], 1);
+        GFX_AddPrim(3, sizeof(POLY_G4));
+    }
+    if (GetGraphType() == 1) {
+        tpage = 0x25;
+    } else if (GetGraphType() == 2) {
+        tpage = 0x25;
+    } else {
+        tpage = 0x15;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(3, sizeof(DR_MODE));
+}
 
 INCLUDE_ASM(func_801EFA34);
 

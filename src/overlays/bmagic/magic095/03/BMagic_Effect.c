@@ -186,4 +186,71 @@ MATCH void func_801F00D8(void) {
     }
 }
 
-INCLUDE_ASM(func_801F012C);
+/* Draws 32 semi-transparent flat triangles on a ring around the effect, one per 1/32 turn: the ring
+ * radius comes from the row table (row = param.unk_0B / 2) widened by the timer, or by unk_09 while the
+ * timer is 0, and its height sinks by row; each triangle turns with unk_09 and grows as it rises, and
+ * once it reaches the ground it is clamped there and the timer takes unk_09. The blue is random. */
+MATCH void func_801F012C(void) {
+    POLY_F3* prim;
+    SVECTOR  center;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      row;
+    s32      x;
+    s32      y;
+    s32      tpage;
+    s16      z;
+
+    row = g_Task->param.unk_0B >> 1;
+    for (i = 1; i < 33; i++) {
+        D_1F800000.view.scenario.math_04 = 0x100 - row * 41;
+        D_1F800000.view.scenario.math_00 = D_1F800000.view.scenario.math_04 + D_801F065C[row * 8 + (i / 8 & 7)];
+        if (g_Task->timer != 0) {
+            D_1F800000.view.scenario.math_00 += g_Task->timer * 4;
+        } else {
+            D_1F800000.view.scenario.math_00 += g_Task->unk_09 * 4;
+        }
+        center.vx = FIXED_MUL(rsin(i << 7), D_1F800000.view.scenario.math_00);
+        center.vy = FIXED_MUL(rcos(i << 7), D_1F800000.view.scenario.math_00);
+        center.vz = -(D_801F065C[row * 8 + (i / 8 & 7)] + row * 72);
+        if (g_Task->param.unk_0B & 1) {
+            center.vz -= 0x24;
+        }
+        center.vx += D_801F065C[i + row];
+        center.vy += D_801F065C[i + row];
+        center.vz += D_801F065C[i + row];
+        x     = (center.vx << 9) + g_Task->pos.x.fixed;
+        y     = (center.vy << 9) + g_Task->pos.y.fixed;
+        tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
+        SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+        Area_AddCellPrim(x, y, 0, sizeof(DR_MODE));
+        prim = GFX_CURSOR(POLY_F3);
+        SetPolyF3(prim);
+        SetSemiTrans(prim, 1);
+        D_1F800000.view.scenario.math_00 = 0x21 - g_Task->unk_09;
+        D_1F800014[0].vx                 = center.vx + FIXED_MUL(rsin(((g_Task->unk_09 + 0x10) & 0x3F) << 6), D_1F800000.view.scenario.math_00);
+        D_1F800014[0].vy                 = center.vy + FIXED_MUL(rcos(((g_Task->unk_09 + 0x10) & 0x3F) << 6), D_1F800000.view.scenario.math_00);
+        D_1F800014[1].vx                 = center.vx + FIXED_MUL(rsin(((g_Task->unk_09 + 0x28) & 0x3F) << 6), D_1F800000.view.scenario.math_00);
+        D_1F800014[1].vy                 = center.vy + FIXED_MUL(rcos(((g_Task->unk_09 + 0x28) & 0x3F) << 6), D_1F800000.view.scenario.math_00);
+        D_1F800014[2].vx                 = center.vx + FIXED_MUL(rsin(((g_Task->unk_09 + 0x31) & 0x3F) << 6), D_1F800000.view.scenario.math_00);
+        D_1F800014[2].vy                 = center.vy + FIXED_MUL(rcos(((g_Task->unk_09 + 0x31) & 0x3F) << 6), D_1F800000.view.scenario.math_00);
+        z                                = center.vz + g_Task->unk_09 * 4;
+        D_1F800014[2].vz                 = z;
+        D_1F800014[1].vz                 = z;
+        D_1F800014[0].vz                 = z;
+        if (z > 0) {
+            D_1F800014[2].vz = 0;
+            D_1F800014[1].vz = 0;
+            D_1F800014[0].vz = 0;
+            if (g_Task->timer == 0) {
+                g_Task->timer = g_Task->unk_09;
+            }
+        }
+        prim->r0 = 0x40;
+        prim->g0 = 0x40;
+        prim->b0 = (rand() & 0x7F) + 0x40;
+        RotTransPers3(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, &depth, &flag);
+        Area_AddCellPrim(x, y, 0, sizeof(POLY_F3));
+    }
+}

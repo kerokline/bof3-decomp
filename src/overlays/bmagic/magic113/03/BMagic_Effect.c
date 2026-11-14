@@ -323,7 +323,65 @@ MATCH void func_801EFD40(void) {
     Effect_CountUpTimer();
 }
 
-INCLUDE_ASM(func_801EFDA0);
+/* Draw the magic113 outline as five line segments between the corner angles of D_801F0BB8, each
+ * growing over eight steps of the effect size; in step 2 they turn semi-transparent and fade. */
+MATCH void func_801EFDA0(void) {
+    LINE_F2* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      length;
+    s32      left;
+    s32      tpage;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(5, sizeof(DR_MODE));
+    for (i = 0; i < 5; i++) {
+        if (i * 8 < g_Task->unk_09) {
+            left   = g_Task->unk_09 - i * 8;
+            length = 8;
+            if (left < 8) {
+                length = left;
+            }
+            prim = (LINE_F2*)g_GfxPrimCursor;
+            SetLineF2(prim);
+            if (g_Task->header.step == 2) {
+                SetSemiTrans(prim, 1);
+            }
+            D_1F800014[0].vx = FIXED_MUL(rsin(D_801F0BB8[i] * 273), 288);
+            D_1F800014[0].vy = FIXED_MUL(rcos(D_801F0BB8[i] * 273), 288);
+            D_1F800014[0].vz = 0;
+            RotTransPers(&D_1F800014[0], (long*)&prim->x0, &depth, &flag);
+            D_1F800014[1].vx = FIXED_MUL(rsin(D_801F0BB8[i + 1] * 273), 288);
+            D_1F800014[1].vy = FIXED_MUL(rcos(D_801F0BB8[i + 1] * 273), 288);
+            D_1F800014[1].vx = D_1F800014[0].vx + ((D_1F800014[1].vx - D_1F800014[0].vx) / 8) * length;
+            D_1F800014[1].vy = D_1F800014[0].vy + ((D_1F800014[1].vy - D_1F800014[0].vy) / 8) * length;
+            D_1F800014[1].vz = 0;
+            RotTransPers(&D_1F800014[1], (long*)&prim->x1, &depth, &flag);
+            prim->r0 = 240;
+            prim->g0 = 170;
+            prim->b0 = 200;
+            if (g_Task->header.step == 2) {
+                prim->r0 = 240 - g_Task->timer * 20;
+                prim->g0 = 170 - g_Task->timer * 14;
+                prim->b0 = 200 - g_Task->timer * 16;
+            }
+            GFX_AddPrim(5, sizeof(LINE_F2));
+        }
+    }
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x25;
+    } else {
+        tpage = 0x15;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(5, sizeof(DR_MODE));
+}
 
 MATCH void func_801F0140(void) {
     SYS_DISPATCH_BYTE(D_801F0BCC, g_Task->header.step);

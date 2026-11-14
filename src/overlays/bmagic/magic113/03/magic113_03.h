@@ -62,4 +62,7 @@ extern Callback D_801F0BCC[];
 extern Callback D_801F0BD8[];
 void            func_801F02CC(void);
 
+/* The corner angles of the outline, in steps of 273 (a fifteenth of a turn). */
+extern s8 D_801F0BB8[];
+
 #endif

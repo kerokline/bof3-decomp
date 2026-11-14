@@ -49,15 +49,15 @@ MATCH void func_801EEC98(void) {
     g_BattleEffects[index & BYTE_MASK].target.party  = work;
     g_Task->param.unk_0B += 1;
     i   = 1;
-    src = MEM_PTR(u16, 0x80036C02u);
-    dst = MEM_PTR(u16, 0x8003AC02u);
+    src = MEM_PTR(u16, AREA_PALETTE_ARENA + 0x3402u);
+    dst = MEM_PTR(u16, AREA_PALETTE_WORK + 0x3402u);
     for (; i < 16; i++) {
         dst[0x20] = src[0x20] | 0x8000;
         src++;
         dst++;
     }
-    *MEM_PTR(u16, 0x8003AC40u) = 0;
-    g_GfxPalettePending        = 1;
+    *MEM_PTR(u16, AREA_PALETTE_WORK + 0x3440u) = 0;
+    g_GfxPalettePending                        = 1;
     g_BattleEffectBattler->header.flags |= PARTY_MEMBER_FLAG_HANDLER_BUSY;
 }
 

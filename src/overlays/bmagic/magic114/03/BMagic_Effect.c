@@ -190,7 +190,57 @@ MATCH void func_801EF8C0(void) {
     }
 }
 
-INCLUDE_ASM(func_801EFA80);
+MATCH void func_801EFA80(void) {
+    POLY_G4* prim;
+    long     depth;
+    long     flag;
+    s32      x;
+    s32      y;
+    s32      tpage;
+
+    g_Task->unk_0C = 0x28000;
+    g_Task->unk_10 = 0xA0000 - (g_Task->unk_09 << 17);
+    func_801DD350(g_Task);
+    x = g_AreaScrollTargetX + g_Task->unk_0C;
+    y = g_AreaScrollTargetY + g_Task->unk_10;
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x2A5;
+    } else {
+        tpage = 0xB5;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(x, y, 0, sizeof(DR_MODE));
+    prim = (POLY_G4*)g_GfxPrimCursor;
+    SetPolyG4(prim);
+    SetSemiTrans(prim, 1);
+    g_Task->unk_0C = 0;
+    g_Task->unk_10 = -0x1000;
+    func_801DD350(g_Task);
+    D_1F800014[0].vx = ((g_Task->pos.x.fixed + g_Task->unk_0C) >> 9) - 0x4000;
+    D_1F800014[0].vy = ((g_Task->pos.y.fixed + g_Task->unk_10) >> 9) - 0x4000;
+    D_1F800014[0].vz = -COORD_INT(g_Task->pos.z) / 2;
+    g_Task->unk_0C   = 0;
+    g_Task->unk_10   = 0x1000;
+    func_801DD350(g_Task);
+    D_1F800014[1].vx = ((g_Task->pos.x.fixed + g_Task->unk_0C) >> 9) - 0x4000;
+    D_1F800014[1].vy = ((g_Task->pos.y.fixed + g_Task->unk_10) >> 9) - 0x4000;
+    D_1F800014[1].vz = -COORD_INT(g_Task->pos.z) / 2;
+    g_Task->unk_10   = 0xA8000 - ((g_Task->unk_09 * 3) << 15);
+    g_Task->unk_0C   = 0x28000;
+    func_801DD350(g_Task);
+    D_1F800014[3].vx = ((g_AreaScrollTargetX + g_Task->unk_0C) >> 9) - 0x4000;
+    D_1F800014[3].vy = ((g_AreaScrollTargetY + g_Task->unk_10) >> 9) - 0x4000;
+    D_1F800014[3].vz = -g_Task->unk_14 / 2;
+    D_1F800014[2].vx = (x >> 9) - 0x4000;
+    D_1F800014[2].vy = (y >> 9) - 0x4000;
+    D_1F800014[2].vz = -g_Task->unk_14 / 2;
+    RotAverage4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+    setRGB0(prim, 16, 1, 1);
+    setRGB1(prim, 16, 1, 1);
+    setRGB2(prim, 224, 64, 64);
+    setRGB3(prim, 1, 1, 1);
+    Area_AddCellPrim(x, y, 0, sizeof(POLY_G4));
+}
 
 MATCH void func_801EFDD8(void) {
     SYS_DISPATCH_BYTE(D_801F1230, g_Task->header.step);

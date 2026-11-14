@@ -10,4 +10,7 @@ void func_801F0198(u8);
 void func_801F06E8(u8);
 void BMagic_DrawDragonBreath(void);
 
+/* The two staged screen points: the target (+0x04) and the start (+0x00). */
+extern s16 D_1F800008[];
+
 #endif

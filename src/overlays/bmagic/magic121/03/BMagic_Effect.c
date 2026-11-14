@@ -76,7 +76,47 @@ MATCH void BMagic_UpdateDragonBreath(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF03C);
+/* Aim the dragon breath: stage the target screen point, project the caster, step its screen
+ * point once and face the shot from there to the target. */
+MATCH void func_801EF03C(void) {
+    PartyMember* task;
+    PartyMember* battler;
+    PartyMember* work;
+    PartyMember* effect;
+    u8           timer;
+
+    timer          = g_Task->unk_09 - 1;
+    g_Task->unk_09 = timer;
+    if (!(timer & BYTE_MASK)) {
+        g_Task->facing = g_BattleEffectBattler->facing;
+        Battle_CenterCamera();
+        Battle_ProjectRange();
+        D_1F800008[2] = g_Task->unk_2E.half;
+        D_1F800008[3] = g_Task->unk_30.half;
+        func_800B0118();
+        battler           = g_BattleEffectBattler;
+        task              = g_Task;
+        task->pos.x.fixed = battler->pos.x.fixed;
+        task->pos.y.fixed = battler->pos.y.fixed;
+        task->pos.z.fixed = battler->pos.z.fixed;
+        Battle_ProjectRange();
+        g_Task->unk_2E.half += g_Task->unk_0C;
+        g_Task->unk_30.half += g_Task->unk_10;
+        D_1F800008[0]        = g_Task->unk_2E.half;
+        D_1F800008[1]        = g_Task->unk_30.half;
+        g_Task->unk_14       = ratan2(D_1F800008[2] - D_1F800008[0], D_1F800008[3] - D_1F800008[1]);
+        g_Task->unk_5D       = RANDOM_MASK(1);
+        g_Task->unk_5E       = RANDOM_MASK(3);
+        g_Task->unk_5F       = RANDOM_MASK(3);
+        effect               = g_Task;
+        effect->unk_04       = 0;
+        effect->unk_0C       = 0;
+        g_Task->param.unk_0B = 0;
+        g_Task->unk_09       = 16;
+        g_Task->timer        = 0;
+        g_Task->header.step += 1;
+    }
+}
 
 MATCH void func_801EF218(void) {
     u8 timer;

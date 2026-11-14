@@ -230,7 +230,75 @@ MATCH void func_801EF758(void) {
 
 #include "overlays/bmagic/Effect_SetActorMatrix.h"
 
-INCLUDE_ASM(func_801EFAA4);
+/* Draw the magic039 flame as 64 shaded quads round the effect, each with a random wobble in its
+ * height and outer radius, dark at the base and tinted at the top by the colour row it picks. */
+MATCH void func_801EFAA4(void) {
+    POLY_G4* prim;
+    long     depth;
+    long     flag;
+    s32      i;
+    s32      x;
+    s32      y;
+    s32      tpage;
+    s32      wobble;
+
+    D_1F800000.view.effect.params[4] = g_Task->timer;
+    D_1F800000.view.effect.params[5] = (((rand() & 3) + g_Task->unk_09) & 0xF) * 256;
+    D_1F800000.view.effect.params[3] = FIXED_MUL(rsin(D_1F800000.view.effect.params[5]) << 1, D_1F800000.view.effect.params[4]) - D_1F800000.view.effect.params[4] * 6;
+    D_1F800000.view.effect.params[6] = 0x80;
+    wobble                           = FIXED_MUL(rsin(D_1F800000.view.effect.params[5]) << 2, D_1F800000.view.effect.params[4]) - 0x80;
+    D_1F800000.view.effect.params[7] = D_1F800000.view.effect.params[4] * 8 - wobble;
+    if (g_Task->unk_09 < 16) {
+        D_1F800000.view.effect.params[0] = D_801F0414[g_Task->unk_04][0] * g_Task->unk_09;
+        D_1F800000.view.effect.params[1] = D_801F0414[g_Task->unk_04][1] * g_Task->unk_09;
+        D_1F800000.view.effect.params[2] = D_801F0414[g_Task->unk_04][2] * g_Task->unk_09;
+    } else {
+        D_1F800000.view.effect.params[0] = D_801F0414[g_Task->unk_04][0] * 16;
+        D_1F800000.view.effect.params[1] = D_801F0414[g_Task->unk_04][1] * 16;
+        D_1F800000.view.effect.params[2] = D_801F0414[g_Task->unk_04][2] * 16;
+    }
+    D_1F800014[1].vx = FIXED_MUL(rcos(0), D_1F800000.view.effect.params[7]);
+    D_1F800014[1].vy = FIXED_MUL(rsin(0), D_1F800000.view.effect.params[7]);
+    D_1F800014[1].vz = D_1F800000.view.effect.params[3];
+    D_1F800014[3].vx = FIXED_MUL(rcos(0), D_1F800000.view.effect.params[6]);
+    D_1F800014[3].vy = FIXED_MUL(rsin(0), D_1F800000.view.effect.params[6]);
+    D_1F800014[2].vz = 0;
+    D_1F800014[3].vz = 0;
+    for (i = 1; i <= 64; i++) {
+        D_1F800000.view.effect.params[5] = (((rand() & 3) + i + g_Task->unk_09) & 0xF) * 256;
+        D_1F800000.view.effect.params[3] = FIXED_MUL(rsin(D_1F800000.view.effect.params[5]) << 1, D_1F800000.view.effect.params[4]) - D_1F800000.view.effect.params[4] * 6;
+        wobble                           = FIXED_MUL(rsin(D_1F800000.view.effect.params[5]) << 2, D_1F800000.view.effect.params[4]) - 0x80;
+        D_1F800000.view.effect.params[7] = D_1F800000.view.effect.params[4] * 8 - wobble;
+        D_1F800014[0].vx                 = D_1F800014[1].vx;
+        D_1F800014[0].vy                 = D_1F800014[1].vy;
+        D_1F800014[0].vz                 = D_1F800014[1].vz;
+        D_1F800014[1].vx                 = FIXED_MUL(rcos(i << 6), D_1F800000.view.effect.params[7]);
+        D_1F800014[1].vy                 = FIXED_MUL(rsin(i << 6), D_1F800000.view.effect.params[7]);
+        D_1F800014[1].vz                 = D_1F800000.view.effect.params[3];
+        D_1F800014[2].vx                 = D_1F800014[3].vx;
+        D_1F800014[2].vy                 = D_1F800014[3].vy;
+        D_1F800014[3].vx                 = FIXED_MUL(rcos(i << 6), D_1F800000.view.effect.params[6]);
+        D_1F800014[3].vy                 = FIXED_MUL(rsin(i << 6), D_1F800000.view.effect.params[6]);
+        x                                = (D_1F800014[3].vx << 9) + g_Task->pos.x.fixed;
+        y                                = (D_1F800014[3].vx << 9) + g_Task->pos.y.fixed;
+        if (GetGraphType() == 1 || GetGraphType() == 2) {
+            tpage = 0xA5;
+        } else {
+            tpage = 0x35;
+        }
+        SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+        Area_AddCellPrim(x, y, 0, sizeof(DR_MODE));
+        prim = (POLY_G4*)g_GfxPrimCursor;
+        SetPolyG4(prim);
+        SetSemiTrans(prim, 1);
+        setRGB0(prim, 1, 1, 1);
+        setRGB1(prim, 1, 1, 1);
+        setRGB2(prim, D_1F800000.view.effect.params[0], D_1F800000.view.effect.params[1], D_1F800000.view.effect.params[2]);
+        setRGB3(prim, D_1F800000.view.effect.params[0], D_1F800000.view.effect.params[1], D_1F800000.view.effect.params[2]);
+        RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+        Area_AddCellPrim(x, y, 0, sizeof(POLY_G4));
+    }
+}
 
 /* Draw the magic039 disc as a fan of sixteen shaded triangles, white at the centre and tinted at
  * the rim by the colour row the effect picks, the tint growing with the effect size up to 16. */

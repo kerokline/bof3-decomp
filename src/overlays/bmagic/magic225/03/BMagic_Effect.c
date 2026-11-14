@@ -235,7 +235,59 @@ MATCH void func_801EF67C(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF7D4);
+/* Draw one corner glow of magic225 at the screen point (x, y): a disc of 32 wedges in the
+ * colour row, then a ring of 32 quads fading out to half the radius again. */
+MATCH void func_801EF7D4(s32 x, s32 y, s32 radius, s32 color) {
+    POLY_G3* prim;
+    POLY_G4* quad;
+    s32      tpage;
+    s32      i;
+
+    if (GetGraphType() == 1) {
+        tpage = 0x125;
+    } else if (GetGraphType() == 2) {
+        tpage = 0x125;
+    } else {
+        tpage = 0x55;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim((u8)g_Task->unk_29, sizeof(DR_MODE));
+    D_1F800000_WORD[0] = (s16)radius;
+    D_1F800000_WORD[1] = (s16)radius + (s16)radius / 2;
+    D_1F800000_WORD[3] = g_Task->unk_09 * 4;
+    D_1F800000_WORD[4] = D_801F038C[color & BYTE_MASK][0] * g_Task->unk_09;
+    D_1F800000_WORD[5] = D_801F038C[color & BYTE_MASK][1] * g_Task->unk_09;
+    D_1F800000_WORD[6] = D_801F038C[color & BYTE_MASK][2] * g_Task->unk_09;
+    for (i = 0; (u32)(i & BYTE_MASK) < 32; i++) {
+        prim     = GFX_BeginPolyG3(1);
+        prim->x0 = x;
+        prim->y0 = y;
+        prim->x1 = x + FIXED_MUL(rsin((i & BYTE_MASK) << 7), D_1F800000_WORD[0]);
+        prim->y1 = y + FIXED_MUL(rcos((i & BYTE_MASK) << 7), D_1F800000_WORD[0]);
+        prim->x2 = x + FIXED_MUL(rsin(((i & BYTE_MASK) + 1) << 7), D_1F800000_WORD[0]);
+        prim->y2 = y + FIXED_MUL(rcos(((i & BYTE_MASK) + 1) << 7), D_1F800000_WORD[0]);
+        setRGB0(prim, D_1F800000_WORD[4], D_1F800000_WORD[5], D_1F800000_WORD[6]);
+        setRGB1(prim, D_1F800000_WORD[4], D_1F800000_WORD[5], D_1F800000_WORD[6]);
+        setRGB2(prim, D_1F800000_WORD[4], D_1F800000_WORD[5], D_1F800000_WORD[6]);
+        GFX_AddPrim((u8)g_Task->unk_29, sizeof(POLY_G3));
+    }
+    for (i = 0; (u32)(i & BYTE_MASK) < 32; i++) {
+        quad     = GFX_BeginPolyG4(1);
+        quad->x0 = x + FIXED_MUL(rsin((i & BYTE_MASK) << 7), D_1F800000_WORD[1]);
+        quad->y0 = y + FIXED_MUL(rcos((i & BYTE_MASK) << 7), D_1F800000_WORD[1]);
+        quad->x1 = x + FIXED_MUL(rsin(((i & BYTE_MASK) + 1) << 7), D_1F800000_WORD[1]);
+        quad->y1 = y + FIXED_MUL(rcos(((i & BYTE_MASK) + 1) << 7), D_1F800000_WORD[1]);
+        quad->x2 = x + FIXED_MUL(rsin((i & BYTE_MASK) << 7), D_1F800000_WORD[0]);
+        quad->y2 = y + FIXED_MUL(rcos((i & BYTE_MASK) << 7), D_1F800000_WORD[0]);
+        quad->x3 = x + FIXED_MUL(rsin(((i & BYTE_MASK) + 1) << 7), D_1F800000_WORD[0]);
+        quad->y3 = y + FIXED_MUL(rcos(((i & BYTE_MASK) + 1) << 7), D_1F800000_WORD[0]);
+        setRGB0(quad, 1, 1, 1);
+        setRGB1(quad, 1, 1, 1);
+        setRGB2(quad, D_1F800000_WORD[4], D_1F800000_WORD[5], D_1F800000_WORD[6]);
+        setRGB3(quad, D_1F800000_WORD[4], D_1F800000_WORD[5], D_1F800000_WORD[6]);
+        GFX_AddPrim((u8)g_Task->unk_29, sizeof(POLY_G4));
+    }
+}
 
 MATCH void func_801EFCA0(void) {
     POLY_F4*      prim;

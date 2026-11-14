@@ -1813,6 +1813,7 @@ Actor_Clear = { addr = 0x801EFBDC, type = "func", source = "Clears the effect wo
 g_BMagicEffectModes = { addr = 0x801EFC2C, source = "Handlers of magic223 (Tempest, Hurricane), run by header.mode (byte 0x01) and by header.step (byte 0x02) in its sub-effects." }
 
 ["emi/bmagic/magic225/03"]
+D_1F800000_WORD = { addr = 0x1F800000, type = "s32", alias = true, source = "The scratchpad base 0x1F800000 as words: func_801EF7D4 stages its radii and its shade there." }
 Battle_MarkDamaged = { addr = 0x800A9820, alias = true, source = "Marks the selected battlers as damaged." }
 Battle_CenterCamera = { addr = 0x800AFD9C, type = "func", source = "Centres the battle camera on the living battlers." }
 Battle_SlotIsBlocked = { addr = 0x801DB524, alias = true, source = "Tells whether a battler slot can not be selected." }
@@ -1826,6 +1827,7 @@ Effect_CountUpAndStep = { addr = 0x801EF5D8, type = "func", source = "Counts the
 BMagic_AllocEffect = { addr = 0x801F02D4, type = "func", source = "Claims the first free slot of the effect table (bit 0 of header.flags) and returns its index, or 0xFF when all 32 slots are in use in magic225 (Temptation)." }
 Actor_Clear = { addr = 0x801F0338, type = "func", source = "Clears the effect work record: header flags, mode (byte 0x01), step (byte 0x02) and bytes 0x03 and 0x04." }
 g_BMagicEffectModes = { addr = 0x801F0388, source = "Handlers of magic225 (Temptation), run by header.mode (byte 0x01)." }
+D_801F038C = { addr = 0x801F038C, source = "RGB of the four corner glows of magic225, three bytes each, scaled by the effect timer in func_801EF7D4." }
 D_801F0398 = { addr = 0x801F0398, source = "Step handlers of magic225, run by header.step (byte 0x02) from func_801EF31C." }
 D_801F03AC = { addr = 0x801F03AC, source = "Mode handlers of the magic225 effect, run by header.mode (byte 0x01) from func_801EFE0C; func_801EFE50 reads the same table one entry further along by header.step." }
 D_801F03BC = { addr = 0x801F03BC, source = "Effect slot table of the magic225 effect, scanned by BMagic_AllocEffect." }

@@ -23,4 +23,7 @@ u8        func_800AED5C(s32 selector, u32 battler_index);
 /* The red, green and blue of each colour row, indexed by the effect byte 0x04. */
 extern u8 D_801F0CFC[][3];
 
+/* The ring colours, laid out as D_801F0CFC. */
+extern u8 D_801F0D08[][3];
+
 #endif

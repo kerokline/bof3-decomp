@@ -134,7 +134,61 @@ MATCH void func_801EF320(void) {
 /* func_801EF478 */
 #include "overlays/bmagic/Effect_FinishTrail.h"
 
-INCLUDE_ASM(func_801EF4E0);
+MATCH void func_801EF4E0(void) {
+    POLY_G4* prim;
+    s32      k;
+    s32      tpage;
+
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(3, sizeof(DR_MODE));
+    k = g_Task->param.unk_0B;
+    while (BMagic_Trail[g_Task->unk_04][k].x == -1) {
+        k++;
+    }
+    D_1F800000.view.effect.params[0] = 2;
+    D_1F800000.view.effect.params[6] = BMagic_Trail[g_Task->unk_04][k].x;
+    D_1F800000.view.effect.params[7] = BMagic_Trail[g_Task->unk_04][k].y;
+    D_1F800000.view.effect.params[4] = BMagic_Trail[g_Task->unk_04][k + 1].x;
+    D_1F800000.view.effect.params[5] = BMagic_Trail[g_Task->unk_04][k + 1].y;
+    D_1F800000.view.effect.params[1] = ratan2(D_1F800000.view.effect.params[4] - D_1F800000.view.effect.params[6], D_1F800000.view.effect.params[5] - D_1F800000.view.effect.params[7]);
+    D_1F800000.view.effect.params[4] = BMagic_Trail[g_Task->unk_04][k].x;
+    D_1F800000.view.effect.params[5] = BMagic_Trail[g_Task->unk_04][k].y;
+    for (k = k + 1; k < g_Task->timer; k++) {
+        D_1F800000.view.effect.params[6] = D_1F800000.view.effect.params[4];
+        D_1F800000.view.effect.params[7] = D_1F800000.view.effect.params[5];
+        D_1F800000.view.effect.params[4] = BMagic_Trail[g_Task->unk_04][k].x;
+        D_1F800000.view.effect.params[5] = BMagic_Trail[g_Task->unk_04][k].y;
+        prim                             = (POLY_G4*)g_GfxPrimCursor;
+        SetPolyG4(prim);
+        SetSemiTrans(prim, 1);
+        D_1F800000.view.effect.params[2] = (D_1F800000.view.effect.params[1] + 0x400) & 0xFFF;
+        prim->x0                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->y0                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800000.view.effect.params[2] = (D_1F800000.view.effect.params[1] - 0x400) & 0xFFF;
+        prim->x2                         = D_1F800000.view.effect.params[6] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->y2                         = D_1F800000.view.effect.params[7] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800000.view.effect.params[1] = ratan2(D_1F800000.view.effect.params[4] - D_1F800000.view.effect.params[6], D_1F800000.view.effect.params[5] - D_1F800000.view.effect.params[7]);
+        D_1F800000.view.effect.params[2] = (D_1F800000.view.effect.params[1] + 0x400) & 0xFFF;
+        prim->x1                         = D_1F800000.view.effect.params[4] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->y1                         = D_1F800000.view.effect.params[5] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800000.view.effect.params[2] = (D_1F800000.view.effect.params[1] - 0x400) & 0xFFF;
+        prim->x3                         = D_1F800000.view.effect.params[4] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->y3                         = D_1F800000.view.effect.params[5] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800000.view.effect.params[2] = 97 - (k - 1) * 6;
+        D_1F800000.view.effect.params[3] = 193 - (k - 1) * 12;
+        setRGB0(prim, 1, 1, D_1F800000.view.effect.params[3]);
+        setRGB2(prim, 1, 1, D_1F800000.view.effect.params[3]);
+        D_1F800000.view.effect.params[2] = 97 - k * 6;
+        D_1F800000.view.effect.params[3] = 193 - k * 12;
+        setRGB1(prim, 1, 1, D_1F800000.view.effect.params[3]);
+        setRGB3(prim, 1, 1, D_1F800000.view.effect.params[3]);
+        GFX_AddPrim(3, sizeof(POLY_G4));
+    }
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0x25 : 0x15;
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(3, sizeof(DR_MODE));
+}
 
 INCLUDE_ASM(func_801EFA4C);
 

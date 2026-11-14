@@ -532,7 +532,53 @@ MATCH void func_801F0CB0(void) {
     }
 }
 
-INCLUDE_ASM(func_801F0D0C);
+MATCH void func_801F0D0C(u8 angle0, u8 angle1) {
+    LINE_F2* prim;
+    long     depth;
+    long     flag;
+    s32      tpage;
+    s32      x;
+    s32      y;
+    u8       i;
+
+    D_1F800000.view.effect.params[5] = (s8)g_Task->unk_5D * 12;
+    D_1F800000.view.effect.params[0] = 0x200;
+    D_1F800000.view.effect.params[1] = FIXED_MUL(rsin(angle1 << 4), D_1F800000.view.effect.params[0]);
+    D_1F800014[1].vx                 = FIXED_MUL(rsin(angle0 << 4), D_1F800000.view.effect.params[1]);
+    D_1F800014[1].vy                 = FIXED_MUL(rcos(angle0 << 4), D_1F800000.view.effect.params[1]);
+    D_1F800014[1].vz                 = FIXED_MUL(rcos(angle1 << 4), D_1F800000.view.effect.params[0]);
+    for (i = 0; i < g_Task->timer; i++) {
+        D_1F800014[0].vx                 = D_1F800014[1].vx;
+        D_1F800014[0].vy                 = D_1F800014[1].vy;
+        D_1F800014[0].vz                 = D_1F800014[1].vz;
+        D_1F800000.view.effect.params[2] = RANDOM_MASK(3) + 4;
+        D_1F800000.view.effect.params[7] = ((g_Task->unk_0C + i) & 0x1F) * 128;
+        D_1F800000.view.effect.params[7] = (angle1 + FIXED_MUL(rsin(D_1F800000.view.effect.params[7]), D_1F800000.view.effect.params[2])) << 4;
+        D_1F800000.view.effect.params[1] = FIXED_MUL(rsin(D_1F800000.view.effect.params[7]), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vz                 = FIXED_MUL(rcos(D_1F800000.view.effect.params[7]), D_1F800000.view.effect.params[0]);
+        angle0 += RANDOM_MASK(7);
+        D_1F800014[1].vx = FIXED_MUL(rsin(angle0 << 4), D_1F800000.view.effect.params[1]);
+        D_1F800014[1].vy = FIXED_MUL(rcos(angle0 << 4), D_1F800000.view.effect.params[1]);
+        x                = (D_1F800014[1].vx << 9) + g_Task->pos.x.fixed;
+        y                = (D_1F800014[1].vy << 9) + g_Task->pos.y.fixed;
+        if (GetGraphType() == 1 || GetGraphType() == 2) {
+            tpage = ((g_Task->param.unk_0B & 3) << 7) | 0x25;
+        } else {
+            tpage = ((g_Task->param.unk_0B & 3) << 5) | 0x15;
+        }
+        SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+        Area_AddCellPrim(x, y, 2, sizeof(DR_MODE));
+        prim = (LINE_F2*)g_GfxPrimCursor;
+        SetLineF2(prim);
+        SetSemiTrans(prim, g_Task->param.unk_0B);
+        RotTransPers(&D_1F800014[0], (long*)&prim->x0, &depth, &flag);
+        RotTransPers(&D_1F800014[1], (long*)&prim->x1, &depth, &flag);
+        prim->r0 = D_1F800000.view.effect.params[5];
+        prim->g0 = D_1F800000.view.effect.params[5];
+        prim->b0 = D_1F800000.view.effect.params[5];
+        Area_AddCellPrim(x, y, 2, sizeof(LINE_F2));
+    }
+}
 
 /* Runs the step's handler, projects the battle range and, once the effect is live, sets the rolled actor
  * matrix and draws its three bands. */

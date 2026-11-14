@@ -339,7 +339,87 @@ MATCH void func_801F00DC(void) {
 
 INCLUDE_ASM(func_801F0260);
 
-INCLUDE_ASM(func_801F03E0);
+/* Draw the magic082 shell as two fans of four flat triangles, one above and one below the
+ * effect, each shaded from its colour table and linked into the map cell by depth. */
+MATCH void func_801F03E0(void) {
+    POLY_G3* prim;
+    u8*      base;
+    long     depth;
+    long     flag;
+    s32      values[16];
+    s32      i;
+    s32      tpage;
+    s32      x;
+    s32      y;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0x25;
+    } else {
+        tpage = 0x15;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+    base = g_GfxPrimCursor;
+    for (i = g_Task->unk_09; i < g_Task->unk_09 + 32; i += 8) {
+        D_1F800000.view.effect.params[1] = 0x50;
+        D_1F800000.view.effect.params[0] = 0x30;
+        D_1F800000.view.effect.params[7] = (i - g_Task->unk_09) / 8;
+        D_1F800000.view.effect.params[4] = D_801F0C9C[g_Task->unk_04][D_1F800000.view.effect.params[7]][0];
+        D_1F800000.view.effect.params[5] = D_801F0C9C[g_Task->unk_04][D_1F800000.view.effect.params[7]][1];
+        D_1F800000.view.effect.params[6] = D_801F0C9C[g_Task->unk_04][D_1F800000.view.effect.params[7]][2];
+        D_1F800014[0].vx                 = 0;
+        D_1F800014[0].vy                 = 0;
+        D_1F800014[0].vz                 = D_1F800000.view.effect.params[1];
+        D_1F800000.view.effect.params[2] = (i & 0x1F) << 7;
+        D_1F800014[1].vx                 = FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vy                 = FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vz                 = 0;
+        D_1F800000.view.effect.params[2] = ((i + 8) & 0x1F) << 7;
+        D_1F800014[2].vx                 = FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800014[2].vy                 = FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800014[2].vz                 = 0;
+        prim                             = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 0);
+        values[(i - g_Task->unk_09) / 8] = RotAverage3(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, &depth, &flag);
+        setRGB0(prim, D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5], D_1F800000.view.effect.params[6]);
+        setRGB1(prim, D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5], D_1F800000.view.effect.params[6]);
+        setRGB2(prim, D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5], D_1F800000.view.effect.params[6]);
+        g_GfxPrimCursor += sizeof(POLY_G3);
+    }
+    x = g_Task->pos.x.fixed;
+    y = g_Task->pos.y.fixed;
+    func_800AF0F8(x, y, values, base, 4, sizeof(POLY_G3), 2);
+    base = g_GfxPrimCursor;
+    for (i = g_Task->unk_09; i < g_Task->unk_09 + 32; i += 8) {
+        D_1F800000.view.effect.params[7] = (i - g_Task->unk_09) / 8;
+        D_1F800000.view.effect.params[4] = D_801F0CCC[g_Task->unk_04][D_1F800000.view.effect.params[7]][0];
+        D_1F800000.view.effect.params[5] = D_801F0CCC[g_Task->unk_04][D_1F800000.view.effect.params[7]][1];
+        D_1F800000.view.effect.params[6] = D_801F0CCC[g_Task->unk_04][D_1F800000.view.effect.params[7]][2];
+        D_1F800014[0].vx                 = 0;
+        D_1F800014[0].vy                 = 0;
+        D_1F800014[0].vz                 = -D_1F800000.view.effect.params[1];
+        D_1F800000.view.effect.params[2] = (i & 0x1F) << 7;
+        D_1F800014[1].vx                 = FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vy                 = FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vz                 = 0;
+        D_1F800000.view.effect.params[2] = ((i + 8) & 0x1F) << 7;
+        D_1F800014[2].vx                 = FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800014[2].vy                 = FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        D_1F800014[2].vz                 = 0;
+        prim                             = (POLY_G3*)g_GfxPrimCursor;
+        SetPolyG3(prim);
+        SetSemiTrans(prim, 0);
+        values[(i - g_Task->unk_09) / 8] = RotAverage3(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, &depth, &flag);
+        setRGB0(prim, D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5], D_1F800000.view.effect.params[6]);
+        setRGB1(prim, D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5], D_1F800000.view.effect.params[6]);
+        setRGB2(prim, D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5], D_1F800000.view.effect.params[6]);
+        g_GfxPrimCursor += sizeof(POLY_G3);
+    }
+    x = g_Task->pos.x.fixed;
+    y = g_Task->pos.y.fixed;
+    func_800AF0F8(x, y, values, base, 4, sizeof(POLY_G3), 2);
+}
 
 /* Draws a semi-transparent disc of the given radius round the effect's screen point as eight
  * shaded triangles, bright at the centre and dark at the rim. */

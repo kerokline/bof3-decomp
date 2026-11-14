@@ -26,4 +26,12 @@ extern u8 D_801F0CFC[][3];
 /* The ring colours, laid out as D_801F0CFC. */
 extern u8 D_801F0D08[][3];
 
+/* The colours of the four triangles of the upper and the lower fan, per colour row. */
+extern u8 D_801F0C9C[][4][3];
+extern u8 D_801F0CCC[][4][3];
+
+/* battle/battle/15: links count packets of size bytes from base into the map cell at the position,
+ * ordered by values[]. */
+void func_800AF0F8(s32 pos_x, s32 pos_y, s32* values, u8* base, u8 count, u8 size, u8 seed);
+
 #endif

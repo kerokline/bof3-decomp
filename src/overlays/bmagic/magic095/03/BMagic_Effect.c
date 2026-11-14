@@ -188,8 +188,9 @@ MATCH void func_801F00D8(void) {
 
 /* Draws 32 semi-transparent flat triangles on a ring around the effect, one per 1/32 turn: the ring
  * radius comes from the row table (row = param.unk_0B / 2) widened by the timer, or by unk_09 while the
- * timer is 0, and its height sinks by row; each triangle turns with unk_09 and grows as it rises, and
- * once it reaches the ground it is clamped there and the timer takes unk_09. The blue is random. */
+ * timer is 0, and its z is lowered by 72 per row; each triangle turns and shrinks with unk_09 while
+ * its z rises by 4 per unk_09, and once z passes 0 it is clamped there and the timer takes unk_09.
+ * The blue is random. */
 MATCH void func_801F012C(void) {
     POLY_F3* prim;
     SVECTOR  center;

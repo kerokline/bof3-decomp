@@ -8,6 +8,8 @@
 extern BMagicEffectFuncs D_801EEC04;
 
 extern s16 D_1F800008;
+/* The outer radius of each blade func_801EF478 draws, indexed by half its angle step. */
+extern s16 D_801F0A30[];
 
 #define MAGIC006_STEP_COUNT 3
 

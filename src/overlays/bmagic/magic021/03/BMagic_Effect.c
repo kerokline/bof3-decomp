@@ -199,7 +199,61 @@ MATCH void func_801EF7A0(void) {
 
 INCLUDE_ASM(func_801EF7FC);
 
-INCLUDE_ASM(func_801EFA48);
+/* Draw the magic021 ring as sixteen shaded quads between two radii around the effect,
+ * tinted on the outer edge by the timer and dark on the inner one. */
+MATCH void func_801EFA48(void) {
+    POLY_G4* prim;
+    s32      tpage;
+    s32      i;
+    u8       red;
+    u8       green;
+    u8       blue;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = 0xA5;
+    } else {
+        tpage = 0x35;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    i = 0;
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+    D_1F800000.view.effect.params[2] = 0;
+    red                              = g_Task->timer * 12;
+    green                            = g_Task->timer * 6;
+    blue                             = g_Task->timer * 4;
+    D_1F800000.view.effect.params[0] = g_Task->unk_09 * 2;
+    D_1F800000.view.effect.params[1] = g_Task->unk_09 * 3;
+    D_1F800000.view.effect.params[4] = g_Task->unk_2E.half;
+    D_1F800000.view.effect.params[5] = g_Task->unk_30.half;
+    do {
+        prim = (POLY_G4*)g_GfxPrimCursor;
+        SetPolyG4(prim);
+        SetSemiTrans(prim, 1);
+        prim->x0                         = D_1F800000.view.effect.params[4] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->y0                         = D_1F800000.view.effect.params[5] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->x2                         = D_1F800000.view.effect.params[4] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[1]);
+        prim->y2                         = D_1F800000.view.effect.params[5] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[1]);
+        D_1F800000.view.effect.params[2] = (i + 1) << 8;
+        prim->x1                         = D_1F800000.view.effect.params[4] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->y1                         = D_1F800000.view.effect.params[5] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[0]);
+        prim->x3                         = D_1F800000.view.effect.params[4] + FIXED_MUL(rsin(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[1]);
+        prim->y3                         = D_1F800000.view.effect.params[5] + FIXED_MUL(rcos(D_1F800000.view.effect.params[2]), D_1F800000.view.effect.params[1]);
+        prim->r0                         = red;
+        prim->g0                         = green;
+        prim->b0                         = blue;
+        prim->r1                         = red;
+        prim->g1                         = green;
+        prim->b1                         = blue;
+        prim->r2                         = 1;
+        prim->g2                         = 1;
+        prim->b2                         = 1;
+        prim->r3                         = 1;
+        prim->g3                         = 1;
+        prim->b3                         = 1;
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_G4));
+        i++;
+    } while (i < 16);
+}
 
 /* func_801EFD4C */
 #include "overlays/bmagic/BMagic_AllocEffect.h"

@@ -329,12 +329,33 @@ MATCH void func_801F03D8(void) {
 MATCH void func_801F0448(void) {
     Callback table[2] = {func_801F04A0, func_801F05A4};
 
-    table[((u8*)D_801F28B4)[1]]();
+    table[D_801F28B4->mode]();
 }
 
 INCLUDE_ASM(func_801F04A0);
 
-INCLUDE_ASM(func_801F05A4);
+/* Spread the magic064 ring: grow both radii by their speeds, raise the speeds by a quarter and
+ * draw five spokes between the radii; past an outer radius of 448 the ring ends. */
+MATCH void func_801F05A4(void) {
+    D_801F28B4->inner.fixed += D_801F28B4->inner_speed;
+    D_801F28B4->outer.fixed += D_801F28B4->outer_speed;
+    D_801F28B4->inner_speed = D_801F28B4->inner_speed * 5 / 4;
+    D_801F28B4->outer_speed = D_801F28B4->outer_speed * 5 / 4;
+    func_801F0B8C(D_801F28B4->x + FIXED_MUL(rcos(D_801F28B4->angle), D_801F28B4->inner.part.integer), D_801F28B4->y + FIXED_MUL(rsin(D_801F28B4->angle), D_801F28B4->inner.part.integer),
+                  D_801F28B4->x + FIXED_MUL(rcos(D_801F28B4->angle), D_801F28B4->outer.part.integer), D_801F28B4->y + FIXED_MUL(rsin(D_801F28B4->angle), D_801F28B4->outer.part.integer));
+    func_801F0B8C(D_801F28B4->x + FIXED_MUL(rcos(D_801F28B4->angle + 1), D_801F28B4->inner.part.integer), D_801F28B4->y + FIXED_MUL(rsin(D_801F28B4->angle + 1), D_801F28B4->inner.part.integer),
+                  D_801F28B4->x + FIXED_MUL(rcos(D_801F28B4->angle + 1), D_801F28B4->outer.part.integer), D_801F28B4->y + FIXED_MUL(rsin(D_801F28B4->angle + 1), D_801F28B4->outer.part.integer));
+    func_801F0B8C(D_801F28B4->x + FIXED_MUL(rcos(D_801F28B4->angle + 2), D_801F28B4->inner.part.integer), D_801F28B4->y + FIXED_MUL(rsin(D_801F28B4->angle + 2), D_801F28B4->inner.part.integer),
+                  D_801F28B4->x + FIXED_MUL(rcos(D_801F28B4->angle + 2), D_801F28B4->outer.part.integer), D_801F28B4->y + FIXED_MUL(rsin(D_801F28B4->angle + 2), D_801F28B4->outer.part.integer));
+    func_801F0B8C(D_801F28B4->x + FIXED_MUL(rcos(D_801F28B4->angle + 3), D_801F28B4->inner.part.integer), D_801F28B4->y + FIXED_MUL(rsin(D_801F28B4->angle + 3), D_801F28B4->inner.part.integer),
+                  D_801F28B4->x + FIXED_MUL(rcos(D_801F28B4->angle + 3), D_801F28B4->outer.part.integer), D_801F28B4->y + FIXED_MUL(rsin(D_801F28B4->angle + 3), D_801F28B4->outer.part.integer));
+    func_801F0B8C(D_801F28B4->x + FIXED_MUL(rcos(D_801F28B4->angle + 4), D_801F28B4->inner.part.integer), D_801F28B4->y + FIXED_MUL(rsin(D_801F28B4->angle + 4), D_801F28B4->inner.part.integer),
+                  D_801F28B4->x + FIXED_MUL(rcos(D_801F28B4->angle + 4), D_801F28B4->outer.part.integer), D_801F28B4->y + FIXED_MUL(rsin(D_801F28B4->angle + 4), D_801F28B4->outer.part.integer));
+    if (D_801F28B4->outer.part.integer > 0x1C0) {
+        D_801F28B4->unk_00 = 0;
+        D_801F28B4->mode   = 0;
+    }
+}
 
 MATCH void func_801F0B8C(s16 x0, s16 y0, s16 x1, s16 y1) {
     LINE_G2* primitive;

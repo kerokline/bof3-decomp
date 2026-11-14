@@ -6,6 +6,7 @@
 #define BATTLE_PARTY_CELL_RECORD
 
 #include "overlays/bmagic/bmagic.h"
+#include "overlays/battle/battle/15/battle_15.h"
 
 /* The step table the effect handler copies onto its stack by value, as retail does. */
 typedef struct Magic225Steps {

@@ -90,7 +90,84 @@ MATCH void func_801EEE8C(void) {
     }
 }
 
-INCLUDE_ASM(func_801EEF8C);
+/* Spawn three effects on each unblocked battler of the selected side: kind j + 4 where
+ * func_800AED5C accepts the battler for selector j, kind 8 otherwise. */
+MATCH void func_801EEF8C(void) {
+    s32 i;
+    s32 j;
+    u8  slot;
+    s32 battler;
+
+    if (g_Task->param.unk_0B == 0) {
+        if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
+            i = 0;
+            do {
+                if (!(Battle_SlotIsBlocked((i + BATTLE_PARTY_CHARACTERS_COUNT) & BYTE_MASK) & BYTE_MASK)) {
+                    j       = 0;
+                    battler = i + BATTLE_PARTY_CHARACTERS_COUNT;
+                    do {
+                        if (func_800AED5C(D_800B6BF0[j & BYTE_MASK], battler & BYTE_MASK) & BYTE_MASK) {
+                            slot = Battle_AllocEffect(1, 2);
+                            if (slot != 0xFF) {
+                                g_BattleEffects[slot].target.party = g_Task;
+                                g_BattleEffects[slot].unk_04       = j + 4;
+                                g_BattleEffects[slot].arg.unk_09   = (j & BYTE_MASK) * 5 + 1;
+                                g_BattleEffects[slot].unk_0B       = battler;
+                                g_BattleEffects[slot].unk_0A       = (j & BYTE_MASK) * 12;
+                                g_Task->param.unk_0B += 1;
+                            }
+                        } else {
+                            slot = Battle_AllocEffect(1, 2);
+                            if (slot != 0xFF) {
+                                g_BattleEffects[slot].target.party = g_Task;
+                                g_BattleEffects[slot].unk_04       = 8;
+                                g_BattleEffects[slot].arg.unk_09   = (j & BYTE_MASK) * 5 + 1;
+                                g_BattleEffects[slot].unk_0B       = battler;
+                                g_BattleEffects[slot].unk_0A       = (j & BYTE_MASK) * 12;
+                                g_Task->param.unk_0B += 1;
+                            }
+                        }
+                        j++;
+                    } while ((u32)(j & BYTE_MASK) < 3);
+                }
+                i++;
+            } while ((u32)(i & BYTE_MASK) < 8);
+        } else {
+            i = 0;
+            do {
+                if (!(Battle_SlotIsBlocked(i & BYTE_MASK) & BYTE_MASK)) {
+                    j = 0;
+                    do {
+                        if (func_800AED5C(D_800B6BF0[j & BYTE_MASK], i & BYTE_MASK) & BYTE_MASK) {
+                            slot = Battle_AllocEffect(1, 2);
+                            if (slot != 0xFF) {
+                                g_BattleEffects[slot].target.party = g_Task;
+                                g_BattleEffects[slot].unk_04       = j + 4;
+                                g_BattleEffects[slot].arg.unk_09   = (j & BYTE_MASK) * 5 + 1;
+                                g_BattleEffects[slot].unk_0B       = i;
+                                g_BattleEffects[slot].unk_0A       = (j & BYTE_MASK) * 12;
+                                g_Task->param.unk_0B += 1;
+                            }
+                        } else {
+                            slot = Battle_AllocEffect(1, 2);
+                            if (slot != 0xFF) {
+                                g_BattleEffects[slot].target.party = g_Task;
+                                g_BattleEffects[slot].unk_04       = 8;
+                                g_BattleEffects[slot].arg.unk_09   = (j & BYTE_MASK) * 5 + 1;
+                                g_BattleEffects[slot].unk_0B       = i;
+                                g_BattleEffects[slot].unk_0A       = (j & BYTE_MASK) * 12;
+                                g_Task->param.unk_0B += 1;
+                            }
+                        }
+                        j++;
+                    } while ((u32)(j & BYTE_MASK) < 3);
+                }
+                i++;
+            } while ((u32)(i & BYTE_MASK) < BATTLE_PARTY_CHARACTERS_COUNT);
+        }
+        g_Task->header.mode += 1;
+    }
+}
 
 #include "overlays/bmagic/Effect_PlayOnZeroTick.h"
 

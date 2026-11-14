@@ -6,7 +6,10 @@ __asm__(".include \"include/match/macro.inc\"\n");
 
 #include "overlays/bmagic/BMagic_DispatchMode.h"
 
-/* Starts the effect: centres the camera, queues a copy of the acting battler as effect\n0x55 in mode 3, sets STP on colours 1 to 15 of the first two palettes of work row 26\nand clears their colour 0, then takes the battler handler and marks it busy. */
+/* Starts the effect: centres the camera, queues a copy of the acting battler as effect
+ * 0x55 in mode 3, sets STP on colours 1 to 15 of the first two palettes of work row 26
+ * and clears their colour 0, then fills bytes 0x24, 0x27 and 0x28 of the effect from the
+ * effect battler and marks the battler busy. */
 MATCH void func_801EEC94(void) {
     PartyMember*     work;
     u16*             dst;
@@ -159,7 +162,8 @@ MATCH void func_801EFB38(void) {
 
 #include "overlays/bmagic/Effect_CountDownTimerCapped.h"
 
-/* Draws the glow disc of sixteen shaded triangles round the effect point: the radius\ngrows with byte 0x09 from step 2 on, the centre is red and green from the effect timer. */
+/* Draws the glow disc of sixteen shaded triangles round the effect point; the radius
+ * follows byte 0x09 (a wider rule from step 2 on) and the centre colour the effect timer. */
 MATCH void func_801EFC74(void) {
     POLY_G3* prim;
     long     depth;

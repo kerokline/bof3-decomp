@@ -96,7 +96,8 @@ MATCH void func_801EF068(void) {
 
 #include "shared/Effect_StartPlaying.h"
 
-/* Covers the screen with two semi-transparent quads in one flat shade of timer times 15;\nthe shade from byte 0x09 is stored first and overwritten. */
+/* Covers the screen with two semi-transparent quads in one flat shade of timer times 15;
+ * the shade from byte 0x09 is stored first and overwritten. */
 MATCH void func_801EF148(void) {
     POLY_G4* prim;
     s16*     shade;

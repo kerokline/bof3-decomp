@@ -24,7 +24,9 @@ MATCH void func_801EEC04(void) {
     }
 }
 
-/* Clears the effect slot table and spawns one effect 0x28 at each selectable battler, the\nenemies when the target selector holds 0x40 and the party otherwise, each starting 16\nframes after the one before; then sets STP on colours 1 to 15 of work palette row 26. */
+/* Clears the effect slot table and spawns one effect 0x28 at each selectable battler, the
+ * enemies when the target selector holds 0x40 and the party otherwise, each starting 16
+ * frames after the one before; then sets STP on colours 1 to 15 of work palette row 26. */
 MATCH void func_801EED04(void) {
     u32 i;
     u32 slot;
@@ -258,7 +260,9 @@ MATCH void func_801F038C(void) {
 
 #include "overlays/bmagic/Effect_TickCounter.h"
 
-/* Draws the glow fan at the effect point: eight triangles of a radius 64 to 79 picked\nonce, red at the centre with a fifth of it in green and blue, redrawing the blend\nmode for each. */
+/* Draws the glow fan at the effect point: eight triangles of a radius 64 to 79 picked
+ * once, red at the centre with a fifth of it in green and blue, redrawing the blend
+ * mode for each. */
 MATCH void func_801F04BC(void) {
     POLY_G3* prim;
     s32      angle;

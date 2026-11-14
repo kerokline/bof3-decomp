@@ -12,10 +12,10 @@ MATCH void func_801EEC04(void) {
     BMagic_DispatchTaskPair(func_801EECE4, Effect_PlayOnZeroTick);
     count = 0;
     do {
-        if (D_801F12BC[(u8)count << 5] & 0x1) {
+        if (D_801F12BC[(u8)count].header.flags & 0x1) {
             saved                 = g_BattleEffectBattler;
-            swap                  = FIELD(PartyMember*, D_801F12D8, (u8)count << 5);
-            D_801F22BC            = D_801F12BC + ((u8)count << 5);
+            swap                  = D_801F12BC[(u8)count].battler;
+            D_801F22BC            = (PartyMember*)&D_801F12BC[(u8)count];
             g_BattleEffectBattler = swap;
             func_801F091C();
             g_BattleEffectBattler = saved;
@@ -29,9 +29,9 @@ MATCH void func_801EECE4(void) {
     u8  slot;
 
     for (i = 0; i < 128; i++) {
-        D_801F12BC[i << 5]       = 0;
-        D_801F12BC[(i << 5) + 1] = 0;
-        D_801F12BC[(i << 5) + 2] = 0;
+        D_801F12BC[i].header.flags = 0;
+        D_801F12BC[i].header.mode  = 0;
+        D_801F12BC[i].header.step  = 0;
     }
     Battle_CenterCamera();
     Battle_ProjectRange();
@@ -325,9 +325,8 @@ MATCH void func_801F037C(void) {
 }
 
 MATCH void func_801F0494(void) {
-    u8  slot;
-    u8  i;
-    u32 row;
+    u8 slot;
+    u8 i;
 
     if (g_Task->param.unk_0B == 0) {
         SND_QueueSelectionFx(0x101);
@@ -341,12 +340,11 @@ MATCH void func_801F0494(void) {
         g_BattleEffects[slot].arg.unk_09   = 46;
         g_BattleEffectBattler->param.unk_0B += 1;
         for (i = 0; i < 64; i++) {
-            slot                                 = func_801F1110();
-            row                                  = slot << 5;
-            FIELD(PartyMember*, D_801F12D8, row) = g_BattleEffectBattler;
-            D_801F12BC[row + 1]                  = 0;
-            D_801F12BC[row + 4]                  = i;
-            D_801F12BC[row + 5]                  = ((i & 1) << 4) + (rand() & 0xF) + 24;
+            slot                         = func_801F1110();
+            D_801F12BC[slot].battler     = g_BattleEffectBattler;
+            D_801F12BC[slot].header.mode = 0;
+            D_801F12BC[slot].unk_04      = i;
+            D_801F12BC[slot].unk_05      = ((i & 1) << 4) + (rand() & 0xF) + 24;
             g_BattleEffectBattler->param.unk_0B += 1;
         }
         Battle_ApplyDamageFlags(g_Battle.target_selector, 0x10);
@@ -472,8 +470,8 @@ MATCH u32 func_801F1110(void) {
     u8 index;
 
     for (index = 0u; index < 128; index++) {
-        if ((D_801F12BC[index << 5] & 0x1) == 0) {
-            D_801F12BC[index << 5] |= 1;
+        if ((D_801F12BC[index].header.flags & 0x1) == 0) {
+            D_801F12BC[index].header.flags |= 1;
             return index;
         }
     }

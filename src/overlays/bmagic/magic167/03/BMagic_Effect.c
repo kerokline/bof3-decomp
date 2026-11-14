@@ -266,7 +266,7 @@ MATCH void func_801F05C8(s32 step) {
     long         p;
     long         flag;
 
-    /* The angle word is the third scratch word after the radius at 0x1F800000; the depth word sits between them. */
+    /* The angle word sits three scratch words after the radius word; the depth word lies between them. */
     i     = 1;
     angle = &D_1F80000C;
     for (; i < 24; i += step) {

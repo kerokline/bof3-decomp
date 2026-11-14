@@ -389,7 +389,61 @@ MATCH void func_801EFF50(void) {
     Camera_SetModelMatrix(&rot, &matrix);
 }
 
-INCLUDE_ASM(func_801F0014);
+/* Outlines a square around the effect with two semi-transparent gouraud line triangles (corners at
+ * 45, 135, 225 and 315 degrees), its radius 0x80 and growing by 4 per unk_09 from mode 2 on, the
+ * shade timer times the frame counter's table step. */
+MATCH void func_801F0014(void) {
+    LINE_G3* prim;
+    s32      tpage;
+    long     depth;
+    long     flag;
+
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+
+    prim = GFX_CURSOR(LINE_G3);
+    SetLineG3(prim);
+    SetSemiTrans(prim, 1);
+    if (g_Task->header.mode < 2) {
+        D_1F800000.view.scenario.math_00 = 0x80;
+    } else {
+        D_1F800000.view.scenario.math_00 = g_Task->unk_09 * 4 + 0x80;
+    }
+    D_1F800014[0].vx = FIXED_MUL(rsin(0x200), D_1F800000.view.scenario.math_00);
+    D_1F800014[0].vy = FIXED_MUL(rcos(0x200), D_1F800000.view.scenario.math_00);
+    D_1F800014[0].vz = 0;
+    D_1F800014[1].vx = FIXED_MUL(rsin(0x600), D_1F800000.view.scenario.math_00);
+    D_1F800014[1].vy = FIXED_MUL(rcos(0x600), D_1F800000.view.scenario.math_00);
+    D_1F800014[1].vz = 0;
+    D_1F800014[2].vx = FIXED_MUL(rsin(0xA00), D_1F800000.view.scenario.math_00);
+    D_1F800014[2].vy = FIXED_MUL(rcos(0xA00), D_1F800000.view.scenario.math_00);
+    D_1F800014[2].vz = 0;
+    RotTransPers3(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, &depth, &flag);
+    D_1F800000.view.scenario.math_08 = g_Task->timer * D_801F0548[g_Task->unk_04];
+    setRGB0(prim, D_1F800000.view.scenario.math_08, 1, D_1F800000.view.scenario.math_08);
+    setRGB1(prim, D_1F800000.view.scenario.math_08, D_1F800000.view.scenario.math_08, 1);
+    setRGB2(prim, D_1F800000.view.scenario.math_08, 1, D_1F800000.view.scenario.math_08);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(LINE_G3));
+
+    prim = GFX_CURSOR(LINE_G3);
+    SetLineG3(prim);
+    SetSemiTrans(prim, 1);
+    D_1F800014[0].vx = FIXED_MUL(rsin(0xA00), D_1F800000.view.scenario.math_00);
+    D_1F800014[0].vy = FIXED_MUL(rcos(0xA00), D_1F800000.view.scenario.math_00);
+    D_1F800014[0].vz = 0;
+    D_1F800014[1].vx = FIXED_MUL(rsin(0xE00), D_1F800000.view.scenario.math_00);
+    D_1F800014[1].vy = FIXED_MUL(rcos(0xE00), D_1F800000.view.scenario.math_00);
+    D_1F800014[1].vz = 0;
+    D_1F800014[2].vx = FIXED_MUL(rsin(0x200), D_1F800000.view.scenario.math_00);
+    D_1F800014[2].vy = FIXED_MUL(rcos(0x200), D_1F800000.view.scenario.math_00);
+    D_1F800014[2].vz = 0;
+    RotTransPers3(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, &depth, &flag);
+    setRGB0(prim, D_1F800000.view.scenario.math_08, 1, D_1F800000.view.scenario.math_08);
+    setRGB1(prim, D_1F800000.view.scenario.math_08, D_1F800000.view.scenario.math_08, 1);
+    setRGB2(prim, D_1F800000.view.scenario.math_08, 1, D_1F800000.view.scenario.math_08);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(LINE_G3));
+}
 
 /* func_801F04A4 */
 #include "overlays/bmagic/BMagic_AllocEffect.h"

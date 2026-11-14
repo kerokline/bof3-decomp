@@ -498,7 +498,54 @@ MATCH void Effect_SetActorMatrix4(void) {
     BMAGIC_SET_ACTOR_MATRIX();
 }
 
-INCLUDE_ASM(func_801F0DF4);
+MATCH void func_801F0DF4(void) {
+    POLY_FT4* prim;
+    long      depth;
+    long      flag;
+    s32       i;
+    s32       tpage;
+    s32       u;
+
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = ((g_Task->param.unk_0B & 3) << 7) | 0x25;
+    } else {
+        tpage = ((g_Task->param.unk_0B & 3) << 5) | 0x15;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(3, sizeof(DR_MODE));
+    D_1F800000.view.effect.params[0] = g_Task->unk_14;
+    D_1F800000.view.effect.params[4] = g_Task->unk_09 << 3;
+    D_1F800000.view.effect.params[5] = g_Task->unk_09 << 3;
+    D_1F800000.view.effect.params[6] = g_Task->unk_09 << 3;
+    D_1F800014[1].vx                 = FIXED_MUL(rsin(0), D_1F800000.view.effect.params[0]);
+    D_1F800014[1].vy                 = FIXED_MUL(rcos(0), D_1F800000.view.effect.params[0]);
+    for (i = 1; i <= 16; i++) {
+        D_1F800014[0].vx = D_1F800014[1].vx;
+        D_1F800014[0].vy = D_1F800014[1].vy;
+        D_1F800014[0].vz = -1024;
+        D_1F800014[2].vx = D_1F800014[1].vx;
+        D_1F800014[2].vy = D_1F800014[1].vy;
+        D_1F800014[2].vz = 0;
+        D_1F800014[1].vx = FIXED_MUL(rsin(i << 8), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vy = FIXED_MUL(rcos(i << 8), D_1F800000.view.effect.params[0]);
+        D_1F800014[1].vz = -1024;
+        D_1F800014[3].vx = D_1F800014[1].vx;
+        D_1F800014[3].vy = D_1F800014[1].vy;
+        D_1F800014[3].vz = 0;
+        prim             = (POLY_FT4*)g_GfxPrimCursor;
+        SetPolyFT4(prim);
+        SetSemiTrans(prim, g_Task->param.unk_0B);
+        prim->tpage = GetTPage(1, g_Task->param.unk_0B, 832, 256);
+        prim->clut  = GetClut(0, 506);
+        u           = (i & 1) << 6;
+        setUV4(prim, u, 0, u + 63, 0, u, 191, u + 63, 191);
+        setRGB0(prim, D_1F800000.view.effect.params[4], D_1F800000.view.effect.params[5], D_1F800000.view.effect.params[6]);
+        RotTransPers4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+        if (i < 7 || i > 14) {
+            GFX_AddPrim(3, sizeof(POLY_FT4));
+        }
+    }
+}
 
 MATCH void func_801F10F4(void) {
     SYS_DISPATCH_TASK((g_BMagicEffectModes + 27), 1, D_801F24E0);

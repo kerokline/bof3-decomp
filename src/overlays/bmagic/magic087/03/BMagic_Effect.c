@@ -167,7 +167,75 @@ MATCH void func_801EF530(void) {
     }
 }
 
-INCLUDE_ASM(func_801EF580);
+/* Draws a column of up to eight semi-transparent 8 by 8 textured quads rising from the effect's
+ * screen point, each edge swayed by a sine of the frame counter plus the row and phase, brightening
+ * up the column to row 6 and fading after it; step 3 starts the column higher as unk_09 grows. */
+MATCH void func_801EF580(s32 phase) {
+    POLY_GT4* prim;
+    s32       count;
+    s32       i;
+    s32       start;
+    s32       offset;
+    s32       tpage;
+
+    tpage = GetGraphType() == 1 || GetGraphType() == 2 ? 0xA5 : 0x35;
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(DR_MODE));
+    D_1F800000.view.scenario.math_08 = 1;
+    start                            = 0;
+    count                            = 8;
+    if (g_Task->unk_04 < 16) {
+        count = (g_Task->unk_04 >> 1) + 1;
+    }
+    if (g_Task->header.step == 3) {
+        start = g_Task->unk_09 >> 1;
+    }
+    for (i = start; i < count; i++) {
+        prim = GFX_CURSOR(POLY_GT4);
+        SetPolyGT4(prim);
+        SetSemiTrans(prim, 1);
+        D_1F800000.view.scenario.math_04 = ((g_Task->unk_04 + i + phase + 1) & 0x1F) << 7;
+        offset                           = ((rsin(D_1F800000.view.scenario.math_04) * 8) >> 12) + 4;
+        prim->x0                         = g_Task->unk_2E.half - offset;
+        prim->y0                         = g_Task->unk_30.half - (i + 1) * 8;
+        prim->x1                         = prim->x0 + 8;
+        prim->y1                         = g_Task->unk_30.half - (i + 1) * 8;
+        D_1F800000.view.scenario.math_04 = ((g_Task->unk_04 + phase + i) & 0x1F) << 7;
+        offset                           = ((rsin(D_1F800000.view.scenario.math_04) * 8) >> 12) + 4;
+        prim->x2                         = g_Task->unk_2E.half - offset;
+        prim->y2                         = g_Task->unk_30.half - i * 8;
+        prim->x3                         = prim->x2 + 8;
+        prim->y3                         = g_Task->unk_30.half - i * 8;
+        prim->r2                         = D_1F800000.view.scenario.math_08;
+        prim->g2                         = D_1F800000.view.scenario.math_08;
+        prim->b2                         = D_1F800000.view.scenario.math_08;
+        prim->r3                         = D_1F800000.view.scenario.math_08;
+        prim->g3                         = D_1F800000.view.scenario.math_08;
+        prim->b3                         = D_1F800000.view.scenario.math_08;
+        if (i < 6) {
+            D_1F800000.view.scenario.math_08 = (i + 1) * 16;
+        } else {
+            D_1F800000.view.scenario.math_08 = 0x61 - (i - 5) * 48;
+        }
+        prim->r0    = D_1F800000.view.scenario.math_08;
+        prim->g0    = D_1F800000.view.scenario.math_08;
+        prim->b0    = D_1F800000.view.scenario.math_08;
+        prim->r1    = D_1F800000.view.scenario.math_08;
+        prim->g1    = D_1F800000.view.scenario.math_08;
+        prim->b1    = D_1F800000.view.scenario.math_08;
+        prim->tpage = GetTPage(0, 1, 0x3C0, 0x100);
+        prim->clut  = GetClut(0, 0x1FA);
+        prim->u0    = 0;
+        prim->v0    = (i * 8 + g_Task->unk_04 * 2) & 0x1F;
+        prim->u1    = 8;
+        prim->v1    = (i * 8 + g_Task->unk_04 * 2) & 0x1F;
+        prim->u2    = 0;
+        prim->v2    = ((i * 8 + g_Task->unk_04 * 2) & 0x1F) + 8;
+        prim->u3    = 8;
+        prim->v3    = ((i * 8 + g_Task->unk_04 * 2) & 0x1F) + 8;
+        Area_AddCellPrim(g_Task->pos.x.fixed, g_Task->pos.y.fixed, 2, sizeof(POLY_GT4));
+    }
+}
 
 MATCH void func_801EF958(void) {
     SYS_DISPATCH_TASK((g_BMagicEffectModes + 6), 1, g_Task);

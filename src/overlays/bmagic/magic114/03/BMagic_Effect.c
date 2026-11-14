@@ -281,7 +281,97 @@ MATCH void func_801EFFB0(void) {
 
 INCLUDE_ASM(func_801F0004);
 
-INCLUDE_ASM(func_801F04D4);
+MATCH void func_801F04D4(s32 semi) {
+    POLY_FT4* prim;
+    long      depth;
+    long      flag;
+    s32       i;
+    s32       tpage;
+    s32       left;
+    s32       x;
+    s32       y;
+    u8        trans;
+
+    trans = semi;
+    if (GetGraphType() == 1 || GetGraphType() == 2) {
+        tpage = ((semi & 3) << 7) | 0x225;
+    } else {
+        tpage = ((semi & 3) << 5) | 0x95;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(5, sizeof(DR_MODE));
+    g_Task->unk_0C = 0x80000;
+    g_Task->unk_10 = 0;
+    func_801DD350(g_Task);
+    x                = g_Task->pos.x.fixed + g_Task->unk_0C;
+    y                = g_Task->pos.y.fixed + g_Task->unk_10;
+    D_1F800014[2].vx = (x >> 9) - 0x4000;
+    D_1F800014[2].vy = (y >> 9) - 0x4000;
+    D_1F800014[2].vz = -COORD_INT(g_Task->pos.z) / 2;
+    g_Task->unk_0C   = -0x30000;
+    g_Task->unk_10   = 0;
+    func_801DD350(g_Task);
+    x                = g_Task->pos.x.fixed + g_Task->unk_0C;
+    y                = g_Task->pos.y.fixed + g_Task->unk_10;
+    D_1F800014[3].vx = (x >> 9) - 0x4000;
+    D_1F800014[3].vy = (y >> 9) - 0x4000;
+    D_1F800014[3].vz = -COORD_INT(g_Task->pos.z) / 2;
+    for (i = 1; i < g_Task->unk_14; i++) {
+        if (i >= 56) {
+            break;
+        }
+        prim = (POLY_FT4*)g_GfxPrimCursor;
+        SetPolyFT4(prim);
+        SetSemiTrans(prim, trans);
+        D_1F800014[0].vx = D_1F800014[2].vx;
+        D_1F800014[0].vy = D_1F800014[2].vy;
+        D_1F800014[0].vz = D_1F800014[2].vz;
+        D_1F800014[1].vx = D_1F800014[3].vx;
+        D_1F800014[1].vy = D_1F800014[3].vy;
+        D_1F800014[1].vz = D_1F800014[3].vz;
+        left             = g_Task->unk_14 - i;
+        if (left < 32) {
+            g_Task->unk_0C = left << 14;
+        } else {
+            g_Task->unk_0C = 0x80000;
+        }
+        g_Task->unk_10 = i * -0x8000;
+        func_801DD350(g_Task);
+        x                = g_Task->pos.x.fixed + g_Task->unk_0C;
+        y                = g_Task->pos.y.fixed + g_Task->unk_10;
+        D_1F800014[2].vx = (x >> 9) - 0x4000;
+        D_1F800014[2].vy = (y >> 9) - 0x4000;
+        D_1F800014[2].vz = -COORD_INT(g_Task->pos.z) / 2;
+        left             = g_Task->unk_14 - i;
+        if (left < 8) {
+            g_Task->unk_0C = -((left * 3) << 13);
+        } else {
+            g_Task->unk_0C = -0x30000;
+        }
+        g_Task->unk_10 = i * -0x8000;
+        func_801DD350(g_Task);
+        x                                = g_Task->pos.x.fixed + g_Task->unk_0C;
+        y                                = g_Task->pos.y.fixed + g_Task->unk_10;
+        D_1F800014[3].vx                 = (x >> 9) - 0x4000;
+        D_1F800014[3].vy                 = (y >> 9) - 0x4000;
+        D_1F800014[3].vz                 = -COORD_INT(g_Task->pos.z) / 2;
+        prim->tpage                      = GetTPage(1, trans, 832, 256);
+        prim->clut                       = GetClut(0, 482);
+        D_1F800000.view.effect.params[0] = (i & 0xF) * 12 + 64;
+        prim->u0                         = 0;
+        prim->v0                         = D_1F800000.view.effect.params[0];
+        prim->u1                         = 196;
+        prim->v1                         = D_1F800000.view.effect.params[0];
+        prim->u2                         = 0;
+        prim->v2                         = D_1F800000.view.effect.params[0] + 11;
+        prim->u3                         = 196;
+        prim->v3                         = D_1F800000.view.effect.params[0] + 11;
+        RotAverage4(&D_1F800014[0], &D_1F800014[1], &D_1F800014[2], &D_1F800014[3], (long*)&prim->x0, (long*)&prim->x1, (long*)&prim->x2, (long*)&prim->x3, &depth, &flag);
+        D_1F800000.view.effect.params[1] = g_Task->unk_09 << 3;
+        setRGB0(prim, D_1F800000.view.effect.params[1], D_1F800000.view.effect.params[1], D_1F800000.view.effect.params[1]);
+        GFX_AddPrim(5, sizeof(POLY_FT4));
+    }
+}
 
 MATCH void func_801F093C(void) {
     POLY_G4* prim;

@@ -12,6 +12,8 @@ typedef struct Magic105Steps {
 } Magic105Steps;
 
 extern Magic105Steps D_801EEC04;
+/* The ray colours the work counter picks: red, green and blue per row. */
+extern u8            D_801F005C[][3];
 /* The x/y speed pairs the step indexes by the work counter. */
 extern s16           D_801F004C[];
 

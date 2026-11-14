@@ -249,7 +249,7 @@ MATCH void func_801EF5B0(void) {
 }
 
 /* Draw the two magic132 breath bands as shaded quads along the sine wave of the effect ticker,
- * red-tinted on the outer edge of each band and dark on the inner one. */
+ * the first tinted red at its far edge and the second at its near edge, dark at the other. */
 MATCH void func_801EF914(void) {
     POLY_G4* prim;
     long     depth;

@@ -117,7 +117,63 @@ MATCH void func_801EF1D4(void) {
 
 #include "overlays/bmagic/Effect_TickOnTimerZero.h"
 
-INCLUDE_ASM(func_801EF330);
+/* Draws a full-screen semi-transparent glow quad: each corner takes its colour from the sines of two angles that
+ * follow the effect counters 0x0C and 0x10, scaled by the effect tick. */
+MATCH void func_801EF330(void) {
+    POLY_G4* prim;
+    s32      tpage;
+    u8       r;
+    u8       g;
+    u8       b;
+
+    if (GetGraphType() == 1) {
+        tpage = 0x125;
+    } else if (GetGraphType() == 2) {
+        tpage = 0x125;
+    } else {
+        tpage = 0x55;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(3, sizeof(DR_MODE));
+    prim = (POLY_G4*)g_GfxPrimCursor;
+    SetPolyG4(prim);
+    SetSemiTrans(prim, 1);
+    setXY4(prim, 0, 0, 0x13F, 0, 0, 0xEF, 0x13F, 0xEF);
+    D_1F800000_HALF[0] = (g_Task->unk_0C & 0x3F) << 6;
+    D_1F800002         = (g_Task->unk_10 & 0x3F) << 6;
+    r                  = g_Task->unk_09 * (FIXED_MUL(rsin(D_1F800000_HALF[0]), 6) + 8);
+    g                  = g_Task->unk_09 * (FIXED_MUL(rsin(D_1F800002), 6) + 8);
+    b                  = g_Task->unk_09 * (FIXED_MUL(rsin(D_1F800002), 6) + 8);
+    setRGB0(prim, r, g, b);
+    D_1F800000_HALF[0] = ((g_Task->unk_0C + 0xF) & 0x3F) << 6;
+    D_1F800002         = ((g_Task->unk_10 + 0xF) & 0x3F) << 6;
+    r                  = g_Task->unk_09 * (FIXED_MUL(rsin(D_1F800002), 6) + 8);
+    g                  = g_Task->unk_09 * (FIXED_MUL(rsin(D_1F800000_HALF[0]), 6) + 8);
+    b                  = g_Task->unk_09 * (FIXED_MUL(rsin(D_1F800002), 6) + 8);
+    setRGB1(prim, r, g, b);
+    D_1F800000_HALF[0] = ((g_Task->unk_0C + 0x1F) & 0x3F) << 6;
+    D_1F800002         = ((g_Task->unk_10 + 0x1F) & 0x3F) << 6;
+    r                  = g_Task->unk_09 * (FIXED_MUL(rsin(D_1F800002), 6) + 8);
+    g                  = g_Task->unk_09 * (FIXED_MUL(rsin(D_1F800002), 6) + 8);
+    b                  = g_Task->unk_09 * (FIXED_MUL(rsin(D_1F800000_HALF[0]), 6) + 8);
+    setRGB2(prim, r, g, b);
+    D_1F800000_HALF[0] = ((g_Task->unk_0C + 0x2F) & 0x3F) << 6;
+    D_1F800002         = ((g_Task->unk_10 + 0x2F) & 0x3F) << 6;
+    r                  = g_Task->unk_09 * (FIXED_MUL(rsin(D_1F800000_HALF[0]), 6) + 8);
+    g                  = g_Task->unk_09 * (FIXED_MUL(rsin(D_1F800000_HALF[0]), 6) + 8);
+    b                  = g_Task->unk_09 * (FIXED_MUL(rsin(D_1F800002), 6) + 8);
+    setRGB3(prim, r, g, b);
+    GFX_AddPrim(3, sizeof(POLY_G4));
+    if (GetGraphType() == 1) {
+        tpage = 0x25;
+    } else if (GetGraphType() == 2) {
+        tpage = 0x25;
+    } else {
+        tpage = 0x15;
+    }
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
+    GFX_AddPrim(3, sizeof(DR_MODE));
+}
 
 MATCH void func_801EF7F8(void) {
     SYS_DISPATCH_BYTE(D_801EFAB8, g_Task->header.step);

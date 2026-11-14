@@ -18,6 +18,6 @@ s32  func_801EF3A0(void);
 
 /* battle/battle/15: the target selector of each effect side, and the test of a selector against the target. */
 extern u8 D_800B6BF0[];
-u8        func_800AED5C(s32 arg0, u32 battler_index);
+u8        func_800AED5C(s32 selector, u32 battler_index);
 
 #endif

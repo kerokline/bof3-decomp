@@ -131,9 +131,9 @@ MATCH void func_801EF6A0(void) {
     s32* party_sum;
 
     /* The effect takes the mean z of the unblocked battlers on the targeted side; the scratchpad keeps the sum and the count. */
-    sum            = &D_1F800000;
-    SP_REF(s32, 4) = 0;
-    *sum           = 0;
+    sum                              = &D_1F800000.view.scenario.math_00;
+    D_1F800000.view.scenario.math_04 = 0;
+    *sum                             = 0;
     if (g_Battle.target_selector & BATTLE_TARGET_ENEMY_SIDE) {
         i         = 0;
         enemy_sum = sum;
@@ -153,5 +153,5 @@ MATCH void func_801EF6A0(void) {
             }
         }
     }
-    COORD_INT(g_Task->pos.z) = SP_REF(s32, 0) / SP_REF(s32, 4);
+    COORD_INT(g_Task->pos.z) = D_1F800000.view.scenario.math_00 / D_1F800000.view.scenario.math_04;
 }

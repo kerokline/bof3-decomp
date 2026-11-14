@@ -19,7 +19,7 @@ MATCH void func_801EEC70(void) {
     Battle_CenterCamera();
     task               = g_Task;
     task->param.unk_0B = 0;
-    task->pos.z.fixed += 0x2000000;
+    task->pos.z.fixed += TO_COORD(0x200);
     g_Task->unk_09 = 0;
     g_Task->header.mode += 1;
     for (i = 0; i < 16; i++) {

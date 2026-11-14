@@ -212,4 +212,65 @@ MATCH void func_801EFB68(void) {
 /* func_801EFC8C */
 #include "overlays/bmagic/BMagic_AllocEffect.h"
 
-INCLUDE_ASM(func_801EFCF0);
+MATCH void func_801EFCF0(void) {
+    SPRT*        prim;
+    u8*          cell;
+    u8*          head;
+    s32          shade;
+    PartyMember* work;
+    PartyMember* task;
+    u8           count;
+    u16          clut;
+    u16          tpage;
+
+    if (g_Task->header.flags & 0x40) {
+        return;
+    }
+    if ((u16)(g_Task->unk_2E.half + 0x40) >= 0x1C1) {
+        return;
+    }
+    if ((u16)(g_Task->unk_30.half + 0x40) >= 0x171) {
+        return;
+    }
+    head  = (u8*)g_Task->unk_54 + g_Task->unk_5A;
+    count = *head;
+    cell  = head + 1;
+    if (g_Task->unk_28) {
+        clut = getClut(0, g_Task->unk_27 + 0x1E0);
+    } else {
+        clut = getClut((g_Task->unk_27 & 0xF) << 4, (g_Task->unk_27 >> 4) + 0x1F0);
+    }
+    for (; count != 0; count--) {
+        if (GetGraphType() == 1 || GetGraphType() == 2) {
+            tpage = ((g_Task->unk_5C & 3) << 7) | (g_Task->unk_28 ? 0x22D : 0x2D);
+        } else {
+            tpage = ((g_Task->unk_5C & 3) << 5) | (g_Task->unk_28 ? 0x9D : 0x1D);
+        }
+        SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 0, tpage, 0);
+        GFX_AddPrim((u8)g_Task->unk_29, sizeof(DR_MODE));
+        prim = (SPRT*)g_GfxPrimCursor;
+        SetSprt(prim);
+        prim->w    = D_801F0080[cell[0] & 0xF][0];
+        prim->h    = D_801F0080[cell[0] & 0xF][1];
+        prim->u0   = cell[3];
+        prim->v0   = g_Task->unk_26 + cell[4];
+        prim->clut = clut;
+        shade      = g_Task->unk_5D - 0x80;
+        prim->r0   = shade;
+        shade      = g_Task->unk_5E - 0x80;
+        prim->g0   = shade;
+        shade      = g_Task->unk_5F - 0x80;
+        prim->b0   = shade;
+        if ((cell[0] & 0x80) && (work = g_Task, (u8)work->unk_2A != 0)) {
+            prim->x0 = work->unk_2E.half - (s8)cell[1] - prim->w;
+            prim->y0 = work->unk_30.half + (s8)cell[2];
+        } else {
+            task     = g_Task;
+            prim->x0 = task->unk_2E.half + (s8)cell[1];
+            prim->y0 = task->unk_30.half + (s8)cell[2];
+        }
+        SetSemiTrans(prim, (g_Task->header.flags >> 5) & 1);
+        GFX_AddPrim((u8)g_Task->unk_29, sizeof(SPRT));
+        cell += 5;
+    }
+}

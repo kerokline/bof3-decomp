@@ -26,6 +26,8 @@ extern BattleEffect D_801F00A0[];
 #define BMAGIC_EFFECT_SLOTS D_801F00A0
 #define BMAGIC_EFFECT_COUNT 64
 
-void func_801EF3A0(void);
+void      func_801EF3A0(void);
+/* The sprite cell sizes the cell record picks with its low nibble: width and height. */
+extern u8 D_801F0080[][2];
 
 #endif

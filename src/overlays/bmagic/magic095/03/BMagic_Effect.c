@@ -204,8 +204,8 @@ MATCH void func_801EF1FC(void) {
 }
 
 /* Draws the same six-row ring as func_801EF1FC with semi-transparent gouraud quads: a quad lights
- * once unk_09 passes 8r, 48 shades per step up to 0xC0 on its outer edge for the first four steps,
- * then the inner edge fades in the same way. */
+ * once unk_09 passes 8r and its row-r edge brightens 48 shades per frame up to 0xC0 for four frames,
+ * then its edge on row r + 1 does the same. */
 MATCH void func_801EF804(void) {
     POLY_G4* prim;
     long     depth;

@@ -35,6 +35,8 @@
 #include "psx/mem.h"
 #include "sys/scratchpad.h"
 #include "psx/psyq.h"
+#include "engine/actor/motion/motion.h"
+#include "engine/ui/message/message.h"
 
 /* The world overlays' own records. Every area program keeps its scratch in
  * the `0x800E4800` window (@source: wiki:formats/area#neighboring-buffers):
@@ -481,15 +483,15 @@ ASSERT_SIZE(PartyMemberMessages, PARTY_MEMBER_MESSAGE_SIZE);
 /* Finds the scene-table record for a wanted scene id and fills its palette and
  * tile fields (exe/slus_004_22@0x8014DD3C). */
 
-/* The area functions the resident tables and the area images call. */
-void Message_RunAreaMessage(void);
-void Actor_ClearVelocity(void);
 void func_801CF564(void);
 void func_801CFB40(void);
 void func_801CFF20(void);
 void func_801F2C14(void);
 void Fishing_ShowLocation(void);
 void func_801F2C3C(void);
+
+/* The area functions the resident tables and the area images call. */
+void func_801F3224(void);
 void func_801F32C0(void);
 void func_801F341C(void);
 void func_801F34A0();
@@ -506,9 +508,6 @@ void func_801F4C84(void);
 void func_801F4D80(void);
 void func_801F512C(void);
 void func_801F52F8(void);
-
-/* The area functions the resident tables and the area images call. */
-void func_801F3224(void);
 void Actor_NextStep(void);
 void func_801F3608(void);
 void func_801F37B4(void);

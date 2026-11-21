@@ -19,13 +19,13 @@
     tools/symbol.py extents [IMAGE] [--jsonl]
     tools/symbol.py homes [--jsonl]
 
-`add` writes one row of config/symbols.toml in address order. The image is a folder under
+`add` writes one row of config/symbols/<image>.toml in address order. The image is a folder under
 `config/` that holds a `splat.yaml`; any other id is refused.
 
 `rename` changes a function or global in every tracked file of the scope: the definition, each
 prototype and use, `config/` references, and the unit file `OLD.c` (`git mv`). It never edits
 `config/attempts.jsonl`: the history keeps the names it was written with. It writes the
-row of config/symbols.toml: a new row for an address name (`--source` describes the symbol), or the
+row of config/symbols/<image>.toml: a new row for an address name (`--source` describes the symbol), or the
 renamed key of an existing row. Naming an address replaces the row already keyed with its address
 name, so no key repeats. An address name (`func_<ADDR>`, `D_<ADDR>`) stays in a comment
 above its definition and declaration. A named symbol is one name in every image: with no
@@ -161,20 +161,19 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from bof3.adapters.cli import run_main
+from bof3.adapters.config import symbol_edits, symbols_text, write_symbols
 from bof3.core.paths import ROOT
 from bof3.link import symbols
 from bof3.resolve.ids import source_folder
 from bof3.source import asmtext, ctext, symtab
 from bof3.status import claims
-from bof3.symbols import TABLE, parse
+from bof3.symbols import parse
 
-SYMBOLS = ROOT / TABLE
 RESIDENT = ("exe/slus_004_22", "emi/etc/game/00")
 DEFAULT_SCOPE = ("src", "include", "config", "docs", "asm")
 
 
 def git(*args: str, check: bool = True, env: dict[str, str] | None = None) -> str:
-    """Run Git in the repository and return stdout."""
     return subprocess.run(
         ["git", *args], cwd=ROOT, capture_output=True, text=True, check=check, env=env
     ).stdout
@@ -219,10 +218,8 @@ def add(args: argparse.Namespace) -> int:
         args.name, addr, type=args.type, size=int(args.size, 0) if args.size else None,
         source=args.source, alias=args.alias,
     )  # fmt: skip
-    text = SYMBOLS.read_text(encoding="utf-8")
-    SYMBOLS.write_text(
-        symtab.add_row(text, args.image, args.name, row, addr), encoding="utf-8"
-    )
+    text = symbols_text(ROOT)
+    write_symbols(ROOT, symtab.add_row(text, args.image, args.name, row, addr))
     print(f"added {args.name} to [{args.image}]")
     return 0
 
@@ -280,7 +277,6 @@ class RowRef:
 
     @property
     def source(self) -> Path:
-        """The unit file the row names, whether or not it exists."""
         return ROOT / "src" / source_folder(self.image) / f"{self.name}.c"
 
 
@@ -310,12 +306,10 @@ def layout_rows(image: str, name: str) -> list[RowRef]:
 
 
 def unit_definitions(path: Path) -> set[str]:
-    """Return the functions a unit defines, or none when the unit file is missing."""
     return claims.unit_definitions(path) if path.is_file() else set()
 
 
 def under_scope(path: Path, scope: list[str]) -> bool:
-    """Whether ``path`` sits on or under one of the scope folders."""
     return any(
         path == ROOT / folder or ROOT / folder in path.parents for folder in scope
     )
@@ -653,7 +647,7 @@ def _rename_edits(
     repair: bool,
 ) -> dict[Path, str]:
     """The new contents of every file the rename rewrites."""
-    edits = {SYMBOLS: text}
+    edits = symbol_edits(ROOT, text)
     if not repair:
         pattern = re.compile(r"\b" + re.escape(old) + r"\b")
         for name in files:
@@ -707,7 +701,7 @@ def rename(args: argparse.Namespace) -> int:
     ):
         raise SystemExit(f"symbol: {new} is not an identifier")
     address = LAYOUT_ADDRESS.match(old)
-    text = SYMBOLS.read_text(encoding="utf-8")
+    text = symbols_text(ROOT)
     images = args.image or ([] if address else tables_with(text, old))
     if not images:
         raise SystemExit(
@@ -817,7 +811,7 @@ def mentioned(names: set[str]) -> set[str]:
                 "include",
                 "asm",
                 "config",
-                ":(exclude)config/symbols.toml",
+                ":(exclude)config/symbols/<image>.toml",
             ],
             cwd=ROOT,
             capture_output=True,
@@ -971,7 +965,7 @@ class Layout:
 
 @dataclass(frozen=True)
 class Row:
-    """One non-alias row of config/symbols.toml."""
+    """One non-alias row of config/symbols/<image>.toml."""
 
     name: str
     addr: int
@@ -1290,8 +1284,7 @@ def locate(layout: Layout, offset: int, prefix: str = "") -> list[tuple[str, int
 
 
 def symbol_tables() -> dict[str, dict[str, dict]]:
-    """Load config/symbols.toml as image table -> name -> row."""
-    return parse(SYMBOLS.read_text(encoding="utf-8"))
+    return parse(symbols_text(ROOT))
 
 
 def table_rows(data: dict[str, dict[str, dict]], table: str) -> list[Row]:
@@ -1769,7 +1762,6 @@ class NamedValue:
 
 
 def _without_comments(text: str) -> str:
-    """Blank comments but keep strings, so an include path and a char literal survive."""
     return COMMENT.sub(lambda match: re.sub(r"[^\n]", " ", match.group()), text)
 
 
@@ -2386,11 +2378,6 @@ def _value_dereference(ctype: str) -> str | None:
     return None
 
 
-def _value_element(ctype: str) -> str | None:
-    """Return the element type of an array or pointer type."""
-    return _value_dereference(ctype)
-
-
 def _value_member(
     index: dict,
     ctype: str,
@@ -2480,7 +2467,7 @@ def _value_type(
     subscript = re.match(r"^(.*)\[[^\]]*\]\s*$", text, re.S)
     if subscript is not None:
         base = _value_type(subscript.group(1), index, scope, depth + 1)
-        return _value_element(base) if base else None
+        return _value_dereference(base) if base else None
     return None
 
 
@@ -2606,7 +2593,6 @@ def _value_family_role(tag: str) -> str:
 
 
 def _value_camel(stem: str) -> str:
-    """Return ``item`` as ``Item``, for the enum tag an id family takes."""
     return "".join(part.capitalize() for part in stem.split("_"))
 
 
@@ -4561,10 +4547,6 @@ def _record_definitions() -> tuple[dict[str, int], dict[str, str], set[str]]:
     return dict(counts), header, names
 
 
-def _record_members(layout) -> list:
-    return list(layout.members)
-
-
 def _record_globals(symbols: dict, names: set[str]) -> dict[str, int]:
     found: dict[str, int] = collections.Counter()
     for rows in symbols.values():
@@ -4668,7 +4650,7 @@ def records(args: argparse.Namespace) -> int:
             owners[member.path.rsplit(".", 1)[-1]].add(name)
     rows = []
     for name, layout in layouts.items():
-        members = _record_members(layout)
+        members = list(layout.members)
         unknown = sum(
             1
             for member in members
@@ -4744,7 +4726,7 @@ UNNAMED_PREFIXES = ("func_", "unk_", "D_", "jtbl_", "g_")
 
 
 class SymbolIndex:
-    """A row lookup over config/symbols.toml: by name, by address and per image."""
+    """A row lookup over config/symbols/<image>.toml: by name, by address and per image."""
 
     def __init__(self, data: dict[str, dict[str, dict]]) -> None:
         self.rows: dict[str, list[Row]] = {}
@@ -4779,7 +4761,6 @@ class SymbolIndex:
         return found
 
     def resolve(self, image: str, name: str) -> Row | None:
-        """Return the row a name has in one image, else None."""
         return self.visible(image).get(name)
 
     def canonical(self, name: str, address: int) -> str:
@@ -4894,7 +4875,6 @@ def _assembly() -> Assembly:
 
 
 def _visible_sources(tree, manifests: dict) -> dict[str, set[str]]:
-    """Return each image's visible C files."""
     return {
         image: _visible_files(tree, manifest) for image, manifest in manifests.items()
     }
@@ -5395,7 +5375,6 @@ def _confidence(votes: collections.Counter, found_home: str) -> str:
 
 
 def _function_home(function, manifests: dict) -> str:
-    """Return the system a function belongs to by its name prefix or its folder."""
     return _name_system(function.name) or _folder_system(
         manifests[function.image].source_dir
     )
@@ -5977,7 +5956,6 @@ def _unit_of(tree, visible: set[str], function) -> str:
 
 
 def _is_split_unit(unit: str) -> bool:
-    """Whether a unit is a split assembly file rather than a C file."""
     return unit.startswith(("asm/", "build/asm/"))
 
 
@@ -6359,7 +6337,9 @@ def main(argv: list[str] | None = None) -> int:
         epilog="Example: tools/symbol.py accesses PartyMember --jsonl",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    ten.add_argument("name", help="a record type or a config/symbols.toml global")
+    ten.add_argument(
+        "name", help="a record type or a config/symbols/<image>.toml global"
+    )
     ten.add_argument("--jsonl", action="store_true", help="one JSON object per line")
     ten.set_defaults(run=accesses)
     eleven = verbs.add_parser(

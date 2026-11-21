@@ -118,7 +118,6 @@ def _symbol(operand: str) -> str | None:
 
 
 def _tactic(fact: str, row: str, write: str) -> str:
-    """One hint line: the fact, the tactic row it maps to, and what to write."""
     return f'- {fact}: {write} (tactic: "{row}", {TACTIC})'
 
 
@@ -373,7 +372,7 @@ def frame(insns: list[Insn], _ctx: Context) -> list[str]:
 
 
 def addresses(insns: list[Insn], ctx: Context) -> list[str]:
-    """Every address the assembly reads, resolved through ``config/symbols.toml``."""
+    """Every address the assembly reads, resolved through ``config/symbols/<image>.toml``."""
     found: dict[int, str] = {}
     pending: dict[str, int] = {}
     for insn in insns:

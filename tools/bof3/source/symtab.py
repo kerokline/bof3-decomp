@@ -1,4 +1,4 @@
-"""Edit ``config/symbols.toml`` as text, keeping its layout: one table per image, rows by address."""
+"""Edit ``config/symbols/<image>.toml`` as text, keeping its layout: one table per image, rows by address."""
 
 from __future__ import annotations
 
@@ -12,7 +12,6 @@ class SymtabError(ValueError):
 
 
 def header(image: str) -> str:
-    """Return the table header line of ``image``."""
     return f'["{image}"]'
 
 

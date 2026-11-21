@@ -3,7 +3,7 @@
 
 A name says what a thing is for the game, never where it lives. The default tool names are the
 only identifiers allowed to hold an address: ``func_<ADDR>``, ``D_<ADDR>``, ``L<ADDR>``,
-``jtbl_*``, ``jpt_*`` and ``s_gap_*``. Comments, strings and config/symbols.toml text are not
+``jtbl_*``, ``jpt_*`` and ``s_gap_*``. Comments, strings and config/symbols/<image>.toml text are not
 checked.
 
 The check is a ratchet. ``config/address_names.txt`` lists the offenders that exist today as
@@ -19,7 +19,7 @@ form to write, so those uses can only shrink (plan section AY). A rebuild that m
 use changes no count, so it passes.
 
 A layout row must not keep an address name its symbol has left. A ``c`` row fails when its unit
-defines no C body under the row name and ``config/symbols.toml`` names its address; a ``bin``,
+defines no C body under the row name and ``config/symbols/<image>.toml`` names its address; a ``bin``,
 ``.data`` or ``data`` row fails when its address has a named non-alias data symbol. ``--diff``
 checks the images whose layout or symbol table the change touches; without it, every image.
 ``tools/symbol.py rename`` moves the row and the unit file.
@@ -33,7 +33,7 @@ import re
 import sys
 from pathlib import Path
 
-from bof3.adapters.config import read_symbols
+from bof3.adapters.config import SPLIT, read_symbols
 from bof3.adapters.git import changed_files, git, ls_files, ok
 from bof3.diff import added_lines as added_diff_lines
 from bof3.diff import renames
@@ -155,7 +155,7 @@ def layout_images(ref: str | None) -> list[str]:
 
 def added_symbol_images(ref: str) -> set[str]:
     """The images whose table a change gives a new row."""
-    diff = git("diff", "-U0", f"{ref}...HEAD", "--", TABLE, check=False)
+    diff = git("diff", "-U0", f"{ref}...HEAD", "--", TABLE, SPLIT, check=False)
     added = {
         match.group(1)
         for row in diff.splitlines()
@@ -163,7 +163,7 @@ def added_symbol_images(ref: str) -> set[str]:
         for match in [SYMBOL_ROW.match(row[1:])]
         if match
     }
-    if not added or not Path("config/symbols.toml").is_file():
+    if not added:
         return set()
     tables = read_symbols(Path())
     return {
@@ -231,7 +231,6 @@ def stale_rows(images: list[str]) -> list[str]:
 
 
 def split_words(name: str) -> list[str]:
-    """Split an identifier at underscores and camel humps, lower case."""
     return [token.lower() for chunk in name.split("_") for token in WORD.findall(chunk)]
 
 
@@ -247,7 +246,6 @@ def rejected_reason(name: str) -> str | None:
 
 
 def rejected_names(text: str) -> set[str]:
-    """Identifiers in ``text`` that use a rejected word or an old tag."""
     return {
         m.group()
         for m in TOKEN.finditer(text)
@@ -258,12 +256,10 @@ def rejected_names(text: str) -> set[str]:
 
 
 def in_ref(ref: str, name: str) -> bool:
-    """Whether ``name`` occurs as a word in the tracked tree at ``ref``."""
     return ok("grep", "-q", "-w", "-F", "-e", name, ref, "--", ".")
 
 
 def unnamed_parameters(text: str) -> set[str]:
-    """``argN`` identifiers in code; comments, strings and hex literals are skipped."""
     return {
         m.group()
         for m in TOKEN.finditer(text)
@@ -285,7 +281,6 @@ DRAFT_BRANCH = re.compile(
 
 
 def without_drafts(text: str) -> str:
-    """``text`` with each draft body (the first branch of ``#ifdef NON_MATCHING``) blank."""
     return DRAFT_BRANCH.sub(lambda m: "\n" * m.group().count("\n"), text)
 
 
@@ -298,19 +293,16 @@ def macro_counts(text: str) -> dict[str, int]:
 
 
 def changed_paths(ref: str) -> list[str]:
-    """The paths under include/ or src/ a change adds, changes or renames; deleted paths add no name."""
     return changed_files("--diff-filter=d", f"{ref}...HEAD", "--", *ROOTS)
 
 
 def renamed_from(ref: str) -> dict[str, str]:
-    """Maps each path under include/ or src/ that a change renames to its path at ``ref``."""
     return renames(
         git("diff", "--name-status", "-M", f"{ref}...HEAD", "--", *ROOTS, check=False)
     )
 
 
 def base_text(ref: str, path: str) -> str:
-    """The file at ``path`` as it is in the base revision; empty when new."""
     return git("show", f"{ref}:{path}", check=False)
 
 

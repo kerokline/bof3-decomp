@@ -25,7 +25,7 @@ NON_MATCHING u8 Actor_RunWaitOps(void* sub, s32 target, u8 value) {
                 if (g_Task->script_pc != hit) {
                     cmd = code + FIELD(u16, sub, 0xAu);
                     if (hit == cmd[3]) {
-                        func_8015D820(cmd[2] | (cmd[1] << 8), cmd[4]);
+                        Actor_PlayCueByDistance(cmd[2] | (cmd[1] << 8), cmd[4]);
                     }
                 }
             }

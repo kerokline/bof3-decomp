@@ -2,7 +2,9 @@
 
 /* Entity spawn counter in scratchpad (signed 16-bit slot index). */
 
-MATCH void func_801A4D54(u8* script) {
+/* func_801A4D54 */
+/* Spawns an actor in the next free slot from a scene script record. */
+MATCH void Actor_SpawnFromRecord(u8* script) {
     s16*   counter = (s16*)&g_ScratchPad;
     s16    slot;
     Actor* work;

@@ -492,35 +492,23 @@ def apply_rename(
             lock.unlink(missing_ok=True)
 
 
-def rename(args: argparse.Namespace) -> int:
-    """Rename one symbol across the scope, its layout rows and the symbol table."""
-    old, new = args.old, args.new
-    offset_rename = bool(OFFSET_NAME.fullmatch(old))
-    if not re.fullmatch(r"[A-Za-z_]\w*", new) and not (
-        offset_rename and OFFSET_NAME.fullmatch(new)
-    ):
-        raise SystemExit(f"symbol: {new} is not an identifier")
-    address = LAYOUT_ADDRESS.match(old)
-    text = SYMBOLS.read_text(encoding="utf-8")
-    images = args.image or ([] if address else tables_with(text, old))
-    if not images:
-        raise SystemExit(
-            f"symbol: give --image for {old}; no table has a row of that name"
-        )
+def _rename_scope(
+    args: argparse.Namespace, old: str, address: re.Match | None, images: list[str]
+) -> list[str]:
+    """The paths a rename may touch."""
     if args.local:
-        scope = local_scope(images)
-    elif args.scope:
-        scope = args.scope
-    elif address and any(i not in RESIDENT for i in images):
+        return local_scope(images)
+    if args.scope:
+        return args.scope
+    if address and any(i not in RESIDENT for i in images):
         raise SystemExit(
             f"symbol: {old} is unique only inside its image. Add --local, or --scope PATH..."
         )
-    else:
-        scope = list(DEFAULT_SCOPE)
-    rows = [row for image in images for row in layout_rows(image, old)]
-    files = grep_files(old, scope)
-    if not files and not rows:
-        raise SystemExit(f"symbol: {old} does not occur under {' '.join(scope)}")
+    return list(DEFAULT_SCOPE)
+
+
+def _require_rows_in_scope(rows: list[RowRef], scope: list[str], old: str) -> None:
+    """Reject a layout row or its source file that lies outside the scope."""
     outside = [row for row in rows if not under_scope(row.splat, scope)]
     if outside:
         raise SystemExit(
@@ -537,99 +525,136 @@ def rename(args: argparse.Namespace) -> int:
             f"symbol: {outside[0].source.relative_to(ROOT)} is named {old}; "
             "add its folder to --scope"
         )
-    # A unit that still holds the old name renames the code itself; one that does not is a
-    # repair of the row and file left behind when the symbol was named elsewhere.
-    units = [row for row in rows if row.kind in UNIT_KINDS]
-    live = any(old in unit_definitions(row.source) for row in units)
-    if not units:
-        for row in rows:
-            if row.source.is_file():
-                body = row.source.read_text(encoding="utf-8", errors="replace")
-                live = live or bool(re.search(r"\b" + re.escape(old) + r"\b", body))
-    repair = bool(rows) and not live
+
+
+def _old_name_is_live(old: str, rows: list[RowRef], units: list[RowRef]) -> bool:
+    """Whether the code still holds the old name, as a unit definition or in a source file."""
+    if any(old in unit_definitions(row.source) for row in units):
+        return True
+    if units:
+        return False
+    pattern = re.compile(r"\b" + re.escape(old) + r"\b")
+    return any(
+        pattern.search(row.source.read_text(encoding="utf-8", errors="replace"))
+        for row in rows
+        if row.source.is_file()
+    )
+
+
+def _reject_clash(
+    text: str,
+    old: str,
+    new: str,
+    images: list[str],
+    scope: list[str],
+    address: re.Match | None,
+) -> None:
+    """Stop when the new name is already in use, unless it is the same address's own row."""
     if symbols.ADDRESS_NAME.fullmatch(new):
         use = address_clash(new, images)
         clash = [use] if use else []
     else:
         clash = grep_files(new, scope)
-    if clash and not repair:
-        document = tomllib.loads(text)
-        allowed = bool(address) and any(
-            isinstance(document.get(image, {}).get(new), dict)
-            and int(document[image][new].get("addr", -1)) == int(address["addr"], 16)
-            for image in images
+    if not clash:
+        return
+    document = tomllib.loads(text)
+    allowed = bool(address) and any(
+        isinstance(document.get(image, {}).get(new), dict)
+        and int(document[image][new].get("addr", -1)) == int(address["addr"], 16)
+        for image in images
+    )
+    if not allowed:
+        raise SystemExit(
+            f"symbol: {new} already occurs in {clash[0]}; pick another name"
         )
-        if not allowed:
-            raise SystemExit(
-                f"symbol: {new} already occurs in {clash[0]}; pick another name"
-            )
-    if args.dry_run:
-        planned = set(files)
-        planned.update(row.splat.relative_to(ROOT).as_posix() for row in rows)
-        print("\n".join(sorted(planned)))
-        return 0
-    if address:
-        addr = int(address["addr"], 16)
-        kind = args.type or ("func" if old.startswith("func_") else None)
-        row = (
-            symtab.format_row(
-                new,
-                addr,
-                type=kind,
-                size=int(args.size, 0) if args.size else None,
-                source=args.source,
-            )
-            if args.source
-            else None
+
+
+def _name_address(
+    text: str,
+    old: str,
+    new: str,
+    images: list[str],
+    address: re.Match,
+    args: argparse.Namespace,
+) -> str:
+    """The symbol table with the address name replaced by ``new`` in every image."""
+    addr = int(address["addr"], 16)
+    kind = args.type or ("func" if old.startswith("func_") else None)
+    row = (
+        symtab.format_row(
+            new,
+            addr,
+            type=kind,
+            size=int(args.size, 0) if args.size else None,
+            source=args.source,
         )
-        document = tomllib.loads(text)
-        for image in images:
-            named = document.get(image, {}).get(new)
-            if isinstance(named, dict):
-                found = int(named.get("addr", -1))
-                if found != addr:
-                    raise SystemExit(
-                        f"symbol: [{image}] {new} is 0x{found:08X}, not 0x{addr:08X}"
-                    )
-                text = symtab.remove_row(text, image, old) or text
-                continue
-            if row is None:
+        if args.source
+        else None
+    )
+    document = tomllib.loads(text)
+    for image in images:
+        named = document.get(image, {}).get(new)
+        if isinstance(named, dict):
+            found = int(named.get("addr", -1))
+            if found != addr:
                 raise SystemExit(
-                    f"symbol: naming {old} needs --source, a description of the symbol"
+                    f"symbol: [{image}] {new} is 0x{found:08X}, not 0x{addr:08X}"
                 )
-            # A row already keyed with the address name would be rewritten by the source
-            # substitution below and repeat the new key.
             text = symtab.remove_row(text, image, old) or text
-            text = symtab.add_row(text, image, new, row, addr)
-    elif not repair:
-        for image in images:
-            text = symtab.rename_row(text, image, old, new) or text
-    if repair:
-        table = tomllib.loads(text)
-        if units:
-            for row in units:
-                if new in unit_definitions(row.source):
-                    continue
-                if offset_rename and new == f"{row.start:X}":
-                    continue
-                raise SystemExit(
-                    f"symbol: {row.source.relative_to(ROOT)} does not define {new}; "
-                    "rename the function first"
-                )
-        else:
-            for row in rows:
-                named = table.get(row.image, {}).get(new)
-                if not (
-                    isinstance(named, dict)
-                    and int(named.get("addr", -1)) == row.address
-                ):
-                    raise SystemExit(
-                        f"symbol: [{row.image}] has no {new} at 0x{row.address:08X}; "
-                        "add the row first"
-                    )
-    pattern = re.compile(r"\b" + re.escape(old) + r"\b")
+            continue
+        if row is None:
+            raise SystemExit(
+                f"symbol: naming {old} needs --source, a description of the symbol"
+            )
+        # A row already keyed with the address name would be rewritten by the source
+        # substitution below and repeat the new key.
+        text = symtab.remove_row(text, image, old) or text
+        text = symtab.add_row(text, image, new, row, addr)
+    return text
+
+
+def _verify_repair(
+    text: str,
+    rows: list[RowRef],
+    units: list[RowRef],
+    new: str,
+    offset_rename: bool,
+) -> None:
+    """Check that a repair finds the new name already defined in the code or table."""
+    if units:
+        for row in units:
+            if new in unit_definitions(row.source):
+                continue
+            if offset_rename and new == f"{row.start:X}":
+                continue
+            raise SystemExit(
+                f"symbol: {row.source.relative_to(ROOT)} does not define {new}; "
+                "rename the function first"
+            )
+        return
+    table = tomllib.loads(text)
+    for row in rows:
+        named = table.get(row.image, {}).get(new)
+        if not (isinstance(named, dict) and int(named.get("addr", -1)) == row.address):
+            raise SystemExit(
+                f"symbol: [{row.image}] has no {new} at 0x{row.address:08X}; "
+                "add the row first"
+            )
+
+
+def _rename_edits(
+    text: str,
+    files: list[str],
+    rows: list[RowRef],
+    old: str,
+    new: str,
+    address: re.Match | None,
+    repair: bool,
+) -> dict[Path, str]:
+    """The new contents of every file the rename rewrites."""
     edits = {SYMBOLS: text}
     if not repair:
+        pattern = re.compile(r"\b" + re.escape(old) + r"\b")
         for name in files:
             path = ROOT / name
             contents = edits.get(path)
@@ -644,6 +669,13 @@ def rename(args: argparse.Namespace) -> int:
         if contents is None:
             contents = row.splat.read_text(encoding="utf-8")
         edits[row.splat] = rename_layout_row(contents, row, new)
+    return edits
+
+
+def _rename_moves(
+    rows: list[RowRef], files: list[str], old: str, new: str, scope: list[str]
+) -> list[tuple[str, str]]:
+    """The ``old.c`` to ``new.c`` file moves the rename needs."""
     moves: list[tuple[str, str]] = []
 
     def add_move(path: Path) -> None:
@@ -662,11 +694,54 @@ def rename(args: argparse.Namespace) -> int:
         path = ROOT / name
         if path.name == f"{old}.c":
             add_move(path)
-    # The edits are the files the scope allows; --local and --scope limit the check with them.
-    check_scope = scope
+    return moves
+
+
+def rename(args: argparse.Namespace) -> int:
+    """Rename one symbol across the scope, its layout rows and the symbol table."""
+    old, new = args.old, args.new
+    offset_rename = bool(OFFSET_NAME.fullmatch(old))
+    if not re.fullmatch(r"[A-Za-z_]\w*", new) and not (
+        offset_rename and OFFSET_NAME.fullmatch(new)
+    ):
+        raise SystemExit(f"symbol: {new} is not an identifier")
+    address = LAYOUT_ADDRESS.match(old)
+    text = SYMBOLS.read_text(encoding="utf-8")
+    images = args.image or ([] if address else tables_with(text, old))
+    if not images:
+        raise SystemExit(
+            f"symbol: give --image for {old}; no table has a row of that name"
+        )
+    scope = _rename_scope(args, old, address, images)
+    rows = [row for image in images for row in layout_rows(image, old)]
+    files = grep_files(old, scope)
+    if not files and not rows:
+        raise SystemExit(f"symbol: {old} does not occur under {' '.join(scope)}")
+    _require_rows_in_scope(rows, scope, old)
+    # A unit that still holds the old name renames the code itself; one that does not is a
+    # repair of the row and file left behind when the symbol was named elsewhere.
+    units = [row for row in rows if row.kind in UNIT_KINDS]
+    repair = bool(rows) and not _old_name_is_live(old, rows, units)
     if not repair:
-        check_rename(old, edits, check_scope, bool(address))
-    apply_rename(edits, moves, old, check_scope, bool(address), verify=not repair)
+        _reject_clash(text, old, new, images, scope, address)
+    if args.dry_run:
+        planned = set(files)
+        planned.update(row.splat.relative_to(ROOT).as_posix() for row in rows)
+        print("\n".join(sorted(planned)))
+        return 0
+    if address:
+        text = _name_address(text, old, new, images, address, args)
+    elif not repair:
+        for image in images:
+            text = symtab.rename_row(text, image, old, new) or text
+    if repair:
+        _verify_repair(text, rows, units, new, offset_rename)
+    edits = _rename_edits(text, files, rows, old, new, address, repair)
+    moves = _rename_moves(rows, files, old, new, scope)
+    # The edits are the files the scope allows; --local and --scope limit the check with them.
+    if not repair:
+        check_rename(old, edits, scope, bool(address))
+    apply_rename(edits, moves, old, scope, bool(address), verify=not repair)
     print(f"renamed {old} -> {new} in {len(edits)} files")
     return 0
 
@@ -751,6 +826,50 @@ def mentioned(names: set[str]) -> set[str]:
     return set(result.stdout.split())
 
 
+def _check_table(
+    target: str,
+    entries: list[symbols.Entry],
+    findings: list[str],
+    repeated: dict[tuple[str, int, str], list[str]],
+    aliases: list[tuple[str, symbols.Entry]],
+) -> int:
+    """Append one table's findings; return 1 when any of them fails the check."""
+    status = 0
+    for before, after in zip(entries, entries[1:], strict=False):
+        if before.addr > after.addr:
+            findings.append(
+                f"order\t{target}\t{after.name} 0x{after.addr:08X} after "
+                f"{before.name} 0x{before.addr:08X}"
+            )
+            status = 1
+            break
+    addresses: dict[str, set[int]] = collections.defaultdict(set)
+    names_at: dict[int, list[str]] = collections.defaultdict(list)
+    for entry in entries:
+        addresses[entry.name].add(entry.addr)
+        if entry.alias:
+            aliases.append((target, entry))
+        else:
+            names_at[entry.addr].append(entry.name)
+            repeated[(entry.name, entry.addr, entry.type)].append(target)
+        if not entry.source:
+            findings.append(f"no-source\t{target}\t{entry.name} 0x{entry.addr:08X}")
+    for name, found in addresses.items():
+        if len(found) > 1:
+            status = 1
+            findings.append(
+                f"name-two-addresses\t{target}\t{name}\t"
+                + " ".join(f"0x{a:08X}" for a in sorted(found))
+            )
+    for address, names in names_at.items():
+        if len(names) > 1:
+            status = 1
+            findings.append(
+                f"address-two-names\t{target}\t0x{address:08X}\t" + " ".join(names)
+            )
+    return status
+
+
 def check(args: argparse.Namespace) -> int:
     """Report the table's problems; a name at two addresses or an out-of-order table exits 1.
 
@@ -769,38 +888,7 @@ def check(args: argparse.Namespace) -> int:
     rows = 0
     for target, entries in tables.items():
         rows += len(entries)
-        for before, after in zip(entries, entries[1:], strict=False):
-            if before.addr > after.addr:
-                findings.append(
-                    f"order\t{target}\t{after.name} 0x{after.addr:08X} after "
-                    f"{before.name} 0x{before.addr:08X}"
-                )
-                status = 1
-                break
-        addresses: dict[str, set[int]] = collections.defaultdict(set)
-        names_at: dict[int, list[str]] = collections.defaultdict(list)
-        for entry in entries:
-            addresses[entry.name].add(entry.addr)
-            if entry.alias:
-                aliases.append((target, entry))
-            else:
-                names_at[entry.addr].append(entry.name)
-                repeated[(entry.name, entry.addr, entry.type)].append(target)
-            if not entry.source:
-                findings.append(f"no-source\t{target}\t{entry.name} 0x{entry.addr:08X}")
-        for name, found in addresses.items():
-            if len(found) > 1:
-                status = 1
-                findings.append(
-                    f"name-two-addresses\t{target}\t{name}\t"
-                    + " ".join(f"0x{a:08X}" for a in sorted(found))
-                )
-        for address, names in names_at.items():
-            if len(names) > 1:
-                status = 1
-                findings.append(
-                    f"address-two-names\t{target}\t0x{address:08X}\t" + " ".join(names)
-                )
+        status |= _check_table(target, entries, findings, repeated, aliases)
     for (name, address, type_), images in sorted(repeated.items()):
         if len(images) > 1:
             findings.append(
@@ -891,6 +979,21 @@ class Row:
     table: str
 
 
+def _sized_member(member: Member, later: list[Member], size: int) -> Member:
+    """Return ``member`` with its length: up to the next member outside it, capped by its type."""
+    depth = member.path.count(".")
+    end = size
+    for after in later:
+        if after.path.count(".") <= depth and after.offset > member.offset:
+            end = after.offset
+            break
+    length = end - member.offset
+    width = _known_width(member.ctype)
+    if width is not None:
+        length = min(length, width)
+    return Member(member.offset, member.path, member.ctype, length)
+
+
 def parse_probe(text: str) -> Layout | None:
     """Read the layout from the ``struct __probe`` block of a clang record dump."""
     for block in text.split("*** Dumping AST Record Layout")[1:]:
@@ -924,17 +1027,7 @@ def parse_probe(text: str) -> Layout | None:
                 member = Member(member.offset, member.path[2:], member.ctype, 0)
             inner.append(member)
         for index, member in enumerate(inner):
-            depth = member.path.count(".")
-            end = size
-            for later in inner[index + 1 :]:
-                if later.path.count(".") <= depth and later.offset > member.offset:
-                    end = later.offset
-                    break
-            length = end - member.offset
-            width = _known_width(member.ctype)
-            if width is not None:
-                length = min(length, width)
-            inner[index] = Member(member.offset, member.path, member.ctype, length)
+            inner[index] = _sized_member(member, inner[index + 1 :], size)
         return Layout(size, tuple(inner), bool(inner))
     return None
 
@@ -1906,10 +1999,8 @@ def _matches_type(name: str, family: str, wanted: str | None) -> bool:
     return family.endswith("_") and family[:-1] == wanted
 
 
-def _named_values(
-    headers: list[str], wanted: int, kind: str | None
-) -> list[NamedValue]:
-    """Return every enum member and numeric macro with ``wanted`` among the headers."""
+def _read_header_values(headers: list[str]) -> tuple[list, list]:
+    """Return the enums and numeric macros of the headers, each with its header."""
     enums = []
     defines = []
     for header in headers:
@@ -1923,6 +2014,33 @@ def _named_values(
         defines.extend(
             (header, name, body, line) for name, body, line in _define_values(text)
         )
+    return enums, defines
+
+
+def _resolve_enum(members: list, values: dict[str, int]) -> bool:
+    """Evaluate one enum's members into ``values``; True when any was added."""
+    changed = False
+    previous: int | None = -1
+    for name, body, _ in members:
+        if name in values:
+            previous = values[name]
+            continue
+        value = (
+            _c_expression(body, values)
+            if body is not None
+            else (previous + 1 if previous is not None else None)
+        )
+        if value is not None:
+            values[name] = value
+            previous = value
+            changed = True
+        else:
+            previous = None
+    return changed
+
+
+def _resolve_values(enums: list, defines: list) -> dict[str, int]:
+    """Evaluate every macro and enum member whose expression resolves."""
     values: dict[str, int] = {}
     for _ in range(5):
         changed = False
@@ -1934,24 +2052,18 @@ def _named_values(
                 values[name] = value
                 changed = True
         for _, _, members in enums:
-            previous: int | None = -1
-            for name, body, _ in members:
-                if name in values:
-                    previous = values[name]
-                    continue
-                value = (
-                    _c_expression(body, values)
-                    if body is not None
-                    else (previous + 1 if previous is not None else None)
-                )
-                if value is not None:
-                    values[name] = value
-                    previous = value
-                    changed = True
-                else:
-                    previous = None
+            changed = _resolve_enum(members, values) or changed
         if not changed:
             break
+    return values
+
+
+def _named_values(
+    headers: list[str], wanted: int, kind: str | None
+) -> list[NamedValue]:
+    """Return every enum member and numeric macro with ``wanted`` among the headers."""
+    enums, defines = _read_header_values(headers)
+    values = _resolve_values(enums, defines)
     found: list[NamedValue] = []
     for header, family, members in enums:
         for name, _, line in members:
@@ -2123,49 +2235,8 @@ def _header_values(
     headers: list[str],
 ) -> tuple[list, list, dict[str, int]]:
     """Return each header's enums, macros and the resolved value of every name."""
-    enums = []
-    defines = []
-    for header in headers:
-        try:
-            text = (ROOT / header).read_text(encoding="utf-8", errors="replace")
-        except OSError:
-            continue
-        enums.extend(
-            (header, family, members) for family, members in _enum_values(text)
-        )
-        defines.extend(
-            (header, name, body, line) for name, body, line in _define_values(text)
-        )
-    values: dict[str, int] = {}
-    for _ in range(5):
-        changed = False
-        for _, name, body, _ in defines:
-            if name in values:
-                continue
-            value = _c_expression(body, values)
-            if value is not None:
-                values[name] = value
-                changed = True
-        for _, _, members in enums:
-            previous: int | None = -1
-            for name, body, _ in members:
-                if name in values:
-                    previous = values[name]
-                    continue
-                value = (
-                    _c_expression(body, values)
-                    if body is not None
-                    else (previous + 1 if previous is not None else None)
-                )
-                if value is not None:
-                    values[name] = value
-                    previous = value
-                    changed = True
-                else:
-                    previous = None
-        if not changed:
-            break
-    return enums, defines, values
+    enums, defines = _read_header_values(headers)
+    return enums, defines, _resolve_values(enums, defines)
 
 
 def _value_families(headers: list[str]) -> tuple[dict[str, ValueFamily], set[str]]:
@@ -4994,16 +5065,10 @@ def _section_of(layout, address: int) -> str:
     return "unknown"
 
 
-def _extent_rows(assembly: Assembly, index: SymbolIndex, manifests: dict) -> list[dict]:
-    """Build one extent row per data and bss symbol the images hold."""
-    global _EXTENT_ROWS
-    if _EXTENT_ROWS is not None:
-        return _EXTENT_ROWS
-    from bof3.resolve.layout import parse_splat_layout
-
-    uses = _symbol_uses(assembly, index)
-    strides = _symbol_strides(assembly)
-    used_names = {name for (name, _address), found in uses.items() if found}
+def _extent_ladders(
+    index: SymbolIndex,
+) -> tuple[dict[str, list[int]], dict[tuple[str, int], int]]:
+    """Each table's sorted data addresses, and the next address after each one."""
     universes: dict[str, list[int]] = {}
     ladders: dict[tuple[str, int], int] = {}
     for table, table_rows in index.rows.items():
@@ -5011,18 +5076,56 @@ def _extent_rows(assembly: Assembly, index: SymbolIndex, manifests: dict) -> lis
         universes[table] = addresses
         for position, address in enumerate(addresses[:-1]):
             ladders[(table, address)] = addresses[position + 1]
+    return universes, ladders
+
+
+def _manifest_layout(manifest):
+    """The splat layout of an image manifest, or None when it cannot be read."""
+    from bof3.resolve.layout import parse_splat_layout
+
+    if manifest is None:
+        return None
+    try:
+        return parse_splat_layout(ROOT / manifest.splat, manifest.load_address)
+    except (OSError, ValueError):
+        return None
+
+
+def _absorbed_names(
+    row, uses: dict, index: SymbolIndex, used_names: set[str], gap: int | None
+) -> list[str]:
+    """The unused symbols inside ``row``'s gap that its own accesses reach."""
+    start = row.addr
+    end = start + (gap or 0)
+    hit = {
+        start + access.offset
+        for _image, _function, access in uses.get((row.name, start), ())
+    }
+    absorbed = []
+    for other in index.rows.get(row.table, ()):
+        if other.type == "func" or not start < other.addr < end:
+            continue
+        if other.name == row.name or other.name in used_names:
+            continue
+        size = index.span(other)
+        if any(other.addr <= address < other.addr + size for address in hit):
+            absorbed.append(other.name)
+    return absorbed
+
+
+def _extent_rows(assembly: Assembly, index: SymbolIndex, manifests: dict) -> list[dict]:
+    """Build one extent row per data and bss symbol the images hold."""
+    global _EXTENT_ROWS
+    if _EXTENT_ROWS is not None:
+        return _EXTENT_ROWS
+    uses = _symbol_uses(assembly, index)
+    strides = _symbol_strides(assembly)
+    used_names = {name for (name, _address), found in uses.items() if found}
+    universes, ladders = _extent_ladders(index)
     rows: list[dict] = []
     for row in _unique_data_rows(index):
         image = index.canonical(row.name, row.addr) or row.table
-        manifest = manifests.get(image)
-        layout = None
-        if manifest is not None:
-            try:
-                layout = parse_splat_layout(
-                    ROOT / manifest.splat, manifest.load_address
-                )
-            except (OSError, ValueError):
-                layout = None
+        layout = _manifest_layout(manifests.get(image))
         following_address = ladders.get((row.table, row.addr))
         if following_address is not None:
             gap = following_address - row.addr
@@ -5043,38 +5146,25 @@ def _extent_rows(assembly: Assembly, index: SymbolIndex, manifests: dict) -> lis
             for _image, function, access in found
             if declared is not None and access.offset >= declared
         ]
-        item = {
-            "symbol": row.name,
-            "image": image,
-            "address": f"0x{row.addr:08X}",
-            "gap": gap,
-            "declared_size": declared,
-            "stride": sorted(strides.get(row.name, set())),
-            "beyond": beyond[:20],
-            "beyond_count": len(beyond),
-            "absorbs": [],
-            "section": _section_of(layout, row.addr),
-            "type": row.type,
-            "evidence": [
-                f"{use_image}@0x{access.address:08X} {function} {access.mnemonic}"
-                for use_image, function, access in found[:5]
-            ],
-        }
-        start = row.addr
-        end = start + (gap or 0)
-        hit = {
-            start + access.offset
-            for _image, _function, access in uses.get((row.name, start), ())
-        }
-        for other in index.rows.get(row.table, ()):
-            if other.type == "func" or not start < other.addr < end:
-                continue
-            if other.name == row.name or other.name in used_names:
-                continue
-            size = index.span(other)
-            if any(other.addr <= address < other.addr + size for address in hit):
-                item["absorbs"].append(other.name)
-        rows.append(item)
+        rows.append(
+            {
+                "symbol": row.name,
+                "image": image,
+                "address": f"0x{row.addr:08X}",
+                "gap": gap,
+                "declared_size": declared,
+                "stride": sorted(strides.get(row.name, set())),
+                "beyond": beyond[:20],
+                "beyond_count": len(beyond),
+                "absorbs": _absorbed_names(row, uses, index, used_names, gap),
+                "section": _section_of(layout, row.addr),
+                "type": row.type,
+                "evidence": [
+                    f"{use_image}@0x{access.address:08X} {function} {access.mnemonic}"
+                    for use_image, function, access in found[:5]
+                ],
+            }
+        )
     _EXTENT_ROWS = rows
     return rows
 

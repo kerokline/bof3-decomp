@@ -101,7 +101,7 @@ NON_MATCHING u8 Script_OpsRunStage(ScriptState* state, const u8* table, u8 value
                 break;
             }
             span = Area_HeightSample(g_AreaScrollTargetX, g_AreaScrollTargetY);
-            Area_AdvanceScroll((s16)span);
+            Area_ScrollAdvance((s16)span);
             break;
         }
         case ACTOR_SCRIPT_STAGE_SET_RECORD_INDEX:

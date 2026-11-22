@@ -64,12 +64,12 @@ NON_MATCHING u8 func_801B4D7C(u8 wanted_code) {
         if (tmp29->pos.x.part.fraction != 0) {
             val2 = 1;
             if (tmp29->pos.y.part.fraction != 0) {
-                val0                   = &g_ScratchPad;
-                val8                   = (void*)5;
-                GAME_ENTITY_ENTRY_DATA = val4;
-                *(u16*)(&g_ScratchPad) = tmp29->pos.x.part.integer;
+                val0                         = &g_ScratchPad;
+                val8                         = (void*)5;
+                GAME_ENTITY_ENTRY_DATA       = val4;
+                g_ScratchPad.cells.halves[0] = tmp29->pos.x.part.integer;
             loop_9:
-                if ((Area_CellGetCode((s16) * (u16*)(&g_ScratchPad), FIELD(s16, (&g_ScratchPad), 0x2u)) & BYTE_MASK) == (val6 & BYTE_MASK)) {
+                if ((Area_CellGetCode(g_ScratchPad.cells.halves[0], g_ScratchPad.cells.halves[1]) & BYTE_MASK) == (val6 & BYTE_MASK)) {
                     tmp25 = g_Task;
                     tmp17 = tmp25->direction;
                     tmp5  = tmp17 & BYTE_MASK;
@@ -92,17 +92,17 @@ NON_MATCHING u8 func_801B4D7C(u8 wanted_code) {
                 }
             block_18:
                 val1 += 1;
-                *(u16*)(&g_ScratchPad) = (u16)(*(u16*)(&g_ScratchPad) + 1);
-                val3                   = 7;
+                g_ScratchPad.cells.halves[0] = (u16)(g_ScratchPad.cells.halves[0] + 1);
+                val3                         = 7;
                 if (val1 >= 2) {
-                    val1                   = 0;
-                    val2                   = 3;
-                    val0                   = &g_ScratchPad;
-                    *(u16*)(&g_ScratchPad) = val5;
-                    val8                   = &g_ScratchPad + 2;
-                    SP_REF(void*, 0x2)     = COORD_INT(g_Task->pos.y);
+                    val1                         = 0;
+                    val2                         = 3;
+                    val0                         = &g_ScratchPad;
+                    g_ScratchPad.cells.halves[0] = val5;
+                    val8                         = &g_ScratchPad + 2;
+                    SP_REF(void*, 0x2)           = COORD_INT(g_Task->pos.y);
                 loop_20:
-                    if ((Area_CellGetCode((s16) * (u16*)(&g_ScratchPad), FIELD(s16, (&g_ScratchPad), 0x2u)) & BYTE_MASK) == (val6 & BYTE_MASK)) {
+                    if ((Area_CellGetCode(g_ScratchPad.cells.halves[0], g_ScratchPad.cells.halves[1]) & BYTE_MASK) == (val6 & BYTE_MASK)) {
                         tmp18 = g_Task;
                         tmp12 = tmp18->direction;
                         tmp2  = tmp12 & BYTE_MASK;
@@ -125,7 +125,7 @@ NON_MATCHING u8 func_801B4D7C(u8 wanted_code) {
                     }
                 block_29:
                     val1 += 1;
-                    FIELD(s16, (&g_ScratchPad), 0x2u) = (s16)(FIELD(s16, (&g_ScratchPad), 0x2u) + 1);
+                    g_ScratchPad.cells.halves[1] = (s16)(g_ScratchPad.cells.halves[1] + 1);
                     if (val1 >= 2) {
                         val1 = val6 & BYTE_MASK;
                         val7 = 1;
@@ -141,14 +141,14 @@ NON_MATCHING u8 func_801B4D7C(u8 wanted_code) {
                 }
                 goto loop_9; /* retail branch */
             }
-            val3                   = 7;
-            val2                   = 3;
-            val0                   = &g_ScratchPad;
-            *(u16*)(&g_ScratchPad) = val5;
-            val8                   = &g_ScratchPad + 2;
-            SP_REF(void*, 0x2)     = (u16)(tmp29->pos.y.part.integer - 1);
+            val3                         = 7;
+            val2                         = 3;
+            val0                         = &g_ScratchPad;
+            g_ScratchPad.cells.halves[0] = val5;
+            val8                         = &g_ScratchPad + 2;
+            SP_REF(void*, 0x2)           = (u16)(tmp29->pos.y.part.integer - 1);
         loop_58:
-            if ((Area_CellGetCode((s16) * (u16*)(&g_ScratchPad), FIELD(s16, (&g_ScratchPad), 0x2u)) & BYTE_MASK) == (val6 & BYTE_MASK)) {
+            if ((Area_CellGetCode(g_ScratchPad.cells.halves[0], g_ScratchPad.cells.halves[1]) & BYTE_MASK) == (val6 & BYTE_MASK)) {
                 tmp22 = g_Task;
                 tmp15 = tmp22->direction;
                 tmp4  = tmp15 & BYTE_MASK;
@@ -171,32 +171,32 @@ NON_MATCHING u8 func_801B4D7C(u8 wanted_code) {
             }
         block_67:
             val1 += 1;
-            FIELD(s16, (&g_ScratchPad), 0x2u) = (s16)(FIELD(s16, (&g_ScratchPad), 0x2u) + 1);
+            g_ScratchPad.cells.halves[1] = (s16)(g_ScratchPad.cells.halves[1] + 1);
             if (val1 >= 3) {
                 tmp23 = g_Task;
                 tmp16 = tmp23->direction;
                 if ((tmp16 == 1) || (val7 = 0, (tmp16 == 5))) {
-                    val1                   = 0;
-                    val0                   = &g_ScratchPad;
-                    *(u16*)(&g_ScratchPad) = (u16)(tmp23->pos.x.part.integer - 1);
-                    val8                   = (void*)(val6 & BYTE_MASK);
-                    SP_REF(void*, 0x2)     = (u16)(tmp23->pos.y.part.integer - 1);
+                    val1                         = 0;
+                    val0                         = &g_ScratchPad;
+                    g_ScratchPad.cells.halves[0] = (u16)(tmp23->pos.x.part.integer - 1);
+                    val8                         = (void*)(val6 & BYTE_MASK);
+                    SP_REF(void*, 0x2)           = (u16)(tmp23->pos.y.part.integer - 1);
                 loop_71:
                     val1 += 1;
-                    if ((Area_CellGetCode((s16) * (u16*)(&g_ScratchPad), FIELD(s16, (&g_ScratchPad), 0x2u)) & BYTE_MASK) != val8) {
-                        FIELD(s16, (&g_ScratchPad), 0x2u) = (s16)(FIELD(s16, (&g_ScratchPad), 0x2u) + 1);
+                    if ((Area_CellGetCode(g_ScratchPad.cells.halves[0], g_ScratchPad.cells.halves[1]) & BYTE_MASK) != val8) {
+                        g_ScratchPad.cells.halves[1] = (s16)(g_ScratchPad.cells.halves[1] + 1);
                         if (val1 >= 3) {
-                            val1                   = 0;
-                            tmp24                  = g_Task;
-                            val0                   = &g_ScratchPad;
-                            *(u16*)(&g_ScratchPad) = (u16)(tmp24->pos.x.part.integer + 2);
-                            val8                   = (void*)(val6 & BYTE_MASK);
-                            SP_REF(void*, 0x2)     = (u16)(tmp24->pos.y.part.integer - 1);
+                            val1                         = 0;
+                            tmp24                        = g_Task;
+                            val0                         = &g_ScratchPad;
+                            g_ScratchPad.cells.halves[0] = (u16)(tmp24->pos.x.part.integer + 2);
+                            val8                         = (void*)(val6 & BYTE_MASK);
+                            SP_REF(void*, 0x2)           = (u16)(tmp24->pos.y.part.integer - 1);
                         loop_74:
                             val1 += 1;
-                            if ((Area_CellGetCode((s16) * (u16*)(&g_ScratchPad), FIELD(s16, (&g_ScratchPad), 0x2u)) & BYTE_MASK) != val8) {
-                                FIELD(s16, (&g_ScratchPad), 0x2u) = (s16)(FIELD(s16, (&g_ScratchPad), 0x2u) + 1);
-                                val7                              = 0;
+                            if ((Area_CellGetCode(g_ScratchPad.cells.halves[0], g_ScratchPad.cells.halves[1]) & BYTE_MASK) != val8) {
+                                g_ScratchPad.cells.halves[1] = (s16)(g_ScratchPad.cells.halves[1] + 1);
+                                val7                         = 0;
                                 if (val1 >= 3) {
                                     return val7;
                                 }
@@ -214,13 +214,13 @@ NON_MATCHING u8 func_801B4D7C(u8 wanted_code) {
             }
             goto loop_58; /* retail branch */
         }
-        val0                   = &g_ScratchPad;
-        val2                   = 1;
-        val8                   = (void*)5;
-        SP_REF(void*, 0x2)     = val4;
-        *(u16*)(&g_ScratchPad) = (u16)(tmp29->pos.x.part.integer - 1);
+        val0                         = &g_ScratchPad;
+        val2                         = 1;
+        val8                         = (void*)5;
+        SP_REF(void*, 0x2)           = val4;
+        g_ScratchPad.cells.halves[0] = (u16)(tmp29->pos.x.part.integer - 1);
     loop_34:
-        if ((Area_CellGetCode((s16) * (u16*)(&g_ScratchPad), FIELD(s16, (&g_ScratchPad), 0x2u)) & BYTE_MASK) == (val6 & BYTE_MASK)) {
+        if ((Area_CellGetCode(g_ScratchPad.cells.halves[0], g_ScratchPad.cells.halves[1]) & BYTE_MASK) == (val6 & BYTE_MASK)) {
             tmp19 = g_Task;
             tmp13 = tmp19->direction;
             tmp3  = tmp13 & BYTE_MASK;
@@ -244,31 +244,31 @@ NON_MATCHING u8 func_801B4D7C(u8 wanted_code) {
         }
     block_43:
         val1 += 1;
-        *(u16*)(&g_ScratchPad) = (u16)(*(u16*)(&g_ScratchPad) + 1);
+        g_ScratchPad.cells.halves[0] = (u16)(g_ScratchPad.cells.halves[0] + 1);
         if (val1 >= 3) {
             tmp20 = g_Task;
             tmp14 = tmp20->direction;
             if ((tmp14 == 7) || (val7 = 0, (tmp14 == 3))) {
-                val1                   = 0;
-                val0                   = &g_ScratchPad;
-                *(u16*)(&g_ScratchPad) = (u16)(tmp20->pos.x.part.integer - 1);
-                val8                   = (void*)(val6 & BYTE_MASK);
-                SP_REF(void*, 0x2)     = (u16)(tmp20->pos.y.part.integer - 1);
+                val1                         = 0;
+                val0                         = &g_ScratchPad;
+                g_ScratchPad.cells.halves[0] = (u16)(tmp20->pos.x.part.integer - 1);
+                val8                         = (void*)(val6 & BYTE_MASK);
+                SP_REF(void*, 0x2)           = (u16)(tmp20->pos.y.part.integer - 1);
             loop_47:
                 val1 += 1;
-                if ((Area_CellGetCode((s16) * (u16*)(&g_ScratchPad), FIELD(s16, (&g_ScratchPad), 0x2u)) & BYTE_MASK) != val8) {
-                    *(u16*)(&g_ScratchPad) = (u16)(*(u16*)(&g_ScratchPad) + 1);
+                if ((Area_CellGetCode(g_ScratchPad.cells.halves[0], g_ScratchPad.cells.halves[1]) & BYTE_MASK) != val8) {
+                    g_ScratchPad.cells.halves[0] = (u16)(g_ScratchPad.cells.halves[0] + 1);
                     if (val1 >= 3) {
-                        val1                   = 0;
-                        tmp21                  = g_Task;
-                        val0                   = &g_ScratchPad;
-                        *(u16*)(&g_ScratchPad) = (u16)(tmp21->pos.x.part.integer - 1);
-                        val8                   = (void*)(val6 & BYTE_MASK);
-                        SP_REF(void*, 0x2)     = (u16)(tmp21->pos.y.part.integer + 2);
+                        val1                         = 0;
+                        tmp21                        = g_Task;
+                        val0                         = &g_ScratchPad;
+                        g_ScratchPad.cells.halves[0] = (u16)(tmp21->pos.x.part.integer - 1);
+                        val8                         = (void*)(val6 & BYTE_MASK);
+                        SP_REF(void*, 0x2)           = (u16)(tmp21->pos.y.part.integer + 2);
                     loop_50:
                         val1 += 1;
-                        if ((Area_CellGetCode((s16) * (u16*)(&g_ScratchPad), FIELD(s16, (&g_ScratchPad), 0x2u)) & BYTE_MASK) != val8) {
-                            *(u16*)(&g_ScratchPad) = (u16)(*(u16*)(&g_ScratchPad) + 1);
+                        if ((Area_CellGetCode(g_ScratchPad.cells.halves[0], g_ScratchPad.cells.halves[1]) & BYTE_MASK) != val8) {
+                            g_ScratchPad.cells.halves[0] = (u16)(g_ScratchPad.cells.halves[0] + 1);
                             if (val1 >= 3) {
                                 return 0U;
                             }

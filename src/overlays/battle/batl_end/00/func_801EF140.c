@@ -3,10 +3,10 @@
 /* Opens the victory level-up panel for the character the battle cursor points at: counts the
  * stat rows the level-ups add and the ability rows the next level teaches, then sizes the panel.
  */
-#ifdef NON_MATCHING
-NON_MATCHING void func_801EF140(void) {
+MATCH void func_801EF140(void) {
     u16 i;
     s32 height;
+    u8  step;
 
     height = 0;
     if (g_PadStates[0].pressed == 0) {
@@ -34,10 +34,8 @@ NON_MATCHING void func_801EF140(void) {
     g_UiPanelTasks[1].unk_09 = height + 4;
     /* FAKE: retail writes the three fields above before loading the two below. */
     FAKE_BARRIER();
+    step                     = g_Battle.ui_mode;
     g_UiPanelTasks[1].unk_0A = g_Battle.cursor.gene.column;
     g_UiPanelTasks[1].unk_0B = *(u16*)&g_Battle.unk_D0[2];
-    g_Battle.ui_mode -= 1;
+    g_Battle.ui_mode         = step - 1;
 }
-#else
-INCLUDE_ASM(func_801EF140);
-#endif

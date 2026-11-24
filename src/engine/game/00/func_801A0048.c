@@ -1,111 +1,56 @@
 #include "game_00.h"
 
-#ifdef NON_MATCHING
-NON_MATCHING bool func_801A0048(s32 cell_x, s32 cell_y) {
-    GameLocaleBank** banks;
-    GameLocaleBank*  bank;
-    GameLocale*      entry;
-    u32*             keys;
-    u8*              counts;
-    u8*              base;
-    u8*              aux;
-    u8*              tab;
-    u16              seed;
-    u32              hi;
-    u32              mid;
-    u32              mask;
-    s32              left;
-    s32              span;
-    s32              x;
-    s32              y;
-    u16              index;
-    u8               n;
-    u8               type;
-    u8               reread;
+/* Finds the area link at a map cell and makes its destination the pending area change; true when none. */
+MATCH bool func_801A0048(s32 cell_x, s32 cell_y) {
+    GameLocale*     link;
+    u8*             choice;
+    s32             n;
+    s32             i;
+    s32             count;
+    GameLocaleBank* bank;
+    u32             x;
+    u32             y;
 
-    /* FAKE: retail reserves eight bytes in this frame. */
-    FAKE_STACK_PADS(u8, 8);
-
-    left = ((GameLocaleBank**)g_AreaLoads)[g_GameAreaId]->outer;
-    if (left < 0)
-        return true;
-    banks = (GameLocaleBank**)g_AreaLoads;
-    x     = cell_x & BYTE_MASK;
-    y     = cell_y & BYTE_MASK;
-    tab   = g_SceneFlagWords;
-    mask  = 0xFF8000;
-    do {
-        entry = &banks[g_GameAreaId]->entries[left];
-        span  = (s32)entry->span - 1;
-        if (span >= 0) {
-            do {
-                if (entry->mode != 0) {
-                    if (x == entry->cx) {
-                        if (y == (s32)entry->cy + span)
-                            goto found;
-                        span -= 1;
-                    } else {
-                        span -= 1;
-                    }
-                } else {
-                    if ((x == (s32)entry->cx + span)) {
-                        if (y == entry->cy)
-                            goto found;
-                        span -= 1;
-                    } else {
-                        span -= 1;
+    n = ((GameLocaleBank**)g_AreaLoads)[g_GameAreaId]->outer;
+    for (; n >= 0; n--) {
+        link = &((GameLocaleBank**)g_AreaLoads)[g_GameAreaId]->entries[n];
+        for (i = link->span - 1; i >= 0; i--) {
+            if (link->mode != 0) {
+                if ((cell_x & BYTE_MASK) == link->cx && (cell_y & BYTE_MASK) == link->cy + i) {
+                    goto found;
+                }
+            } else if ((cell_x & BYTE_MASK) == link->cx + i && (cell_y & BYTE_MASK) == link->cy) {
+                goto found;
+            }
+            continue;
+        found:
+            if (link->key == 0xFFFF) {
+                bank   = ((GameLocaleBank**)g_AreaLoads)[g_GameAreaId];
+                choice = (u8*)bank->keys[link->index];
+                count  = bank->counts[link->index];
+                for (n = 0; n < count; n++, choice += 10) {
+                    if (SYS_TestFlag(g_SceneFlagWords + choice[6] * 8, choice[7]) != 0) {
+                        break;
                     }
                 }
-            } while (span >= 0);
+                x                 = *(u16*)(choice + 2);
+                g_GameEntryAreaId = *(u16*)choice;
+                y                 = *(u16*)(choice + 4);
+                g_GameEntryPosX   = (x << 8) & 0xFF8000;
+                g_GameEntryPosY   = (y << 8) & 0xFF8000;
+                g_GameEntryFacing = choice[8];
+            } else {
+                g_GameEntryAreaId = link->key;
+                g_GameEntryPosX   = (link->index << 8) & 0xFF8000;
+                g_GameEntryPosY   = (link->alt << 8) & 0xFF8000;
+                g_GameEntryFacing = link->type;
+            }
+            SP_REF(s8, 0x01u) = (g_GameEntryFacing >> 4) & 7;
+            g_GameEntryFacing &= 0x8F;
+            func_801A02E8();
+            func_801A0380(D_80143F16, D_80143F1A, g_GameEntryAreaId);
+            return false;
         }
-        left -= 1;
-    } while (left >= 0);
-    return true;
-
-found:
-    if (entry->key == 0xFFFF) {
-        index  = entry->index;
-        bank   = banks[g_GameAreaId];
-        keys   = bank->keys;
-        counts = bank->counts;
-        n      = counts[index];
-        base   = (u8*)keys[index];
-        left   = 0;
-        if (n != 0) {
-            aux = base + 7;
-            do {
-                left += 1;
-                if (SYS_TestFlag(tab + ((u32)aux[-1] << 3), aux[0]) != 0) {
-                    base += 0x0A;
-                    break;
-                }
-                aux += 0x0A;
-                base += 0x0A;
-            } while (left < (s32)n);
-        }
-        hi   = *(u16*)(base + 2);
-        seed = *(u16*)base;
-        hi <<= 8;
-        g_GameEntryAreaId = seed;
-        mid               = *(u16*)(base + 4);
-        g_GameEntryPosX   = hi & mask;
-        mid <<= 8;
-        g_GameEntryPosY = mid & mask;
-        type            = base[8];
-    } else {
-        g_GameEntryAreaId = entry->key;
-        g_GameEntryPosX   = ((u32)entry->index << 8) & mask;
-        g_GameEntryPosY   = ((u32)entry->alt << 8) & mask;
-        type              = entry->type;
     }
-    g_GameEntryFacing = type;
-    reread            = g_GameEntryFacing;
-    SP_REF(s8, 0x01u) = (s8)((reread >> 4) & 7);
-    g_GameEntryFacing = reread & 0x8F;
-    func_801A02E8();
-    func_801A0380((u32)D_80143F16, (u32)D_80143F1A, g_GameEntryAreaId);
-    return false;
+    return true;
 }
-#else
-INCLUDE_ASM(func_801A0048);
-#endif

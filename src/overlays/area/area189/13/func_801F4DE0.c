@@ -1,27 +1,26 @@
 #include "area189_13.h"
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801F4DE0(void) {
+/* Start the desert walk: camera, leader height and the encounter pace from the party equipment. */
+MATCH void func_801F4DE0(void) {
     s32 value;
     s32 count;
-    s32 offset;
-    s32 match;
+    s32 i;
+    s32 x;
+    s32 y;
     u8* flags;
-
-    /* FAKE: the retail frame holds 0x10 bytes no statement explains. */
-    FAKE_STACK_PADS(u8, 0x10);
 
     SetGeomOffset(0xA0, 0xB9);
     SetGeomScreen(0x12C);
     g_AreaCameraAngle.vx     = -0x2EE;
     TASK(Actor)->direction   = LOBU(D_8014504B);
     D_801492DC               = ((0x12 - LOBU(D_8014504B)) & 0xF) << 8;
-    g_AreaScrollTargetX      = TASK(Actor)->pos.x.fixed;
+    g_AreaScrollTargetX      = LOW(TASK(Actor)->pos.x.fixed);
+    g_AreaScrollTargetY      = LOW(TASK(Actor)->pos.y.fixed);
     g_AreaCameraOffsetZ      = -0xD80;
-    g_AreaScrollTargetY      = TASK(Actor)->pos.y.fixed;
+    x                        = LOW(TASK(Actor)->pos.x.fixed);
+    y                        = LOW(TASK(Actor)->pos.y.fixed);
     g_AreaCameraRefreshCount = 4;
-    match                    = 0;
-    TASK(Actor)->pos.z.fixed = func_801F4A04(TASK(Actor)->pos.x.fixed, TASK(Actor)->pos.y.fixed) << 16;
+    TASK(Actor)->pos.z.fixed = func_801F4A04(x, y) << 16;
     Actor_ClearVelocity_801F5F20();
     TASK(Actor)->active_flags  = 0;
     TASK(Actor)->script_record = 0;
@@ -29,32 +28,21 @@ NON_MATCHING void func_801F4DE0(void) {
 
     value = (rand() & 0x1F) + 0x96;
     count = Party_CountOrder(PARTY_ORDER_FIELD);
-    if (count != 0) {
-        offset = 0;
-        do {
-            if ((func_801C38F4((&g_Game.members[0].character_index)[offset], 3, 0x15) & BYTE_MASK) != 0) {
-                break;
-            }
-            match++;
-            offset += BATTLE_PARTY_STRIDE;
-        } while (match < count);
-        if (match < count) {
-            value <<= 1;
+    for (i = 0; i < count; i++) {
+        if ((func_801C38F4(g_Game.members[i].character_index, 3, 0x15) & BYTE_MASK) != 0) {
+            break;
         }
     }
-    if (count != 0) {
-        match  = 0;
-        offset = 0;
-        do {
-            if ((func_801C38F4((&g_Game.members[0].character_index)[offset], 3, 0x14) & BYTE_MASK) != 0) {
-                break;
-            }
-            match++;
-            offset += BATTLE_PARTY_STRIDE;
-        } while (match < count);
-        if (match < count) {
-            value >>= 1;
+    if (i < count) {
+        value <<= 1;
+    }
+    for (i = 0; i < count; i++) {
+        if ((func_801C38F4(g_Game.members[i].character_index, 3, 0x14) & BYTE_MASK) != 0) {
+            break;
         }
+    }
+    if (i < count) {
+        value >>= 1;
     }
     if (D_8014933C == 0) {
         value <<= 1;
@@ -70,6 +58,3 @@ NON_MATCHING void func_801F4DE0(void) {
     SYS_ClearFlag(flags, 0x8E);
     TASK(Actor)->header.step += 1;
 }
-#else
-INCLUDE_ASM(func_801F4DE0);
-#endif

@@ -631,7 +631,7 @@ void               func_801D8450(u32 panel_index);
 /* func_801D8690 */
 void               Battle_DrawEnemyPanel(s16 x, s16 y, s32 slot);
 void               Battle_DrawEnemyNamePanel(s32 x, s32 y, s32 slot);
-void               func_801D8DF8(s32 panel_x, s32 panel_y, u32 index);
+void               func_801D8DF8(s16 x, s16 y, u8 index);
 /* func_801D9304 */
 void               Battle_OpenPartyPanel(u8 index);
 void               func_801D9388(u8 index);

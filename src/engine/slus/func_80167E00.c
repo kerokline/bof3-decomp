@@ -29,7 +29,7 @@ MATCH void func_80167E00(void) {
             Actor_ProjectForDraw();
             continue;
         }
-        for (slot = 0; slot < *(u8*)SCENE_TABLE_BASE; slot++) {
+        for (slot = 0; slot < MEM(u8, SCENE_TABLE_BASE); slot++) {
             if (SCENE_SLOTS[slot].script_section == TASK(Actor)->unk_2C) {
                 break;
             }

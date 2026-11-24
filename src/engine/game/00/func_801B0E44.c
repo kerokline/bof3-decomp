@@ -40,10 +40,10 @@ NON_MATCHING u8 func_801B0E44(void) {
     switch (result & BYTE_MASK) {
         case 2:
             pos2   = (s32*)&g_ScratchPad.cells.halves[4];
-            result = Area_HeightReadStep(*(s32*)&g_ScratchPad.cells.halves[4], SP_REF(s32, 0xC), TASK(Actor)->direction);
+            result = ((s32 (*)(s32, s32, s32))Area_HeightReadStep)(*(s32*)&g_ScratchPad.cells.halves[4], SP_REF(s32, 0xC), TASK(Actor)->direction);
             func_801B13BC();
             if (((u8*)pos2)[-8] != 0) {
-                if (result >= 0x41) {
+                if ((s16)result >= 0x41) {
                     if (!(func_801A0048(SP_REF(s16, 0x4), SP_REF(s16, 0x6)) & BYTE_MASK) && (g_Task == (void*)g_Game.members)) {
                         if (Area_CellSetPalette(g_Game.members[0].pos.x.part.integer, g_Game.members[0].pos.y.part.integer) & BYTE_MASK) {
                             SND_SEPlay(D_801CD0F4[((u8*)pos2)[-7]]);
@@ -75,13 +75,13 @@ NON_MATCHING u8 func_801B0E44(void) {
                 return 0;
             }
             g_GameStateIndex = GAME_REQUEST_AREA_CHANGE;
-            g_Game.walk_flags |= 0x20 | AREA_WALK_ENTRY_PENDING;
+            g_AreaWalkFlags |= 0x20 | AREA_WALK_ENTRY_PENDING;
             return 0;
         case 3:
             pos3   = (s32*)&g_ScratchPad.cells.halves[4];
-            result = Area_HeightReadStep(pos3[0], pos3[1], TASK(Actor)->direction);
+            result = ((s32 (*)(s32, s32, s32))Area_HeightReadStep)(pos3[0], pos3[1], TASK(Actor)->direction);
             if (SP_REF(u8, 0x0) != 0) {
-                if (result >= 0x41) {
+                if ((s16)result >= 0x41) {
                     g_AreaCameraSpeed      = 0;
                     TASK(Actor)->direction = saved_dir;
                     return 1;
@@ -93,14 +93,14 @@ NON_MATCHING u8 func_801B0E44(void) {
         case 4:
             func_801B13BC();
             if (!(func_801A0048(SP_REF(s16, 0x4), SP_REF(s16, 0x6)) & BYTE_MASK)) {
-                g_Game.walk_flags |= 0x80 | AREA_WALK_ENTRY_PENDING;
+                g_AreaWalkFlags |= 0x80 | AREA_WALK_ENTRY_PENDING;
                 return 2;
             }
             return 1;
         case 5:
             func_801B13BC();
             if (!(func_801A0048(SP_REF(s16, 0x4), SP_REF(s16, 0x6)) & BYTE_MASK)) {
-                g_Game.walk_flags |= 0x100 | AREA_WALK_ENTRY_PENDING;
+                g_AreaWalkFlags |= 0x100 | AREA_WALK_ENTRY_PENDING;
                 return 3;
             }
             return 1;

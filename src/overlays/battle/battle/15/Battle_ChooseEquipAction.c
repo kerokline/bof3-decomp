@@ -1,51 +1,49 @@
 #include "battle_15.h"
 
 /* func_80099364 */
-#ifdef NON_MATCHING
-NON_MATCHING void Battle_ChooseEquipAction(void) {
-    u8* state;
-    u8* panel;
+MATCH void Battle_ChooseEquipAction(void) {
+    u8* option;
+    u8* choice;
+    u8  mode;
 
-    state                                           = &D_8014862E;
-    g_BattleMessages[((D_801EC328 - 1) & 0xF)].text = UI_MessageGetText((*state) == 0u ? 0x2Fu : 0x31u);
-    if (D_80148627 == 0u) {
-        D_801485DC = 1u;
-        D_801485E0 = D_80148628 + (*state * 0x30);
-        D_801485E2 = D_8014862A + 4u;
+    option                                        = &g_UiPanelTasks[21].unk_0A;
+    g_BattleMessages[(D_801EC328 - 1) & 0xF].text = UI_MessageGetText(*option == 0 ? 0x2F : 0x31);
+    if (g_UiPanelTasks[21].state == 0) {
+        g_UiPanelTasks[19].active = 1;
+        g_UiPanelTasks[19].pos.x  = g_UiPanelTasks[21].pos.x + *option * 48;
+        g_UiPanelTasks[19].pos.y  = g_UiPanelTasks[21].pos.y + 4;
     } else {
-        D_801485DC = 0u;
+        g_UiPanelTasks[19].active = 0;
     }
-    panel  = &D_8014862F;
-    *panel = 0xFFu;
-    if ((g_PadStates[0].pressed & (PADLleft | PADLright)) != 0u) {
+    choice  = &g_UiPanelTasks[21].unk_0B;
+    *choice = 0xFF;
+    if ((g_PadStates[0].pressed & (PADLleft | PADLright)) != 0) {
         SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 1));
-        D_8014862E ^= 1u;
+        g_UiPanelTasks[21].unk_0A ^= 1;
     }
-    if ((g_PadStates[0].pressed & g_InputMasks[BATTLE_INPUT_CANCEL]) != 0u) {
-        g_UiPanelTasks[21].active = 0u;
-        g_UiPanelTasks[4].active  = 1u;
-        g_Battle.phase.sub_step   = 2u;
-        g_Battle.ui_step          = 1u;
-    } else if ((g_PadStates[0].pressed & g_InputMasks[BATTLE_INPUT_CONFIRM]) != 0u) {
+    if ((g_PadStates[0].pressed & g_InputMasks[BATTLE_INPUT_CANCEL]) != 0) {
+        g_UiPanelTasks[21].active = 0;
+        g_UiPanelTasks[4].active  = 1;
+        g_Battle.phase.sub_step   = 2;
+        g_Battle.ui_step          = 1;
+    } else if ((g_PadStates[0].pressed & g_InputMasks[BATTLE_INPUT_CONFIRM]) != 0) {
         SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 3));
-        *panel = D_8014862E;
-        if (D_8014862E == 0u) {
+        *choice = g_UiPanelTasks[21].unk_0A;
+        if (g_UiPanelTasks[21].unk_0A == 0) {
             Battle_InitEquipUsePanel();
-            g_Battle.ui_mode += 3u;
+            g_Battle.ui_mode += 3;
         } else {
             Battle_InitEquipChangePanel();
+            mode                      = g_Battle.ui_mode;
             g_UiPanelTasks[17].unk_09 = g_BattleEquipSlot;
             g_UiPanelTasks[17].unk_0C = g_UiPanelTasks[18].unk_0C;
-            g_Battle.ui_mode += 1u;
+            g_Battle.ui_mode          = mode + 1;
         }
-    } else if ((g_PadStates[0].pressed & PADLdown) != 0u) {
+    } else if ((g_PadStates[0].pressed & PADLdown) != 0) {
         SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 0));
-        g_UiPanelTasks[21].active = 0u;
-        g_UiPanelTasks[4].active  = 1u;
-        g_Battle.phase.sub_step   = 2u;
-        g_Battle.ui_step          = 1u;
+        g_UiPanelTasks[21].active = 0;
+        g_UiPanelTasks[4].active  = 1;
+        g_Battle.phase.sub_step   = 2;
+        g_Battle.ui_step          = 1;
     }
 }
-#else
-INCLUDE_ASM(Battle_ChooseEquipAction);
-#endif

@@ -16,6 +16,8 @@ NON_MATCHING s32 Scene_SetupParty(u32 scene) {
     s32  size;
     s32  i;
     s32  j;
+    /* FAKE: unused frame, 8 bytes. */
+    FAKE_STACK_PADS(u8, 8);
 
     lists   = FIELD(u8*, GAME_TILE_RUN(g_GameAreaId), 0x14);
     ids     = lists[(u8)scene];
@@ -31,8 +33,7 @@ NON_MATCHING s32 Scene_SetupParty(u32 scene) {
             SP_TAKEN[i] = g_PartyFieldOrder[i];
         for (i = 0; i < count; i++) {
             if (ids[i] != 0x80) {
-                size = g_PartySize;
-                for (j = 0; j < size; j++) {
+                for (j = 0; j < g_PartySize; j++) {
                     if (g_Game.members[j].chr.character_id == ids[i]) {
                         SP_VALUES[i] = (u8)g_Game.members[j].unk_2C.value;
                         SP_SLOTS[i]  = j;
@@ -43,8 +44,7 @@ NON_MATCHING s32 Scene_SetupParty(u32 scene) {
                 if (j == g_PartySize)
                     return 1;
             } else {
-                size = g_PartySize;
-                for (j = 0; j < size; j++) {
+                for (j = 0; j < g_PartySize; j++) {
                     if (SP_TAKEN[j] != GAME_NONE) {
                         SP_VALUES[i] = (u8)g_Game.members[j].unk_2C.value;
                         SP_SLOTS[i]  = j;
@@ -54,8 +54,13 @@ NON_MATCHING s32 Scene_SetupParty(u32 scene) {
                 }
             }
         }
-        for (i = 0; i < (u8)count; i++)
-            g_PartyFieldOrder[i] = g_Game.members[SP_SLOTS[i]].chr.character_id;
+        if ((count & 0xFF) > 0) {
+            i = 0;
+            do {
+                g_PartyFieldOrder[i] = g_Game.members[SP_SLOTS[i]].chr.character_id;
+                i++;
+            } while (i < (u8)count);
+        }
         for (i = 0; i < (u8)count - 1; i++) {
             if (i != SP_SLOTS[i]) {
                 Party_MemberSwap((u8)i, SP_SLOTS[i], 0);
@@ -78,7 +83,7 @@ NON_MATCHING s32 Scene_SetupParty(u32 scene) {
     if (command & 0x20)
         g_GameFlags |= GAME_FLAG_SCROLL_LOCK;
     if (command == 0x30)
-        Area_ScrollStartRoute(*ids);
+        ((void (*)(u8))Area_ScrollStartRoute)(*ids);
     g_GameFlags |= GAME_FLAG_SCRIPT_ACTIVE;
     g_AreaWalkFlags |= AREA_WALK_MAP_LOADING;
     return 0;

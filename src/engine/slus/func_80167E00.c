@@ -6,8 +6,7 @@
  */
 #define SCENE_SLOTS ((AreaActorDef*)g_SceneActorDefs)
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_80167E00(void) {
+MATCH void func_80167E00(void) {
     u8 i;
     u8 slot;
     u8 j;
@@ -30,7 +29,7 @@ NON_MATCHING void func_80167E00(void) {
             Actor_ProjectForDraw();
             continue;
         }
-        for (slot = 0; slot < FAKE_VOLATILE(u8, D_800E3800); slot++) {
+        for (slot = 0; slot < *(u8*)SCENE_TABLE_BASE; slot++) {
             if (SCENE_SLOTS[slot].script_section == TASK(Actor)->unk_2C) {
                 break;
             }
@@ -43,6 +42,3 @@ NON_MATCHING void func_80167E00(void) {
         }
     }
 }
-#else
-INCLUDE_ASM(func_80167E00);
-#endif

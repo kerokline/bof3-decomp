@@ -622,7 +622,7 @@ extern void        Battle_ReloadMusicBank(void);
 /* func_801D7350 */
 extern void        Battle_WriteBackParty(void);
 extern void        func_801D74D4(void);
-void               Battle_DrawPartyPanel(s32 x, s32 y);
+void               Battle_DrawPartyPanel(s16 x, s16 y);
 /* func_801D7A40 */
 void               Battle_DrawPanels(s16 x, s16 y);
 void               func_801D7D10(u8 clut_index, u16 x, u16 y, u16 width, u8 height, u8 shade);

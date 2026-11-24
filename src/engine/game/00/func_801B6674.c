@@ -2,71 +2,67 @@
 
 #ifdef NON_MATCHING
 NON_MATCHING bool func_801B6674(void) {
-    s32 cell_code;
-    u8  status;
-    u8* counter;
-    u16 entry_area;
-    s32 entry_pos_x;
-    s32 entry_pos_y;
-    u8  entry_facing;
+    s32 cell;
+    u8  flags;
+    u16 pressed;
 
-    cell_code = Area_CellGetCode(COORD_INT(TASK(Actor)->pos.x), COORD_INT(TASK(Actor)->pos.y));
-    status    = g_GameRequestFlags;
-    if (!(status & AREA_LOAD_FLAG_WORLD_MAP)) {
+    cell  = Area_CellGetCode(COORD_INT(TASK(Actor)->pos.x), COORD_INT(TASK(Actor)->pos.y));
+    flags = g_GameRequestFlags;
+    if (!(flags & AREA_LOAD_FLAG_WORLD_MAP)) {
         return 0;
     }
-    if (g_PadStates[0].pressed & g_InputMasks[WORLD_INPUT_ENTER]) {
-        if ((cell_code & BYTE_MASK) == 0xAE) {
-            g_SceneEventState.mode = 0x37;
-            ACTOR_CLEAR_STEP();
+    pressed = g_PadStates[0].pressed;
+    if (pressed & g_InputMasks[WORLD_INPUT_ENTER]) {
+        if ((cell & BYTE_MASK) != 0xAE) {
+            if ((cell & 0xF0) != 0xA0 && !(g_AreaWalkFlags & AREA_WALK_TRANSITION)) {
+                return 0;
+            }
+            if (!(flags & AREA_LOAD_FLAG_NO_ACTOR_SCRIPT)) {
+                Actor_RequestRoute(TASK(Actor)->direction);
+            }
+            func_801B690C();
+            g_AreaWalkFlags &= ~AREA_WALK_TRANSITION;
+            Game_RequestAreaChange(g_GameEntryAreaId, g_GameEntryPosX, g_GameEntryPosY, g_GameEntryFacing);
             return 1;
         }
-        if ((cell_code & 0xF0) != 0xA0 && !(g_AreaWalkFlags & AREA_WALK_TRANSITION)) {
-            return 0;
-        }
-        if (!(status & AREA_LOAD_FLAG_NO_ACTOR_SCRIPT)) {
-            Actor_RequestRoute(TASK(Actor)->direction);
-        }
-        func_801B690C();
-        entry_area   = g_GameEntryAreaId;
-        entry_pos_x  = g_GameEntryPosX;
-        entry_pos_y  = g_GameEntryPosY;
-        entry_facing = g_GameEntryFacing;
-        g_AreaWalkFlags &= ~AREA_WALK_TRANSITION;
-        Game_RequestAreaChange(entry_area, entry_pos_x, entry_pos_y, entry_facing);
+        g_SceneEventState.mode = 0x37;
+        ACTOR_CLEAR_STEP();
         return 1;
     }
-    if (g_PadStates[0].pressed & PADselect) {
-        counter = &D_801454F2;
+    if (pressed & PADselect) {
+        u8* counter = &D_801454F2;
+
         *counter += 1;
-        if ((u8)*counter < 3) {
-            return 0;
+        if ((u8)*counter >= 3) {
+            *counter = 0;
         }
-        *counter = 0;
         return 0;
     }
-    if (g_PadStates[0].pressed & PADstart) {
-        if ((func_801B6470(cell_code, status) & BYTE_MASK) == 0) {
+    if (pressed & PADstart) {
+        if (!(func_801B6470(cell, flags) & BYTE_MASK)) {
             return 0;
         }
         if (!(g_GameRequestFlags & AREA_LOAD_FLAG_NO_ACTOR_SCRIPT)) {
             Actor_RequestRoute(TASK(Actor)->direction);
         }
-        entry_area   = g_GameEntryAreaId;
-        entry_pos_x  = g_GameEntryPosX;
-        entry_pos_y  = g_GameEntryPosY;
-        entry_facing = g_GameEntryFacing;
-        D_8014504A += 1;
-        g_AreaWalkFlags &= ~AREA_WALK_TRANSITION;
-        D_80145044 = TASK(Actor)->pos.y.fixed;
-        D_80145040 = TASK(Actor)->pos.x.fixed;
-        D_80145048 = g_GameAreaId;
-        Game_RequestAreaChange(entry_area, entry_pos_x, entry_pos_y, entry_facing);
+        {
+            u16 area   = g_GameEntryAreaId;
+            u32 x      = g_GameEntryPosX;
+            u32 y      = g_GameEntryPosY;
+            u8  facing = g_GameEntryFacing;
+
+            D_80145040 = TASK(Actor)->pos.x.fixed;
+            D_8014504A += 1;
+            g_AreaWalkFlags &= ~AREA_WALK_TRANSITION;
+            D_80145048 = g_GameAreaId;
+            D_80145044 = TASK(Actor)->pos.y.fixed;
+            Game_RequestAreaChange(area, x, y, facing);
+        }
         return 1;
     }
-    if ((g_PadStates[0].pressed & g_InputMasks[WORLD_INPUT_LOCATION_GUIDE]) && ((u8)(cell_code + 0x60) < 2)) {
+    if ((pressed & g_InputMasks[WORLD_INPUT_LOCATION_GUIDE]) && (u8)(cell + 0x60) < 2) {
         g_SceneEventState.mode = 0x1B;
-        if (!(status & AREA_LOAD_FLAG_NO_ACTOR_SCRIPT)) {
+        if (!(flags & AREA_LOAD_FLAG_NO_ACTOR_SCRIPT)) {
             Actor_RequestRoute(TASK(Actor)->direction);
         }
         ACTOR_CLEAR_STEP();

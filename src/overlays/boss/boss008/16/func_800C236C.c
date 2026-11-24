@@ -1,6 +1,10 @@
 #include "boss008_16.h"
 
 #ifdef NON_MATCHING
+static inline u8* ColourTableRow(u8 kind) {
+    return &D_800C2640[(kind - 8) * 3];
+}
+
 NON_MATCHING void func_800C236C(u8 phase) {
     s32           ring[64][2];
     EnemyBattler* enemy;
@@ -21,16 +25,14 @@ NON_MATCHING void func_800C236C(u8 phase) {
         prim = (POLY_G3*)g_GfxPrimCursor;
         SetPolyG3(prim);
         setRGB0(prim, 0xFF, 0xFF, 0xFF);
-
-        prim->r1 = *(volatile u8*)(D_800C2640 + ((*(EnemyBattler* volatile*)&g_BattleCurrentEnemy)->unk_F0 - 8) * 3);
+        prim->r1 = ColourTableRow(g_BattleCurrentEnemy->unk_F0)[0];
+        prim->g1 = ColourTableRow(g_BattleCurrentEnemy->unk_F0)[1];
+        prim->b1 = ColourTableRow(g_BattleCurrentEnemy->unk_F0)[2];
+        prim->r2 = ColourTableRow(g_BattleCurrentEnemy->unk_F0)[0];
+        prim->g2 = ColourTableRow(g_BattleCurrentEnemy->unk_F0)[1];
+        prim->b2 = ColourTableRow(g_BattleCurrentEnemy->unk_F0)[2];
+        enemy    = TASK(EnemyBattler);
         next     = (i + 1) & 0x1F;
-        prim->g1 = *(volatile u8*)(D_800C2641 + ((*(EnemyBattler* volatile*)&g_BattleCurrentEnemy)->unk_F0 - 8) * 3);
-        prim->b1 = *(volatile u8*)(D_800C2642 + ((*(EnemyBattler* volatile*)&g_BattleCurrentEnemy)->unk_F0 - 8) * 3);
-        setRGB2(prim, *(volatile u8*)(D_800C2640 + ((*(EnemyBattler* volatile*)&g_BattleCurrentEnemy)->unk_F0 - 8) * 3),
-                *(volatile u8*)(D_800C2641 + ((*(EnemyBattler* volatile*)&g_BattleCurrentEnemy)->unk_F0 - 8) * 3),
-                *(volatile u8*)(D_800C2642 + ((*(EnemyBattler* volatile*)&g_BattleCurrentEnemy)->unk_F0 - 8) * 3));
-
-        enemy = TASK(EnemyBattler);
         setXY3(prim, enemy->screen_x, enemy->screen_y, enemy->screen_x + ring[i][0], enemy->screen_y + ring[i][1], enemy->screen_x + ring[next][0], enemy->screen_y + ring[next][1]);
         SetSemiTrans(prim, 1);
         GFX_AddPrim(3, sizeof(POLY_G3));

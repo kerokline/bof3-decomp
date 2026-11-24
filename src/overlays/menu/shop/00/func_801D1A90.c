@@ -2,29 +2,28 @@
 
 #ifdef NON_MATCHING
 NON_MATCHING void func_801D1A90(void) {
-    s32            buttons;
-    u8             cursor;
-    MenuPanelTask* panel;
+    s32                     buttons;
+    u8                      cursor;
+    volatile MenuPanelTask* panel;
+    MenuPanelTask*          prev;
 
-    panel = &g_UiPanelTasks[9];
-    /* FAKE: the panel store stays above the pad-state read, as retail orders them. */
-    FAKE_BARRIER();
-    panel->active            = 1;
-    D_80148475               = 7;
-    D_80148476               = 8;
-    D_80148478               = panel[-1].pos.x;
-    g_UiPanelTasks[8].unk_0A = 1;
-    buttons                  = panel[-1].pos.y + 0x2D;
-    D_8014847F               = g_ShopStockIndex;
-    D_80148480               = g_ShopItemCount;
-    D_80148494               = D_8018E7CC;
-    D_8014847A               = buttons;
-    D_8014847E               = g_ShopPricePercent;
-    D_80148628               = panel[-1].pos.x + 4;
-    D_8014862A               = panel[-1].pos.y + 0x33;
-    D_80148340               = g_ShopItemCount != 0 ? 0x48 : 0x4E;
-    buttons                  = INPUT_REPEATED(g_PadStates[0].pressed, INPUT_DIRECTIONAL);
-    cursor                   = g_ShopItemCount;
+    panel         = &g_UiPanelTasks[9];
+    prev          = &g_UiPanelTasks[8];
+    panel->active = 1;
+    D_80148475    = 7;
+    D_80148476    = 8;
+    D_80148478    = prev->pos.x;
+    D_8014845A    = 1;
+    D_8014847F    = g_ShopStockIndex;
+    D_80148480    = g_ShopItemCount;
+    D_80148494    = D_8018E7CC;
+    D_8014847A    = prev->pos.y + 0x2D;
+    D_8014847E    = g_ShopPricePercent;
+    D_80148628    = prev->pos.x + 4;
+    D_8014862A    = prev->pos.y + 0x33;
+    D_80148340    = g_ShopItemCount != 0 ? 0x48 : 0x4E;
+    buttons       = INPUT_REPEATED(g_PadStates[0].pressed, INPUT_DIRECTIONAL);
+    cursor        = g_ShopItemCount;
     if (buttons & PADLleft) {
         g_ShopItemCount = cursor - 1;
     } else if (buttons & PADLright) {
@@ -57,13 +56,13 @@ NON_MATCHING void func_801D1A90(void) {
         if (g_ShopItemCount != 0) {
             SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 3));
             D_8014865B = 1;
-            g_MenuStep.state += 1;
+            D_80148652 += 1;
         } else {
             SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 7));
         }
     } else if (g_PadStates[0].pressed & g_InputMasks[MENU_INPUT_CANCEL]) {
         SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 6));
-        (*(s8*)&g_MenuStep.state)--;
+        g_MenuStep.state -= 1;
     }
 }
 #else

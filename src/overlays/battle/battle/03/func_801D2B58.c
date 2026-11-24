@@ -19,7 +19,6 @@
 #ifdef NON_MATCHING
 NON_MATCHING void func_801D2B58(void) {
     PartyMember* actor;
-    Stats*       stats;
     u8           id;
     u8           target;
     s32          index;
@@ -43,30 +42,29 @@ NON_MATCHING void func_801D2B58(void) {
         g_Battle.active_battler = id;
 
         if (id < 3) {
-            ACTIVE_ACTOR  = &g_Game.members[id];
-            ACTIVE_ACTION = &g_Game.members[id].u.turn.command.target;
-            actor         = D_8014637C;
-            index         = g_Game.members[id].chr.character_id * 8 + actor->facing * 2;
-            dx            = g_BattlePanelOffsets[index];
-            ACTIVE_X      = actor->screen_x.value + dx;
-            index         = g_Game.members[id].chr.character_id * 8 + actor->facing * 2;
-            dy            = D_801EB0B1[index];
-            ACTIVE_Y      = actor->screen_y.value + dy;
-            ACTIVE_DEPTH  = actor->depth;
-            stats         = &g_Game.members[id].chr.stats;
+            ACTIVE_ACTION        = &g_Game.members[id].u.turn.command.target;
+            ACTIVE_ACTOR         = &g_Game.members[id];
+            actor                = D_8014637C;
+            index                = g_Game.members[id].chr.character_id * 8 + actor->facing * 2;
+            dx                   = g_BattlePanelOffsets[index];
+            ACTIVE_X             = actor->screen_x.value + dx;
+            index                = g_Game.members[id].chr.character_id * 8 + actor->facing * 2;
+            dy                   = D_801EB0B1[index];
+            ACTIVE_Y             = actor->screen_y.value + dy;
+            ACTIVE_DEPTH         = actor->depth;
+            g_BattleCalcStats[1] = g_Game.members[id].chr.stats;
         } else {
-            ACTIVE_ACTOR  = (PartyMember*)&ENEMY_COMBATANT(id);
-            ACTIVE_ACTION = &ENEMY_COMBATANT(id).turn.command.target;
-            actor         = D_8014637C;
-            enemy         = id - 3;
-            dx            = g_BattleEnemyBattlers[enemy].panel_offset_x;
-            ACTIVE_X      = actor->screen_x.value + dx;
-            dy            = g_BattleEnemyBattlers[enemy].panel_offset_y;
-            ACTIVE_Y      = actor->screen_y.value + dy;
-            ACTIVE_DEPTH  = actor->depth;
-            stats         = &g_BattleEnemyBattlers[enemy].stats;
+            ACTIVE_ACTION        = &ENEMY_COMBATANT(id).turn.command.target;
+            ACTIVE_ACTOR         = (PartyMember*)&ENEMY_COMBATANT(id);
+            actor                = D_8014637C;
+            enemy                = id - 3;
+            dx                   = g_BattleEnemyBattlers[enemy].panel_offset_x;
+            ACTIVE_X             = actor->screen_x.value + dx;
+            dy                   = g_BattleEnemyBattlers[enemy].panel_offset_y;
+            ACTIVE_Y             = actor->screen_y.value + dy;
+            ACTIVE_DEPTH         = actor->depth;
+            g_BattleCalcStats[1] = g_BattleEnemyBattlers[enemy].stats;
         }
-        g_BattleCalcStats[1] = *stats;
 
         target = g_Battle.target_selector;
         if (target < 3) {

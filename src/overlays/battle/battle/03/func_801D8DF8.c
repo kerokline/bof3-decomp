@@ -9,7 +9,7 @@ MATCH void func_801D8DF8(s16 x, s16 y, u8 index) {
     u8  mode;
 
     GFX_AddDrawMode(GetTPage(TPAGE_DEPTH_4BIT, TPAGE_ABR_HALF, FONT_TPAGE_X, FONT_TPAGE_Y));
-    color = *(u16*)(MEM_PTR(u8, 0x80033A08u) + (((*(s8*)&g_WindowStyle) << 6) | 0x20));
+    color = *(u16*)(BATTLE_GLOBAL_BYTES_3A08 + (((*(s8*)&g_WindowStyle) << 6) | 0x20));
     r     = (color & 0x1F) * 8;
     g     = (color >> 2) & 0xF8;
     b     = (color >> 7) & 0xF8;

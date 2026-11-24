@@ -33,6 +33,8 @@
 #define BATTLE_ENDING_BYTES      ((volatile u8*)&g_Battle.phase)
 /* Single fixed-address globals (inline; no symbol binding required). */
 #define BATTLE_GLOBAL_WORD_598C  (*(u32*)&g_GfxPrimCursor)
+/* D_80033A08 as a fixed address: retail indexes the window colour words as a literal (addu at,index,at). */
+#define BATTLE_GLOBAL_BYTES_3A08 MEM_PTR(u8, 0x80033A08u)
 /* Party slot the entrance pass is on, and the entrance sub-step byte 0x801462E2. */
 #define BATTLE_PARTY_CURSOR      (((u8*)&D_80140000)[0x62E5])
 #define BATTLE_ENTRANCE_STEP     (((u8*)&D_80140000)[0x62E2])
@@ -1104,7 +1106,7 @@ static inline void BattleDrawPanelFrame(s32 x, s32 y, s32 type, s32 glyph0, s32 
 
     GFX_AddDrawMode(GetTPage(TPAGE_DEPTH_4BIT, TPAGE_ABR_HALF, FONT_TPAGE_X, FONT_TPAGE_Y));
     /* FAKE: retail reads g_WindowStyle as s8. */
-    color = *(u16*)(MEM_PTR(u8, 0x80033A08u) + (((*(s8*)&g_WindowStyle) << 6) | 0x20));
+    color = *(u16*)(BATTLE_GLOBAL_BYTES_3A08 + (((*(s8*)&g_WindowStyle) << 6) | 0x20));
     r     = PSX_COLOR_R(color) << 3;
     g     = PSX_COLOR_G(color) << 3;
     b     = PSX_COLOR_B(color) << 3;

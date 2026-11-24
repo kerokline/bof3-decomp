@@ -1,69 +1,65 @@
 #include "game_00.h"
 
 #ifdef NON_MATCHING
-NON_MATCHING void func_801A3080(Actor* actor, s32 facing) {
+NON_MATCHING void func_801A3080(Actor* actor, u8 facing) {
     Actor* work;
-    s32    slot;
-    s32    type;
-    s8     n;
-    u8     dir;
-    s16    value;
     s32    angle_x;
     s32    angle_y;
+    s8     n;
+    s16    rise;
     u16    angle;
 
-    slot    = (s32)(-(((s32)actor - (s32)g_PartyActors) * 0xD79435E5)) >> 3;
-    work    = g_Task;
+    n       = actor - g_PartyActors;
+    work    = TASK(Actor);
     angle_x = work->angle_x;
     angle_y = work->angle_y;
-    type    = facing;
-    n       = (s8)slot;
     if (n < 0) {
         n = 4;
     }
-
     if (g_ActorTurnRamps[n].flags & 1) {
         return;
     }
-
-    dir = type & BYTE_MASK;
-    if ((work->vx + work->vy) != 0) {
-        value = (s16)(Area_HeightSample(work->pos.x.fixed + g_FacingSteps[dir].x, work->pos.y.fixed + g_FacingStepY[dir * 2]) - COORD_INT(TASK(Actor)->pos.z));
+    if (work->vx + work->vy != 0) {
+        rise = Area_HeightSample(work->pos.x.fixed + g_FacingSteps[(u8)facing].x, work->pos.y.fixed + g_FacingStepY[(u8)facing * 2]) - COORD_INT(TASK(Actor)->pos.z);
         if (facing & 2) {
-            TASK(Actor)->angle_x = 0;
-            if (dir != 3) {
-                value = -value;
+            {
+                s32 slope = rise;
+
+                TASK(Actor)->angle_x = 0;
+
+                if ((u8)facing != 3) {
+                    slope = -slope;
+                }
+                angle_y = ratan2((s16)slope, 0x80);
             }
-            angle_y = ratan2(value, 0x80);
         } else {
-            if (dir != 1) {
-                value = -value;
+            {
+                s32 slope = rise;
+
+                if ((u8)facing != 1) {
+                    slope = -slope;
+                }
+                angle_x = ratan2((s16)slope, 0x80);
             }
-            angle_x              = ratan2(value, 0x80);
             TASK(Actor)->angle_y = 0;
         }
     }
-
-    work = g_Task;
-    if (work->timer != 0) {
-        g_ActorTurnRamps[n].frames_xy = (s8)(work->timer * 2);
-        g_ActorTurnRamps[n].frames_z  = (s8)(TASK(Actor)->unk_0A * 4);
-        work                          = g_Task;
-        g_ActorTurnRamps[n].delta_x   = (angle_x - work->angle_x) / (work->timer * 2);
-        g_ActorTurnRamps[n].delta_y   = (angle_y - work->angle_y) / (work->timer * 2);
-        if ((((type - 5) & BYTE_MASK) < 2) && (D_801C842A[0] < (work->angle_z & ANGLE_MASK))) {
-            angle = D_801C842A[(facing & BYTE_MASK) - 3] + ONE;
+    if (TASK(Actor)->unk_0A != 0) {
+        g_ActorTurnRamps[n].frames_xy = TASK(Actor)->unk_0A * 2;
+        g_ActorTurnRamps[n].frames_z  = TASK(Actor)->unk_0A * 4;
+        work                          = TASK(Actor);
+        g_ActorTurnRamps[n].delta_x   = (angle_x - work->angle_x) / (work->unk_0A * 2);
+        g_ActorTurnRamps[n].delta_y   = (angle_y - work->angle_y) / (work->unk_0A * 2);
+        if ((u8)(facing - 5) < 2 && g_ActorFacingAngles[3] < (work->angle_z & ANGLE_MASK)) {
+            angle = g_ActorFacingAngles[(u8)facing] + ONE;
         } else {
-            angle = g_ActorFacingAngles[type & BYTE_MASK];
+            angle = g_ActorFacingAngles[(u8)facing];
         }
         g_ActorTurnRamps[n].delta_z = ((s16)angle - (TASK(Actor)->angle_z & ANGLE_MASK)) / (TASK(Actor)->unk_0A * 4);
         return;
     }
-
-    g_ActorTurnRamps[n].delta_z = 0;
-    g_ActorTurnRamps[n].delta_y = 0;
-    g_ActorTurnRamps[n].delta_x = 0;
-    work->angle_z               = g_ActorFacingAngles[type & BYTE_MASK];
+    g_ActorTurnRamps[n].delta_x = g_ActorTurnRamps[n].delta_y = g_ActorTurnRamps[n].delta_z = 0;
+    TASK(Actor)->angle_z                                                                    = g_ActorFacingAngles[(u8)facing];
 }
 #else
 INCLUDE_ASM(func_801A3080);

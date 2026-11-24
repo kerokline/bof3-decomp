@@ -699,7 +699,7 @@ void    func_801A2AE4(Actor* entity, u8 route_flag);
 u8      func_801A2C94(Actor* actor);
 u8      func_801A2DB4(Actor* entity);
 u8      func_801A2ED4(Actor* entity, u8 route_step);
-void    func_801A3080(Actor* actor, s32 facing);
+void    func_801A3080(Actor* actor, u8 facing);
 void    func_801A3410(void* work_index);
 void    func_801A3648(void);
 void    func_801A386C(void);

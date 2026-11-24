@@ -6,56 +6,53 @@
 NON_MATCHING void func_801DA7D4(void) {
     BattleRank entries[BATTLE_PARTY_CHARACTERS_COUNT];
     BattleRank temp;
-    s32        total;
-    u32        maximum;
+    u8         n;
+    u8         i;
+    u8         count;
     u16        agility;
-    s32        index;
+    u16        maximum;
 
-    total   = 0;
+    n       = 0;
     maximum = 0;
-    for (index = BATTLE_PARTY_CHARACTERS_COUNT; (u32)(index & BYTE_MASK) < COMBATANT_COUNT; index++) {
-        if (D_801463BA == 0 || (ENEMY_COMBATANT(index & BYTE_MASK).turn.action_flags.value & BATTLER_ACTION_PREEMPTIVE_TURN)) {
-            if (func_801DB9E4(index & BYTE_MASK)) {
-                agility = ENEMY_COMBATANT(index & BYTE_MASK).stats.agility;
-                total += agility;
+    for (i = BATTLE_PARTY_CHARACTERS_COUNT; i < COMBATANT_COUNT; i++) {
+        if (D_801463BA == 0 || (ENEMY_COMBATANT(i).turn.action_flags.value & BATTLER_ACTION_PREEMPTIVE_TURN)) {
+            if (func_801DB9E4(i)) {
+                agility = ENEMY_COMBATANT(i).stats.agility;
+                n += agility;
                 if (maximum < agility) {
                     maximum = agility;
                 }
             }
         }
     }
-
-    total = 0;
-    for (index = 0; (u32)(index & BYTE_MASK) < BATTLE_PARTY_CHARACTERS_COUNT; index++) {
-        if (D_801463BA == 0 || (g_Game.members[index & BYTE_MASK].u.turn.action_flags.value & BATTLER_ACTION_PREEMPTIVE_TURN)) {
-            if (func_801DB844(index & BYTE_MASK)) {
-                entries[total & BYTE_MASK].index = index & BYTE_MASK;
-                entries[total & BYTE_MASK].value = g_Game.members[index & BYTE_MASK].chr.stats.agility;
-                total += 1;
+    for (n = 0, i = 0; i < BATTLE_PARTY_CHARACTERS_COUNT; i++) {
+        if (D_801463BA == 0 || (g_Game.members[i].u.turn.action_flags.value & BATTLER_ACTION_PREEMPTIVE_TURN)) {
+            if (func_801DB844(i)) {
+                entries[n].value = g_Game.members[i].chr.stats.agility;
+                entries[n].index = i;
+                n++;
             }
         }
     }
-
-    maximum = total;
-    if ((maximum & BYTE_MASK) >= 2) {
-        for (total = 0; (total & BYTE_MASK) < (maximum & BYTE_MASK) - 1; total++) {
-            for (index = total + 1; (index & BYTE_MASK) < (maximum & BYTE_MASK); index++) {
-                if (entries[total & BYTE_MASK].value < entries[index & BYTE_MASK].value) {
-                    temp                       = entries[total & BYTE_MASK];
-                    entries[total & BYTE_MASK] = entries[index & BYTE_MASK];
-                    entries[index & BYTE_MASK] = temp;
+    count = n;
+    if (count >= 2) {
+        for (n = 0; n < count - 1; n++) {
+            for (i = n + 1; i < count; i++) {
+                if (entries[n].value < entries[i].value) {
+                    temp       = entries[n];
+                    entries[n] = entries[i];
+                    entries[i] = temp;
                 }
             }
         }
     }
-
-    for (index = 0; (u32)(index & BYTE_MASK) < BATTLE_PARTY_CHARACTERS_COUNT; index++) {
-        D_801462F6[index & BYTE_MASK] = 0xFF;
+    for (i = 0; i < BATTLE_PARTY_CHARACTERS_COUNT; i++) {
+        D_801462F6[i] = 0xFF;
     }
     g_Battle.command_count = 0;
-    for (index = 0; (u32)(index & BYTE_MASK) < (maximum & BYTE_MASK); index++) {
-        if (func_801DB844(entries[index & BYTE_MASK].index)) {
-            D_801462F6[(s8)g_Battle.command_count] = entries[index & BYTE_MASK].index;
+    for (i = 0; i < count; i++) {
+        if (func_801DB844((u8)entries[i].index)) {
+            D_801462F6[(s8)g_Battle.command_count] = entries[i].index;
             g_Battle.command_count++;
         }
     }

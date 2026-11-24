@@ -9,23 +9,21 @@ NON_MATCHING void func_801DF00C(s32 x, s32 y) {
     u8         highlight;
     u8         clut;
     u8         flags;
-    s32        text_x;
-    s32        sprite_x;
+    s16        text_x;
+    u16        sprite_x;
     u32        row_y;
     u8         index;
     u8         shade;
+    u8*        buf;
 
     Menu_DrawWindowFrame(x, y, 0x12, 0x15);
-    base_x = x + 7;
-    base_y = y + 6;
-    if (D_801E6250 == 0) {
-        return;
-    }
+    base_x    = x + 7;
+    base_y    = y + 6;
     highlight = 0;
-    row       = 0;
-    sprite_x  = (x + 0x5D) & HALF_MASK;
+    sprite_x  = x + 0x5D;
     text_x    = x + 0x1F;
-    do {
+    buf       = g_UiTextFormatBuffer;
+    for (row = 0; row < D_801E6250; row++) {
         clut   = 0;
         row_y  = base_y & HALF_MASK;
         record = &g_Characters[g_CharSlot[D_801E6244[row & BYTE_MASK]]];
@@ -39,8 +37,8 @@ NON_MATCHING void func_801DF00C(s32 x, s32 y) {
         Menu_DrawCharacterPortrait(sprite_x, row_y, record->character_id, shade);
         UI_TextDraw((s16)(base_x + 20), (s16)(base_y + 1), index, CHARACTER_NAME_LENGTH, record);
         Menu_DrawIcon((base_x + 2) & HALF_MASK, (base_y + 0x15) & HALF_MASK, 3U, D_801D0E78[0]);
-        TEXT_Format(g_UiTextFormatBuffer, D_801D0E64, record->level);
-        UI_TextDrawGlyphString((s16)text_x, (s16)(base_y + 0x15), index, g_UiTextFormatBuffer);
+        TEXT_Format(buf, D_801D0E64, record->level);
+        UI_TextDrawGlyphString(text_x, (s16)(base_y + 0x15), index, buf);
         if ((record->status & (STATUS_CONFUSED | STATUS_POISONED)) == (STATUS_CONFUSED | STATUS_POISONED)) {
             if (g_FrameCount & 0x20) {
                 flags = 1;
@@ -79,15 +77,15 @@ NON_MATCHING void func_801DF00C(s32 x, s32 y) {
                 clut = 2;
             }
         }
-        TEXT_Format(g_UiTextFormatBuffer, D_801D0E68, record->hp);
-        UI_TextDrawGlyphString((s16)text_x, (s16)(base_y + 0x1D), clut, g_UiTextFormatBuffer);
+        TEXT_Format(buf, D_801D0E68, record->hp);
+        UI_TextDrawGlyphString(text_x, (s16)(base_y + 0x1D), clut, buf);
         if (highlight != 0) {
             clut = 7;
         } else {
             clut = (record->fatigue != 0) * 4;
         }
-        TEXT_Format(g_UiTextFormatBuffer, D_801D0E70, record->stats.max_hp);
-        UI_TextDrawGlyphString((s16)text_x, (s16)(base_y + 0x1D), clut, g_UiTextFormatBuffer);
+        TEXT_Format(buf, D_801D0E70, record->stats.max_hp);
+        UI_TextDrawGlyphString(text_x, (s16)(base_y + 0x1D), clut, buf);
         Menu_DrawIcon((base_x + 2) & HALF_MASK, (base_y + 0x25) & HALF_MASK, 1U, 0U);
         clut = 0;
         if (highlight != 0) {
@@ -100,13 +98,12 @@ NON_MATCHING void func_801DF00C(s32 x, s32 y) {
                 clut = 2;
             }
         }
-        TEXT_Format(g_UiTextFormatBuffer, D_801D0E68, record->ap);
-        row += 1;
-        UI_TextDrawGlyphString((s16)text_x, (s16)(base_y + 0x25), clut, g_UiTextFormatBuffer);
-        TEXT_Format(g_UiTextFormatBuffer, D_801D0E70, record->stats.max_ap);
-        UI_TextDrawGlyphString((s16)text_x, (s16)(base_y + 0x25), 0U, g_UiTextFormatBuffer);
+        TEXT_Format(buf, D_801D0E68, record->ap);
+        UI_TextDrawGlyphString(text_x, (s16)(base_y + 0x25), clut, buf);
+        TEXT_Format(buf, D_801D0E70, record->stats.max_ap);
+        UI_TextDrawGlyphString(text_x, (s16)(base_y + 0x25), 0U, buf);
         base_y += 0x34;
-    } while ((u32)(row & BYTE_MASK) < D_801E6250);
+    }
 }
 #else
 INCLUDE_ASM(func_801DF00C);

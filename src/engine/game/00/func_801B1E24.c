@@ -1,37 +1,42 @@
 #include "game_00.h"
 
-/* Arms the party members whose placement probes pass, then advances the party step once a later member is armed. */
-#ifdef NON_MATCHING
-NON_MATCHING void func_801B1E24(void) {
+/* Gathers the party for a leader swap: each member takes its formation spot or the leader's, then the swap advances while one is moving. */
+MATCH void func_801B1E24(void) {
+    /* FAKE: retail frame reserves 8 bytes no statement uses. */
+    FAKE_STACK_PADS(u8, 8);
+    PartyMember* leader;
     PartyMember* member;
     s32          i;
-    s8           prev;
-    s32          index;
-    s32          result;
-    s32          state;
+    s8           slot;
+    u8           count;
     u8           facing;
+    s32          ok;
+    s32          placed;
+    s32          index;
 
+    count  = g_PartySize;
     facing = g_Game.members[0].facing;
     i      = 0;
-    if (g_PartySize != 0) {
-        member = &g_Game.members[0];
+    if (count != 0) {
+        leader = &g_Game.members[0];
         do {
+            member = &leader[i];
             TASK_SET(member);
-            prev = i - 1;
-            if (prev < 0) {
-                prev = g_PartySize - 1;
+            slot = i - 1;
+            if (slot < 0) {
+                slot = count - 1;
             }
-            if ((g_Game.members[0].status.field.flags.unsigned_value & 1) == 0 && prev != 0) {
-                index  = (prev - 1) * 2 + facing * 4;
-                result = func_801B1B2C(g_Game.members[0].pos.x.fixed + (s_EntityPlacementOffsets[index] << 15), g_Game.members[0].pos.y.fixed + (s_EntityPlacementOffsets[index + 1] << 15), facing,
-                                       member->speed);
-                if (((result & BYTE_MASK) != 0) && ((func_801B1C18(SP_REF(s32, 0x8u), SP_REF(s32, 0xCu), TASK(PartyMember)->speed) & BYTE_MASK) != 0)) {
+            if (!(leader->status.field.flags.unsigned_value & 1) && slot != 0) {
+                index  = (slot - 1) * 2 + facing * 4;
+                ok     = func_801B1B2C(leader->pos.x.fixed + (s_EntityPlacementOffsets[index] << 15), leader->pos.y.fixed + (s_EntityPlacementOffsets[index + 1] << 15), facing, member->speed);
+                placed = (ok & BYTE_MASK) ? func_801B1C18(SP_REF(s32, 0x8u), SP_REF(s32, 0xCu), TASK(PartyMember)->speed) : 0;
+                if ((ok & BYTE_MASK) && (placed & BYTE_MASK)) {
                     goto found;
                 }
-                if ((func_801B1B2C(g_Game.members[0].pos.x.fixed, g_Game.members[0].pos.y.fixed, facing, TASK(PartyMember)->speed) & BYTE_MASK) == 0) {
+                if (!(func_801B1B2C(D_80145EC4, D_80145EC8, facing, TASK(PartyMember)->speed) & BYTE_MASK)) {
                     goto next;
                 }
-            } else if ((func_801B1B2C(g_Game.members[0].pos.x.fixed, g_Game.members[0].pos.y.fixed, facing, member->speed) & BYTE_MASK) == 0) {
+            } else if (!(func_801B1B2C(leader->pos.x.fixed, leader->pos.y.fixed, facing, member->speed) & BYTE_MASK)) {
                 goto next;
             }
         found:
@@ -42,23 +47,16 @@ NON_MATCHING void func_801B1E24(void) {
                 TASK(PartyMember)->unk_5C = 1;
             }
         next:
+            count = g_PartySize;
             i++;
-            member++;
-        } while (i < g_PartySize);
+        } while (i < count);
     }
-
-    i = 1;
     TASK_SET(g_Game.members);
-    state = 4;
-    while (i < g_PartySize) {
+    for (i = 1; i < g_PartySize; i++) {
         if (g_Game.members[i].header.mode == 3) {
-            state = TASK(PartyMember)->header.step + 1;
-            break;
+            TASK(PartyMember)->header.step = TASK(PartyMember)->header.step + 1;
+            return;
         }
-        i++;
     }
-    TASK(PartyMember)->header.step = state;
+    TASK(PartyMember)->header.step = 4;
 }
-#else
-INCLUDE_ASM(func_801B1E24);
-#endif

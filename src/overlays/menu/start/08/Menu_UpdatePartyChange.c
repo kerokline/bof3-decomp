@@ -1,85 +1,94 @@
 #include "start_08.h"
 
 /* func_801DA474 */
-#ifdef NON_MATCHING
-NON_MATCHING void Menu_UpdatePartyChange(void) {
-    u8*          panel_data;
+MATCH void Menu_UpdatePartyChange(void) {
+    u8*          clut;
+    volatile u8* frame;
+    u8*          side;
+    s8*          row;
+    s32          next;
     s32          input;
     s32          index;
     u8           count;
     u8           old_side;
     u8           old_row;
     u8           result;
-    s16          id;
-    volatile u8* flag;
+    u16          y;
 
-    panel_data = &g_WindowClut;
-    Menu_DrawClutStrip(*panel_data);
-    flag                                                 = &D_801485DC;
-    *flag                                                = 0;
+    clut = &g_WindowClut;
+    Menu_DrawClutStrip(*clut);
+    frame                                                = &D_801485DC;
+    *frame                                               = 0;
     index                                                = D_80148658[0] * 8 + D_80148659 * 0x10;
     D_80148600                                           = 0;
     D_801485E0                                           = FIELD(u16, &D_801EC548, index);
-    *flag                                                = 1;
-    D_801485E2                                           = FIELD(u16, &D_801EC54A, index);
-    g_UiPanelTasks[MENU_START_PANEL_CURSOR_FRAME].unk_0B = 1;
+    y                                                    = FIELD(u16, &D_801EC54A, index);
+    *frame                                               = 1;
+    D_801485E2                                           = y;
     g_UiPanelTasks[MENU_START_PANEL_CURSOR_FRAME].unk_0A = FIELD(s32, &D_801EC54C, index);
+    g_UiPanelTasks[MENU_START_PANEL_CURSOR_FRAME].unk_0B = 1;
     if ((s8)D_8014865D != 0x7F) {
-        index                     = (s8)D_8014865A * 8 + (s8)D_8014865D * 0x10;
-        g_UiPanelTasks[20].pos.x  = FIELD(u16, &D_801EC548, index);
+        s32 cell;
+        u16 y2;
+
+        cell                      = (s8)D_8014865A * 8 + (s8)D_8014865D * 0x10;
+        g_UiPanelTasks[20].pos.x  = FIELD(u16, &D_801EC548, cell);
+        y2                        = FIELD(u16, &D_801EC54A, cell);
         D_80148600                = 1;
-        g_UiPanelTasks[20].pos.y  = FIELD(u16, &D_801EC54A, index);
+        g_UiPanelTasks[20].pos.y  = y2;
+        g_UiPanelTasks[20].unk_0A = FIELD(s32, &D_801EC54C, cell);
         g_UiPanelTasks[20].unk_0B = 0;
-        g_UiPanelTasks[20].unk_0A = FIELD(s32, &D_801EC54C, index);
     }
     if (D_801ED69C == GAME_NONE) {
-        id = 0x60;
+        D_801484CC = 0x60;
     } else {
-        UI_MessageSetVariable(0U, 5U, g_CharSlot[D_801ED69C] * 0xA4 + (panel_data + 0x15));
-        id = 0x61;
+        s32 offset;
+        u8* name;
+
+        offset = g_CharSlot[D_801ED69C] * 0xA4;
+        name   = clut + 0x15;
+        UI_MessageSetVariable(0, 5, name + offset);
+        D_801484CC = 0x61;
     }
-    D_801484CC = id;
-    input      = INPUT_REPEATED(g_PadStates[0].pressed, INPUT_DIRECTIONAL);
-    count      = Party_CountOrder(PARTY_ORDER_FIELD);
-    old_side   = *(u8*)D_80148658;
-    old_row    = *(u8*)&D_80148659;
-    if ((input & (PADLright | PADLleft)) && (g_UiPanelTasks[MENU_START_PANEL_COMMANDS].unk_0A != 0)) {
-        *(u8*)D_80148658 = old_side ^ 1;
+    input    = INPUT_REPEATED(g_PadStates[0].pressed, INPUT_DIRECTIONAL);
+    count    = Party_CountOrder(PARTY_ORDER_FIELD);
+    side     = (u8*)D_80148658;
+    old_side = *side;
+    old_row  = D_80148659;
+    if ((input & (PADLright | PADLleft)) && g_UiPanelTasks[MENU_START_PANEL_COMMANDS].unk_0A != 0) {
+        *side = old_side ^ 1;
     }
     if (D_80148658[0] == 0) {
         if (count - 1 < D_80148659) {
-            *(u8*)&D_80148659 = count - 1;
+            D_80148659 = count - 1;
         }
-    } else {
-        if (g_UiPanelTasks[MENU_START_PANEL_COMMANDS].unk_0A - 1 < D_80148659) {
-            *(u8*)&D_80148659 = g_UiPanelTasks[MENU_START_PANEL_COMMANDS].unk_0A - 1;
-        }
+    } else if (g_UiPanelTasks[MENU_START_PANEL_COMMANDS].unk_0A - 1 < D_80148659) {
+        D_80148659 = g_UiPanelTasks[MENU_START_PANEL_COMMANDS].unk_0A - 1;
     }
     if (input & PADLup) {
-        *(u8*)&D_80148659 -= 1;
-        if ((s8) * (u8*)&D_80148659 < 0) {
-            *(u8*)&D_80148659 = D_80148658[0] != 0 ? g_UiPanelTasks[MENU_START_PANEL_COMMANDS].unk_0A - 1 : count - 1;
+        row = &D_80148659;
+        *row -= 1;
+        if (*row < 0) {
+            *row = D_80148658[0] == 0 ? count - 1 : g_UiPanelTasks[MENU_START_PANEL_COMMANDS].unk_0A - 1;
         }
     } else if (input & PADLdown) {
-        *(u8*)&D_80148659 += 1;
-        if (D_80148658[0] == 0) {
-            if (count - 1 < (s8) * (u8*)&D_80148659) {
-                *(u8*)&D_80148659 = 0;
-            }
-        } else if (g_UiPanelTasks[MENU_START_PANEL_COMMANDS].unk_0A - 1 < (s8) * (u8*)&D_80148659) {
-            *(u8*)&D_80148659 = 0;
+        s8* down = &D_80148659;
+
+        next = ++*down;
+        if ((D_80148658[0] == 0 && count - 1 < next) || (D_80148658[0] != 0 && g_UiPanelTasks[MENU_START_PANEL_COMMANDS].unk_0A - 1 < next)) {
+            D_80148659 = 0;
         }
     }
-    if (old_side != *(u8*)D_80148658 || old_row != *(u8*)&D_80148659) {
+    if (old_side != (u8)D_80148658[0] || old_row != (u8)D_80148659) {
         SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 0));
     }
     if (g_PadStates[0].pressed & g_InputMasks[MENU_INPUT_CONFIRM]) {
-        s8* face = (s8*)&D_8014865A;
+        s8* pick = (s8*)&D_8014865A;
 
-        if (*face == 0x7F) {
+        if (*pick == 0x7F) {
             SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 3));
-            *face      = *(u8*)D_80148658;
-            D_8014865D = *(u8*)&D_80148659;
+            *pick      = D_80148658[0];
+            D_8014865D = D_80148659;
             return;
         }
         result     = Menu_SwapPartyMembers();
@@ -90,12 +99,12 @@ NON_MATCHING void Menu_UpdatePartyChange(void) {
         return;
     }
     if (g_PadStates[0].pressed & g_InputMasks[MENU_INPUT_CANCEL]) {
-        s8* face;
+        s8* pick;
 
         SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 6));
-        face = (s8*)&D_8014865A;
-        if (*face != 0x7F) {
-            *face      = 0x7F;
+        pick = (s8*)&D_8014865A;
+        if (*pick != 0x7F) {
+            *pick      = 0x7F;
             D_8014865D = 0x7F;
             return;
         }
@@ -106,6 +115,3 @@ NON_MATCHING void Menu_UpdatePartyChange(void) {
         D_80148652 += 1;
     }
 }
-#else
-INCLUDE_ASM(Menu_UpdatePartyChange);
-#endif

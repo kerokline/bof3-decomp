@@ -3,58 +3,56 @@
 #ifdef NON_MATCHING
 NON_MATCHING void func_801F5600(void) {
     s32 i;
+    u16 frames;
 
     Actor_ClearVelocity_801F5F20();
-    D_80144F54++;
+    (*(u16*)&D_80144EF8[0x5C])++;
     g_EncounterSteps++;
-    if (D_80144F54 == 0x1E0) {
-        if (D_80144F57 != 0) {
-            D_80144F57 += 8;
+    if ((*(u16*)&D_80144EF8[0x5C]) == 0x1E0) {
+        if (D_80144EF8[0x5F] != 0) {
+            D_80144EF8[0x5F] += 8;
         }
         D_8014933C = 0;
         g_ScenarioState.flags_01 &= 0xFE;
         MESSAGE_START_WAIT(5);
     }
-    if (D_80144F54 == 0x3C0) {
-        if (D_80144F57 != 0) {
-            D_80144F57 += 8;
+    if ((*(u16*)&D_80144EF8[0x5C]) == 0x3C0) {
+        if (D_80144EF8[0x5F] != 0) {
+            D_80144EF8[0x5F] += 8;
         }
-        D_80144F54 = 0;
-        D_8014933C = 1;
-        D_80144F56++;
+        (*(u16*)&D_80144EF8[0x5C]) = 0;
+        D_8014933C                 = 1;
+        D_80144EF8[0x5E]++;
         g_ScenarioState.flags_01 |= 1;
         MESSAGE_START_WAIT(6);
     }
-    if (D_80144F57 != 0) {
-        /* Drops once with the variant byte set, up to three times with it clear. */
-        i = 0;
-        do {
-            if (D_80144F57 != 0) {
-                D_80144F57--;
+    if (D_80144EF8[0x5F] != 0) {
+        for (i = 0; i < (D_8014933C == 0 ? 3 : 1); i++) {
+            if (D_80144EF8[0x5F] != 0) {
+                D_80144EF8[0x5F]--;
             }
-            i++;
-        } while (D_8014933C == 0 && i < 3);
+        }
         D_80146880 = 0;
         D_80146881 = 0;
-        if (D_80144F57 == 0) {
+        if (D_80144EF8[0x5F] == 0) {
             MESSAGE_START_WAIT(1);
         }
     } else {
-        if (D_80146880 < (rand() & 7) + D_8014933C * 20 + 7) {
-            D_80146880++;
-        } else {
+        if (LOBU(D_80146880) >= (rand() & 7) + D_8014933C * 20 + 7) {
             D_80146880 = 0;
-            if (D_80146881 < 4) {
-                func_801F6088();
-                g_AreaSceneMode = 1;
-                SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 8));
-                D_80146881++;
-            } else {
+            if (LOBU(D_80146881) >= 4) {
                 Char_AddFatigue();
                 g_AreaSceneMode = 2;
                 SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 0xB));
                 D_80146881 = 0;
+            } else {
+                func_801F6088();
+                g_AreaSceneMode = 1;
+                SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 8));
+                D_80146881++;
             }
+        } else {
+            D_80146880++;
         }
     }
     if (g_GameStateIndex == GAME_REQUEST_MESSAGE) {

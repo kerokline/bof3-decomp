@@ -1,6 +1,6 @@
 #include "area189_13.h"
 
-/* Start the desert walk: camera, leader height and the encounter pace from the party equipment. */
+/* Start the leader walk: camera, leader height and the encounter pace from the party equipment. */
 MATCH void func_801F4DE0(void) {
     s32 value;
     s32 count;

@@ -1,10 +1,10 @@
 #include "area111_13.h"
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801F3808(void) {
+/* Place the current member on the grid: clear its old cell, then mark the cell under the task. */
+MATCH void func_801F3808(void) {
     s16 x;
     s16 y;
-    s32 index;
+    u8  index;
     u8  row;
     u8  col;
 
@@ -14,9 +14,9 @@ NON_MATCHING void func_801F3808(void) {
     func_801F4604(x, y, 0);
     for (row = 0; row < 7; row++) {
         for (col = 0; col < 7; col++) {
-            if ((D_801F5C18[row][col / 2] & 0xF) == (u8)index) {
+            if ((D_801F5C18[row][col / 2] & 0xF) == index) {
                 D_801F5C18[row][col / 2] &= 0xF0;
-            } else if ((D_801F5C18[row][col / 2] >> 4) == (u8)index) {
+            } else if ((D_801F5C18[row][col / 2] >> 4) == index) {
                 D_801F5C18[row][col / 2] &= 0xF;
             }
         }
@@ -28,6 +28,3 @@ NON_MATCHING void func_801F3808(void) {
     }
     SND_SEPlay(EMI_SE_ID(SND_BANK_AREA, 4));
 }
-#else
-INCLUDE_ASM(func_801F3808);
-#endif

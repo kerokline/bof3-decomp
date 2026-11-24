@@ -1,21 +1,16 @@
 #include "start_08.h"
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801D53AC(void) {
+MATCH void func_801D53AC(void) {
     s32 pressed;
     u8  old;
-    u16 x;
-    u16 id;
 
     Menu_DrawClutStrip(g_WindowClut);
-    id                                                        = D_801EC440[(s8)D_801ED620];
-    x                                                         = (u16)g_UiPanelTasks[MENU_START_PANEL_COMMANDS].pos.x + (s8)D_801ED620 * 0x30;
+    g_UiPanelTasks[MENU_START_PANEL_DESCRIPTION].u.message.id = D_801EC440[(s8)D_801ED620];
     g_UiPanelTasks[MENU_START_PANEL_CURSOR].active            = 1;
+    g_UiPanelTasks[MENU_START_PANEL_CURSOR].pos.x             = (u16)g_UiPanelTasks[MENU_START_PANEL_COMMANDS].pos.x + (s8)D_801ED620 * 0x30;
     g_UiPanelTasks[MENU_START_PANEL_CURSOR].pos.y             = (u16)g_UiPanelTasks[MENU_START_PANEL_COMMANDS].pos.y + 4;
     g_UiPanelTasks[MENU_START_PANEL_ITEMS].flags              = 1;
-    g_UiPanelTasks[MENU_START_PANEL_CURSOR].pos.x             = x;
     g_UiPanelTasks[MENU_START_PANEL_COMMANDS].unk_0B          = 0xFF;
-    g_UiPanelTasks[MENU_START_PANEL_DESCRIPTION].u.message.id = id;
     pressed                                                   = INPUT_GetRepeatedButtons(g_PadStates[0].pressed & (PADLright | PADLleft));
     old                                                       = D_801ED620;
     if (pressed & PADLleft) {
@@ -37,7 +32,7 @@ NON_MATCHING void func_801D53AC(void) {
         SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 4));
         g_UiPanelTasks[MENU_START_PANEL_CURSOR].active   = 0;
         g_UiPanelTasks[MENU_START_PANEL_COMMANDS].unk_0B = D_801ED620;
-        g_MenuStep.sub_step += 1;
+        g_MenuStep.sub_step++;
         return;
     }
     if (g_PadStates[0].pressed & g_InputMasks[MENU_INPUT_CANCEL]) {
@@ -55,6 +50,3 @@ NON_MATCHING void func_801D53AC(void) {
         *step += 5;
     }
 }
-#else
-INCLUDE_ASM(func_801D53AC);
-#endif

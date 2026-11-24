@@ -4,72 +4,83 @@
 
 #ifdef NON_MATCHING
 NON_MATCHING s32 func_801C41D0(s32 pos_x, s32 pos_y, s16 probe_range) {
-    s32 a;
-    s32 b;
+    Coord a;
+    Coord b;
+
     s32 dist;
     s32 found;
     u16 saved;
 
     if (func_801C3E80(pos_x, pos_y, 1) & BYTE_MASK)
         return 1;
-    a = (((u32)pos_x >> 16) << 16) | 0x8000;
-    b = (((u32)pos_y >> 16) << 16) | 0x8000;
-    if (BLOCKED(a, b, 4))
+    a.part.fraction = 0x8000;
+    a.part.integer  = (pos_x >> 16);
+    b.part.fraction = 0x8000;
+    b.part.integer  = (pos_y >> 16);
+    if (BLOCKED(a.fixed, b.fixed, 4))
         return 1;
-    a &= 0xFFFF0000;
-    a |= 0x8000;
-    b &= 0xFFFF0000;
-    if (BLOCKED(a, b, 3))
+    a.part.fraction = 0x8000;
+    b.part.fraction = 0;
+    if (BLOCKED(a.fixed, b.fixed, 3))
         return 1;
-    a &= 0xFFFF0000;
-    b &= 0xFFFF0000;
-    b |= 0x8000;
-    if (BLOCKED(a, b, 5))
+    a.part.fraction = 0;
+    b.part.fraction = 0x8000;
+    if (BLOCKED(a.fixed, b.fixed, 5))
         return 1;
-    if ((pos_x & HALF_MASK) == 0) {
-        a = (((pos_x >> 16) - 1) << 16) | 0x8000;
-        b = ((u32)pos_y >> 16) << 16;
-        if (BLOCKED(a, b, 7))
+    if ((pos_x & 0xFFFF) == 0) {
+        a.part.fraction = 0x8000;
+        a.part.integer  = (pos_x >> 16) - 1;
+        b.part.fraction = 0;
+        b.part.integer  = (pos_y >> 16);
+        if (BLOCKED(a.fixed, b.fixed, 7))
             return 1;
-        b = (b & HALF_MASK) | (((pos_y >> 16) + 1) << 16);
-        if (BLOCKED(a, b, 7))
+        b.part.integer = (pos_y >> 16) + 1;
+        if (BLOCKED(a.fixed, b.fixed, 7))
             return 1;
-        a = (a & HALF_MASK) | (((u32)pos_x >> 16) << 16);
-        b = (b & HALF_MASK) | (((pos_y >> 16) + 1) << 16);
-        if (BLOCKED(a, b, 7))
+        a.part.integer = (pos_x >> 16);
+        b.part.integer = (pos_y >> 16) + 1;
+        if (BLOCKED(a.fixed, b.fixed, 7))
             return 1;
-        a = ((pos_x >> 16) - 1) << 16;
-        b = (((u32)pos_y >> 16) << 16) | 0x8000;
-        if (BLOCKED(a, b, 1))
+        a.part.fraction = 0;
+        a.part.integer  = (pos_x >> 16) - 1;
+        b.part.fraction = 0x8000;
+        b.part.integer  = (pos_y >> 16);
+        if (BLOCKED(a.fixed, b.fixed, 1))
             return 1;
-        a = (a & HALF_MASK) | (((pos_x >> 16) + 1) << 16);
-        if (BLOCKED(a, b, 1))
+        a.part.integer = (pos_x >> 16) + 1;
+        if (BLOCKED(a.fixed, b.fixed, 1))
             return 1;
     }
-    if ((pos_y & HALF_MASK) == 0) {
-        b = (((pos_y >> 16) - 1) << 16) | 0x8000;
-        a = ((u32)pos_x >> 16) << 16;
-        if (Area_HeightReadStep(a, b, 1) + 1 > 0x41 && ((u8*)&g_ScratchPad)[0])
+    if ((pos_y & 0xFFFF) == 0) {
+        b.part.fraction = 0x8000;
+        b.part.integer  = (pos_y >> 16) - 1;
+        a.part.fraction = 0;
+        a.part.integer  = (pos_x >> 16);
+        if (BLOCKED(a.fixed, b.fixed, 1))
             return 1;
-        a = (a & HALF_MASK) | (((pos_x >> 16) + 1) << 16);
-        if (BLOCKED(a, b, 1))
+        a.part.integer = (pos_x >> 16) + 1;
+        if (BLOCKED(a.fixed, b.fixed, 1))
             return 1;
-        b = (b & HALF_MASK) | (((u32)pos_y >> 16) << 16);
-        a = (a & HALF_MASK) | (((pos_x >> 16) + 1) << 16);
-        if (BLOCKED(a, b, 1))
+        b.part.integer = (pos_y >> 16);
+        a.part.integer = (pos_x >> 16) + 1;
+        if (BLOCKED(a.fixed, b.fixed, 1))
             return 1;
-        a = (((u32)pos_x >> 16) << 16) | 0x8000;
-        b = ((pos_y >> 16) - 1) << 16;
-        if (BLOCKED(a, b, 3))
+        a.part.fraction = 0x8000;
+        a.part.integer  = (pos_x >> 16);
+        b.part.fraction = 0;
+        b.part.integer  = (pos_y >> 16) - 1;
+        if (BLOCKED(a.fixed, b.fixed, 3))
             return 1;
-        b = (b & HALF_MASK) | (((pos_y >> 16) + 1) << 16);
-        if (BLOCKED(a, b, 3))
+        b.part.integer = (pos_y >> 16) + 1;
+        if (BLOCKED(a.fixed, b.fixed, 3))
             return 1;
     }
-    if ((pos_x & HALF_MASK) == 0 && (pos_y & HALF_MASK) == 0) {
-        a = ((pos_x >> 16) - 1) << 16;
-        b = ((pos_y >> 16) - 1) << 16;
-        if (BLOCKED(a | 0x8000, b | 0x8000, 0))
+    if ((pos_x & 0xFFFF) == 0 && (pos_y & 0xFFFF) == 0) {
+        a.part.fraction = 0;
+        a.part.integer  = (pos_x >> 16) - 1;
+        b.part.fraction = 0;
+        b.part.integer  = (pos_y >> 16) - 1;
+        if (BLOCKED(a.fixed | 0x8000, b.fixed | 0x8000, 0))
             return 1;
     }
     dist = Area_HeightRead(pos_x, pos_y) - probe_range;

@@ -1,13 +1,11 @@
 #include "area040_13.h"
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801F37D4(void) {
+/* Each 4x4 cell with code 0x50 and a cell id gets a flat quad at its corners, grey pulsing with the frame. */
+MATCH void func_801F37D4(void) {
     POLY_F4* prim;
     s32      shade;
     s32      id;
     s32      x;
-    s32      sx;
-    s32      sy;
     u8       i;
     s32      j;
 
@@ -28,18 +26,10 @@ NON_MATCHING void func_801F37D4(void) {
             prim->x1 = g_AreaCellPrims[id][(g_GfxBufferIndex) ? (0) : (1)].x1, prim->y1 = g_AreaCellPrims[id][(g_GfxBufferIndex) ? (0) : (1)].y1,
             prim->x2 = g_AreaCellPrims[id][(g_GfxBufferIndex) ? (0) : (1)].x2, prim->y2 = g_AreaCellPrims[id][(g_GfxBufferIndex) ? (0) : (1)].y2,
             prim->x3 = g_AreaCellPrims[id][(g_GfxBufferIndex) ? (0) : (1)].x3, prim->y3 = g_AreaCellPrims[id][(g_GfxBufferIndex) ? (0) : (1)].y3;
-            sx    = x << 16;
-            sy    = (i + 0x20) << 16;
-            shade = ((g_FrameCount >> 1) & 0xF) - 8;
-            if (shade < 0) {
-                shade = -shade;
-            }
-            shade *= 31;
+            shade    = ((g_FrameCount >> 1) & 0xF) - 8;
+            shade    = (shade < 0 ? -shade : shade) * 31;
             prim->r0 = (prim->g0 = (prim->b0 = shade));
-            Area_CellAddPrim(sx, sy, 0, sizeof(POLY_F4));
+            Area_CellAddPrim(x << 16, (i + 0x20) << 16, 0, sizeof(POLY_F4));
         }
     }
 }
-#else
-INCLUDE_ASM(func_801F37D4);
-#endif

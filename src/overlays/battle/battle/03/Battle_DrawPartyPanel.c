@@ -16,7 +16,7 @@ NON_MATCHING void Battle_DrawPartyPanel(s16 x, s16 y) {
     Battle_DrawPanelShape(x, y, ((g_Battle.party_count * 2) + 0xA) & 0xFE, 1);
     Battle_DrawPanelShape(x, (s16)(y + 0x18), ((g_Battle.party_count * 2) + 0xB) & BYTE_MASK, 1);
     Battle_DrawWindowTile(x, (s16)(y + 2), (g_Battle.party_count + 0xD) & BYTE_MASK, 1);
-    color = *(u16*)(MEM_PTR(u8, 0x80033A08u) + (((*(s8*)&g_WindowStyle) << 6) | 0x20));
+    color = *(u16*)(BATTLE_GLOBAL_BYTES_3A08 + (((*(s8*)&g_WindowStyle) << 6) | 0x20));
     r     = PSX_COLOR_R(color) << 3;
     g     = PSX_COLOR_G(color) << 3;
     b     = PSX_COLOR_B(color) << 3;

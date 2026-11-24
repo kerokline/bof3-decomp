@@ -24,7 +24,11 @@ void              func_801DE9A8(u8 entry);
 s32               func_801EF6C0(void);
 u16               func_801EF928(s32 id, s32 flag);
 extern void       func_801EFE5C(void);
-void              func_801F039C(s16 x, s16 y, s32 width, s32 height);
+void              func_801F039C(s16 x, s16 y, s16 width, s16 height);
+/* The battle panel helpers of BATTLE.EMI: a corner or edge shape and the two frame lines. */
+void              func_801D9AB4(s16 x, s16 y, s32 shape, s32 shade);
+void              func_801DA5A8(s16 x0, s16 y0, s16 x1, s16 y1, u8 r, u8 g, u8 b);
+void              func_801DA4B4(s16 x0, s16 y0, s16 x1, s16 y1, u8 r, u8 g, u8 b);
 extern void       func_801F07C0(void);
 extern void       func_801F07E0(void);
 extern Callback   D_801F0C98[];

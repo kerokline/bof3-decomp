@@ -366,7 +366,7 @@ extern u16                 D_80146918[][ACTOR_SIZE / 2];
 extern u8                  D_8014691C[ENTITY_MAX][ACTOR_SIZE]; /* 0x8014691C */
 /* D_80147A58 */
 extern u16                 D_801481D8;
-extern u16                 D_801481E0;         /* 0x801481E0 */
+extern u16                 D_801481E0;
 extern Pos3                D_801481E8;         /* scene angle, 16.16 fixed point */
 extern Pos3                D_801481F8;         /* per-frame step of D_801481E8 */
 extern s16                 D_8014820C;         /* 0x8014820C */

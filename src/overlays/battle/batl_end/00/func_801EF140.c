@@ -13,7 +13,7 @@ MATCH void func_801EF140(void) {
         return;
     }
     func_801DE9A8((g_Battle.selection - 1) & BYTE_MASK);
-    g_Battle.level = g_Characters[g_Battle.cursor.gene.column].level;
+    g_Battle.level       = g_Characters[g_Battle.cursor.gene.column].level;
     g_Battle.level_shown = g_Characters[g_Battle.cursor.gene.column].level + func_801EF928(g_Battle.cursor.gene.column, 0);
     sprintf((char*)D_801490F8, D_801EEC04, g_Battle.level_shown);
     g_BattleEventSlots[0].payload = UI_MessageGetText(7);

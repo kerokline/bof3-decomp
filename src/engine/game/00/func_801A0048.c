@@ -2,14 +2,14 @@
 
 /* Finds the area link at a map cell and makes its destination the pending area change; true when none. */
 MATCH bool func_801A0048(s32 cell_x, s32 cell_y) {
-    GameLocale*     link;
+    GameLocale*       link;
     GameLocaleChoice* choice;
-    s32             n;
-    s32             i;
-    s32             count;
-    GameLocaleBank* bank;
-    u32             x;
-    u32             y;
+    s32               n;
+    s32               i;
+    s32               count;
+    GameLocaleBank*   bank;
+    u32               x;
+    u32               y;
 
     n = ((GameLocaleBank**)g_AreaLoads)[g_GameAreaId]->outer;
     for (; n >= 0; n--) {

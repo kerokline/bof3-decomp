@@ -33,7 +33,7 @@ s32         func_800AC704(s32 entry_id);
 /* func_800AC870 */
 void        Battle_CopyActorEntry(s32 entry_id, PartyMember* source_record, s32 mode);
 extern void func_800ACF80(void);
-void        func_800AEEC8(s32 arg0, u8 arg1);
+void        func_800AEEC8(s32 effect_mode, u8 target_slot);
 void        func_800AD26C(void);
 void        func_800AE014(void);
 /* func_800AEF98 */

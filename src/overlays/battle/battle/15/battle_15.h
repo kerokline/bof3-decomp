@@ -437,7 +437,6 @@ extern u8                                D_800B7088[][2]; /* Flag bytes cleared 
 extern u8                                D_800B70B8[];
 extern u8                                D_800E4050;
 extern u16                               D_800E405E;
-extern u16                               D_800E4068;
 /* Playable-character records are byte-addressed; each typed record is 0xA4 bytes. */
 extern volatile u32                      D_80144F60[];
 extern u8                                D_801454FD; /* plain: Battle_SelectItem stores it outside the volatile order */

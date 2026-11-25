@@ -35,6 +35,8 @@
 #define BATTLE_GLOBAL_WORD_598C  (*(u32*)&g_GfxPrimCursor)
 /* D_80033A08 as a fixed address: retail indexes the window colour words as a literal (addu at,index,at). */
 #define BATTLE_GLOBAL_BYTES_3A08 MEM_PTR(u8, 0x80033A08u)
+/* The same window color words read a halfword at a time: 32 per window style. */
+#define BATTLE_WINDOW_COLORS     MEM_PTR(u16, 0x80033A08u)
 /* Party slot the entrance pass is on, and the entrance sub-step byte 0x801462E2. */
 #define BATTLE_PARTY_CURSOR      (((u8*)&D_80140000)[0x62E5])
 #define BATTLE_ENTRANCE_STEP     (((u8*)&D_80140000)[0x62E2])

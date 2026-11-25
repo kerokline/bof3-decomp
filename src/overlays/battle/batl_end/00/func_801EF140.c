@@ -13,19 +13,19 @@ MATCH void func_801EF140(void) {
         return;
     }
     func_801DE9A8((g_Battle.selection - 1) & BYTE_MASK);
-    *(u16*)&g_Battle.unk_D0[2] = g_Characters[g_Battle.cursor.gene.column].level;
-    *(u16*)&g_Battle.unk_D0[4] = g_Characters[g_Battle.cursor.gene.column].level + func_801EF928(g_Battle.cursor.gene.column, 0);
-    sprintf((char*)D_801490F8, D_801EEC04, *(u16*)&g_Battle.unk_D0[4]);
+    g_Battle.level = g_Characters[g_Battle.cursor.gene.column].level;
+    g_Battle.level_shown = g_Characters[g_Battle.cursor.gene.column].level + func_801EF928(g_Battle.cursor.gene.column, 0);
+    sprintf((char*)D_801490F8, D_801EEC04, g_Battle.level_shown);
     g_BattleEventSlots[0].payload = UI_MessageGetText(7);
     for (i = 1; i < 7; i++) {
         if (func_801EF928(g_Battle.cursor.gene.column, (u8)i) != 0) {
             height += 0x10;
         }
     }
-    if (g_LevelGrowth[g_Battle.cursor.gene.column][*(u16*)&g_Battle.unk_D0[2]].ability != 0) {
+    if (g_LevelGrowth[g_Battle.cursor.gene.column][g_Battle.level].ability != 0) {
         height += 0x10;
     }
-    if (g_LevelGrowth[g_Battle.cursor.gene.column][*(u16*)&g_Battle.unk_D0[2]].extra_ability != 0) {
+    if (g_LevelGrowth[g_Battle.cursor.gene.column][g_Battle.level].extra_ability != 0) {
         height += 0x10;
     }
     UI_PanelOpenTask(1, 4);
@@ -36,6 +36,6 @@ MATCH void func_801EF140(void) {
     FAKE_BARRIER();
     step                     = g_Battle.ui_mode;
     g_UiPanelTasks[1].unk_0A = g_Battle.cursor.gene.column;
-    g_UiPanelTasks[1].unk_0B = *(u16*)&g_Battle.unk_D0[2];
+    g_UiPanelTasks[1].unk_0B = g_Battle.level;
     g_Battle.ui_mode         = step - 1;
 }

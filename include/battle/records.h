@@ -1064,7 +1064,10 @@ typedef struct BattleState {
     /* 0xC4 */ Callback          choose_ending_hook;
     /* 0xC8 */ Callback          end_hook;
     /* 0xCC */ BossEventCallback boss_event_hook;
-    /* 0xD0 */ u8                unk_D0[14];
+    /* 0xD0 */ u8                unk_D0[2];
+    /* 0xD2 */ u16               level;       /* the victory level-up panel: the level of the cursor character */
+    /* 0xD4 */ u16               level_shown; /* that level plus func_801EF928(column, 0), the number the panel prints */
+    /* 0xD6 */ u8                unk_D6[8];
     /* 0xDE */ u16               unk_DE; /* boss055 reads the script index here; boss001 counts frames in it */
     /* 0xE0 */ u16               action_id;
     /* 0xE2 */ u8                unk_E2[2];

@@ -167,13 +167,26 @@ typedef struct {
 
 ASSERT_SIZE(GameLocale, 0x0C);
 
+/* One destination of an area link whose key is 0xFFFF: the first whose scene flag is set is taken. */
 typedef struct {
-    u8          pad_00[0x20]; /* 0x00-0x1F */
-    GameLocale* entries;      /* 0x20 */
-    u32*        keys;         /* 0x24 */
-    u8*         counts;       /* 0x28 */
-    u8          pad_2C[4];    /* 0x2C-0x2F */
-    u8          outer;        /* 0x30 */
+    u16 area_id;    /* 0x00 */
+    u16 x;          /* 0x02 */
+    u16 y;          /* 0x04 */
+    u8  flag_block; /* 0x06: the 8-byte block of g_SceneFlagWords */
+    u8  flag_bit;   /* 0x07 */
+    u8  facing;     /* 0x08 */
+    u8  pad_09;
+} GameLocaleChoice;
+
+ASSERT_SIZE(GameLocaleChoice, 0x0A);
+
+typedef struct {
+    u8                 pad_00[0x20]; /* 0x00-0x1F */
+    GameLocale*        entries;      /* 0x20 */
+    GameLocaleChoice** keys;         /* 0x24 */
+    u8*                counts;       /* 0x28 */
+    u8                 pad_2C[4];    /* 0x2C-0x2F */
+    u8                 outer;        /* 0x30 */
 } GameLocaleBank;
 
 typedef struct TileRun {

@@ -3,7 +3,7 @@
 /* Finds the area link at a map cell and makes its destination the pending area change; true when none. */
 MATCH bool func_801A0048(s32 cell_x, s32 cell_y) {
     GameLocale*     link;
-    u8*             choice;
+    GameLocaleChoice* choice;
     s32             n;
     s32             i;
     s32             count;
@@ -26,19 +26,19 @@ MATCH bool func_801A0048(s32 cell_x, s32 cell_y) {
         found:
             if (link->key == 0xFFFF) {
                 bank   = ((GameLocaleBank**)g_AreaLoads)[g_GameAreaId];
-                choice = (u8*)bank->keys[link->index];
+                choice = bank->keys[link->index];
                 count  = bank->counts[link->index];
-                for (n = 0; n < count; n++, choice += 10) {
-                    if (SYS_TestFlag(g_SceneFlagWords + choice[6] * 8, choice[7]) != 0) {
+                for (n = 0; n < count; n++, choice++) {
+                    if (SYS_TestFlag(g_SceneFlagWords + choice->flag_block * 8, choice->flag_bit) != 0) {
                         break;
                     }
                 }
-                x                 = *(u16*)(choice + 2);
-                g_GameEntryAreaId = *(u16*)choice;
-                y                 = *(u16*)(choice + 4);
+                x                 = choice->x;
+                g_GameEntryAreaId = choice->area_id;
+                y                 = choice->y;
                 g_GameEntryPosX   = (x << 8) & 0xFF8000;
                 g_GameEntryPosY   = (y << 8) & 0xFF8000;
-                g_GameEntryFacing = choice[8];
+                g_GameEntryFacing = choice->facing;
             } else {
                 g_GameEntryAreaId = link->key;
                 g_GameEntryPosX   = (link->index << 8) & 0xFF8000;

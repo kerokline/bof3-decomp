@@ -45,7 +45,7 @@ MATCH bool func_801A0048(s32 cell_x, s32 cell_y) {
                 g_GameEntryPosY   = (link->alt << 8) & 0xFF8000;
                 g_GameEntryFacing = link->type;
             }
-            SP_REF(s8, 0x01u) = (g_GameEntryFacing >> 4) & 7;
+            g_ScratchPad.cells.bytes[1] = (g_GameEntryFacing >> 4) & 7;
             g_GameEntryFacing &= 0x8F;
             func_801A02E8();
             func_801A0380(D_80143F16, D_80143F1A, g_GameEntryAreaId);

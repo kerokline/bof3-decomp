@@ -17,15 +17,15 @@ MATCH void Game_BattleSetEncounterSpot(s32 x, s32 y, s32 party_slot) {
         s32    slot  = party_slot & BYTE_MASK;
         s32    row   = (base * 3) + slot;
 
-        actor->pos.x.fixed = x + FIELD(s32, D_80181CA8, row << 3) * (s_CameraScrollDeltas[g_Battle.scroll_dir].dx / 4);
-        actor->pos.y.fixed = y + FIELD(s32, &D_80181CAC, row << 3) * (s_CameraScrollDeltas[g_Battle.scroll_dir].dx / 4);
+        actor->pos.x.fixed = x + D_80181CA8[row][0] * (s_CameraScrollDeltas[g_Battle.scroll_dir].dx / 4);
+        actor->pos.y.fixed = y + D_80181CA8[row][1] * (s_CameraScrollDeltas[g_Battle.scroll_dir].dx / 4);
     } else {
         s32    slot  = party_slot & BYTE_MASK;
         s32    row   = (base * 3) + slot;
         Actor* actor = TASK(Actor);
 
-        actor->pos.x.fixed = x - FIELD(s32, &D_80181CAC, row << 3) * (s_CameraScrollDeltas[g_Battle.scroll_dir].dy / 4);
-        actor->pos.y.fixed = y + FIELD(s32, D_80181CA8, row << 3) * (s_CameraScrollDeltas[g_Battle.scroll_dir].dy / 4);
+        actor->pos.x.fixed = x - D_80181CA8[row][1] * (s_CameraScrollDeltas[g_Battle.scroll_dir].dy / 4);
+        actor->pos.y.fixed = y + D_80181CA8[row][0] * (s_CameraScrollDeltas[g_Battle.scroll_dir].dy / 4);
     }
     COORD_INT(TASK(Actor)->pos.z) = Area_HeightRead(TASK(Actor)->pos.x.fixed, TASK(Actor)->pos.y.fixed);
 }

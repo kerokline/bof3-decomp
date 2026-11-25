@@ -390,10 +390,10 @@ extern u8*                 g_EncounterZones[]; /* the exe declares it as const E
 extern Offset2             g_FacingOffsets[];  /* 0x80181AC0 */
 extern s8                  D_80181B00[];
 extern s8                  D_80181B01[];
-extern u8                  D_80181B1C[];          /* 0x80181B1C */
-extern u8                  D_80181B28[];          /* 0x80181B28 */
-extern s16                 D_80181B70[];          /* 0x80181B70 */
-extern s32                 D_80181CA8[30][2];     /* 0x80181CA8 - the 60-word table the exe defines at src/engine/slus/data_80181CA8.c, read as word pairs, three slots per formation */
+extern u8                  D_80181B1C[]; /* 0x80181B1C */
+extern u8                  D_80181B28[]; /* 0x80181B28 */
+extern s16                 D_80181B70[]; /* 0x80181B70 */
+extern const s32           D_80181CA8[30][2];
 extern u8                  D_80181E40[];          /* 0x80181E40 */
 extern u8                  D_80181E44[];          /* 0x80181E44 */
 extern u8                  D_8018214C[];          /* 0x8018214C */

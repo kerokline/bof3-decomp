@@ -10,7 +10,7 @@ MATCH void Battle_DrawEnemyPanel(s16 x, s16 y, s32 slot) {
 
     GFX_AddDrawMode(GetTPage(TPAGE_DEPTH_4BIT, TPAGE_ABR_HALF, FONT_TPAGE_X, FONT_TPAGE_Y));
     index        = slot - 3;
-    packed_color = *(u16*)(BATTLE_GLOBAL_BYTES_3A08 + (((*(s8*)&g_WindowStyle) << 6) | 0x20));
+    packed_color = BATTLE_WINDOW_COLORS[(LOB(g_WindowStyle) << 5) | 0x10];
     color_r      = (packed_color & 0x1F) * 8;
     color_g      = (packed_color >> 2) & 0xF8;
     color_b      = (packed_color >> 7) & 0xF8;

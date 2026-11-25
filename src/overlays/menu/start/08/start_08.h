@@ -432,6 +432,14 @@ typedef struct CursorFrameSize {
 
 ASSERT_SIZE(CursorFrameSize, 4);
 
+typedef struct PartyChangeCell {
+    u16 x;     /* 0x00 */
+    u16 y;     /* 0x02 */
+    s32 value; /* 0x04 */
+} PartyChangeCell;
+
+ASSERT_SIZE(PartyChangeCell, 8);
+
 extern CursorFrameSize g_MenuStartCursorFrames[4];
 /* D_801ED43C */
 extern Callback        g_MenuStartPanel11Steps[MENU_START_PANEL11_STATE_COUNT];
@@ -794,103 +802,101 @@ static inline void MenuAdvancePanelYField6(void) {
     }
 }
 
-s32              Char_GetExpForLevel(s32 character, s32 level);
-extern s8        D_8014850C;
-extern u8        D_801485B9;
-extern u8        D_801485BA;
-extern s8        D_80148659;
-extern u8        D_8014865A;
-extern u8        D_80181B1A;
-extern u8*       D_801C8940;
-extern u8*       D_801C8944;
+s32                    Char_GetExpForLevel(s32 character, s32 level);
+extern s8              D_8014850C;
+extern u8              D_801485B9;
+extern u8              D_801485BA;
+extern s8              D_80148659;
+extern u8              D_8014865A;
+extern u8              D_80181B1A;
+extern u8*             D_801C8940;
+extern u8*             D_801C8944;
 /* D_801D0C50 */
-extern char      g_MenuCurrentValueFormat[8];
+extern char            g_MenuCurrentValueFormat[8];
 /* D_801D0C58 */
-extern char      g_MenuMaxValueFormat[8];
-extern char      g_MenuClockFormat[];
-extern u8        D_801D0E20[];
-extern s32       D_801D0E28;
-extern s32       D_801D0EA8;
-extern char      D_801D0F18[];
-extern char      D_801D0F1C[];
-extern char      D_801D0F24[];
-void             Party_InitDefaults(void);
-void             func_801D29A4(void);
-extern void      func_801D2C7C(void);
-void             func_801D2D74(void);
-void             func_801D4884(void);
-void             func_801D667C(void);
-void             Menu_PreviewStrongestEquipment(u8 character);
-void             func_801D71EC(void);
-void             func_801D9664(void);
-void             func_801D96D4(void);
-void             Menu_DrawPlayTimeWindow(u16 panel_x, u16 panel_y);
+extern char            g_MenuMaxValueFormat[8];
+extern char            g_MenuClockFormat[];
+extern u8              D_801D0E20[];
+extern s32             D_801D0E28;
+extern s32             D_801D0EA8;
+extern char            D_801D0F18[];
+extern char            D_801D0F1C[];
+extern char            D_801D0F24[];
+void                   Party_InitDefaults(void);
+void                   func_801D29A4(void);
+extern void            func_801D2C7C(void);
+void                   func_801D2D74(void);
+void                   func_801D4884(void);
+void                   func_801D667C(void);
+void                   Menu_PreviewStrongestEquipment(u8 character);
+void                   func_801D71EC(void);
+void                   func_801D9664(void);
+void                   func_801D96D4(void);
+void                   Menu_DrawPlayTimeWindow(u16 panel_x, u16 panel_y);
 /* func_801DAE14 */
-void             Menu_OpenPartyChange(u16 buttons);
-void             Menu_DrawPanelIcon(u16 icon_x, u16 icon_y, s32 icon_u, s32 icon_v, u16 icon_clut, u8 icon_shade);
-void             Menu_DrawEquipCompareWindow(u8 index, s32 x, s32 y, u8* patch, u8 hide_changes, MenuPanelTask* task);
-extern void      func_801E30FC(u16 caption_x, u16 caption_y, s32 flags);
-void             func_801E6D88(s32 prompt_x);
-void             func_801E6E18(s16 x, s16 y, s32 row, s32 shade, u8 blend);
-void             func_801E7000(void);
-extern s32       func_801E7348(void);
-extern void      func_801E77F0(void);
+void                   Menu_OpenPartyChange(u16 buttons);
+void                   Menu_DrawPanelIcon(u16 icon_x, u16 icon_y, s32 icon_u, s32 icon_v, u16 icon_clut, u8 icon_shade);
+void                   Menu_DrawEquipCompareWindow(u8 index, s32 x, s32 y, u8* patch, u8 hide_changes, MenuPanelTask* task);
+extern void            func_801E30FC(u16 caption_x, u16 caption_y, s32 flags);
+void                   func_801E6D88(s32 prompt_x);
+void                   func_801E6E18(s16 x, s16 y, s32 row, s32 shade, u8 blend);
+void                   func_801E7000(void);
+extern s32             func_801E7348(void);
+extern void            func_801E77F0(void);
 /* func_801E9350 */
-void             Menu_DrawCampIcons(void);
-void             func_801EAF18(void);
-void             func_801EAF58(void);
-extern u8        D_801EC3E0[]; /* 6-byte rows: entry count, then up to five entries */
-extern s32       D_801EC488;
-extern u8        D_801EC4A4[]; /* 6-byte rows: entry count, then up to five entries */
-extern s32       D_801EC548;
-extern s32       D_801EC54A;
-extern s32       D_801EC54C;
-extern s32       D_801EC598;
-extern u8        g_MenuClockCaption[];
-extern u8        g_MenuCommandFrame[];
-extern u8        g_MenuCommandFrameSelected[];
-extern u8        D_801EC930[];
-extern u8        D_801EC938[];
-extern u8        g_MenuClockColon[];
-extern u8*       g_MenuCommandLabels[];  /* label id -> button text */
-extern u8        g_MenuCommandRows[][5]; /* button count, then four label ids */
-extern u8        D_801485B8;
-extern u8        D_801ECD0C[];
-extern u8        D_801ECD14[];
-extern u8        D_801ECDAC[];
-extern u8        D_801ECDB4[];
-extern s32       D_801ECFB8;
-extern u8        D_801ED105;
-extern const u16 D_801ED1FC[];
-extern const u16 D_801ED1FE[];
-extern const u16 D_801ED200[];
-extern const u16 D_801ED202[];
-extern const u16 D_801ED204[];
+void                   Menu_DrawCampIcons(void);
+void                   func_801EAF18(void);
+void                   func_801EAF58(void);
+extern u8              D_801EC3E0[]; /* 6-byte rows: entry count, then up to five entries */
+extern s32             D_801EC488;
+extern u8              D_801EC4A4[];    /* 6-byte rows: entry count, then up to five entries */
+extern PartyChangeCell D_801EC548[][2]; /* by row, then side */
+extern s32             D_801EC598;
+extern u8              g_MenuClockCaption[];
+extern u8              g_MenuCommandFrame[];
+extern u8              g_MenuCommandFrameSelected[];
+extern u8              D_801EC930[];
+extern u8              D_801EC938[];
+extern u8              g_MenuClockColon[];
+extern u8*             g_MenuCommandLabels[];  /* label id -> button text */
+extern u8              g_MenuCommandRows[][5]; /* button count, then four label ids */
+extern u8              D_801485B8;
+extern u8              D_801ECD0C[];
+extern u8              D_801ECD14[];
+extern u8              D_801ECDAC[];
+extern u8              D_801ECDB4[];
+extern s32             D_801ECFB8;
+extern u8              D_801ED105;
+extern const u16       D_801ED1FC[];
+extern const u16       D_801ED1FE[];
+extern const u16       D_801ED200[];
+extern const u16       D_801ED202[];
+extern const u16       D_801ED204[];
 /* The poison and confusion labels the character rows draw. */
-extern u8        D_801ED5D4[];
-extern u8        D_801ED5DC[];
-extern s32       D_801ED5F0;
-extern s32       D_801ED5FC;
-extern s32       D_801ED608;
-extern s8        D_801ED654;
-extern u8        D_801ED660;
-extern u8        D_801ED664;
+extern u8              D_801ED5D4[];
+extern u8              D_801ED5DC[];
+extern s32             D_801ED5F0;
+extern s32             D_801ED5FC;
+extern s32             D_801ED608;
+extern s8              D_801ED654;
+extern u8              D_801ED660;
+extern u8              D_801ED664;
 /* D_801ED668 */
-extern s8        g_FormationCursorColumn;
+extern s8              g_FormationCursorColumn;
 /* D_801ED66C */
-extern s8        g_FormationCursorRow;
+extern s8              g_FormationCursorRow;
 /* D_801ED670 */
-extern s8        g_FormationColumn;
+extern s8              g_FormationColumn;
 /* D_801ED674 */
-extern s8        g_FormationRow;
+extern s8              g_FormationRow;
 /* D_801ED678 */
-extern s8        g_FormationPickColumn;
+extern s8              g_FormationPickColumn;
 /* D_801ED67C */
-extern s8        g_FormationPickRow;
-extern u8        D_801ED69C;
-extern u8        D_801ED7FC;
-extern u8        D_801ED878[];
-void             func_801EA1F0(MenuPanelTask* task);
+extern s8              g_FormationPickRow;
+extern u8              D_801ED69C;
+extern u8              D_801ED7FC;
+extern u8              D_801ED878[];
+void                   func_801EA1F0(MenuPanelTask* task);
 
 /* Pick the party record the record index selects: record 0 is the saved
  * Character, any other is the Character copy inside the battle row. */

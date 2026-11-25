@@ -29,7 +29,7 @@ MATCH void func_801B1E24(void) {
             if (!(leader->status.field.flags.unsigned_value & 1) && slot != 0) {
                 index  = (slot - 1) * 2 + facing * 4;
                 ok     = func_801B1B2C(leader->pos.x.fixed + (s_EntityPlacementOffsets[index] << 15), leader->pos.y.fixed + (s_EntityPlacementOffsets[index + 1] << 15), facing, member->speed);
-                placed = (ok & BYTE_MASK) ? func_801B1C18(SP_REF(s32, 0x8u), SP_REF(s32, 0xCu), TASK(PartyMember)->speed) : 0;
+                placed = (ok & BYTE_MASK) ? func_801B1C18(SPAD(0u)->cells.words[2], SPAD(0u)->cells.words[3], TASK(PartyMember)->speed) : 0;
                 if ((ok & BYTE_MASK) && (placed & BYTE_MASK)) {
                     goto found;
                 }

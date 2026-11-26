@@ -45,10 +45,10 @@ MATCH u8* Area_RunSetupRecord(u8* script) {
             Actor_SpawnPartyFromRecord(script);
             break;
         case AREA_SETUP_TYPE_ENTITY_7:
-            func_801A623C(script);
+            Actor_SpawnBattleEntry(script);
             break;
         case AREA_SETUP_TYPE_ENTITY_FLAGGED:
-            func_801A7330(script);
+            Actor_SpawnSearchSpot(script);
             break;
         case AREA_SETUP_TYPE_ENTITY_4:
             func_801A5EFC(script);

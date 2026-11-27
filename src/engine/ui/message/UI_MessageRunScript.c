@@ -24,13 +24,13 @@ NON_MATCHING void UI_MessageRunScript(void) {
     s32  v;
     u16  flags;
     u8*  p;
-    u8*  cur16;
-    u8*  cur14;
-    u8*  curF;
+    u8*  step_cursor;
+    u8*  pair_cursor;
+    u8*  entry_cursor;
     u8*  base8;
     u8   entry;
     u8   hi;
-    s32  idx7;
+    s32  block;
     u8*  next7;
     u8*  next4;
     s32  idx;
@@ -73,10 +73,10 @@ NON_MATCHING void UI_MessageRunScript(void) {
                 }
                 break;
             case 0x16:
-                cur16             = *(u8**)(s4 + 0xA);
+                step_cursor       = *(u8**)(s4 + 0xA);
                 loop              = 0;
-                *(u8**)(s4 + 0xA) = cur16 + 1;
-                s4[0]             = cur16[1];
+                *(u8**)(s4 + 0xA) = step_cursor + 1;
+                s4[0]             = step_cursor[1];
                 s4[-6]            = 7;
                 break;
             case 0xB:
@@ -89,10 +89,10 @@ NON_MATCHING void UI_MessageRunScript(void) {
                 loop                   = 0;
                 break;
             case 0x14:
-                cur14              = *(u8**)(s2 - 0x14);
-                *(u8**)(s2 - 0x14) = cur14 + 1;
-                count              = cur14[1];
-                *(u8**)(s2 - 0x14) = cur14 + 3;
+                pair_cursor        = *(u8**)(s2 - 0x14);
+                *(u8**)(s2 - 0x14) = pair_cursor + 1;
+                count              = pair_cursor[1];
+                *(u8**)(s2 - 0x14) = pair_cursor + 3;
                 p                  = (u8*)g_UIMessageState.cursor;
                 s2[0]              = count;
                 s2[2]              = (*p & 0xF) - 1;
@@ -111,9 +111,9 @@ NON_MATCHING void UI_MessageRunScript(void) {
                 CHAN_CURSOR(chan) = next7;
                 CHAN_FLAGS(chan) |= FRONTEND_FLAG_TIMER_ACTIVE;
                 CHAN_RETURN(chan) = next7;
-                idx7              = *(u8*)g_UIMessageState.cursor;
+                block             = *(u8*)g_UIMessageState.cursor;
                 chan[3]           = 0x21;
-                CHAN_CURSOR(chan) = (u8*)&D_801490D7 + (idx7 << 5);
+                CHAN_CURSOR(chan) = (u8*)&D_801490D7 + (block << 5);
                 break;
             case 3:
                 CHAN_FLAGS(chan) |= FRONTEND_FLAG_TIMER_ACTIVE;
@@ -134,10 +134,10 @@ NON_MATCHING void UI_MessageRunScript(void) {
                 CHAN_CURSOR(chan) = (u8*)&D_80144967 + idx * PARTY_RECORD_STRIDE;
                 break;
             case 0xF:
-                curF               = *(u8**)(s3 + 0xE);
-                *(u8**)(s3 + 0xE)  = curF + 1;
+                entry_cursor       = *(u8**)(s3 + 0xE);
+                *(u8**)(s3 + 0xE)  = entry_cursor + 1;
                 p                  = (u8*)g_UIMessageState.cursor;
-                entry              = D_8017F5B8[curF[1]].unk_00;
+                entry              = D_8017F5B8[entry_cursor[1]].unk_00;
                 s3[1]              = 0;
                 s3[-1]             = 0;
                 s3[0]              = entry;

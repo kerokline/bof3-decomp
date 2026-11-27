@@ -6,11 +6,13 @@
 
 #include "overlays/area/worlds/world04.h"
 /* The scratchpad work row the entry paths read. */
-extern s8*  D_1F800010;
+extern s8*     D_1F800010;
+/* ScratchPad.vectors[1], the second corner the cell draw projects, as its own symbol. */
+extern SVECTOR D_1F80001C;
 /* The cell ordering-table rows: six 8-byte lists per grid row, head then tail. */
-extern u8   D_80142CC0[];
+extern u8      D_80142CC0[];
 /* The per-buffer ordering-table heads, one 8-byte entry per slot. */
-extern u32* D_80143534[][2];
+extern u32*    D_80143534[][2];
 
 /* The marker screen-y source flag and the y it holds. */
 extern s16 D_80145EC0;

@@ -94,8 +94,7 @@ MATCH void func_801EF030(s32 x, s32 y, u16 radius, s32 phase) {
 }
 
 /* Draws the magic002 effect's shaded sphere: rings of ten points from the south pole to the equator, each ring quad also drawn mirrored below the centre. */
-#ifdef NON_MATCHING
-NON_MATCHING void func_801EF1FC(s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2) {
+MATCH void func_801EF1FC(s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2) {
     POLY_G4* prim;
     s16      prev_x[12];
     s16      prev_z[12];
@@ -111,16 +110,13 @@ NON_MATCHING void func_801EF1FC(s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2) 
     SVECTOR  light = D_801EEC10;
     s16      quad_x[4];
     s16      quad_y[4];
-    s32      avg_x;
-    s32      avg_z;
-    s32      mid_height;
-    s32      ring_radius;
+    s16      ring_radius;
     s32      dot;
     s16      angle;
     s16      prev_height;
-    s16      ring_height;
     s16      i;
     s16      j;
+    s16      ring_height;
     s8       point;
     u16      tpage;
 
@@ -132,8 +128,8 @@ NON_MATCHING void func_801EF1FC(s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2) 
         ring_x[i] = 0;
         ring_z[i] = 0;
         vec.vx    = ring_x[i];
-        vec.vy    = ring_height;
         vec.vz    = ring_z[i];
+        vec.vy    = ring_height;
         VectorNormalS(&vec, &normal);
         dot            = normal.vx * light.vx + normal.vy * light.vy + normal.vz * light.vz;
         ring_light[i]  = (u8)((u32)SquareRoot0(dot) >> 4);
@@ -142,21 +138,21 @@ NON_MATCHING void func_801EF1FC(s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2) 
         ring_mirror[i] = (u8)((u32)SquareRoot0(dot) >> 4);
     }
 
-    prev_height = ring_height;
     for (i = 1; i < 5; i++) {
+        prev_height = ring_height;
         for (j = 0; j < 10; j++) {
             prev_x[j]      = ring_x[j];
             prev_z[j]      = ring_z[j];
             prev_light[j]  = ring_light[j];
             prev_mirror[j] = ring_mirror[j];
         }
-        ring_x[0]   = -(x1 * rsin(i << 8)) >> 12;
-        ring_z[0]   = 0;
+        ring_radius = -(x1 * rsin(i << 8)) >> 12;
         ring_height = -(x1 * rcos(i << 8)) >> 12;
-        ring_radius = ring_x[0];
+        ring_x[0]   = ring_radius;
+        ring_z[0]   = 0;
         vec.vx      = ring_x[0];
-        vec.vy      = ring_height;
         vec.vz      = ring_z[0];
+        vec.vy      = ring_height;
         VectorNormalS(&vec, &normal);
         dot            = normal.vx * light.vx + normal.vy * light.vy + normal.vz * light.vz;
         ring_light[0]  = (u8)((u32)SquareRoot0(dot) >> 4);
@@ -164,13 +160,13 @@ NON_MATCHING void func_801EF1FC(s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2) 
         dot            = normal.vx * light.vx + normal.vy * light.vy + normal.vz * light.vz;
         ring_mirror[0] = (u8)((u32)SquareRoot0(dot) >> 4);
 
-        angle = (u8)y1;
+        angle = y1 & 0xFF;
         for (point = 1; angle < 0x800; point++, angle += 0x100) {
             ring_x[point] = FIXED_MUL(ring_radius, rcos(angle));
             ring_z[point] = FIXED_MUL(ring_radius, rsin(angle));
             vec.vx        = ring_x[point];
-            vec.vy        = ring_height;
             vec.vz        = ring_z[point];
+            vec.vy        = ring_height;
             VectorNormalS(&vec, &normal);
             dot                = normal.vx * light.vx + normal.vy * light.vy + normal.vz * light.vz;
             ring_light[point]  = (u8)((u32)SquareRoot0(dot) >> 4);
@@ -182,8 +178,8 @@ NON_MATCHING void func_801EF1FC(s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2) 
         ring_x[point] = -ring_radius;
         ring_z[point] = 0;
         vec.vx        = ring_x[point];
-        vec.vy        = ring_height;
         vec.vz        = ring_z[point];
+        vec.vy        = ring_height;
         VectorNormalS(&vec, &normal);
         dot                = normal.vx * light.vx + normal.vy * light.vy + normal.vz * light.vz;
         ring_light[point]  = (u8)((u32)SquareRoot0(dot) >> 4);
@@ -193,30 +189,33 @@ NON_MATCHING void func_801EF1FC(s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2) 
         point++;
 
         for (j = 0; j < point - 1; j++) {
-            avg_x      = (prev_x[j] + prev_x[j + 1] + ring_x[j] + ring_x[j + 1]) / 4;
-            avg_z      = (prev_z[j] + prev_z[j + 1] + ring_z[j] + ring_z[j + 1]) / 4;
-            mid_height = (prev_height + ring_height) / 2;
-            centre.vx  = (avg_x * x2) >> 8;
-            centre.vy  = (mid_height * x2) >> 8;
-            centre.vz  = (avg_z * x2) >> 8;
-
-            quad_x[0] = ((prev_x[j] - avg_x) * y2) >> 8;
-            quad_x[1] = ((prev_x[j + 1] - avg_x) * y2) >> 8;
-            quad_x[2] = ((ring_x[j] - avg_x) * y2) >> 8;
-            quad_x[3] = ((ring_x[j + 1] - avg_x) * y2) >> 8;
-            quad_y[0] = ((prev_height - mid_height) * y2) >> 8;
-            quad_y[1] = quad_y[0];
-            quad_y[2] = ((ring_height - mid_height) * y2) >> 8;
-            quad_y[3] = quad_y[2];
+            centre.vx = (prev_x[j] + prev_x[j + 1] + ring_x[j] + ring_x[j + 1]) / 4;
+            centre.vz = (prev_z[j] + prev_z[j + 1] + ring_z[j] + ring_z[j + 1]) / 4;
+            centre.vy = (prev_height + prev_height + ring_height + ring_height) / 4;
+            quad_x[0] = ((prev_x[j] - centre.vx) * y2) >> 8;
+            quad_y[0] = ((prev_height - centre.vy) * y2) >> 8;
+            quad_x[1] = ((prev_x[j + 1] - centre.vx) * y2) >> 8;
+            quad_y[1] = ((prev_height - centre.vy) * y2) >> 8;
+            quad_x[2] = ((ring_x[j] - centre.vx) * y2) >> 8;
+            quad_y[2] = ((ring_height - centre.vy) * y2) >> 8;
+            quad_x[3] = ((ring_x[j + 1] - centre.vx) * y2) >> 8;
+            quad_y[3] = ((ring_height - centre.vy) * y2) >> 8;
+            centre.vx = (centre.vx * x2) >> 8;
+            centre.vy = (centre.vy * x2) >> 8;
+            centre.vz = (centre.vz * x2) >> 8;
 
             prim = (POLY_G4*)g_GfxPrimCursor;
             SetPolyG4(prim);
             setXY4(prim, x0 + centre.vx + quad_x[0], y0 + centre.vy + quad_y[0], x0 + centre.vx + quad_x[1], y0 + centre.vy + quad_y[1], x0 + centre.vx + quad_x[2], y0 + centre.vy + quad_y[2],
                    x0 + centre.vx + quad_x[3], y0 + centre.vy + quad_y[3]);
-            setRGB0(prim, prev_light[j], prev_light[j], 0);
-            setRGB1(prim, prev_light[j], prev_light[j], 0);
-            setRGB2(prim, ring_light[j + 1], ring_light[j + 1], 0);
-            setRGB3(prim, ring_light[j + 1], ring_light[j + 1], 0);
+            prim->r0 = prim->g0 = prev_light[j];
+            prim->b0            = 0;
+            prim->r1 = prim->g1 = prev_light[j];
+            prim->b1            = 0;
+            prim->r2 = prim->g2 = ring_light[j + 1];
+            prim->b2            = 0;
+            prim->r3 = prim->g3 = ring_light[j + 1];
+            prim->b3            = 0;
             SetSemiTrans(prim, 1);
             GFX_AddPrim(GFX_LAYER_UI, sizeof(POLY_G4));
 
@@ -224,16 +223,16 @@ NON_MATCHING void func_801EF1FC(s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2) 
             SetPolyG4(prim);
             setXY4(prim, x0 + centre.vx + quad_x[0], y0 - centre.vy - quad_y[0], x0 + centre.vx + quad_x[1], y0 - centre.vy - quad_y[1], x0 + centre.vx + quad_x[2], y0 - centre.vy - quad_y[2],
                    x0 + centre.vx + quad_x[3], y0 - centre.vy - quad_y[3]);
-            setRGB0(prim, prev_mirror[j], prev_mirror[j], 0);
-            setRGB1(prim, prev_mirror[j], prev_mirror[j], 0);
-            setRGB2(prim, ring_mirror[j + 1], ring_mirror[j + 1], 0);
-            setRGB3(prim, ring_mirror[j + 1], ring_mirror[j + 1], 0);
+            prim->r0 = prim->g0 = prev_mirror[j];
+            prim->b0            = 0;
+            prim->r1 = prim->g1 = prev_mirror[j];
+            prim->b1            = 0;
+            prim->r2 = prim->g2 = ring_mirror[j + 1];
+            prim->b2            = 0;
+            prim->r3 = prim->g3 = ring_mirror[j + 1];
+            prim->b3            = 0;
             SetSemiTrans(prim, 1);
             GFX_AddPrim(GFX_LAYER_UI, sizeof(POLY_G4));
         }
-        prev_height = ring_height;
     }
 }
-#else
-INCLUDE_ASM(func_801EF1FC);
-#endif

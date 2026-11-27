@@ -1291,14 +1291,16 @@ NON_MATCHING void func_801D51D0(void) {
     s32 row;
     s32 value;
     u8  digit;
+    u32 roll;
+
+    FAKE_STACK_PADS(u8, 0x20); /* FAKE: retail reserves 0x20 unused stack bytes. */
 
     D_801DB0B4                = rand() & 0x7;
     D_801DB080.words.count[0] = 0;
     D_801DB080.words.count[1] = 0;
     D_801DB080.words.count[2] = 0;
     D_801DB080.words.count[3] = 0;
-    dst                       = g_TextVariables[0];
-    for (row = 0; row < 9; row++, dst += TEXT_VARIABLE_LENGTH) {
+    for (row = 0, dst = g_TextVariables[0]; row < 9; row++, dst += TEXT_VARIABLE_LENGTH) {
         digit = D_801DAD90[(s8)D_801DB0B4][row];
         if (digit == 9) {
             break;
@@ -1321,12 +1323,14 @@ NON_MATCHING void func_801D51D0(void) {
                 value = 0;
             }
         }
+        i                                                                   = 0;
         D_801DB080.words.picked[digit * 10 + D_801DB080.words.count[digit]] = value;
         D_801DB080.words.count[digit]++;
 
-        src = MESSAGE_TABLE_TEXT(AREA_MESSAGE_TABLE, D_801DADD8[digit][0] + (u8)value + 0x100);
         p   = dst;
-        for (i = 0; i < TEXT_VARIABLE_LENGTH; i++) {
+        src = (u8*)AREA_MESSAGE_TABLE;
+        src += AREA_MESSAGE_TABLE->offsets[(u8)value + D_801DADD8[digit][0] + 0x100];
+        for (; i < TEXT_VARIABLE_LENGTH; i++) {
             *p = *src;
             if (*src == STRING_END && src[-1] != STRING_SKIP && src[-1] != STRING_SKIP_ALT) {
                 break;
@@ -1336,9 +1340,9 @@ NON_MATCHING void func_801D51D0(void) {
         }
     }
 
-    value = rand() & 0x7;
+    roll = rand() & 0x7;
     for (digit = 0; digit < 3; digit++) {
-        if ((u32)value >= D_801DADE0[digit][0]) {
+        if (roll >= D_801DADE0[digit][0]) {
             break;
         }
     }
@@ -1349,16 +1353,16 @@ NON_MATCHING void func_801D51D0(void) {
     }
 
     if (rand() & 1) {
-        i = 0;
+        row = 0;
         if (D_801DB080.words.count[D_801DADE0[digit][1]] - 1 > 0) {
             do {
                 if (rand() & 1) {
                     break;
                 }
-                i++;
-            } while (i < D_801DB080.words.count[D_801DADE0[digit][1]] - 1);
+                row++;
+            } while (row < D_801DB080.words.count[D_801DADE0[digit][1]] - 1);
         }
-        D_801DB0AD = D_801DADD8[D_801DADE0[digit][1]][0] + D_801DB080.words.picked[D_801DADE0[digit][1] * 10 + i];
+        D_801DB0AD = D_801DADD8[D_801DADE0[digit][1]][0] + D_801DB080.words.picked[D_801DADE0[digit][1] * 10 + row];
     } else {
         D_801DB0AD = D_801DADD8[D_801DADE0[digit][1]][0] + func_801D5AD0(D_801DADD8[D_801DADE0[digit][1]][1]);
     }
@@ -1366,16 +1370,16 @@ NON_MATCHING void func_801D51D0(void) {
     if (D_801DADE0[digit][2] == 0xFF) {
         D_801DB0AE = 0xFF;
     } else if (rand() & 1) {
-        i = 0;
+        row = 0;
         if (D_801DB080.words.count[D_801DADE0[digit][2]] - 1 > 0) {
             do {
                 if (rand() & 1) {
                     break;
                 }
-                i++;
-            } while (i < D_801DB080.words.count[D_801DADE0[digit][2]] - 1);
+                row++;
+            } while (row < D_801DB080.words.count[D_801DADE0[digit][2]] - 1);
         }
-        D_801DB0AE = D_801DADD8[D_801DADE0[digit][2]][0] + D_801DB080.words.picked[D_801DADE0[digit][2] * 10 + i];
+        D_801DB0AE = D_801DADD8[D_801DADE0[digit][2]][0] + D_801DB080.words.picked[D_801DADE0[digit][2] * 10 + row];
     } else {
         D_801DB0AE = D_801DADD8[D_801DADE0[digit][2]][0] + func_801D5AD0(D_801DADD8[D_801DADE0[digit][2]][1]);
     }

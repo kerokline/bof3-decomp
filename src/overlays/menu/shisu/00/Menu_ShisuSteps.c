@@ -714,48 +714,45 @@ NON_MATCHING void func_801D2308(void* record) {
 INCLUDE_ASM(func_801D2308);
 #endif
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801D27BC(void) {
+/* Sets the base and topping models at the scroll target, full size, unturned and neutral-tinted. */
+MATCH void func_801D27BC(void) {
     s32*  scroll_x;
     s32*  scroll_y;
     s32** record_cell;
 
+    record_cell            = &D_801F501C;
     scroll_x               = &g_AreaScrollTargetX;
     scroll_y               = &g_AreaScrollTargetY;
-    record_cell            = &D_801F501C;
     D_801DA09C             = *record_cell;
+    D_801DA098             = D_801DA09C[1];
     D_801DA048.header.mode = 0;
-    D_801DA090             = 0;
-    g_ShisuBaseScale       = 0x1000;
-    D_801DA0AC             = 0;
-    D_801DA0B0             = 0;
-    g_ShisuBaseAngle       = 0;
+    D_801DA048.unk_48      = 0;
+    D_801DA048.scale.x     = 0x1000;
+    D_801DA048.angle_x     = 0;
+    D_801DA048.angle_y     = 0;
+    D_801DA048.angle_z     = 0;
     g_ShisuBase[0]         = -0x80;
     g_ShisuBase[1]         = -0x80;
     g_ShisuBase[2]         = -0x80;
-    D_801DA07C             = *scroll_x;
-    D_801DA080             = *scroll_y;
-    D_801DA098             = D_801DA09C[1];
-    D_801DA084             = (Area_HeightSample(g_AreaScrollTargetX, g_AreaScrollTargetY) << 16) - SHISU_HEIGHT_BIAS;
+    D_801DA048.pos.x.fixed = *scroll_x;
+    D_801DA048.pos.y.fixed = *scroll_y;
+    D_801DA048.pos.z.fixed = (Area_HeightSample(g_AreaScrollTargetX, g_AreaScrollTargetY) << 16) - SHISU_HEIGHT_BIAS;
 
     D_801DA114             = *record_cell + 2;
+    D_801DA110             = D_801DA114[1];
     D_801DA0C0.header.mode = 0;
-    D_801DA108             = 0;
-    g_ShisuToppingScale    = 0x1000;
-    D_801DA124             = 0;
-    D_801DA128             = 0;
-    g_ShisuToppingAngle    = 0;
+    D_801DA0C0.unk_48      = 0;
+    D_801DA0C0.scale.x     = 0x1000;
+    D_801DA0C0.angle_x     = 0;
+    D_801DA0C0.angle_y     = 0;
+    D_801DA0C0.angle_z     = 0;
     g_ShisuTopping[0]      = -0x80;
     g_ShisuTopping[1]      = -0x80;
     g_ShisuTopping[2]      = -0x80;
-    D_801DA0F4             = *scroll_x;
-    D_801DA0F8             = *scroll_y;
-    D_801DA110             = D_801DA114[1];
-    D_801DA0FC             = (Area_HeightSample(g_AreaScrollTargetX, g_AreaScrollTargetY) << 16) + SHISU_HEIGHT_BIAS;
+    D_801DA0C0.pos.x.fixed = *scroll_x;
+    D_801DA0C0.pos.y.fixed = *scroll_y;
+    D_801DA0C0.pos.z.fixed = (Area_HeightSample(g_AreaScrollTargetX, g_AreaScrollTargetY) << 16) + SHISU_HEIGHT_BIAS;
 }
-#else
-INCLUDE_ASM(func_801D27BC);
-#endif
 
 /* Draws the base model with its tint shifted by the vinegar used, then restores the tint. */
 MATCH void func_801D2978(void) {

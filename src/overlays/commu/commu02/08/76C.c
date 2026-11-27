@@ -1143,20 +1143,21 @@ MATCH void func_801D4910(s32 x, s32 y) {
     }
     FairyCasino_DrawFramePiece((s16)(x + 0x50), (s16)(y + 0x78), 0x11);
 }
-#ifdef NON_MATCHING
-NON_MATCHING void func_801D4AE0(s16 x, s16 y, u8 flag) {
+
+/* Draws the eight record rows: filled rows up to the current one, dimmed blanks after it. */
+MATCH void func_801D4AE0(s16 x, s16 y, u8 flag) {
     s32 i;
-    s16 dy;
-    s16 gy;
+    s32 dy;
+    s32 gy;
     s32 ry;
     u8  k;
     s8  sel;
 
     UI_WindowDraw(x, y, 0x52, 0x7A, 0, g_WindowStyle);
     func_801D4910(x, y);
-    dy = 7;
-    gy = 9;
     for (i = 0; i < 8; i++) {
+        dy  = i * 14 + 7;
+        gy  = i * 14 + 9;
         k   = i * 5 + 3;
         sel = D_801DB0B4;
         if (i == sel) {
@@ -1195,13 +1196,8 @@ NON_MATCHING void func_801D4AE0(s16 x, s16 y, u8 flag) {
             UI_TextDrawAscii(x + 0x43, ry, UI_TEXT_DIM, g_UiTextFormatBuffer);
             UI_TextDrawGlyphString(x + 0x39, y + gy, UI_TEXT_DIM, D_801D0C2C);
         }
-        gy += 14;
-        dy += 14;
     }
 }
-#else
-INCLUDE_ASM(func_801D4AE0);
-#endif
 
 MATCH void func_801D4EA4(s16 left, s16 top, u8 icon_row, u8 raised) {
     s32 i;
@@ -2243,20 +2239,30 @@ MATCH void func_801D81A4(s16 x, s16 y) {
 #ifdef NON_MATCHING
 void func_801D851C(s16 x, s16 y, s32 width, u8 index);
 
-NON_MATCHING void func_801D830C(s32 x, s32 y, s32 kind, s32 mode) {
+NON_MATCHING void func_801D830C(s32 x, s32 y, u8 kind, u8 mode) {
     TILE* tile;
-    s32   tile_x;
-    s32   tile_y;
+    s16   tile_x;
+    s16   tile_y;
     s32   row;
     u8*   style;
+    u16   left;
+    u16   top;
+    u8*   text;
 
-    UI_WindowDraw(x, y, 0x48, 0x26, 0x80, *(style = &g_WindowStyle));
+    left = x;
+    top  = y;
+    UI_WindowDraw(left, top, 0x48, 0x26, 0x80, *(style = &g_WindowStyle));
     func_801D81A4(x, y);
-    UI_TextDraw(x + 6, y + 4, 0, 5, (mode & BYTE_MASK) ? D_801DB080.bytes : style + 0xE96 + (kind & BYTE_MASK) * 5);
+    if (mode == 0) {
+        text = style + 0xE96 + kind * 5;
+    } else {
+        text = D_801DB080.bytes;
+    }
+    UI_TextDraw(x + 6, y + 4, 0, 5, text);
     tile = (TILE*)g_GfxPrimCursor;
     SetTile(tile);
-    tile_x   = x + 6;
-    tile_y   = y + 0x12;
+    tile_x   = left + 6;
+    tile_y   = top + 0x12;
     tile->x0 = tile_x;
     tile->y0 = tile_y;
     tile->w  = 0x3C;
@@ -2265,30 +2271,32 @@ NON_MATCHING void func_801D830C(s32 x, s32 y, s32 kind, s32 mode) {
     GFX_AddPrim(GFX_LAYER_UI, sizeof(TILE));
     row = kind & BYTE_MASK;
     func_801D851C(tile_x, tile_y, g_Fairies[row][5] * 12, 0);
-    func_801D851C(tile_x, y + 0x16, g_Fairies[row][6] * 12, 1);
-    func_801D851C(tile_x, y + 0x1A, g_Fairies[row][7] * 12, 2);
-    func_801D851C(tile_x, y + 0x1E, g_Fairies[row][8] * 12, 3);
+    func_801D851C(tile_x, top + 0x16, g_Fairies[row][6] * 12, 1);
+    func_801D851C(tile_x, top + 0x1A, g_Fairies[row][7] * 12, 2);
+    func_801D851C(tile_x, top + 0x1E, g_Fairies[row][8] * 12, 3);
 }
 #else
 INCLUDE_ASM(func_801D830C);
 #endif
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801D851C(s16 x, s16 y, s32 width, u8 index) {
+/* Draws one channel bar of a fairy box: two shaded bands in the channel colour. */
+MATCH void func_801D851C(s16 x, s16 y, s32 width, u8 index) {
     u8       colors[4][3];
     POLY_G4* prim;
     u8*      color;
+    s16      middle;
 
     memcpy(colors, D_801D0C30, sizeof(colors));
     prim = (POLY_G4*)g_GfxPrimCursor;
     SetPolyG4(prim);
     prim->x0 = x;
     prim->x1 = x + width;
-    prim->y1 = y;
     prim->y0 = y;
     prim->y2 = y + 2;
-    prim->y3 = y + 2;
+    prim->y1 = y;
     prim->x2 = prim->x0;
+    middle   = y + 2;
+    prim->y3 = middle;
     prim->x3 = prim->x1;
     color    = colors[index];
     setRGB2(prim, color[0] << 7, color[1] << 7, color[2] << 7);
@@ -2299,22 +2307,19 @@ NON_MATCHING void func_801D851C(s16 x, s16 y, s32 width, u8 index) {
     prim = (POLY_G4*)g_GfxPrimCursor;
     SetPolyG4(prim);
     prim->x0 = x;
+    prim->y0 = middle;
     prim->x1 = x + width;
-    prim->y0 = y + 2;
-    prim->y1 = y + 2;
-    prim->y2 = y + 4;
-    prim->y3 = y + 4;
+    prim->y1 = middle;
     prim->x2 = prim->x0;
+    prim->y2 = y + 4;
     prim->x3 = prim->x1;
+    prim->y3 = y + 4;
     setRGB0(prim, color[0] << 7, color[1] << 7, color[2] << 7);
     setRGB2(prim, prim->r0 >> 2, prim->g0 >> 2, prim->b0 >> 2);
     setRGB1(prim, prim->r0, prim->g0, prim->b0);
     setRGB3(prim, prim->r2, prim->g2, prim->b2);
     GFX_AddPrim(GFX_LAYER_UI, sizeof(POLY_G4));
 }
-#else
-INCLUDE_ASM(func_801D851C);
-#endif
 
 MATCH void func_801D875C(s16 x, s16 y, s32 index) {
     s32   tpage;

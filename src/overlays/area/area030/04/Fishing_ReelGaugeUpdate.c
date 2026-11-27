@@ -3,7 +3,8 @@
 /* func_801D2DC4 */
 /* Reel gauge: moves the cursor toward the hooked fish's limit, then draws the gauge line, the
  * cursor row and the fish arrow. */
-MATCH void Fishing_ReelGaugeUpdate(void) {
+#ifdef NON_MATCHING
+NON_MATCHING void Fishing_ReelGaugeUpdate(void) {
     LINE_F2*      prim;
     FishingState* work;
     FishingState* gauge;
@@ -33,10 +34,7 @@ MATCH void Fishing_ReelGaugeUpdate(void) {
             timer = work->timer;
             if (timer >= 15) {
                 if (limit < origin) {
-                    /* FAKE: the loop weight lifts the work pointer over the fish limit in the allocator (a0 above a1); pure C best 13 rows. */
-                    do {
-                        work->cursor_10 = -1;
-                    } while (0);
+                    work->cursor_10 = -1;
                 } else if (origin < limit) {
                     work->cursor_10 = 1;
                 }
@@ -98,3 +96,6 @@ moved:
         }
     }
 }
+#else
+INCLUDE_ASM(Fishing_ReelGaugeUpdate);
+#endif

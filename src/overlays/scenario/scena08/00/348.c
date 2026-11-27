@@ -949,10 +949,13 @@ MATCH void func_801F9F8C(WorldPos* pos, s32 unused, s16 jitter, s32 layer) {
     s32      depth;
     s32      root;
 
-    FAKE_STACK_PADS(u8, 0x20); /* FAKE: retail reserves unused stack bytes. */
-
     SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 0, GetTPage(TPAGE_DEPTH_4BIT, TPAGE_ABR_HALF, 0x3C0, 0x100) & 0xFFFF, 0);
-    Area_CellAddPrim(pos->x.fixed, pos->y.fixed, (s8)layer, 12);
+    {
+        Coord cell_x = {pos->x.fixed};
+        Coord cell_y = {pos->y.fixed};
+
+        Area_CellAddPrim(cell_x.fixed, cell_y.fixed, (s8)layer, 12);
+    }
     Camera_SetMatrix(&camera);
     Camera_ProjectPoint(&pos->x.fixed, &screen);
     size.vx = size.vy = 0x50;
@@ -968,7 +971,12 @@ MATCH void func_801F9F8C(WorldPos* pos, s32 unused, s16 jitter, s32 layer) {
         line->x1 = root + (jitter + (screen.vx + ((rsin((u16)angle) * 16) >> 12)));
         line->y0 = line->y1 = screen.vy + i;
         setRGB0(line, 0, 0, 0);
-        Area_CellAddPrim(pos->x.fixed, pos->y.fixed, (s8)depth, sizeof(LINE_F2));
+        {
+            Coord cell_x = {pos->x.fixed};
+            Coord cell_y = {pos->y.fixed};
+
+            Area_CellAddPrim(cell_x.fixed, cell_y.fixed, (s8)depth, sizeof(LINE_F2));
+        }
         jitter = -jitter;
         angle += rand() & 0xFF;
     }

@@ -12,8 +12,7 @@
  * state 1, 0xF/0x14/0x16 load per-channel fields, 0x10/0x11 toggle bit 0x10; other opcodes read the pad state.
  */
 /* func_8015083C */
-#ifdef NON_MATCHING
-NON_MATCHING void UI_MessageRunScript(void) {
+MATCH void UI_MessageRunScript(void) {
     u8   loop;
     u8*  chan;
     u8*  s2;
@@ -34,6 +33,7 @@ NON_MATCHING void UI_MessageRunScript(void) {
     u8*  next7;
     u8*  next4;
     s32  idx;
+    u16  timer_flags;
 
     loop = 1;
     chan = (u8*)&g_UIMessageState.flags;
@@ -149,10 +149,14 @@ NON_MATCHING void UI_MessageRunScript(void) {
                 *s5 += 1;
                 break;
             case 8:
-                CHAN_FLAGS(chan) |= FRONTEND_FLAG_TIMER_ACTIVE;
-                base8 = (u8*)D_80010004;
-                CHAN_CURSOR(chan) += 1;
-                CHAN_RETURN(chan) = CHAN_CURSOR(chan);
+                timer_flags = CHAN_FLAGS(chan);
+                p           = CHAN_CURSOR(chan);
+                base8       = (u8*)D_80010004;
+                timer_flags |= FRONTEND_FLAG_TIMER_ACTIVE;
+                p += 1;
+                CHAN_FLAGS(chan)  = timer_flags;
+                CHAN_CURSOR(chan) = p;
+                CHAN_RETURN(chan) = p;
                 v                 = *(u8*)g_UIMessageState.cursor;
                 base8 += SLUS_LOAD_ADDRESS;
                 CHAN_CURSOR(chan) = base8;
@@ -194,6 +198,3 @@ NON_MATCHING void UI_MessageRunScript(void) {
         CHAN_CURSOR(chan) += 1;
     } while (loop);
 }
-#else
-INCLUDE_ASM(UI_MessageRunScript);
-#endif

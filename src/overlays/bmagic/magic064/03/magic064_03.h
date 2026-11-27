@@ -15,6 +15,11 @@ typedef struct Magic064MainSteps {
 
 extern Magic064MainSteps D_801EEC10;
 
+/* The battle work image a party member's record begins with. */
+static inline BattleWorkImage* BMagic_MemberImage(PartyMember* member) {
+    return (BattleWorkImage*)member;
+}
+
 #define MAGIC064_STEP_COUNT 4
 
 typedef struct Magic064Steps {

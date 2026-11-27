@@ -14,14 +14,14 @@ MATCH void Battle_OpenMenu(void) {
 
     UI_PanelOpenTask(0x15, 5);
     menu_id                   = 0x11;
-    g_UiPanelTasks[21].pos.vx = 0x142;
-    g_UiPanelTasks[21].mode   = 0;
-    g_UiPanelTasks[21].state  = 0;
-    g_UiPanelTasks[21].pos.vy = 0x3F;
-    g_UiPanelTasks[21].unk_0A = 0;
+    g_UIPanelTasks[21].pos.vx = 0x142;
+    g_UIPanelTasks[21].mode   = 0;
+    g_UIPanelTasks[21].state  = 0;
+    g_UIPanelTasks[21].pos.vy = 0x3F;
+    g_UIPanelTasks[21].unk_0A = 0;
     UI_PanelOpenTask(menu_id, 5);
-    g_UiPanelTasks[17].mode  = 1;
-    g_UiPanelTasks[17].state = 0;
+    g_UIPanelTasks[17].mode  = 1;
+    g_UIPanelTasks[17].state = 0;
     SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 2));
     row   = 0;
     flags = D_800B7070;

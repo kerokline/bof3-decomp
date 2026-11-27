@@ -25,8 +25,8 @@ NON_MATCHING void func_801D759C(void) {
     if (g_BattleMessageState == 0) {
         window[0x64]              = 1;
         D_801485E7                = 1;
-        g_UiPanelTasks[19].pos.vx = D_801483C4;
-        g_UiPanelTasks[19].pos.vy = D_801483C6 + D_8014857A * 0x36;
+        g_UIPanelTasks[19].pos.vx = D_801483C4;
+        g_UIPanelTasks[19].pos.vy = D_801483C6 + D_8014857A * 0x36;
     } else {
         window[0x64] = 0;
     }
@@ -35,7 +35,7 @@ NON_MATCHING void func_801D759C(void) {
     input      = INPUT_GetRepeatedButtons(g_PadStates[0].pressed & INPUT_DIRECTIONAL);
     D_8014857C = 0xFF;
     D_8014857D = 0xFF;
-    task       = &g_UiPanelTasks[16];
+    task       = &g_UIPanelTasks[16];
     /* FAKE: retail keeps the whole return word; the u8 prototype extends it. */
     count      = ((s32 (*)(s32))Party_CountOrder)(PARTY_ORDER_FIELD);
     previous   = D_8014857A;
@@ -85,7 +85,7 @@ NON_MATCHING void func_801D759C(void) {
         D_80148651++;
     } else if ((g_PadStates[0].pressed & g_InputMasks[MENU_INPUT_CANCEL]) != 0) {
         SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 6));
-        g_UiPanelTasks[19].active = 0;
+        g_UIPanelTasks[19].active = 0;
         D_80148651--;
     }
 }

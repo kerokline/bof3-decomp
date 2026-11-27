@@ -10,12 +10,12 @@ MATCH void func_800AD808(void) {
     if (!(((PartyMember*)work)->header.flags & 0x1)) {
         return;
     }
-    if (!(g_UiPanelTasks[21].active & 0x1)) {
+    if (!(g_UIPanelTasks[21].active & 0x1)) {
         ((PartyMember*)work)->header.mode = 2;
         SELF(PartyMember)->header.step    = 0;
         return;
     }
-    *(u16*)(work + 0x2E) = g_UiPanelTasks[21].pos.vx + 0x14;
-    *(u16*)(work + 0x30) = g_UiPanelTasks[21].pos.vy + 0x12;
+    *(u16*)(work + 0x2E) = g_UIPanelTasks[21].pos.vx + 0x14;
+    *(u16*)(work + 0x30) = g_UIPanelTasks[21].pos.vy + 0x12;
     Area_AddActor();
 }

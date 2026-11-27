@@ -13,14 +13,14 @@ MATCH void func_801D42F0(void) {
     u8  result;
 
     Menu_DrawClutStrip(g_WindowClut);
-    items  = &g_ItemCategoryIds[g_UiPanelTasks[13].unk_0A][g_UiPanelTasks[13].unk_0C];
-    counts = &g_ItemCategoryCounts[g_UiPanelTasks[13].unk_0A][g_UiPanelTasks[13].unk_0C];
+    items  = &g_ItemCategoryIds[g_UIPanelTasks[13].unk_0A][g_UIPanelTasks[13].unk_0C];
+    counts = &g_ItemCategoryCounts[g_UIPanelTasks[13].unk_0A][g_UIPanelTasks[13].unk_0C];
     UI_MessageSetVariable(0, 0xC, (const u8*)&g_Items[*items]);
-    g_UiPanelTasks[MENU_START_PANEL_DESCRIPTION].u.message.id = 0x19;
-    g_UiPanelTasks[19].active                                 = 1;
-    g_UiPanelTasks[19].pos.vx                                 = 0xB6;
+    g_UIPanelTasks[MENU_START_PANEL_DESCRIPTION].u.message.id = 0x19;
+    g_UIPanelTasks[19].active                                 = 1;
+    g_UIPanelTasks[19].pos.vx                                 = 0xB6;
     sel                                                       = &D_80148656;
-    g_UiPanelTasks[19].pos.vy                                 = *sel * 0x36 + 0x3E;
+    g_UIPanelTasks[19].pos.vy                                 = *sel * 0x36 + 0x3E;
     count                                                     = Party_CountOrder(PARTY_ORDER_FIELD);
     input                                                     = INPUT_REPEATED(g_PadStates[0].pressed, (PADLup | PADLdown));
     old                                                       = *sel;
@@ -58,7 +58,7 @@ MATCH void func_801D42F0(void) {
     } else {
         return;
     }
-    g_UiPanelTasks[19].active       = 0;
-    *(u8*)&g_UiPanelTasks[13].flags = 0xFF;
+    g_UIPanelTasks[19].active       = 0;
+    *(u8*)&g_UIPanelTasks[13].flags = 0xFF;
     D_80148651 -= 4;
 }

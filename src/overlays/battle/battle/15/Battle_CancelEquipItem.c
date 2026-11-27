@@ -9,8 +9,8 @@ MATCH void Battle_CancelEquipItem(void) {
     mode                      = 2;
     g_Battle.selection_latch  = 0;
     g_BattleChoicePhase       = mode;
-    /* g_UiPanelTasks[16].pos.vx stays an address symbol here: a g_UiPanelTasks[16] view changes the code. */
-    g_UiPanelTasks[16].pos.vx = -200;
+    /* g_UIPanelTasks[16].pos.vx stays an address symbol here: a g_UIPanelTasks[16] view changes the code. */
+    g_UIPanelTasks[16].pos.vx = -200;
     g_Battle.phase.step       = 4;
     g_Battle.phase.sub_step   = mode;
     g_Battle.ui_step          = 1;

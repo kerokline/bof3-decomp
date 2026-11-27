@@ -119,10 +119,10 @@ def test_a_rename_passes_only_to_a_new_name_of_the_same_kind() -> None:
 
 
 def test_a_rename_to_an_absent_name_fails() -> None:
-    before = snapshot(Entities(globals={"g_UiFlags": "u8"}), {"a.c": {"g_UiFlags"}})
+    before = snapshot(Entities(globals={"g_UIFlags": "u8"}), {"a.c": {"g_UIFlags"}})
     after = snapshot(Entities(), {"a.c": set()})
-    assert rename_problems({"g_UiFlags": "g_UIFlags"}, before, after) == {
-        "g_UiFlags": "Renamed: g_UiFlags -> g_UIFlags, but g_UIFlags is not in the tree"
+    assert rename_problems({"g_UIFlags": "g_UIFlags"}, before, after) == {
+        "g_UIFlags": "Renamed: g_UIFlags -> g_UIFlags, but g_UIFlags is not in the tree"
     }
 
 

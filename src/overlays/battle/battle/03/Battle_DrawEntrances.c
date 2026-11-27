@@ -14,12 +14,12 @@ MATCH void Battle_DrawEntrances(void) {
         u8* count;
 
         count                   = &g_Battle.phase.sub_step;
-        g_UiPanelTasks[2].state = 1;
-        g_UiPanelTasks[1].state = 1;
-        g_UiPanelTasks[3].state = 1;
+        g_UIPanelTasks[2].state = 1;
+        g_UIPanelTasks[1].state = 1;
+        g_UIPanelTasks[3].state = 1;
         (*count)++;
     }
-    Battle_DrawPartyPanel(g_UiPanelTasks[1].pos.vx, g_UiPanelTasks[1].pos.vy);
+    Battle_DrawPartyPanel(g_UIPanelTasks[1].pos.vx, g_UIPanelTasks[1].pos.vy);
     Battle_DrawDimOverlay();
     for (panel_index = 0; panel_index < 7; panel_index++) {
         func_801D8450(panel_index);

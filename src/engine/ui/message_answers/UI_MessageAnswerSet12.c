@@ -1,7 +1,6 @@
 #include "engine/slus/slus.h"
 
-/* stores table entry g_UiMessageChoice of the D_8017F658 row in g_UiMessageRequest.
- */
+/* Requests the answer message the selection picks from the D_8017F658 row. */
 MATCH void UI_MessageAnswerSet12(void) {
-    g_UiMessageRequest = g_AnswerMessages[24 + g_UiMessageWindow.selection_index];
+    g_UIMessageRequest = g_AnswerMessages[24 + g_UIMessageWindow.selection_index];
 }

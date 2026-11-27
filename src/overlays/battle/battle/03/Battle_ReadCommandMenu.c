@@ -39,20 +39,20 @@ MATCH void Battle_ReadCommandMenu(void) {
             return;
         }
         SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 4));
-        g_UiPanelTasks[3].state = 2;
-        g_UiPanelTasks[2].state = 2;
+        g_UIPanelTasks[3].state = 2;
+        g_UIPanelTasks[2].state = 2;
         g_Battle.phase.step += 2;
         g_Battle.phase.sub_step = g_Battle.panel_slot;
         return;
     }
     if (g_PadStates[0].held & PADselect) {
         SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 4));
-        g_UiPanelTasks[2].state = 2;
-        g_UiPanelTasks[1].state = 2;
-        g_UiPanelTasks[3].state = 2;
-        Battle_DrawPanels(g_UiPanelTasks[2].pos.vx, g_UiPanelTasks[2].pos.vy);
+        g_UIPanelTasks[2].state = 2;
+        g_UIPanelTasks[1].state = 2;
+        g_UIPanelTasks[3].state = 2;
+        Battle_DrawPanels(g_UIPanelTasks[2].pos.vx, g_UIPanelTasks[2].pos.vy);
         func_801D8450((u32)g_Battle.panel_slot);
-        Battle_DrawPartyPanel((s32)g_UiPanelTasks[1].pos.vx, (s32)g_UiPanelTasks[1].pos.vy);
+        Battle_DrawPartyPanel((s32)g_UIPanelTasks[1].pos.vx, (s32)g_UIPanelTasks[1].pos.vy);
         g_Battle.phase.step += 1;
         return;
     }
@@ -68,7 +68,7 @@ MATCH void Battle_ReadCommandMenu(void) {
                                 g_Battle.cursor.panel_entry = 0;
                                 return;
                             }
-                            g_UiPanelTasks[2].state = g_UiPanelTasks[3].state = 2;
+                            g_UIPanelTasks[2].state = g_UIPanelTasks[3].state = 2;
                             g_Battle.phase.step += 2;
                             g_Battle.phase.sub_step = g_Battle.panel_slot = i + 1;
                             g_Battle.selection                            = 0;

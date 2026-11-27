@@ -7,14 +7,14 @@ MATCH void func_800A4C70(void) {
     volatile u8* state;
     u8           count;
 
-    flag = &g_UiPanelTasks[21].active;
+    flag = &g_UIPanelTasks[21].active;
     if ((*flag & 0x1) == 0) {
         *flag = 0;
         UI_PanelOpenTask(0x12, 5);
-        g_UiPanelTasks[18].mode                         = 2;
-        g_UiPanelTasks[18].pos.vx                       = -0xA5;
+        g_UIPanelTasks[18].mode                         = 2;
+        g_UIPanelTasks[18].pos.vx                       = -0xA5;
         g_BattlePanelMode                               = 0;
-        g_UiPanelTasks[18].pos.vy                       = 0x3F;
+        g_UIPanelTasks[18].pos.vy                       = 0x3F;
         g_BattleTargetCursorCol                         = 0;
         D_801485CA                                      = 0;
         g_BattleMessages[((D_801EC328 - 1) & 0xF)].text = UI_MessageGetText(0x59);

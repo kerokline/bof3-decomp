@@ -2,7 +2,7 @@
 
 MATCH void func_801F3AA0(void) {
     MESSAGE_REQUEST_CLEAR();
-    if (g_UiMessageChoice == 0) {
+    if (g_UIMessageChoice == 0) {
         Scene_SetupParty(3U);
         g_ScriptVars[1] = 0x1E;
     } else {

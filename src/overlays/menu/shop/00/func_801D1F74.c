@@ -12,9 +12,9 @@ MATCH void func_801D1F74(void) {
     pad   = &g_PadStates[0].pressed;
     UI_MessageSetVariable(0, 0xC, block);
     D_80148340                = 0x4A;
-    g_UiPanelTasks[21].active = 1;
-    g_UiPanelTasks[21].pos.vx = g_UiPanelTasks[0].pos.vx + (1 - *mode) * 32 + 0xDE;
-    g_UiPanelTasks[21].pos.vy = g_UiPanelTasks[0].pos.vy + 5;
+    g_UIPanelTasks[21].active = 1;
+    g_UIPanelTasks[21].pos.vx = g_UIPanelTasks[0].pos.vx + (1 - *mode) * 32 + 0xDE;
+    g_UIPanelTasks[21].pos.vy = g_UIPanelTasks[0].pos.vy + 5;
     if (*pad & (PADLright | PADLleft)) {
         SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 0));
         *mode = *mode ^ 0x1;

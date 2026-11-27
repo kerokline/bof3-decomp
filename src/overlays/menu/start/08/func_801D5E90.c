@@ -12,13 +12,13 @@ MATCH void func_801D5E90(void) {
     u8             next;
     u8             clut;
     clut  = g_WindowClut;
-    panel = &g_UiPanelTasks[14];
+    panel = &g_UIPanelTasks[14];
     Menu_DrawClutStrip(clut);
     frame                                                     = panel + 7;
     frame->active                                             = 1;
-    D_80148628                                                = g_UiPanelTasks[14].pos.vx + 7;
-    D_8014862A                                                = g_UiPanelTasks[14].pos.vy + ((g_UiPanelTasks[14].unk_0B - g_UiPanelTasks[14].unk_0A) * 13 + 0x1A);
-    g_UiPanelTasks[MENU_START_PANEL_DESCRIPTION].u.message.id = Item_GetDescription(g_UiPanelTasks[14].unk_08, g_UiPanelTasks[14].flags);
+    D_80148628                                                = g_UIPanelTasks[14].pos.vx + 7;
+    D_8014862A                                                = g_UIPanelTasks[14].pos.vy + ((g_UIPanelTasks[14].unk_0B - g_UIPanelTasks[14].unk_0A) * 13 + 0x1A);
+    g_UIPanelTasks[MENU_START_PANEL_DESCRIPTION].u.message.id = Item_GetDescription(g_UIPanelTasks[14].unk_08, g_UIPanelTasks[14].flags);
     panel                                                     = frame;
     panel -= 7;
     buttons = INPUT_REPEATED(g_PadStates[0].pressed, (INPUT_DIRECTIONAL | PADL1 | PADR1));
@@ -29,14 +29,14 @@ MATCH void func_801D5E90(void) {
             D_80148533 = old - 1;
         }
         if (D_80148533 < D_80148532) {
-            g_UiPanelTasks[14].u.addr.unk_10 = 240;
+            g_UIPanelTasks[14].u.addr.unk_10 = 240;
         }
     } else if (buttons & PADLdown) {
         if (old < 127) {
             D_80148533 = old + 1;
         }
         if (D_80148533 >= D_80148532 + 9) {
-            g_UiPanelTasks[14].u.addr.unk_10 = 16;
+            g_UIPanelTasks[14].u.addr.unk_10 = 16;
         }
     } else if (buttons & PADL1) {
         first_row = D_80148532;
@@ -62,12 +62,12 @@ MATCH void func_801D5E90(void) {
             D_80148532 = last_row + 9;
         }
     }
-    if (g_UiPanelTasks[13].unk_0A < 4) {
-        s_SkillOrderGroups[g_UiPanelTasks[13].unk_0C][g_UiPanelTasks[13].unk_0A] = D_80148532;
-        s_SkillOrderTypes[g_UiPanelTasks[13].unk_0C][g_UiPanelTasks[13].unk_0A]  = D_80148533;
+    if (g_UIPanelTasks[13].unk_0A < 4) {
+        s_SkillOrderGroups[g_UIPanelTasks[13].unk_0C][g_UIPanelTasks[13].unk_0A] = D_80148532;
+        s_SkillOrderTypes[g_UIPanelTasks[13].unk_0C][g_UIPanelTasks[13].unk_0A]  = D_80148533;
     } else {
-        s_SkillOrderGroups[g_UiPanelTasks[13].unk_0C][4] = s_SkillOrderGroups[g_UiPanelTasks[13].unk_0C][5] = D_80148532;
-        s_SkillOrderTypes[g_UiPanelTasks[13].unk_0C][4] = s_SkillOrderTypes[g_UiPanelTasks[13].unk_0C][5] = D_80148533;
+        s_SkillOrderGroups[g_UIPanelTasks[13].unk_0C][4] = s_SkillOrderGroups[g_UIPanelTasks[13].unk_0C][5] = D_80148532;
+        s_SkillOrderTypes[g_UIPanelTasks[13].unk_0C][4] = s_SkillOrderTypes[g_UIPanelTasks[13].unk_0C][5] = D_80148533;
     }
     if (old != (*panel).unk_0B) {
         SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 0));
@@ -78,15 +78,15 @@ MATCH void func_801D5E90(void) {
             if ((*panel).flags != 0) {
                 SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 4));
                 func_801D6E6C();
-                g_UiPanelTasks[14].unk_0B = GAME_NONE;
+                g_UIPanelTasks[14].unk_0B = GAME_NONE;
                 g_MenuStep.sub_step -= 1;
             } else {
                 SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 7));
             }
         } else if (pad & g_InputMasks[MENU_INPUT_CANCEL]) {
             SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 6));
-            g_UiPanelTasks[14].unk_0B                            = GAME_NONE;
-            g_UiPanelTasks[MENU_START_PANEL_CURSOR_FRAME].active = 0;
+            g_UIPanelTasks[14].unk_0B                            = GAME_NONE;
+            g_UIPanelTasks[MENU_START_PANEL_CURSOR_FRAME].active = 0;
             g_MenuStep.sub_step -= 1;
         }
     }

@@ -80,6 +80,10 @@ match itself; [matching](../../../../docs/matching.md) is the full reference.
    - *A register reused as a constant in a compare*: reuse does not cross widths; make the flag `u8`.
    - *One odd instruction after everything else matches*: read what the form implies about the
      source (a raw `andi` beside an `andi 0xFF` copy is an `s32` parameter with a `u8` local).
+   - *Frame bytes no local explains*: before a `FAKE_STACK_PADS`, look for a call that takes a
+     fixed-point pair (`Area_HeightSample`, `Area_CellAddPrim`). `Coord x = {value};` on a union held
+     in a register leaves a `(clobber (reg x))` that no pass deletes. The pseudo gets no hard
+     register, so reload gives it an 8-byte stack slot: 0x10 bytes per call. Pass `x.fixed`.
 
    Ask the compiler before guessing. `tools/rtl_dump.sh <file.c> [letters] [function]` prints the
    function's part of GCC's dumps (`l` local, `g` global allocation, `L` loop, `S` schedule,

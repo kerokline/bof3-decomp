@@ -80,7 +80,9 @@
 /* Retail frame bytes that no statement, struct, array, spilled argument or
  * local type explains: n unused objects of type, declared the same in every mode
  * (the size only matters when matching). A declaration:
- * place it with the other locals at block start. */
+ * place it with the other locals at block start. First try a brace-initialised
+ * union local for each fixed-point argument of a call (`Coord x = {value};`):
+ * its constructor leaves an 8-byte slot (docs/matching.md, tactics). */
 #define FAKE_STACK_PADS(type, n) type stack_pad[n]
 
 /* A local holds a constant so the loop pass hoists it in retail order. A

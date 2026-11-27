@@ -2243,20 +2243,30 @@ MATCH void func_801D81A4(s16 x, s16 y) {
 #ifdef NON_MATCHING
 void func_801D851C(s16 x, s16 y, s32 width, u8 index);
 
-NON_MATCHING void func_801D830C(s32 x, s32 y, s32 kind, s32 mode) {
+NON_MATCHING void func_801D830C(s32 x, s32 y, u8 kind, u8 mode) {
     TILE* tile;
-    s32   tile_x;
-    s32   tile_y;
+    s16   tile_x;
+    s16   tile_y;
     s32   row;
     u8*   style;
+    u16   left;
+    u16   top;
+    u8*   text;
 
-    UI_WindowDraw(x, y, 0x48, 0x26, 0x80, *(style = &g_WindowStyle));
+    left = x;
+    top  = y;
+    UI_WindowDraw(left, top, 0x48, 0x26, 0x80, *(style = &g_WindowStyle));
     func_801D81A4(x, y);
-    UI_TextDraw(x + 6, y + 4, 0, 5, (mode & BYTE_MASK) ? D_801DB080.bytes : style + 0xE96 + (kind & BYTE_MASK) * 5);
+    if (mode == 0) {
+        text = style + 0xE96 + kind * 5;
+    } else {
+        text = D_801DB080.bytes;
+    }
+    UI_TextDraw(x + 6, y + 4, 0, 5, text);
     tile = (TILE*)g_GfxPrimCursor;
     SetTile(tile);
-    tile_x   = x + 6;
-    tile_y   = y + 0x12;
+    tile_x   = left + 6;
+    tile_y   = top + 0x12;
     tile->x0 = tile_x;
     tile->y0 = tile_y;
     tile->w  = 0x3C;
@@ -2265,9 +2275,9 @@ NON_MATCHING void func_801D830C(s32 x, s32 y, s32 kind, s32 mode) {
     GFX_AddPrim(GFX_LAYER_UI, sizeof(TILE));
     row = kind & BYTE_MASK;
     func_801D851C(tile_x, tile_y, g_Fairies[row][5] * 12, 0);
-    func_801D851C(tile_x, y + 0x16, g_Fairies[row][6] * 12, 1);
-    func_801D851C(tile_x, y + 0x1A, g_Fairies[row][7] * 12, 2);
-    func_801D851C(tile_x, y + 0x1E, g_Fairies[row][8] * 12, 3);
+    func_801D851C(tile_x, top + 0x16, g_Fairies[row][6] * 12, 1);
+    func_801D851C(tile_x, top + 0x1A, g_Fairies[row][7] * 12, 2);
+    func_801D851C(tile_x, top + 0x1E, g_Fairies[row][8] * 12, 3);
 }
 #else
 INCLUDE_ASM(func_801D830C);

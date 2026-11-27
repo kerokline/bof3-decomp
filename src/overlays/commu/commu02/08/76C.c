@@ -2283,22 +2283,24 @@ NON_MATCHING void func_801D830C(s32 x, s32 y, u8 kind, u8 mode) {
 INCLUDE_ASM(func_801D830C);
 #endif
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801D851C(s16 x, s16 y, s32 width, u8 index) {
+/* Draws one channel bar of a fairy box: two shaded bands in the channel colour. */
+MATCH void func_801D851C(s16 x, s16 y, s32 width, u8 index) {
     u8       colors[4][3];
     POLY_G4* prim;
     u8*      color;
+    s16      middle;
 
     memcpy(colors, D_801D0C30, sizeof(colors));
     prim = (POLY_G4*)g_GfxPrimCursor;
     SetPolyG4(prim);
     prim->x0 = x;
     prim->x1 = x + width;
-    prim->y1 = y;
     prim->y0 = y;
     prim->y2 = y + 2;
-    prim->y3 = y + 2;
+    prim->y1 = y;
     prim->x2 = prim->x0;
+    middle   = y + 2;
+    prim->y3 = middle;
     prim->x3 = prim->x1;
     color    = colors[index];
     setRGB2(prim, color[0] << 7, color[1] << 7, color[2] << 7);
@@ -2309,22 +2311,19 @@ NON_MATCHING void func_801D851C(s16 x, s16 y, s32 width, u8 index) {
     prim = (POLY_G4*)g_GfxPrimCursor;
     SetPolyG4(prim);
     prim->x0 = x;
+    prim->y0 = middle;
     prim->x1 = x + width;
-    prim->y0 = y + 2;
-    prim->y1 = y + 2;
-    prim->y2 = y + 4;
-    prim->y3 = y + 4;
+    prim->y1 = middle;
     prim->x2 = prim->x0;
+    prim->y2 = y + 4;
     prim->x3 = prim->x1;
+    prim->y3 = y + 4;
     setRGB0(prim, color[0] << 7, color[1] << 7, color[2] << 7);
     setRGB2(prim, prim->r0 >> 2, prim->g0 >> 2, prim->b0 >> 2);
     setRGB1(prim, prim->r0, prim->g0, prim->b0);
     setRGB3(prim, prim->r2, prim->g2, prim->b2);
     GFX_AddPrim(GFX_LAYER_UI, sizeof(POLY_G4));
 }
-#else
-INCLUDE_ASM(func_801D851C);
-#endif
 
 MATCH void func_801D875C(s16 x, s16 y, s32 index) {
     s32   tpage;

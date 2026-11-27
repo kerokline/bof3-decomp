@@ -17,12 +17,13 @@ MATCH void func_801EEC04(void) {
 
 #ifdef NON_MATCHING
 NON_MATCHING void func_801EED0C(void) {
-    u16* palette_src;
-    u16* palette_dst;
-    u32  i;
-    u8   slot;
-    u8   phase;
-    s32  speed;
+    u16*         palette_src;
+    u16*         palette_dst;
+    u32          i;
+    u8           slot;
+    u8           phase;
+    s32          speed;
+    PartyMember* work;
 
     for (i = 0; i < BMAGIC_EFFECT_COUNT; i++) {
         BMAGIC_EFFECT_SLOTS[i].header.flags = 0;
@@ -55,8 +56,9 @@ NON_MATCHING void func_801EED0C(void) {
         BMAGIC_EFFECT_SLOTS[slot].arg.unk_09    = phase;
         BMAGIC_EFFECT_SLOTS[slot].unk_0B        = 2;
         BMAGIC_EFFECT_SLOTS[slot].unk_0C        = speed;
+        work                                    = SELF(PartyMember);
         *(s32*)BMAGIC_EFFECT_SLOTS[slot].pad_14 = 0x400000;
-        SELF(PartyMember)->param.unk_0B++;
+        work->param.unk_0B++;
     }
     speed = 0x100;
     for (i = 0, phase = 4; i < 8; i++, phase += 8) {

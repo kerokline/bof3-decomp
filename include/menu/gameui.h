@@ -37,8 +37,8 @@ typedef struct MessageState {
     u16 flags;        /* 0x04 */
     u8  count;        /* 0x06 */
     u8  pad_07[5];    /* 0x07 */
-    s32 entry;        /* 0x0C */
-    s32 cursor;       /* 0x10 */
+    u8* entry;        /* 0x0C */
+    u8* cursor;       /* 0x10 */
     u8  pad_14[4];    /* 0x14 */
     u8  phase;        /* 0x18 */
     u8  index;        /* 0x19 */

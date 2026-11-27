@@ -41,10 +41,10 @@ MATCH u8 func_801AF5B0(s32 item_category, s32 character_index, s32 ability_type)
                         } while (0);
                     } while (0);
                 }
-                if ((u8)ability_type == ABILITY_BONEBREAK && *(u32*)&g_GameBonebreakTimer != 0) {
+                if ((u8)ability_type == ABILITY_BONEBREAK && LOW(g_GameBonebreakTimer) != 0) {
                     return 0;
                 }
-                if ((u8)ability_type == ABILITY_CELERITY && *(u32*)&g_GameCelerityTimer != 0) {
+                if ((u8)ability_type == ABILITY_CELERITY && LOW(g_GameCelerityTimer) != 0) {
                     return 0;
                 }
                 if ((u8)ability_type == ABILITY_TRUMP && g_Game.members[(u8)character_index].chr.ap != 0) {

@@ -3,8 +3,7 @@
 /* func_801D2DC4 */
 /* Reel gauge: moves the cursor toward the hooked fish's limit, then draws the gauge line, the
  * cursor row and the fish arrow. */
-#ifdef NON_MATCHING
-NON_MATCHING void Fishing_ReelGaugeUpdate(void) {
+MATCH void Fishing_ReelGaugeUpdate(void) {
     LINE_F2*      prim;
     FishingState* work;
     FishingState* gauge;
@@ -41,11 +40,12 @@ NON_MATCHING void Fishing_ReelGaugeUpdate(void) {
             } else {
                 work->timer = timer + 1;
             }
-            goto moved;
+        } else {
+            work->timer = 0;
         }
+    } else {
+        work->timer = 0;
     }
-    work->timer = 0;
-moved:
     LOH(SELF(FishingState)->origin_y) += SELF(FishingState)->cursor_10;
     gauge  = SELF(FishingState);
     cursor = gauge->origin_y;
@@ -96,6 +96,3 @@ moved:
         }
     }
 }
-#else
-INCLUDE_ASM(Fishing_ReelGaugeUpdate);
-#endif

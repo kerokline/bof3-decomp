@@ -2185,8 +2185,7 @@ MATCH void func_801D7EF0(s16 x, s16 y) {
     COMMU_DRAW_CELL_GRID(func_801D875C, 0x16, 20, 2, 6);
 }
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801D8058(s32 left, s32 top) {
+MATCH void func_801D8058(s32 left, s32 top) {
     s32 i;
     s32 count;
     s32 x;
@@ -2195,6 +2194,7 @@ NON_MATCHING void func_801D8058(s32 left, s32 top) {
     s32 grid_x;
     s32 y_fixed;
     s32 n;
+    FAKE_STACK_PADS(u8, 8); /* FAKE: retail reserves 8 unused stack bytes; without them 14 rows (frame 0x30). */
 
     x      = left;
     y      = top;
@@ -2215,9 +2215,6 @@ NON_MATCHING void func_801D8058(s32 left, s32 top) {
         } while (i < n);
     }
 }
-#else
-INCLUDE_ASM(func_801D8058);
-#endif
 
 MATCH void func_801D812C(void) {
     u16 index;
@@ -2612,13 +2609,13 @@ MATCH void Menu_DrawPanelIcon(u16 x, u16 y, s32 u, s32 v, u16 clut, u8 color) {
     MenuDrawPanelIcon(x, y, u, v, clut, color);
 }
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801D9B80(s32 x, s32 y, s32 width, s32 height) {
+MATCH void func_801D9B80(s32 x, s32 y, s32 width, s32 height) {
     RECT  window;
     SPRT* sprite;
     s32   columns;
     s32   rows;
     u8    edge;
+    FAKE_STACK_PADS(u8, 8); /* FAKE: retail reserves 8 unused stack bytes after the window rectangle; without them the frame is 0x40 (16 rows). */
 
     /* not setRECT: retail stores h before w */
     window.x = 112;
@@ -2707,9 +2704,6 @@ NON_MATCHING void func_801D9B80(s32 x, s32 y, s32 width, s32 height) {
     UI_SpriteDraw((s16)x, (s16)(y + rows * 8), 0x27, UI_SPRITE_ALT_PAGE);
     UI_SpriteDraw((s16)(x + columns * 8), (s16)(y + rows * 8), 0x29, UI_SPRITE_ALT_PAGE);
 }
-#else
-INCLUDE_ASM(func_801D9B80);
-#endif
 
 MATCH s8 func_801DA114(void) {
     s32 pressed;

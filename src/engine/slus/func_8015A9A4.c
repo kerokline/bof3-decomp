@@ -31,7 +31,7 @@ NON_MATCHING void func_8015A9A4(void) {
     /* FAKE: keeps dx in its own pseudo so the x delta loads first, as in Area_CellAddPrim; pure C best 18 rows. */
     dx++;
     dx--;
-    sum = dy + dx;
+    sum = dx + dy;
     key = sum + 1;
     if (COORD_FRAC(SELF(Actor)->pos.y) == 0) {
         key = sum;
@@ -42,7 +42,8 @@ NON_MATCHING void func_8015A9A4(void) {
     actor->unk_32 = key;
     if (g_AreaDrawMode == GFX_LAYER_BATTLE_SCENE) {
         if (D_8014933F != 0) {
-            actor->unk_32 = key | ((actor->pos.x.fixed >> 15) & BYTE_MASK);
+            sum           = actor->pos.x.fixed >> 15;
+            actor->unk_32 = key | (sum & BYTE_MASK);
         } else {
             actor->unk_32 = key | ((actor->pos.y.fixed >> 15) & BYTE_MASK);
         }

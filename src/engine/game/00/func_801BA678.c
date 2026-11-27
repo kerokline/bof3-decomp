@@ -20,23 +20,33 @@ NON_MATCHING s32 func_801BA678(void) {
     if (COORD_FRAC(SELF(Actor)->pos.x) == 0 && COORD_FRAC(SELF(Actor)->pos.y) == 0) {
         return 1;
     }
-    dx = D_80181B00[SELF(Actor)->direction][0];
-    if (dx == 1) {
-        dx = 2;
+    switch (D_80181B00[SELF(Actor)->direction][0]) {
+        case 1:
+            dx = 2;
+            break;
+        default:
+            dx = D_80181B00[SELF(Actor)->direction][0];
+            break;
     }
-    dy = D_80181B00[SELF(Actor)->direction][1];
-    if (dy == 1) {
-        dy = 2;
+    switch (D_80181B00[SELF(Actor)->direction][1]) {
+        case 1:
+            dy = 2;
+            break;
+        default:
+            dy = D_80181B00[SELF(Actor)->direction][1];
+            break;
     }
-    near_x  = COORD_INT(SELF(Actor)->pos.x);
-    ahead_x = COORD_INT(SELF(Actor)->pos.x) + dx;
-    ahead_y = COORD_INT(SELF(Actor)->pos.y) + dy;
+    ahead_x = (u16)COORD_INT(SELF(Actor)->pos.x) + dx;
+    ahead_y = (u16)COORD_INT(SELF(Actor)->pos.y) + dy;
     if (D_80181B00[SELF(Actor)->direction][0] == 1) {
-        near_x += 1;
+        near_x = COORD_INT(SELF(Actor)->pos.x) + 1;
+    } else {
+        near_x = COORD_INT(SELF(Actor)->pos.x);
     }
-    near_y = COORD_INT(SELF(Actor)->pos.y);
     if (D_80181B00[SELF(Actor)->direction][1] == 1) {
-        near_y += 1;
+        near_y = COORD_INT(SELF(Actor)->pos.y) + 1;
+    } else {
+        near_y = COORD_INT(SELF(Actor)->pos.y);
     }
     func_801BBCCC(ahead_x, ahead_y, near_x, near_y);
 

@@ -11,14 +11,14 @@ NON_MATCHING void func_801F2FEC(s32* pos, s16 radius_x, s16 radius_y, u16 rotati
     u16      angle;
     s16      ellipse[2];
     u8       i;
-    s16      rot;
+    s32      rot;
     u16      tpage;
 
     tpage = GetTPage(TPAGE_DEPTH_4BIT, TPAGE_ABR_ADD, FONT_TPAGE_X, FONT_TPAGE_Y);
-    rot   = rotation;
+    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, NULL);
     angle = 0;
     i     = 0;
-    SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, NULL);
+    rot   = rotation;
     {
         Coord cell_x = {pos[0]};
         Coord cell_y = {pos[1]};

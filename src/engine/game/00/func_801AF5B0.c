@@ -1,8 +1,7 @@
 #include "game_00.h"
 
 /* Reports whether the character may use the ability in this context: 0 is locked. */
-#ifdef NON_MATCHING
-NON_MATCHING u8 func_801AF5B0(s32 item_category, s32 character_index, s32 ability_type) {
+MATCH u8 func_801AF5B0(s32 item_category, s32 character_index, s32 ability_type) {
     Ability* ability;
     u8       character;
 
@@ -32,13 +31,20 @@ NON_MATCHING u8 func_801AF5B0(s32 item_category, s32 character_index, s32 abilit
                 if ((g_Game.members[(u8)character_index].chr.status & STATUS_SILENCED) != 0 && (LOH(ability->element) & (ABILITY_SILENCEABLE << 8)) != 0) {
                     return 0;
                 }
-                if ((u8)ability_type == ABILITY_DISEMBOWEL && g_Game.members[(u8)character_index].chr.fatigue >= 5) {
+                if ((u8)ability_type == ABILITY_DISEMBOWEL) {
+                    /* FAKE: the loop weight lifts character_index over ability_type and the ability pointer in the allocator (s1, s2, s3); pure C best 20 rows. */
+                    do {
+                        do {
+                            if (g_Game.members[(u8)character_index].chr.fatigue >= 5) {
+                                return 0;
+                            }
+                        } while (0);
+                    } while (0);
+                }
+                if ((u8)ability_type == ABILITY_BONEBREAK && LOW(g_GameBonebreakTimer) != 0) {
                     return 0;
                 }
-                if ((u8)ability_type == ABILITY_BONEBREAK && *(u32*)&g_GameBonebreakTimer != 0) {
-                    return 0;
-                }
-                if ((u8)ability_type == ABILITY_CELERITY && *(u32*)&g_GameCelerityTimer != 0) {
+                if ((u8)ability_type == ABILITY_CELERITY && LOW(g_GameCelerityTimer) != 0) {
                     return 0;
                 }
                 if ((u8)ability_type == ABILITY_TRUMP && g_Game.members[(u8)character_index].chr.ap != 0) {
@@ -53,6 +59,3 @@ NON_MATCHING u8 func_801AF5B0(s32 item_category, s32 character_index, s32 abilit
     }
     return 0;
 }
-#else
-INCLUDE_ASM(func_801AF5B0);
-#endif

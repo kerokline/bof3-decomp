@@ -6,7 +6,6 @@
 NON_MATCHING void func_801D6684(void) {
     u8(*cells)[8];
     u8* cell_ptr;
-    u8(*glyphs)[2];
     s32 row;
     s32 col;
     s32 x;
@@ -14,6 +13,7 @@ NON_MATCHING void func_801D6684(void) {
     s32 y_page;
     u8  page;
     u8  cell;
+    u8* text;
 
     if (SELF(FishingState)->step_index != 0) {
         func_801D2034(0xD4, 0x8A, 0, (u8)(SELF(FishingState)->saved_index + 1));
@@ -33,7 +33,6 @@ NON_MATCHING void func_801D6684(void) {
     y      = TO_COORD(158);
     y_page = TO_COORD(155);
     do {
-        glyphs   = D_801E2070;
         col      = 0;
         x        = TO_COORD(132);
         cell_ptr = *cells;
@@ -42,12 +41,18 @@ NON_MATCHING void func_801D6684(void) {
         if (cell != 0xFF) {
             if (row == SELF(FishingState)->saved_index) {
                 if ((u8)(SELF(FishingState)->timer % 12) < 10 && col == page) {
-                    UI_TextDraw(x >> 16, y_page >> 16, cell, 1, glyphs[cell]);
+                    /* FAKE: the loop weight lifts the glyph table over the cell rows in the allocator (s6 above s7); pure C best 22 rows. */
+                    do {
+                        do {
+                            text = D_801E2070[cell];
+                        } while (0);
+                    } while (0);
+                    UI_TextDraw(x >> 16, y_page >> 16, cell, 1, text);
                 } else {
-                    UI_TextDrawString(x >> 16, y >> 16, (u8)(*cell_ptr * 3), 1, glyphs[*cell_ptr]);
+                    UI_TextDrawString(x >> 16, y >> 16, (u8)(*cell_ptr * 3), 1, D_801E2070[*cell_ptr]);
                 }
             } else {
-                UI_TextDrawString(x >> 16, y >> 16, (u8)(7 - cell), 1, glyphs[cell]);
+                UI_TextDrawString(x >> 16, y >> 16, (u8)(7 - cell), 1, D_801E2070[cell]);
             }
             x += TO_COORD(12);
             col++;

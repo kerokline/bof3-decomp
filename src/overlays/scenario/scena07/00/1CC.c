@@ -899,8 +899,11 @@ NON_MATCHING void func_801FA01C(void) {
         }
     }
     angle -= 0x80;
-    vertex->vx = 0;
-    vertex->vy = 0;
+    /* FAKE: the loop weight lifts the ring vertex pointer over the phase counter in the allocator (s5 above s6); pure C best 17 rows. */
+    do {
+        vertex->vx = 0;
+        vertex->vy = 0;
+    } while (0);
     vertex->vz = -0x1000;
 
     quad = MEM_PTR(u16, AREA_WORK + 0x27F4);

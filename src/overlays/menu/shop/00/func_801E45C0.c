@@ -1,9 +1,8 @@
 #include "shop_00.h"
 
-#ifdef NON_MATCHING
 /* Draws the message panel: the packed entry rows with their cursor shading and
  * class icon, then the tab strips and the scrollbar. */
-NON_MATCHING void func_801E45C0(MenuPanelTask* task) {
+MATCH void func_801E45C0(MenuPanelTask* task) {
     u8  entries[17];
     u8  row_offset;
     u8  count;
@@ -11,15 +10,18 @@ NON_MATCHING void func_801E45C0(MenuPanelTask* task) {
     u8  packed;
     u8  first;
     u8  current;
-    s32 shade;
-    s32 start;
+    u8  shade;
+    u8  start;
     s16 row_y;
     s32 title_x;
     s32 enabled;
+    s32 rows;
 
-    packed  = 0;
+    /* The list shows nine rows at a time. */
+    rows    = 9;
     first   = 0x7F;
     current = 0x7F;
+    packed  = 0;
     for (i = 0; i < 0x11; i++) {
         if (((D_8014554F[i >> 3] >> (i & 7)) & 1) != 0) {
             if (task->unk_0B == packed) {
@@ -39,17 +41,17 @@ NON_MATCHING void func_801E45C0(MenuPanelTask* task) {
         task->flags = 0xFF;
     }
 
-    UI_WindowDraw(((u16)task->pos.vx + 3) & HALF_MASK, ((u16)task->pos.vy + 3) & HALF_MASK, 0x71, 0x9A, 0, g_WindowStyle);
+    UI_WindowDraw(((u16)task->pos.vx + 3) & HALF_MASK, ((u16)task->pos.vy + 3) & HALF_MASK, 0x71, 0x9A, 0, CHARACTER_BLOCK->window_style);
 
     start = UI_ScrollList(&task->unk_0A, &row_offset, &count, &task->unk_08);
     row_y = (s8)row_offset + ((u16)task->pos.vy + 0x1A);
-    for (i = start; (u8)i < (u8)start + (count + 9); i++) {
+    for (i = start; i < start + (count + rows); i++) {
         if (entries[i] != 0) {
             enabled = func_801E4C2C((entries[i] - 1) & BYTE_MASK);
             if (first == i) {
                 UI_TextDraw(((u16)task->pos.vx + 0x13), (s16)row_y, UI_TEXT_DIM, TEXT_LENGTH_MAX, UI_MessageGetText(entries[i] + 0x110));
                 if ((enabled & BYTE_MASK) == 0) {
-                    UI_IconDraw(((u16)task->pos.vx + 8) & HALF_MASK, (row_y + 2) & HALF_MASK, 6, 1);
+                    UI_IconDraw(((u16)task->pos.vx + 8) & HALF_MASK, ((u16)row_y + 2) & HALF_MASK, 6, 1);
                 } else {
                     UI_TextDraw(((u16)task->pos.vx + 8), (s16)row_y, UI_TEXT_DIM, TEXT_LENGTH_MAX, (u8*)&D_801E5F68);
                 }
@@ -57,7 +59,7 @@ NON_MATCHING void func_801E45C0(MenuPanelTask* task) {
             }
             UI_TextDraw(((u16)task->pos.vx + 0x13), (s16)row_y, shade = (current == i) * 2, TEXT_LENGTH_MAX, UI_MessageGetText(entries[i] + 0x110));
             if ((enabled & BYTE_MASK) == 0) {
-                UI_IconDraw(((u16)task->pos.vx + 8) & HALF_MASK, (row_y + 2) & HALF_MASK, 6, 0);
+                UI_IconDraw(((u16)task->pos.vx + 8) & HALF_MASK, ((u16)row_y + 2) & HALF_MASK, 6, 0);
             } else {
                 UI_TextDraw(((u16)task->pos.vx + 8), (s16)row_y, shade, TEXT_LENGTH_MAX, (u8*)&D_801E5F68);
             }
@@ -68,8 +70,8 @@ NON_MATCHING void func_801E45C0(MenuPanelTask* task) {
         row_y += 0xD;
     }
 
-    UI_WindowDraw(((u16)task->pos.vx + 3) & HALF_MASK, ((u16)task->pos.vy + 3) & HALF_MASK, 0x71, 0x14, 0, g_WindowStyle);
-    UI_WindowDraw(((u16)task->pos.vx + 3) & HALF_MASK, ((u16)task->pos.vy + 0x92) & HALF_MASK, 0x71, 8, 0, g_WindowStyle);
+    UI_WindowDraw(((u16)task->pos.vx + 3) & HALF_MASK, ((u16)task->pos.vy + 3) & HALF_MASK, 0x71, 0x14, 0, CHARACTER_BLOCK->window_style);
+    UI_WindowDraw(((u16)task->pos.vx + 3) & HALF_MASK, ((u16)task->pos.vy + 0x92) & HALF_MASK, 0x71, 8, 0, CHARACTER_BLOCK->window_style);
 
     title_x = (Game_ReadCommand((u8*)D_801E5F60) & BYTE_MASK) * 4 - 0x3A;
     UI_TextDraw(((u16)task->pos.vx - title_x), ((u16)task->pos.vy + 7), 0, MENU_LABEL_LENGTH, (u8*)D_801E5F60);
@@ -95,6 +97,3 @@ NON_MATCHING void func_801E45C0(MenuPanelTask* task) {
     UI_SpriteDraw(((u16)task->pos.vx + 0x68), (u16)task->pos.vy, 0x33, UI_SPRITE_ALT_PAGE);
     UI_ListDrawScrollbar(entries, task->unk_0A, ((u16)task->pos.vx + 0x68), ((u16)task->pos.vy + 0x18), 9, 0x11, 0x74);
 }
-#else
-INCLUDE_ASM(func_801E45C0);
-#endif

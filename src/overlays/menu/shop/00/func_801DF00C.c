@@ -50,7 +50,7 @@ NON_MATCHING void func_801DF00C(s32 x, s32 y) {
         TEXT_Format(g_UITextFormatBuffer, D_801D0E70, record->stats.max_hp);
         UI_TextDrawGlyphString(x + 0x1F, base_y + 0x1D, clut, g_UITextFormatBuffer);
         Menu_DrawIcon(base_x + 2, base_y + 0x25, 1, 0);
-        clut = 0;
+        clut = highlight ? 7 : 0;
         if (!highlight) {
             if ((record->stats.max_ap >> 2) >= record->ap)
                 clut = 4;

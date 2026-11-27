@@ -8,7 +8,7 @@ MATCH void func_8015102C(void) {
     u8  count;
     u8  phase;
     u16 flags;
-    s32 cursor;
+    u8* cursor;
 
     count                  = g_UIMessageState.count;
     g_UIMessageState.count = count + 0xFF;

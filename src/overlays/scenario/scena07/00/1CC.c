@@ -237,14 +237,12 @@ MATCH void func_801F786C(void) {
     SYS_DISPATCH_TASK(D_801FDDAC, 2, g_Self);
 }
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801F78B0(void) {
+MATCH void func_801F78B0(void) {
     Scena07BurstBuffer* buffer;
+    Coord               x = {SELF(Actor)->pos.x.fixed};
+    Coord               y = {SELF(Actor)->pos.y.fixed};
 
-    /* FAKE: the retail frame holds 0x10 bytes no statement explains. */
-    FAKE_STACK_PADS(u8, 0x10);
-
-    SELF(Actor)->pos.z.fixed = Area_HeightSample(SELF(Actor)->pos.x.fixed, SELF(Actor)->pos.y.fixed) << 16;
+    SELF(Actor)->pos.z.fixed = Area_HeightSample(x.fixed, y.fixed) << 16;
     buffer                   = MEM_PTR(Scena07BurstBuffer, AREA_WORK + 0x424);
     D_801FDFC0               = buffer;
     buffer->pos.vx           = SELF(Actor)->pos.x.fixed;
@@ -256,9 +254,6 @@ NON_MATCHING void func_801F78B0(void) {
     SELF(Actor)->header.step++;
     SND_SEPlay(EMI_SE_ID(SND_BANK_AREA, 9));
 }
-#else
-INCLUDE_ASM(func_801F78B0);
-#endif
 
 MATCH void func_801F7960(void) {
     Scene_TurnBurst(64);
@@ -307,29 +302,27 @@ MATCH void func_801F7B9C(void) {
     SYS_DISPATCH_TASK(D_801FDDC0, 2, g_Self);
 }
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801F7BE0(void) {
+MATCH void func_801F7BE0(void) {
     Scena07BurstBuffer* buffer;
-
-    /* FAKE: the retail frame holds 0x10 bytes no statement explains. */
-    FAKE_STACK_PADS(u8, 0x10);
 
     SELF(Actor)->pos.x.fixed = g_Game.members[0].pos.x.fixed;
     SELF(Actor)->pos.y.fixed = g_Game.members[0].pos.y.fixed;
-    SELF(Actor)->pos.z.fixed = TO_COORD(Area_HeightSample(SELF(Actor)->pos.x.fixed, SELF(Actor)->pos.y.fixed));
-    buffer                   = MEM_PTR(Scena07BurstBuffer, AREA_WORK + 0x424);
-    buffer->pos.vx           = SELF(Actor)->pos.x.fixed;
-    D_801FDFC0               = buffer;
-    buffer->pos.vy           = SELF(Actor)->pos.y.fixed;
-    buffer->pos.vz           = SELF(Actor)->pos.z.fixed + TO_COORD(0x200);
-    buffer->angle            = 0x800;
+    {
+        Coord x = {SELF(Actor)->pos.x.fixed};
+        Coord y = {SELF(Actor)->pos.y.fixed};
+
+        SELF(Actor)->pos.z.fixed = TO_COORD(Area_HeightSample(x.fixed, y.fixed));
+    }
+    buffer         = MEM_PTR(Scena07BurstBuffer, AREA_WORK + 0x424);
+    buffer->pos.vx = SELF(Actor)->pos.x.fixed;
+    D_801FDFC0     = buffer;
+    buffer->pos.vy = SELF(Actor)->pos.y.fixed;
+    buffer->pos.vz = SELF(Actor)->pos.z.fixed + TO_COORD(0x200);
+    buffer->angle  = 0x800;
     func_801F90F4(MEM_PTR(Scena07BurstBuffer, AREA_WORK + 0x424));
     SELF(Actor)->vx = 0x28;
     SELF(Actor)->header.step++;
 }
-#else
-INCLUDE_ASM(func_801F7BE0);
-#endif
 
 MATCH void func_801F7C9C(void) {
     Scene_TurnBurst(-64);

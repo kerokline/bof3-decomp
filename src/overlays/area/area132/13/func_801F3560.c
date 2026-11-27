@@ -2,8 +2,7 @@
 
 /* Draws the spawn slot's glow as a textured quad; its corner shades come from the slot's colour and shade flags. */
 /* func_801F3560 */
-#ifdef NON_MATCHING
-NON_MATCHING void func_801F3560(AreaSpawnSlot* slot) {
+MATCH void func_801F3560(AreaSpawnSlot* slot) {
     DVECTOR   screen;
     u16       size[2];
     s32*      object;
@@ -13,11 +12,13 @@ NON_MATCHING void func_801F3560(AreaSpawnSlot* slot) {
     u8        green;
     u8        blue;
 
-    /* FAKE: retail reserves 32 frame bytes that no local or callee buffer explains. */
-    FAKE_STACK_PADS(u8, 0x20);
-
     GFX_SET_DRAW_MODE(GetTPage(TPAGE_DEPTH_4BIT, TPAGE_ABR_SUB, FONT_TPAGE_X, FONT_TPAGE_Y));
-    Area_CellAddPrim(slot->pos.x.fixed, slot->pos.y.fixed, 3, sizeof(DR_MODE));
+    {
+        Coord cell_x = {slot->pos.x.fixed};
+        Coord cell_y = {slot->pos.y.fixed};
+
+        Area_CellAddPrim(cell_x.fixed, cell_y.fixed, 3, sizeof(DR_MODE));
+    }
 
     primitive = (POLY_FT4*)g_GfxPrimCursor;
     SetPolyFT4(primitive);
@@ -47,8 +48,10 @@ NON_MATCHING void func_801F3560(AreaSpawnSlot* slot) {
         blue = slot->unk_03;
     }
     setRGB0(primitive, red, green, blue);
-    Area_CellAddPrim(slot->pos.x.fixed, slot->pos.y.fixed, 3, sizeof(POLY_FT4));
+    {
+        Coord cell_x = {slot->pos.x.fixed};
+        Coord cell_y = {slot->pos.y.fixed};
+
+        Area_CellAddPrim(cell_x.fixed, cell_y.fixed, 3, sizeof(POLY_FT4));
+    }
 }
-#else
-INCLUDE_ASM(func_801F3560);
-#endif

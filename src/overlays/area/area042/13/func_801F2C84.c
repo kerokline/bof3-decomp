@@ -1,12 +1,12 @@
 #include "area042_13.h"
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801F2C84(void) {
-    s16 height;
-    s32 value;
-    FAKE_STACK_PADS(u8, 16); /* FAKE: retail's frame is 0x28, the body's locals take 0x18. */
+MATCH void func_801F2C84(void) {
+    Coord x = {SELF(Actor)->vx};
+    Coord y = {SELF(Actor)->vy};
+    s16   height;
+    s32   value;
 
-    height                        = Area_HeightSample(SELF(Actor)->vx, SELF(Actor)->vy);
+    height                        = Area_HeightSample(x.fixed, y.fixed);
     value                         = (height << 0x10) + TO_COORD(0x100);
     SELF(Actor)->vz               = value;
     SELF(Actor)->gravity          = value;
@@ -18,6 +18,3 @@ NON_MATCHING void func_801F2C84(void) {
         SELF(Actor)->header.mode = 2;
     }
 }
-#else
-INCLUDE_ASM(func_801F2C84);
-#endif

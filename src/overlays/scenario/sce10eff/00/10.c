@@ -261,22 +261,16 @@ MATCH void func_801D1544(void) {
     }
 }
 
-#ifdef NON_MATCHING
-NON_MATCHING void Scene_DrawBands(s16 band_height, u16 radius, u16 jitter_mask) {
+MATCH void Scene_DrawBands(s16 band_height, s16 radius, s16 jitter_mask) {
     long     depth;
     long     flag;
     POLY_G4* primitive;
-    SVECTOR* quad;
-    SVECTOR* prev;
     s32*     radius_cell;
     s32*     cell;
-    s32*     ramp;
     s32      tpage;
     s32      shade;
-    s32      radius_base;
     s32      i;
 
-    radius_base                 = (s16)radius;
     radius_cell                 = &g_ScratchPad.cells.words[0];
     *radius_cell                = 0x10;
     g_ScratchPad.cells.words[1] = (SELF(SceneBandEffect)->ticker & 0xF) << 8;
@@ -285,32 +279,27 @@ NON_MATCHING void Scene_DrawBands(s16 band_height, u16 radius, u16 jitter_mask) 
     g_ScratchPadVectors[0].vy   = FIXED_MUL(rsin(g_ScratchPad.cells.words[1]), *radius_cell);
     g_ScratchPadVectors[0].vz   = 0;
     tpage                       = getTPage(TPAGE_DEPTH_4BIT, TPAGE_ABR_ADD, 320, 256);
-    prev                        = &g_ScratchPadVectors[2];
-    quad                        = prev - 2;
-    cell                        = &g_ScratchPad.cells.words[1];
     SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
     GFX_AddPrim(GFX_LAYER_EFFECT_FRONT, sizeof(DR_MODE));
-    ramp = cell + 1;
     for (i = 1; i < 18; i++) {
-        cell[0] = ((SELF(SceneBandEffect)->ticker + i) & 0xF) << 8;
-        if RANDOM_MASK (1) {
-            cell[-1] = radius_base + RANDOM_MASK((s16)jitter_mask);
-        } else {
-            cell[-1] = radius_base - RANDOM_MASK((s16)jitter_mask);
-        }
-        prev[0].vx = 0;
-        prev[1].vx = 0;
-        quad[0].vx = 0;
-        prev[0].vy = quad[0].vy;
-        prev[1].vy = quad[0].vy - band_height;
-        prev[0].vz = quad[0].vz;
-        prev[1].vz = quad[0].vz;
-        quad[0].vy = FIXED_MUL(rsin(cell[0]), cell[-1]);
-        primitive  = (POLY_G4*)g_GfxPrimCursor;
-        quad[1].vx = 0;
-        quad[0].vz = -(i * 64);
-        quad[1].vz = -(i * 64);
-        quad[1].vy = quad[0].vy - band_height;
+        cell     = &g_ScratchPad.cells.words[1];
+        cell[0]  = ((SELF(SceneBandEffect)->ticker + i) & 0xF) << 8;
+        cell[-1] = radius + (RANDOM_MASK(1) ? RANDOM_MASK(jitter_mask) : -RANDOM_MASK(jitter_mask));
+        /* FAKE: keeps the jittered radius store at the join, ahead of the angle reload (6 rows without). */
+        FAKE_BARRIER();
+        g_ScratchPadVectors[2].vx = 0;
+        g_ScratchPadVectors[2].vy = g_ScratchPadVectors[0].vy;
+        g_ScratchPadVectors[2].vz = g_ScratchPadVectors[0].vz;
+        g_ScratchPadVectors[3].vx = 0;
+        g_ScratchPadVectors[3].vy = g_ScratchPadVectors[0].vy - band_height;
+        g_ScratchPadVectors[3].vz = g_ScratchPadVectors[0].vz;
+        g_ScratchPadVectors[0].vx = 0;
+        g_ScratchPadVectors[0].vy = FIXED_MUL(rsin(cell[0]), cell[-1]);
+        primitive                 = (POLY_G4*)g_GfxPrimCursor;
+        g_ScratchPadVectors[1].vx = 0;
+        g_ScratchPadVectors[0].vz = -(i * 64);
+        g_ScratchPadVectors[1].vz = -(i * 64);
+        g_ScratchPadVectors[1].vy = g_ScratchPadVectors[0].vy - band_height;
         SetPolyG4(primitive);
         SetSemiTrans(primitive, 1);
         setRGB0(primitive, cell[1], cell[1], cell[1]);
@@ -322,70 +311,71 @@ NON_MATCHING void Scene_DrawBands(s16 band_height, u16 radius, u16 jitter_mask) 
             setRGB2(primitive, cell[1], cell[1], cell[1]);
             setRGB3(primitive, shade, cell[1], 1);
         }
-        RotTransPers4(quad, quad + 1, quad + 2, quad + 3, (long*)&primitive->x0, (long*)&primitive->x1, (long*)&primitive->x2, (long*)&primitive->x3, &depth, &flag);
+        RotTransPers4(&g_ScratchPadVectors[0], &g_ScratchPadVectors[1], &g_ScratchPadVectors[2], &g_ScratchPadVectors[3], (long*)&primitive->x0, (long*)&primitive->x1, (long*)&primitive->x2,
+                      (long*)&primitive->x3, &depth, &flag);
         if (primitive->y2 > 0) {
             GFX_AddPrim(GFX_LAYER_EFFECT_FRONT, sizeof(POLY_G4));
             primitive = (POLY_G4*)g_GfxPrimCursor;
-            SPAD(0u)->vectors[0].vy -= band_height;
-            SPAD(0u)->vectors[1].vy -= band_height;
-            SPAD(0u)->vectors[2].vy -= band_height;
-            SPAD(0u)->vectors[3].vy -= band_height;
+            g_ScratchPadVectors[0].vy -= band_height;
+            g_ScratchPadVectors[1].vy -= band_height;
+            g_ScratchPadVectors[2].vy -= band_height;
+            g_ScratchPadVectors[3].vy -= band_height;
             SetPolyG4(primitive);
             SetSemiTrans(primitive, 1);
-            setRGB0(primitive, shade, *ramp, 1);
+            setRGB0(primitive, shade, g_ScratchPad.cells.words[2], 1);
             setRGB1(primitive, 1, 1, 1);
             if (i == 1) {
                 setRGB2(primitive, 1, 1, 1);
                 setRGB3(primitive, 1, 1, 1);
             } else {
-                setRGB2(primitive, shade, *ramp, 1);
+                setRGB2(primitive, shade, g_ScratchPad.cells.words[2], 1);
                 setRGB3(primitive, 1, 1, 1);
             }
-            RotTransPers4(quad, quad + 1, quad + 2, quad + 3, (long*)&primitive->x0, (long*)&primitive->x1, (long*)&primitive->x2, (long*)&primitive->x3, &depth, &flag);
+            RotTransPers4(&g_ScratchPadVectors[0], &g_ScratchPadVectors[1], &g_ScratchPadVectors[2], &g_ScratchPadVectors[3], (long*)&primitive->x0, (long*)&primitive->x1, (long*)&primitive->x2,
+                          (long*)&primitive->x3, &depth, &flag);
             GFX_AddPrim(GFX_LAYER_EFFECT_FRONT, sizeof(POLY_G4));
             primitive = (POLY_G4*)g_GfxPrimCursor;
-            SPAD(0u)->vectors[0].vy += band_height * 2;
-            SPAD(0u)->vectors[1].vy += band_height * 2;
-            SPAD(0u)->vectors[2].vy += band_height * 2;
-            SPAD(0u)->vectors[3].vy += band_height * 2;
+            g_ScratchPadVectors[0].vy += band_height * 2;
+            g_ScratchPadVectors[1].vy += band_height * 2;
+            g_ScratchPadVectors[2].vy += band_height * 2;
+            g_ScratchPadVectors[3].vy += band_height * 2;
             SetPolyG4(primitive);
             SetSemiTrans(primitive, 1);
-            setRGB0(primitive, shade, *ramp, 1);
-            setRGB1(primitive, *ramp, *ramp, *ramp);
+            setRGB0(primitive, shade, g_ScratchPad.cells.words[2], 1);
+            setRGB1(primitive, g_ScratchPad.cells.words[2], g_ScratchPad.cells.words[2], g_ScratchPad.cells.words[2]);
             if (i == 1) {
                 setRGB2(primitive, 1, 1, 1);
                 setRGB3(primitive, 1, 1, 1);
             } else {
-                setRGB2(primitive, shade, *ramp, 1);
-                setRGB3(primitive, *ramp, *ramp, *ramp);
+                setRGB2(primitive, shade, g_ScratchPad.cells.words[2], 1);
+                setRGB3(primitive, g_ScratchPad.cells.words[2], g_ScratchPad.cells.words[2], g_ScratchPad.cells.words[2]);
             }
-            RotTransPers4(quad, quad + 1, quad + 2, quad + 3, (long*)&primitive->x0, (long*)&primitive->x1, (long*)&primitive->x2, (long*)&primitive->x3, &depth, &flag);
+            RotTransPers4(&g_ScratchPadVectors[0], &g_ScratchPadVectors[1], &g_ScratchPadVectors[2], &g_ScratchPadVectors[3], (long*)&primitive->x0, (long*)&primitive->x1, (long*)&primitive->x2,
+                          (long*)&primitive->x3, &depth, &flag);
             GFX_AddPrim(GFX_LAYER_EFFECT_FRONT, sizeof(POLY_G4));
             primitive = (POLY_G4*)g_GfxPrimCursor;
-            SPAD(0u)->vectors[0].vy += band_height;
-            SPAD(0u)->vectors[1].vy += band_height;
-            SPAD(0u)->vectors[2].vy += band_height;
-            SPAD(0u)->vectors[3].vy += band_height;
+            g_ScratchPadVectors[0].vy += band_height;
+            g_ScratchPadVectors[1].vy += band_height;
+            g_ScratchPadVectors[2].vy += band_height;
+            g_ScratchPadVectors[3].vy += band_height;
             SetPolyG4(primitive);
             SetSemiTrans(primitive, 1);
             setRGB0(primitive, 1, 1, 1);
-            setRGB1(primitive, shade, *ramp, 1);
+            setRGB1(primitive, shade, g_ScratchPad.cells.words[2], 1);
             if (i == 1) {
                 setRGB2(primitive, 1, 1, 1);
                 setRGB3(primitive, 1, 1, 1);
             } else {
                 setRGB2(primitive, 1, 1, 1);
-                setRGB3(primitive, shade, *ramp, 1);
+                setRGB3(primitive, shade, g_ScratchPad.cells.words[2], 1);
             }
-            RotTransPers4(quad, quad + 1, quad + 2, quad + 3, (long*)&primitive->x0, (long*)&primitive->x1, (long*)&primitive->x2, (long*)&primitive->x3, &depth, &flag);
+            RotTransPers4(&g_ScratchPadVectors[0], &g_ScratchPadVectors[1], &g_ScratchPadVectors[2], &g_ScratchPadVectors[3], (long*)&primitive->x0, (long*)&primitive->x1, (long*)&primitive->x2,
+                          (long*)&primitive->x3, &depth, &flag);
             GFX_AddPrim(GFX_LAYER_EFFECT_FRONT, sizeof(POLY_G4));
-            SPAD(0u)->vectors[0].vy -= band_height * 2;
+            g_ScratchPadVectors[0].vy -= band_height * 2;
         }
     }
 }
-#else
-INCLUDE_ASM(Scene_DrawBands);
-#endif
 
 MATCH void func_801D1D58(void) {
     D_801D2734[SELF(SceneBandEffect)->step_index]();

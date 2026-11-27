@@ -658,8 +658,6 @@ MATCH void func_801F9020(Coord* position, s32* step) {
     s32      point[3];
     DVECTOR  screen[4];
 
-    FAKE_STACK_PADS(u8, 0x20); /* FAKE: retail keeps the point and screen rows in a 96-byte frame. */
-
     point[0] = position[0].fixed + step[0];
     point[1] = position[1].fixed + step[1];
     point[2] = position[2].fixed + step[2];
@@ -697,14 +695,24 @@ MATCH void func_801F9020(Coord* position, s32* step) {
     SetSemiTrans(line4, 0);
     setXY4(line4, screen[0].vx, screen[0].vy, screen[1].vx, screen[1].vy, screen[3].vx, screen[3].vy, screen[2].vx, screen[2].vy);
     setRGB0(line4, 0xFF, 0xFF, 0xFF);
-    Area_CellAddPrim(position[0].fixed, position[1].fixed, 0, sizeof(LINE_F4));
+    {
+        Coord cell_x = {position[0].fixed};
+        Coord cell_y = {position[1].fixed};
+
+        Area_CellAddPrim(cell_x.fixed, cell_y.fixed, 0, sizeof(LINE_F4));
+    }
 
     line2 = (LINE_F2*)g_GfxPrimCursor;
     SetLineF2(line2);
     SetSemiTrans(line2, 0);
     setXY2(line2, screen[0].vx, screen[0].vy, screen[2].vx, screen[2].vy);
     setRGB0(line2, 0xFF, 0xFF, 0xFF);
-    Area_CellAddPrim(position[0].fixed, position[1].fixed, 0, sizeof(LINE_F2));
+    {
+        Coord cell_x = {position[0].fixed};
+        Coord cell_y = {position[1].fixed};
+
+        Area_CellAddPrim(cell_x.fixed, cell_y.fixed, 0, sizeof(LINE_F2));
+    }
 }
 
 MATCH void func_801F92F0(Coord* position, s32* step) {
@@ -759,8 +767,6 @@ MATCH void func_801F9500(WorldPos* pos, s32* vx) {
     Scena15SpriteCell* cell;
     s32                point[3];
 
-    FAKE_STACK_PADS(u8, 0x10); /* FAKE: retail keeps the point row in a 72-byte frame. */
-
     cell = D_801FE5E8;
     if (SELF(Actor)->unk_06 & 0x4) {
         cell++;
@@ -805,7 +811,12 @@ MATCH void func_801F9500(WorldPos* pos, s32* vx) {
     prim->tpage = GetTPage(TPAGE_DEPTH_8BIT, TPAGE_ABR_ADD, cell->page_x, cell->page_y);
     setClut(prim, 0xA0, 0x1F0);
     setRGB0(prim, 0x20, 0x20, 0x20);
-    Area_CellAddPrim(pos->x.fixed, pos->y.fixed, 0, sizeof(POLY_FT4));
+    {
+        Coord cell_x = {pos->x.fixed};
+        Coord cell_y = {pos->y.fixed};
+
+        Area_CellAddPrim(cell_x.fixed, cell_y.fixed, 0, sizeof(POLY_FT4));
+    }
 }
 
 #ifdef NON_MATCHING
@@ -858,10 +869,13 @@ MATCH void func_801F9A20(WorldPos* pos, s32* vx) {
     POLY_F4* poly;
     s32      point[3];
 
-    FAKE_STACK_PADS(u8, 0x20); /* FAKE: retail keeps the point row in an 88-byte frame. */
-
     SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, GetTPage(TPAGE_DEPTH_4BIT, TPAGE_ABR_HALF, FONT_TPAGE_X, FONT_TPAGE_Y) & 0xFFFF, 0);
-    Area_CellAddPrim(pos->x.fixed, pos->y.fixed, 0, sizeof(DR_MODE));
+    {
+        Coord cell_x = {pos->x.fixed};
+        Coord cell_y = {pos->y.fixed};
+
+        Area_CellAddPrim(cell_x.fixed, cell_y.fixed, 0, sizeof(DR_MODE));
+    }
     poly = (POLY_F4*)g_GfxPrimCursor;
     SetPolyF4(poly);
     SetSemiTrans(poly, 1);
@@ -899,7 +913,12 @@ MATCH void func_801F9A20(WorldPos* pos, s32* vx) {
     Camera_ProjectPoint(point, (DVECTOR*)&poly->x3);
 
     setRGB0(poly, (SELF(Actor)->unk_06 & 2) != 0 ? 0x80 : 0, (SELF(Actor)->unk_06 & 2) == 0 ? 0x80 : 0, 0);
-    Area_CellAddPrim(pos->x.fixed, pos->y.fixed, 0, sizeof(POLY_F4));
+    {
+        Coord cell_x = {pos->x.fixed};
+        Coord cell_y = {pos->y.fixed};
+
+        Area_CellAddPrim(cell_x.fixed, cell_y.fixed, 0, sizeof(POLY_F4));
+    }
 }
 
 MATCH void func_801F9CAC(void) {

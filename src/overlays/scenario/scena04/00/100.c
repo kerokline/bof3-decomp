@@ -371,11 +371,14 @@ MATCH void func_801F7CF0(SceneParticle* particle) {
     DVECTOR   screen;
     DVECTOR   scale;
     VECTOR    pos;
-    /* FAKE: retail reserves 32 bytes of frame that no statement uses. */
-    FAKE_STACK_PADS(u8, 32);
 
     SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 0, GetTPage(TPAGE_DEPTH_4BIT, TPAGE_ABR_ADD, 704, 256) & HALF_MASK, 0);
-    Area_CellAddPrim(particle->pos.vx, particle->pos.vy, 1, sizeof(DR_MODE));
+    {
+        Coord cell_x = {particle->pos.vx};
+        Coord cell_y = {particle->pos.vy};
+
+        Area_CellAddPrim(cell_x.fixed, cell_y.fixed, 1, sizeof(DR_MODE));
+    }
     prim = (POLY_FT4*)g_GfxPrimCursor;
     SetPolyFT4(prim);
     SetSemiTrans(prim, 1);
@@ -392,7 +395,12 @@ MATCH void func_801F7CF0(SceneParticle* particle) {
     prim->tpage = GetTPage(TPAGE_DEPTH_4BIT, TPAGE_ABR_ADD, 704, 256);
     setUVWH(prim, 224, 48, 31, 31);
     setRGB0(prim, particle->unk_24, particle->unk_24, particle->unk_24);
-    Area_CellAddPrim(particle->pos.vx, particle->pos.vy, 1, sizeof(POLY_FT4));
+    {
+        Coord cell_x = {particle->pos.vx};
+        Coord cell_y = {particle->pos.vy};
+
+        Area_CellAddPrim(cell_x.fixed, cell_y.fixed, 1, sizeof(POLY_FT4));
+    }
 }
 
 MATCH void func_801F7EC0() {

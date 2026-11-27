@@ -4,8 +4,6 @@ MATCH void func_801F2DB8(SpriteSpark* spark) {
     TILE_1* tile1;
     TILE*   tile;
 
-    FAKE_STACK_PADS(u8, 0x30); /* FAKE: retail reserves 48 bytes of unused stack. */
-
     if (spark->blink != 0) {
         tile1 = (TILE_1*)g_GfxPrimCursor;
         SetTile1(tile1);
@@ -13,10 +11,20 @@ MATCH void func_801F2DB8(SpriteSpark* spark) {
         tile1->b0 = 0;
         tile1->g0 = 0;
         tile1->r0 = 0;
-        Area_CellAddPrim(spark->pos.vx, spark->pos.vy, 0, sizeof(TILE_1));
+        {
+            Coord cell_x = {spark->pos.vx};
+            Coord cell_y = {spark->pos.vy};
+
+            Area_CellAddPrim(cell_x.fixed, cell_y.fixed, 0, sizeof(TILE_1));
+        }
 
         SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 0, GetTPage(TPAGE_DEPTH_4BIT, TPAGE_ABR_SUB, 0x3C0, 0), 0);
-        Area_CellAddPrim(spark->pos.vx, spark->pos.vy, 0, sizeof(DR_MODE));
+        {
+            Coord cell_x = {spark->pos.vx};
+            Coord cell_y = {spark->pos.vy};
+
+            Area_CellAddPrim(cell_x.fixed, cell_y.fixed, 0, sizeof(DR_MODE));
+        }
 
         tile = (TILE*)g_GfxPrimCursor;
         SetTile(tile);
@@ -28,6 +36,11 @@ MATCH void func_801F2DB8(SpriteSpark* spark) {
         tile->r0 = 8;
         tile->x0 -= 1;
         tile->y0 -= 1;
-        Area_CellAddPrim(spark->pos.vx, spark->pos.vy, 0, sizeof(TILE));
+        {
+            Coord cell_x = {spark->pos.vx};
+            Coord cell_y = {spark->pos.vy};
+
+            Area_CellAddPrim(cell_x.fixed, cell_y.fixed, 0, sizeof(TILE));
+        }
     }
 }

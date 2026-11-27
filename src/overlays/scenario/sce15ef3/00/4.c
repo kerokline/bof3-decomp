@@ -265,11 +265,14 @@ MATCH void func_801D1758(SpriteSpark* spark) {
     TILE_1* dot;
     TILE*   box;
     DVECTOR xy;
-    /* FAKE: retail reserves 48 bytes of unused stack. */
-    FAKE_STACK_PADS(u8, 48);
 
     GFX_SET_DRAW_MODE(GetTPage(TPAGE_DEPTH_4BIT, TPAGE_ABR_ADD, FONT_TPAGE_X, FONT_TPAGE_Y));
-    Area_CellAddPrim(spark->pos.vx, spark->pos.vy, 0, sizeof(DR_MODE));
+    {
+        Coord cell_x = {spark->pos.vx};
+        Coord cell_y = {spark->pos.vy};
+
+        Area_CellAddPrim(cell_x.fixed, cell_y.fixed, 0, sizeof(DR_MODE));
+    }
     Camera_ProjectPoint(&spark->pos.vx, &xy);
     dot = (TILE_1*)g_GfxPrimCursor;
     SetTile1(dot);
@@ -280,7 +283,12 @@ MATCH void func_801D1758(SpriteSpark* spark) {
     } else {
         setRGB0(dot, 128, 0, 0);
     }
-    Area_CellAddPrim(spark->pos.vx, spark->pos.vy, 0, sizeof(TILE_1));
+    {
+        Coord cell_x = {spark->pos.vx};
+        Coord cell_y = {spark->pos.vy};
+
+        Area_CellAddPrim(cell_x.fixed, cell_y.fixed, 0, sizeof(TILE_1));
+    }
     box = (TILE*)g_GfxPrimCursor;
     SetTile(box);
     SetSemiTrans(box, 1);
@@ -291,7 +299,12 @@ MATCH void func_801D1758(SpriteSpark* spark) {
     } else {
         setRGB0(box, 32, 0, 0);
     }
-    Area_CellAddPrim(spark->pos.vx, spark->pos.vy, 0, sizeof(TILE));
+    {
+        Coord cell_x = {spark->pos.vx};
+        Coord cell_y = {spark->pos.vy};
+
+        Area_CellAddPrim(cell_x.fixed, cell_y.fixed, 0, sizeof(TILE));
+    }
 }
 
 MATCH s32 func_801D18CC(void) {

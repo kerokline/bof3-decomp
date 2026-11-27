@@ -8,8 +8,7 @@ void Menu_DrawPanelIcon(u16 x, u16 y, s32 u, s32 v, u16 clut, u8 color);
 /* The equipped-item compare window: the member's name and four stats, the four stats the
  * equipped items would give (func_80164EF8), and the six equipment rows with their icons.
  * The labels, slot icons and slot categories come from the panel tables object. */
-#ifdef NON_MATCHING
-NON_MATCHING void func_800B3324(u8 index, s32 x, s32 y, s32 patch, u8 hide_changes, MenuPanelTask* task) {
+MATCH void func_800B3324(u8 index, s32 x, s32 y, s32 patch, u8 hide_changes, MenuPanelTask* task) {
     struct {
         u8  pad[32];
         u8  flags[8];
@@ -24,7 +23,6 @@ NON_MATCHING void func_800B3324(u8 index, s32 x, s32 y, s32 patch, u8 hide_chang
     u8         shade;
     s32        icon;
     s32        draw_y;
-    s32        label_y;
     s32        left;
     s32        top;
 
@@ -119,8 +117,7 @@ NON_MATCHING void func_800B3324(u8 index, s32 x, s32 y, s32 patch, u8 hide_chang
     UI_SpriteDraw((s16)left, (s16)(top + 0x50), 0xD, UI_SPRITE_ALT_PAGE);
     UI_SpriteDraw((s16)(left + 0x78), (s16)(top + 0x50), 0xF, UI_SPRITE_ALT_PAGE);
     UI_SpriteDraw((s16)left, (s16)(top + 0xA0), 0x10, UI_SPRITE_ALT_PAGE);
-    UI_SpriteDraw((s16)(left + 0x78), label_y = (s16)(top + 0xA0), 0x12, UI_SPRITE_ALT_PAGE);
+    x = left + 0x78;
+    y = top + 0xA0;
+    UI_SpriteDraw((s16)x, (s16)y, 0x12, UI_SPRITE_ALT_PAGE);
 }
-#else
-INCLUDE_ASM(func_800B3324);
-#endif

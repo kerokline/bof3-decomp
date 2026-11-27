@@ -47,7 +47,7 @@ NON_MATCHING void func_801EAF98(MenuPanelTask* task) {
     }
     task->unk_0C = D_801ED878[task->unk_0B];
     /* FAKE: keeps the window-style address in a saved register for both draws, as retail; pure C best 6 hunks. */
-    style = &g_WindowStyle;
+    style        = &g_WindowStyle;
     UI_WindowDraw(((u16)task->pos.vx + 3) & HALF_MASK, ((u16)task->pos.vy + 3) & HALF_MASK, MENU_INVENTORY_WINDOW_WIDTH, MENU_INVENTORY_TOP_HEIGHT, 0, *FAKE_VOLATILE_PTR(u8, style));
     UI_WindowDraw(((u16)task->pos.vx + 3) & HALF_MASK, ((u16)task->pos.vy + 146) & HALF_MASK, MENU_INVENTORY_WINDOW_WIDTH, MENU_INVENTORY_BOTTOM_HEIGHT, 0, *FAKE_VOLATILE_PTR(u8, style));
     title   = (u8*)&D_801ED608;

@@ -213,9 +213,6 @@ NON_MATCHING void func_801D1250(s16 x, s16 y) {
         prim->tpage         = getTPage(0, 0, 960, 0);
         GFX_AddPrim(GFX_LAYER_UI, sizeof(POLY_FT4));
     }
-    /* FAKE: a late mention of the parameters keeps them canonical over the left/top copies in cse. */
-    scene = left;
-    mode  = top;
 }
 #else
 INCLUDE_ASM(func_801D1250);

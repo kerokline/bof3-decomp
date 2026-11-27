@@ -2185,8 +2185,7 @@ MATCH void func_801D7EF0(s16 x, s16 y) {
     COMMU_DRAW_CELL_GRID(func_801D875C, 0x16, 20, 2, 6);
 }
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801D8058(s32 left, s32 top) {
+MATCH void func_801D8058(s32 left, s32 top) {
     s32 i;
     s32 count;
     s32 x;
@@ -2195,6 +2194,7 @@ NON_MATCHING void func_801D8058(s32 left, s32 top) {
     s32 grid_x;
     s32 y_fixed;
     s32 n;
+    FAKE_STACK_PADS(u8, 8); /* FAKE: retail reserves 8 unused stack bytes; without them 14 rows (frame 0x30). */
 
     x      = left;
     y      = top;
@@ -2215,9 +2215,6 @@ NON_MATCHING void func_801D8058(s32 left, s32 top) {
         } while (i < n);
     }
 }
-#else
-INCLUDE_ASM(func_801D8058);
-#endif
 
 MATCH void func_801D812C(void) {
     u16 index;

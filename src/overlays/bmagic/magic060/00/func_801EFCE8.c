@@ -12,12 +12,14 @@ NON_MATCHING void func_801EFCE8(s32 x, s32 y) {
     u16*      uv_right;
     s32       selector;
     s32       i;
+    u16*      u_cells;
+    u16*      v_cells;
 
     selector = g_Battle.target_selector - 3;
+    u_cells  = (u16*)(D_801F0B8C + 12);
+    v_cells  = u_cells + 1;
     for (i = 0; i < 6; i++) {
-        uv_left  = &((u16*)(D_801F0B8C + 12))[i * 2];
-        uv_right = &((u16*)(D_801F0B8C + 12))[i * 2 + 1];
-        prim     = GFX_CURSOR(POLY_FT4);
+        prim = GFX_CURSOR(POLY_FT4);
         SetPolyFT4(prim);
         setXYWH(prim, x, y, 12, 12);
         g_ScratchPad.cells.words[1] = 0x30;
@@ -53,6 +55,8 @@ NON_MATCHING void func_801EFCE8(s32 x, s32 y) {
                 }
                 break;
         }
+        uv_left  = &u_cells[i * 2];
+        uv_right = &v_cells[i * 2];
         setRGB0(prim, g_ScratchPad.cells.words[1], g_ScratchPad.cells.words[1], g_ScratchPad.cells.words[1]);
         prim->tpage = GetTPage(TPAGE_DEPTH_4BIT, TPAGE_ABR_ADD, 0x3C0, 0x100);
         prim->clut  = GetClut(0, 0x1E0);

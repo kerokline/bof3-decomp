@@ -1282,16 +1282,14 @@ MATCH void func_801D5194(void) {
 /* Deals a numbers board round: fills four per-digit rows of the board with the
  * message ids of the digits the round rolled, then picks the two digits the
  * round shows. */
-#ifdef NON_MATCHING
-NON_MATCHING void func_801D51D0(void) {
-    u8* dst;
+MATCH void func_801D51D0(void) {
     u8* src;
-    u8* p;
     s32 i;
     s32 row;
     s32 value;
     u8  digit;
     u32 roll;
+    s32 id;
 
     FAKE_STACK_PADS(u8, 0x20); /* FAKE: retail reserves 0x20 unused stack bytes. */
 
@@ -1300,7 +1298,7 @@ NON_MATCHING void func_801D51D0(void) {
     D_801DB080.words.count[1] = 0;
     D_801DB080.words.count[2] = 0;
     D_801DB080.words.count[3] = 0;
-    for (row = 0, dst = g_TextVariables[0]; row < 9; row++, dst += TEXT_VARIABLE_LENGTH) {
+    for (row = 0; row < 9; row++) {
         digit = D_801DAD90[(s8)D_801DB0B4][row];
         if (digit == 9) {
             break;
@@ -1327,16 +1325,14 @@ NON_MATCHING void func_801D51D0(void) {
         D_801DB080.words.picked[digit * 10 + D_801DB080.words.count[digit]] = value;
         D_801DB080.words.count[digit]++;
 
-        p   = dst;
-        src = (u8*)AREA_MESSAGE_TABLE;
-        src += AREA_MESSAGE_TABLE->offsets[(u8)value + D_801DADD8[digit][0] + 0x100];
+        id  = (u8)value + D_801DADD8[digit][0];
+        src = MESSAGE_TABLE_TEXT(AREA_MESSAGE_TABLE, id + 0x100);
         for (; i < TEXT_VARIABLE_LENGTH; i++) {
-            *p = *src;
+            g_TextVariables[row][i] = *src;
             if (*src == STRING_END && src[-1] != STRING_SKIP && src[-1] != STRING_SKIP_ALT) {
                 break;
             }
             src++;
-            p++;
         }
     }
 
@@ -1387,9 +1383,6 @@ NON_MATCHING void func_801D51D0(void) {
     D_801DB0C4 = 0;
     D_801F294D += 1;
 }
-#else
-INCLUDE_ASM(func_801D51D0);
-#endif
 
 MATCH void func_801D5788(void) {
     POLY_G4* g4;

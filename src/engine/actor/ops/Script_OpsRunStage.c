@@ -23,18 +23,18 @@ typedef enum ActorScriptStage {
 /* func_801AB458 */
 /* Runs one scene stage opcode. */
 MATCH u8 Script_OpsRunStage(ScriptState* state, const u8* table, u8 value) {
-    u8    byte;
-    u8    flag;
-    u8    slot;
-    s32   delta_x;
-    s32   delta_y;
-    u32   sel;
-    u32   span_y;
-    s32   step;
-    s16   span;
-    s32   buf[3];
-    void* entry;
-    u32*  list;
+    u8        byte;
+    u8        flag;
+    u8        slot;
+    s32       delta_x;
+    s32       delta_y;
+    u32       sel;
+    u32       span_y;
+    s32       step;
+    s16       span;
+    s32       buf[3];
+    AreaLoad* entry;
+    u32*      list;
 
     byte = table[state->cursor];
     switch (byte) {
@@ -97,7 +97,7 @@ MATCH u8 Script_OpsRunStage(ScriptState* state, const u8* table, u8 value) {
             if (Actor_GetOwner() == 1) {
                 entry                      = g_AreaLoads[g_GameAreaId];
                 byte                       = (table + state->cursor)[1];
-                list                       = *(u32**)((u8*)entry + 0x18);
+                list                       = entry->unk_18;
                 g_GameState->u.field.index = list[byte];
             } else {
                 state->script_index = (table + state->cursor)[1];

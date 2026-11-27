@@ -21,7 +21,9 @@ NON_MATCHING void func_801F369C(s32 level) {
     s32       half;
     s32       top_z;
     s32       glow_z;
+    s32       inner;
 
+    inner = 0x18;
     /* three bands of eight quads: the pillar steps down a band and back a row at a time */
     for (i = 0; i < 3; i++) {
         center_x = -0x1F40;
@@ -38,7 +40,7 @@ NON_MATCHING void func_801F369C(s32 level) {
             SetSemiTrans(prim, 1);
 
             /* the row's quad widens as the phase advances and leans with the band */
-            size = phase * 2 + j * 16 + 0x18;
+            size = phase * 2 + (j * 16 + inner);
             tilt = rsin(row * 16) >> 5;
             x_lo = center_x - size + tilt;
             x_hi = center_x + size + tilt;

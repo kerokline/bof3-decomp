@@ -2,8 +2,7 @@
 
 /* Draws a shot's ground ring: sixteen Gouraud wedges around the projected point, each
  * corner on the ellipse the two radii span, rotated by the given angle. */
-#ifdef NON_MATCHING
-NON_MATCHING void func_801F2FEC(s32* pos, s16 radius_x, s16 radius_y, u16 rotation, u8 center_shade, u8 rim_shade) {
+MATCH void func_801F2FEC(s32* pos, s16 radius_x, s16 radius_y, u16 rotation, u8 center_shade, u8 rim_shade) {
     DVECTOR  screen;
     DVECTOR  size;
     DVECTOR  scale;
@@ -57,6 +56,3 @@ NON_MATCHING void func_801F2FEC(s32* pos, s16 radius_x, s16 radius_y, u16 rotati
         i++;
     } while (i < 16);
 }
-#else
-INCLUDE_ASM(func_801F2FEC);
-#endif

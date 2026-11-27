@@ -204,11 +204,10 @@ MATCH void func_801EF7D8(void) {
     }
 }
 
-#ifdef NON_MATCHING
 /* Draws seventeen bands of three projected POLY_G4 quads, each band 0x40 deeper than the last: the
  * quads sway with the effect counter, their radius jitters by jitter_mask and their height by
  * band_height; the shades follow the counter and the first band fades to black. */
-NON_MATCHING void func_801EF8F0(s16 band_height, s16 radius, s16 jitter_mask) {
+MATCH void func_801EF8F0(s16 band_height, s16 radius, s16 jitter_mask) {
     POLY_G4* prim;
     long     p;
     long     flag;
@@ -229,9 +228,11 @@ NON_MATCHING void func_801EF8F0(s16 band_height, s16 radius, s16 jitter_mask) {
     SetDrawMode((DR_MODE*)g_GfxPrimCursor, 0, 1, tpage, 0);
     Area_CellAddPrim(SELF(PartyMember)->pos.x.fixed, SELF(PartyMember)->pos.y.fixed, 2, sizeof(DR_MODE));
     for (i = 1; i < 18; i++) {
-        cell                      = &g_ScratchPad.cells.words[1];
-        cell[0]                   = ((SELF(PartyMember)->param.unk_0B + i) & 0xF) << 8;
-        cell[-1]                  = radius + (RANDOM_MASK(1) ? (rand() & jitter_mask) : -(rand() & jitter_mask));
+        cell     = &g_ScratchPad.cells.words[1];
+        cell[0]  = ((SELF(PartyMember)->param.unk_0B + i) & 0xF) << 8;
+        cell[-1] = radius + (RANDOM_MASK(1) ? (rand() & jitter_mask) : -(rand() & jitter_mask));
+        /* FAKE: keeps the jittered radius store at the join, ahead of the angle reload (6 rows without). */
+        FAKE_BARRIER();
         g_ScratchPadVectors[2].vx = 0;
         g_ScratchPadVectors[2].vy = g_ScratchPadVectors[0].vy;
         g_ScratchPadVectors[2].vz = g_ScratchPadVectors[0].vz;
@@ -319,9 +320,6 @@ NON_MATCHING void func_801EF8F0(s16 band_height, s16 radius, s16 jitter_mask) {
         }
     }
 }
-#else
-INCLUDE_ASM(func_801EF8F0);
-#endif
 
 MATCH void func_801F0008(void) {
     D_801F09C0[SELF(PartyMember)->header.step]();

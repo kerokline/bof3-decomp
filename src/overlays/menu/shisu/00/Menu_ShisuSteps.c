@@ -440,47 +440,37 @@ MATCH void func_801D1CA4(void) {
     g_ShisuIngredients.held[3] = Item_Count(ITEM_CATEGORY_ITEM, ITEM_HORSERADISH, 0);
 }
 
-#ifdef NON_MATCHING
 /* Places the four shisu panels and points the ingredient list at the item counts. */
-NON_MATCHING void func_801D1D1C(void) {
-    MenuPanelTask* panel;
-
-    g_UiPanelTasks[2].pos.vx = 0x70;
-    g_UiPanelTasks[1].pos.vx = 0x14;
-    g_UiPanelTasks[1].pos.vy = -0x64;
-    g_UiPanelTasks[2].pos.vy = -0x64;
-    g_UiPanelTasks[3].mode   = 3;
-    g_UiPanelTasks[2].unk_0A = 8;
-    g_UiPanelTasks[3].pos.vx = -0x78;
-    panel                    = &g_UiPanelTasks[0];
-    panel->active            = 0;
-    panel->panel             = 1;
-    panel->mode              = 0;
-    panel->state             = 2;
-    panel->pos.vx            = 0;
-    panel->pos.vy            = 0;
-    panel++;
-    panel->active = 1;
-    panel->panel  = 1;
-    panel->mode   = 1;
-    panel->state  = 2;
-    panel++;
-    panel->active            = 1;
-    panel->panel             = 1;
-    panel->mode              = 2;
-    panel->state             = 2;
-    panel->unk_0B            = 0xFF;
-    g_UiPanelTasks[3].pos.vy = 0x3F;
-    panel++;
-    panel->active     = 1;
-    panel->panel      = 1;
-    panel->state      = 2;
-    panel->unk_0A     = 0xFF;
-    panel->item_table = (s32)&g_ShisuIngredients;
+MATCH void func_801D1D1C(void) {
+    g_UiPanelTasks[0].active     = 0;
+    g_UiPanelTasks[0].panel      = 1;
+    g_UiPanelTasks[0].mode       = 0;
+    g_UiPanelTasks[0].state      = 2;
+    g_UiPanelTasks[0].pos.vx     = 0;
+    g_UiPanelTasks[0].pos.vy     = 0;
+    g_UiPanelTasks[1].active     = 1;
+    g_UiPanelTasks[1].panel      = 1;
+    g_UiPanelTasks[1].mode       = 1;
+    g_UiPanelTasks[1].state      = 2;
+    g_UiPanelTasks[1].pos.vx     = 0x14;
+    g_UiPanelTasks[1].pos.vy     = -0x64;
+    g_UiPanelTasks[2].active     = 1;
+    g_UiPanelTasks[2].panel      = 1;
+    g_UiPanelTasks[2].mode       = 2;
+    g_UiPanelTasks[2].state      = 2;
+    g_UiPanelTasks[2].pos.vx     = 0x70;
+    g_UiPanelTasks[2].pos.vy     = -0x64;
+    g_UiPanelTasks[2].unk_0A     = 8;
+    g_UiPanelTasks[2].unk_0B     = 0xFF;
+    g_UiPanelTasks[3].active     = 1;
+    g_UiPanelTasks[3].panel      = 1;
+    g_UiPanelTasks[3].mode       = 3;
+    g_UiPanelTasks[3].state      = 2;
+    g_UiPanelTasks[3].pos.vx     = -0x78;
+    g_UiPanelTasks[3].pos.vy     = 0x3F;
+    g_UiPanelTasks[3].unk_0A     = 0xFF;
+    g_UiPanelTasks[3].item_table = (s32)&g_ShisuIngredients;
 }
-#else
-INCLUDE_ASM(func_801D1D1C);
-#endif
 
 MATCH void func_801D1E34(void) {
     FIELD(u8, g_UiPanelTasks, 0x0) = 0;

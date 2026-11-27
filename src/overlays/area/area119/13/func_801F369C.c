@@ -60,9 +60,7 @@ NON_MATCHING void func_801F369C(s32 level) {
         }
 
         /* the band's own sprite, projected from one point behind the pillar */
-        g_ScratchPadVectors[0].vx = center_x;
-        D_1F800016                = band_y;
-        D_1F800018                = glow_z;
+        setVector(&g_ScratchPadVectors[0], center_x, band_y, glow_z);
         RotTransPers(g_ScratchPadVectors, (long*)D_1F800034, &depth, &flag);
 
         half = abs(3 - ((g_FrameCount / 3 + i) & 7)) + 0x10;

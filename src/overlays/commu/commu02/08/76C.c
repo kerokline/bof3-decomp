@@ -1143,20 +1143,21 @@ MATCH void func_801D4910(s32 x, s32 y) {
     }
     FairyCasino_DrawFramePiece((s16)(x + 0x50), (s16)(y + 0x78), 0x11);
 }
-#ifdef NON_MATCHING
-NON_MATCHING void func_801D4AE0(s16 x, s16 y, u8 flag) {
+
+/* Draws the eight record rows: filled rows up to the current one, dimmed blanks after it. */
+MATCH void func_801D4AE0(s16 x, s16 y, u8 flag) {
     s32 i;
-    s16 dy;
-    s16 gy;
+    s32 dy;
+    s32 gy;
     s32 ry;
     u8  k;
     s8  sel;
 
     UI_WindowDraw(x, y, 0x52, 0x7A, 0, g_WindowStyle);
     func_801D4910(x, y);
-    dy = 7;
-    gy = 9;
     for (i = 0; i < 8; i++) {
+        dy  = i * 14 + 7;
+        gy  = i * 14 + 9;
         k   = i * 5 + 3;
         sel = D_801DB0B4;
         if (i == sel) {
@@ -1195,13 +1196,8 @@ NON_MATCHING void func_801D4AE0(s16 x, s16 y, u8 flag) {
             UI_TextDrawAscii(x + 0x43, ry, UI_TEXT_DIM, g_UiTextFormatBuffer);
             UI_TextDrawGlyphString(x + 0x39, y + gy, UI_TEXT_DIM, D_801D0C2C);
         }
-        gy += 14;
-        dy += 14;
     }
 }
-#else
-INCLUDE_ASM(func_801D4AE0);
-#endif
 
 MATCH void func_801D4EA4(s16 left, s16 top, u8 icon_row, u8 raised) {
     s32 i;

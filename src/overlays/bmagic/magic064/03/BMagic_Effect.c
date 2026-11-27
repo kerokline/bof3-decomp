@@ -273,39 +273,37 @@ MATCH void func_801EF89C(void) {
     table[SELF(PartyMember)->unk_03]();
 }
 
-#ifdef NON_MATCHING
 /* Stages the effect's four sprite rows over the active battler's work image. */
-NON_MATCHING void func_801EF8F4(void) {
+MATCH void func_801EF8F4(void) {
     PartyMember*     saved;
     u8               slot;
-    u8               i;
-    BattleWorkImage* image;
     u16*             stage;
+    BattleWorkImage* image;
     u16*             mirror;
 
-    stage        = (u16*)GAME_PALETTE_STAGE;
-    mirror       = GAME_PALETTE_MIRROR_U16;
-    stage[0xA0]  = 0;
-    mirror[0xA0] = 0;
-    for (i = 1; i < 0x20; i++) {
-        stage[0xA0 + i]  = 0xFFFF;
-        mirror[0xA0 + i] = 0xFFFF;
+    GAME_PALETTE_STAGE_U16[0xA0]  = 0;
+    GAME_PALETTE_MIRROR_U16[0xA0] = 0;
+    for (slot = 1; slot < 0x20; slot++) {
+        stage               = GAME_PALETTE_STAGE_U16;
+        stage[0xA0 + slot]  = 0xFFFF;
+        mirror              = GAME_PALETTE_MIRROR_U16;
+        mirror[0xA0 + slot] = 0xFFFF;
     }
     g_GfxPalettePending = 1;
     GFX_ClearRect(0x340, 0x100, 0xC0, 0x100);
 
     slot                               = Battle_AllocEffect(1, 0x3A);
     image                              = (BattleWorkImage*)&g_BattleEffects[slot];
-    *image                             = *(BattleWorkImage*)&BATTLE_ACTIVE_PARTY;
+    *image                             = *BMagic_MemberImage(&BATTLE_ACTIVE_PARTY);
     g_BattleEffects[slot].target.party = SELF(PartyMember);
+    g_BattleEffects[slot].header.mode  = 2;
+    g_BattleEffects[slot].unk_06       = 1;
+    g_BattleEffects[slot].header.step  = 0;
+    g_BattleEffects[slot].effect_type  = 0x3A;
     g_BattleEffects[slot].header.flags &= ~PARTY_MEMBER_FLAG_HANDLER_BUSY;
-    g_BattleEffects[slot].header.mode = 2;
-    g_BattleEffects[slot].header.step = 0;
-    g_BattleEffects[slot].unk_06      = 1;
-    g_BattleEffects[slot].effect_type = 0x3A;
-    g_BattleEffects[slot].unk_0B      = SELF(PartyMember)->facing + 0x38;
-    g_BattleEffects[slot].screen_x    = 0x20;
-    g_BattleEffects[slot].screen_y    = 0x40;
+    g_BattleEffects[slot].unk_0B   = SELF(PartyMember)->facing + 0x38;
+    g_BattleEffects[slot].screen_x = 0x20;
+    g_BattleEffects[slot].screen_y = 0x40;
     g_BattleEffects[slot].active_flags |= 0x88;
     g_BattleEffects[slot].unk_27 = 0x7B;
     saved                        = SELF(PartyMember);
@@ -317,31 +315,31 @@ NON_MATCHING void func_801EF8F4(void) {
 
     slot                               = Battle_AllocEffect(1, 0x3A);
     image                              = (BattleWorkImage*)&g_BattleEffects[slot];
-    *image                             = *(BattleWorkImage*)&BATTLE_ACTIVE_PARTY;
+    *image                             = *BMagic_MemberImage(&BATTLE_ACTIVE_PARTY);
     g_BattleEffects[slot].target.party = SELF(PartyMember);
+    g_BattleEffects[slot].header.mode  = 2;
+    g_BattleEffects[slot].unk_06       = 1;
+    g_BattleEffects[slot].header.step  = 0;
+    g_BattleEffects[slot].effect_type  = 0x3A;
     g_BattleEffects[slot].header.flags &= ~PARTY_MEMBER_FLAG_HANDLER_BUSY;
-    g_BattleEffects[slot].header.mode = 2;
-    g_BattleEffects[slot].header.step = 0;
-    g_BattleEffects[slot].unk_06      = 1;
-    g_BattleEffects[slot].effect_type = 0x3A;
-    g_BattleEffects[slot].unk_0B      = SELF(PartyMember)->facing + 0x38;
-    g_BattleEffects[slot].screen_x    = 0x20;
-    g_BattleEffects[slot].screen_y    = 0x90;
+    g_BattleEffects[slot].unk_0B   = SELF(PartyMember)->facing + 0x38;
+    g_BattleEffects[slot].screen_x = 0x20;
+    g_BattleEffects[slot].screen_y = 0x90;
     g_BattleEffects[slot].active_flags |= 0x88;
     g_BattleEffects[slot].unk_27 = 0x7D;
 
     slot                               = Battle_AllocEffect(1, 0x3A);
     image                              = (BattleWorkImage*)&g_BattleEffects[slot];
-    *image                             = *(BattleWorkImage*)&BATTLE_ACTIVE_PARTY;
+    *image                             = *BMagic_MemberImage(&BATTLE_ACTIVE_PARTY);
     g_BattleEffects[slot].target.party = SELF(PartyMember);
+    g_BattleEffects[slot].header.mode  = 2;
+    g_BattleEffects[slot].unk_06       = 1;
+    g_BattleEffects[slot].header.step  = 0;
+    g_BattleEffects[slot].effect_type  = 0x3A;
     g_BattleEffects[slot].header.flags &= ~PARTY_MEMBER_FLAG_HANDLER_BUSY;
-    g_BattleEffects[slot].header.mode = 2;
-    g_BattleEffects[slot].header.step = 0;
-    g_BattleEffects[slot].unk_06      = 1;
-    g_BattleEffects[slot].effect_type = 0x3A;
-    g_BattleEffects[slot].unk_0B      = SELF(PartyMember)->facing + 0x3C;
-    g_BattleEffects[slot].screen_x    = 0x80;
-    g_BattleEffects[slot].screen_y    = 0x40;
+    g_BattleEffects[slot].unk_0B   = SELF(PartyMember)->facing + 0x3C;
+    g_BattleEffects[slot].screen_x = 0x80;
+    g_BattleEffects[slot].screen_y = 0x40;
     g_BattleEffects[slot].active_flags |= 0x88;
     g_BattleEffects[slot].unk_27 = 0x7C;
     saved                        = SELF(PartyMember);
@@ -353,23 +351,20 @@ NON_MATCHING void func_801EF8F4(void) {
 
     slot                               = Battle_AllocEffect(1, 0x3A);
     image                              = (BattleWorkImage*)&g_BattleEffects[slot];
-    *image                             = *(BattleWorkImage*)&BATTLE_ACTIVE_PARTY;
+    *image                             = *BMagic_MemberImage(&BATTLE_ACTIVE_PARTY);
     g_BattleEffects[slot].target.party = SELF(PartyMember);
+    g_BattleEffects[slot].header.mode  = 2;
+    g_BattleEffects[slot].unk_06       = 1;
+    g_BattleEffects[slot].header.step  = 0;
+    g_BattleEffects[slot].effect_type  = 0x3A;
     g_BattleEffects[slot].header.flags &= ~PARTY_MEMBER_FLAG_HANDLER_BUSY;
-    g_BattleEffects[slot].header.mode = 2;
-    g_BattleEffects[slot].header.step = 0;
-    g_BattleEffects[slot].unk_06      = 1;
-    g_BattleEffects[slot].effect_type = 0x3A;
-    g_BattleEffects[slot].unk_0B      = SELF(PartyMember)->facing + 0x3C;
-    g_BattleEffects[slot].screen_x    = 0x80;
-    g_BattleEffects[slot].screen_y    = 0x90;
+    g_BattleEffects[slot].unk_0B   = SELF(PartyMember)->facing + 0x3C;
+    g_BattleEffects[slot].screen_x = 0x80;
+    g_BattleEffects[slot].screen_y = 0x90;
     g_BattleEffects[slot].active_flags |= 0x88;
     g_BattleEffects[slot].unk_27 = 0x7D;
     SELF(PartyMember)->unk_03 += 1;
 }
-#else
-INCLUDE_ASM(func_801EF8F4);
-#endif
 
 MATCH void func_801F001C(void) {
     Script_AnimStepOnce();

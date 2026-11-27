@@ -2,8 +2,7 @@
 
 /* Draws the area-030 party bars: the actor's own bar row, the
  * member bars and the name text. */
-#ifdef NON_MATCHING
-NON_MATCHING void func_801D72E4(s16 panel_x, s16 panel_y) {
+MATCH void func_801D72E4(s16 panel_x, s16 panel_y) {
     u16 value;
     u16 health;
     u8  bar_index;
@@ -81,7 +80,10 @@ NON_MATCHING void func_801D72E4(s16 panel_x, s16 panel_y) {
     }
     bar_index = (u8)SELF(FishingState)->bounce_speed;
     if (bar_count != 0) {
-        count = 0;
+        /* FAKE: the loop weight lifts the row counter over the stepped row y in the allocator (s1 above s2); pure C best 6 rows. */
+        do {
+            count = 0;
+        } while (0);
         do {
             value = D_801E2120[bar_index & BYTE_MASK];
             if (value != 0xFFFF) {
@@ -102,6 +104,3 @@ NON_MATCHING void func_801D72E4(s16 panel_x, s16 panel_y) {
     TEXT_Format(text, D_801D0C08, SELF(FishingState)->bounce.half.unk_3C + 1);
     UI_TextDrawGlyphString((s16)(panel_x + 202), (s16)(panel_y + 146), 0U, text);
 }
-#else
-INCLUDE_ASM(func_801D72E4);
-#endif

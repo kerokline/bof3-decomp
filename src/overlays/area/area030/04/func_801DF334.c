@@ -3,7 +3,6 @@
 /* The hooked fish's fight: reacts to the rod's reel window, rolls the fish's
  * next jerk and walks the depth-and-direction steps that raise or lower the
  * lure against it. */
-#ifdef NON_MATCHING
 /* The fish's depth against the reel window, held to -0x30..0x30. */
 static inline u8 Fishing_ClampDepth(s8 depth) {
     u8 clamped;
@@ -20,7 +19,7 @@ static inline u8 Fishing_ClampDepth(s8 depth) {
     return clamped;
 }
 
-NON_MATCHING void func_801DF334(void) {
+MATCH void func_801DF334(void) {
     u8            grade;
     s32           span;
     s32           value;
@@ -254,10 +253,10 @@ NON_MATCHING void func_801DF334(void) {
         value                          = SELF(FishingState)->y_38.pos_y + 0x1000;
         SELF(FishingState)->y_38.pos_y = value;
         if (value > 0x150000) {
-            g_AreaCameraSpeed   = 0x10;
-            g_AreaScrollTargetY = value;
+            g_AreaScrollTargetCoordY.fixed = value;
+            g_AreaCameraSpeed              = 0x10;
             if (value > 0x3C0000) {
-                g_AreaScrollTargetY = 0x3C0000;
+                g_AreaScrollTargetCoordY.fixed = 0x3C0000;
             }
         }
         if (SELF(FishingState)->flag_04 == 0) {
@@ -271,6 +270,3 @@ NON_MATCHING void func_801DF334(void) {
     Script_Request(D_801E2330[SELF(FishingState)->counter_08][0]);
     Script_AnimStepLoop();
 }
-#else
-INCLUDE_ASM(func_801DF334);
-#endif

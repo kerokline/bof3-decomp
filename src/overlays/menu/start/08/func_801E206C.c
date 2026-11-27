@@ -45,7 +45,7 @@ NON_MATCHING void func_801E206C(void) {
             buttons &= ~(1 << i);
         }
         for (i = 0; i < 6; i++) {
-            if (g_InputMasks[D_801ECD14[i]] & buttons) {
+            if (buttons & g_InputMasks[D_801ECD14[i]]) {
                 break;
             }
         }
@@ -81,7 +81,8 @@ NON_MATCHING void func_801E206C(void) {
         SND_SEPlay(EMI_SE_ID(SND_BANK_COMMON, 6));
         step       = &D_80148652;
         D_80148655 = 0;
-        *step      = *step - 2;
+        buttons    = *step;
+        *step      = buttons - 2;
     }
 }
 #else

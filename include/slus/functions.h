@@ -34,5 +34,6 @@ void         func_8015C214(s32 slot, u8 value);
 #define GAME_PALETTE_STAGE             MEM_PTR(u8, 0x80035600u)
 #define GAME_PALETTE_MIRROR            MEM_PTR(u8, 0x80039600u)
 #define GAME_PALETTE_MIRROR_U16        ((u16*)GAME_PALETTE_MIRROR)
+#define GAME_PALETTE_STAGE_U16         ((u16*)GAME_PALETTE_STAGE)
 
 #endif

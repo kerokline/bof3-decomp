@@ -33,6 +33,8 @@ NON_MATCHING u8 Script_OpsRunAppearance(void* sub, s32 target, u8 value) {
     s32 cur;
     s32 val;
     u16 next;
+    u8  goal;
+    u16 step;
 
     code = (u8*)target;
     switch (code[CUR(sub)]) {
@@ -153,14 +155,15 @@ NON_MATCHING u8 Script_OpsRunAppearance(void* sub, s32 target, u8 value) {
             break;
         case ACTOR_SCRIPT_APPEARANCE_TURN_TO_PARTY:
             cur  = SELF(Actor)->direction & 7;
-            want = g_Game.members[0].facing ^ 4;
-            slot = cur;
-            if (slot != want) {
-                val = slot + 1;
-                if (((want - cur) << 0x18) <= 0) {
-                    val = slot - 1;
+            goal = g_Game.members[0].facing ^ 4;
+            step = cur;
+            if (step != goal) {
+                val  = goal - cur;
+                goal = step + 1;
+                if ((val << 0x18) <= 0) {
+                    goal = step - 1;
                 }
-                SELF(Actor)->direction = val & 7;
+                SELF(Actor)->direction = goal & 7;
                 if (Actor_GetOwner() != 1) {
                     Script_DispatchSelector(SELF(Actor)->direction);
                 } else {

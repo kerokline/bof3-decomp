@@ -23,25 +23,25 @@ MATCH s32 func_801B95E0(void) {
     if (COORD_FRAC(SELF(Actor)->pos.x) != 0 && COORD_FRAC(SELF(Actor)->pos.y) != 0) {
         return 1;
     }
-    x     = FIELD(u16, g_Self, 0x36u) + (s8)D_80181B00[WDIR][0];
-    y_arg = y = FIELD(u16, g_Self, 0x3Au) + (s8)D_80181B00[WDIR][1];
+    x     = SELF(Actor)->pos.x.part.integer + (s8)D_80181B00[WDIR][0];
+    y_arg = y = SELF(Actor)->pos.y.part.integer + (s8)D_80181B00[WDIR][1];
     Area_WalkProbeCells(x, y_arg);
 
     if (!(WDIR & AREA_LOAD_FLAG_WORLD_MAP)) {
         if (COORD_FRAC(SELF(Actor)->pos.x) == 0) {
             if (COORD_FRAC(SELF(Actor)->pos.y) == 0) {
-                ((u8*)&D_1F800008)[0] = func_801B9F08(1, 2, 3);
-                ((u8*)&D_1F800008)[1] = func_801B9F08(2, 0, 0);
-                PAD_C                 = func_801B9F08(3, 0, 0);
-                if (((u8*)&D_1F800008)[0] == 0xB0) {
+                g_ScratchPad.cells.bytes[8] = func_801B9F08(1, 2, 3);
+                g_ScratchPad.cells.bytes[9] = func_801B9F08(2, 0, 0);
+                PAD_C                       = func_801B9F08(3, 0, 0);
+                if (g_ScratchPad.cells.bytes[8] == 0xB0) {
                     return 6;
                 }
                 {
-                    if (((u8*)&D_1F800008)[0] == 0x10 || ((u8*)&D_1F800008)[0] == 0x20) {
-                        if ((*(u32*)&D_1F800008 & 0xFFFF00) == 0x101000) {
+                    if (g_ScratchPad.cells.bytes[8] == 0x10 || g_ScratchPad.cells.bytes[8] == 0x20) {
+                        if ((g_ScratchPad.cells.words[2] & 0xFFFF00) == 0x101000) {
                             return 0;
                         }
-                        if (((u8*)&D_1F800008)[1] == 0x10) {
+                        if (g_ScratchPad.cells.bytes[9] == 0x10) {
                             Actor_SnapFacing(2, 4, 3);
                         } else if (PAD_C == 0x10) {
                             Actor_SnapFacing(4, 6, 5);
@@ -74,7 +74,7 @@ MATCH s32 func_801B95E0(void) {
                             return 1;
                         }
                         if (!(WDIR & AREA_LOAD_FLAG_WORLD_MAP)) {
-                            height = Area_HeightReadStep(x << 0x10, (((s16)FIELD(u16, g_Self, 0x3Au) + y) << 0x10) >> 1, 1);
+                            height = Area_HeightReadStep(x << 0x10, (((s16)SELF(Actor)->pos.y.part.integer + y) << 0x10) >> 1, 1);
                             if (PAD_FLAG != 0 && height >= 0x41) {
                                 Actor_SnapFacing(2, 4, 3);
                                 return 1;
@@ -175,7 +175,7 @@ MATCH s32 func_801B95E0(void) {
         if ((PAD_A & 0xF0) == 0xA0) {
             return func_801BB7B0(8) & BYTE_MASK;
         }
-        height = Area_HeightReadStep(((((s16)FIELD(u16, g_Self, 0x36u) * 2) + 1) << 0x10) >> 1, y_arg << 0x10, 1);
+        height = Area_HeightReadStep(((((s16)SELF(Actor)->pos.x.part.integer * 2) + 1) << 0x10) >> 1, y_arg << 0x10, 1);
         if (PAD_FLAG != 0 && height >= 0x41) {
             WDIR = 7;
             return 1;
@@ -217,7 +217,7 @@ diag_south:
     if ((PAD_A & 0xF0) == 0xA0) {
         return func_801BB7B0(8) & BYTE_MASK;
     }
-    height = Area_HeightReadStep(x << 0x10, ((((s16)FIELD(u16, g_Self, 0x3Au) * 2) + 1) << 0x10) >> 1, 1);
+    height = Area_HeightReadStep(x << 0x10, ((((s16)SELF(Actor)->pos.y.part.integer * 2) + 1) << 0x10) >> 1, 1);
     if (PAD_FLAG != 0 && height >= 0x41) {
         WDIR = 1;
         return 1;

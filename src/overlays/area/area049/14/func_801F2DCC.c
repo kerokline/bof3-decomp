@@ -1,7 +1,6 @@
 #include "area049_14.h"
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801F2DCC(void) {
+MATCH void func_801F2DCC(void) {
     PartyMember* saved;
     PartyMember* record;
     u32          index;
@@ -27,8 +26,17 @@ NON_MATCHING void func_801F2DCC(void) {
             SELF_SET(record);
             if (SYS_TestFlag(&g_Scenario2Flags[0x38], 0x25) != 0 || SYS_TestFlag(&g_Scenario2Flags[0x18], 0x3A) != 0 || (bounds = func_801F2D00((u8)index)) == 0xFF) {
                 if (((saved->param.unk_0B >> index) & 1) != 0) {
-                    saved->param.unk_0B &= ~(one << index);
-                    g_AreaWalkFlags &= ~(one << index);
+                    /* FAKE: the loop weight lifts the mask 1 over the flag table base in the allocator (s3 above s4); pure C best 10 rows. */
+                    do {
+                        do {
+                            do {
+                                do {
+                                    saved->param.unk_0B &= ~(one << index);
+                                    g_AreaWalkFlags &= ~(one << index);
+                                } while (0);
+                            } while (0);
+                        } while (0);
+                    } while (0);
                 }
                 goto next_record;
             }
@@ -80,6 +88,3 @@ NON_MATCHING void func_801F2DCC(void) {
 
     SELF_SET(saved);
 }
-#else
-INCLUDE_ASM(func_801F2DCC);
-#endif

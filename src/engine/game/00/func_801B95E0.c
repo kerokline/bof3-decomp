@@ -7,14 +7,13 @@
 #define PAD_C          SP_REF(u8, 0xA)
 #define WDIR           SELF(Actor)->direction
 
-#ifdef NON_MATCHING
-NON_MATCHING s32 func_801B95E0(void) {
+MATCH s32 func_801B95E0(void) {
     s16 x;
     s16 y;
     s16 y_arg;
     u8  dir;
-    s32 probe;
-    /* FAKE: retail's frame is 8 bytes larger than the statements need. */
+    s16 height;
+    /* FAKE: retail's frame is 32 bytes larger than the statements need. */
     FAKE_STACK_PADS(s32, 8);
 
     if (g_Game.flags & 0x400) {
@@ -69,14 +68,14 @@ NON_MATCHING s32 func_801B95E0(void) {
                         }
                     }
                     if (!(WDIR & AREA_LOAD_FLAG_WORLD_MAP)) {
-                        probe = Area_HeightReadStep(STEP_TILE_X(x), y << 0x10, 3) << 0x10;
-                        if (PAD_FLAG != 0 && (probe >> 0x10) >= 0x41) {
+                        height = Area_HeightReadStep(STEP_TILE_X(x), y << 0x10, 3);
+                        if (PAD_FLAG != 0 && height >= 0x41) {
                             Actor_SnapFacing(4, 6, 5);
                             return 1;
                         }
                         if (!(WDIR & AREA_LOAD_FLAG_WORLD_MAP)) {
-                            probe = Area_HeightReadStep(x << 0x10, (((s16)FIELD(u16, g_Self, 0x3Au) + y) << 0x10) >> 1, 1) << 0x10;
-                            if (PAD_FLAG != 0 && (probe >> 0x10) >= 0x41) {
+                            height = Area_HeightReadStep(x << 0x10, (((s16)FIELD(u16, g_Self, 0x3Au) + y) << 0x10) >> 1, 1);
+                            if (PAD_FLAG != 0 && height >= 0x41) {
                                 Actor_SnapFacing(2, 4, 3);
                                 return 1;
                             }
@@ -176,8 +175,8 @@ NON_MATCHING s32 func_801B95E0(void) {
         if ((PAD_A & 0xF0) == 0xA0) {
             return func_801BB7B0(8) & BYTE_MASK;
         }
-        probe = Area_HeightReadStep(((((s16)FIELD(u16, g_Self, 0x36u) * 2) + 1) << 0x10) >> 1, y_arg << 0x10, 1) << 0x10;
-        if (PAD_FLAG != 0 && (probe >> 0x10) >= 0x41) {
+        height = Area_HeightReadStep(((((s16)FIELD(u16, g_Self, 0x36u) * 2) + 1) << 0x10) >> 1, y_arg << 0x10, 1);
+        if (PAD_FLAG != 0 && height >= 0x41) {
             WDIR = 7;
             return 1;
         }
@@ -218,13 +217,10 @@ diag_south:
     if ((PAD_A & 0xF0) == 0xA0) {
         return func_801BB7B0(8) & BYTE_MASK;
     }
-    probe = Area_HeightReadStep(x << 0x10, ((((s16)FIELD(u16, g_Self, 0x3Au) * 2) + 1) << 0x10) >> 1, 1) << 0x10;
-    if (PAD_FLAG != 0 && (probe >> 0x10) >= 0x41) {
+    height = Area_HeightReadStep(x << 0x10, ((((s16)FIELD(u16, g_Self, 0x3Au) * 2) + 1) << 0x10) >> 1, 1);
+    if (PAD_FLAG != 0 && height >= 0x41) {
         WDIR = 1;
         return 1;
     }
     return 3;
 }
-#else
-INCLUDE_ASM(func_801B95E0);
-#endif

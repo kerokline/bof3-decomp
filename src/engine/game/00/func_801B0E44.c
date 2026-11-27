@@ -28,10 +28,10 @@ MATCH u8 func_801B0E44(void) {
         g_ScratchPad.cells.words[3] = SELF(Actor)->pos.y.fixed + g_FacingOffsets[SELF(Actor)->direction].y * divisor * SELF(Actor)->timer * 2;
     }
     if (g_GameStateIndex != GAME_REQUEST_SCENE_CAMERA) {
-        Coord sample_x = {g_ScratchPad.cells.words[2]};
-        Coord sample_y = {g_ScratchPad.cells.words[3]};
+        Coord step_x = {g_ScratchPad.cells.words[2]};
+        Coord step_y = {g_ScratchPad.cells.words[3]};
 
-        if (((s32 (*)(s32, s32))Area_IsStepBlocked)(sample_x.fixed, sample_y.fixed) != 0) {
+        if (((s32 (*)(s32, s32))Area_IsStepBlocked)(step_x.fixed, step_y.fixed) != 0) {
             result = 0;
             if (SELF(Actor)->header.mode == 2) {
                 return 0xFF;

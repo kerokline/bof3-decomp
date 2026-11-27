@@ -29,10 +29,10 @@ MATCH s32 func_801BC4D0(void) {
         case 5:
             return 1;
         case 3: {
-            Coord sample_x = {*(s32*)&g_ScratchPad.cells.halves[4]};
-            Coord sample_y = {FIELD(s32, (&g_ScratchPad.cells.halves[4]), 0x4u)};
+            Coord step_x = {*(s32*)&g_ScratchPad.cells.halves[4]};
+            Coord step_y = {FIELD(s32, (&g_ScratchPad.cells.halves[4]), 0x4u)};
 
-            result = ((s32 (*)(s32, s32, u8))Area_HeightReadStep)(sample_x.fixed, sample_y.fixed, SELF(Actor)->direction);
+            result = ((s32 (*)(s32, s32, u8))Area_HeightReadStep)(step_x.fixed, step_y.fixed, SELF(Actor)->direction);
             if (SP_REF(u8, 0) != 0) {
                 if ((s16)result >= 0x41) {
                     SELF(Actor)->direction = saved;

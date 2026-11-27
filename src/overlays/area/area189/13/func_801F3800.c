@@ -3,10 +3,9 @@
 
 #include <abs.h>
 
-#ifdef NON_MATCHING
 /* Draws the area 189 sky: the textured band and the white haze tile, two rows of sky quads coloured
  * by the desert clock, the stars, two layers of four haze bands, and the two glows by the target cell. */
-NON_MATCHING void func_801F3800(void) {
+MATCH void func_801F3800(void) {
     RECT*     window;
     POLY_FT4* prim;
     TILE*     tile;
@@ -14,6 +13,7 @@ NON_MATCHING void func_801F3800(void) {
     POLY_G4*  first;
     s32       shade;
     s32       scale;
+    s32       dist;
     s32       dx;
     s32       dy;
     s32       phase;
@@ -124,9 +124,9 @@ NON_MATCHING void func_801F3800(void) {
     }
 
     tx    = &g_AreaTargetCellX;
+    dist  = abs(*tx - 0x1780);
     ty    = &g_AreaTargetCellY;
-    shade = abs(*tx - 0x1780) + abs(*ty - 0x1380);
-    shade = 0xC0 - shade / 3;
+    shade = 0xC0 - (dist + abs(*ty - 0x1380)) / 3;
     shade = shade > 0x80 ? 0x80 : shade;
     shade = shade < 0 ? 0 : shade;
     if (shade != 0) {
@@ -144,6 +144,3 @@ NON_MATCHING void func_801F3800(void) {
         }
     }
 }
-#else
-INCLUDE_ASM(func_801F3800);
-#endif

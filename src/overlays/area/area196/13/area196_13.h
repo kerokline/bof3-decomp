@@ -11,11 +11,11 @@
 
 /* The step handler bank. */
 extern u8                  D_801F412C[];
+extern Callback            D_801F4138[];
 /* The cone's ring radii, ring heights and the per-copy depth rows. */
 extern u8                  D_801F4150[];
 extern u8                  D_801F415C[];
 extern u8                  D_801F4168[];
-extern Callback            D_801F4138[];
 /* D_801F42F4 */
 extern PartyMemberMessages g_PartyMemberMessages[2];
 

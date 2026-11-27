@@ -28,7 +28,7 @@ NON_MATCHING void func_8015A9A4(void) {
     if (COORD_FRAC(task->pos.x) != 0) {
         dy++;
     }
-    /* FAKE: keeps dx in its own pseudo so the x delta loads first, as in Area_CellAddPrim; pure C best 18 rows. */
+    /* FAKE: keeps dx in its own pseudo so the x delta loads first, as in Area_CellAddPrim; pure C best 11 rows. */
     dx++;
     dx--;
     sum = dx + dy;

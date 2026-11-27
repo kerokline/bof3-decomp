@@ -264,8 +264,6 @@ MATCH void func_801F79EC(void) {
 }
 
 MATCH void func_801F7A30(void) {
-    /* FAKE: retail reserves 16 bytes of frame that no statement uses. */
-    FAKE_STACK_PADS(u8, 0x10);
     Actor* work;
 
     Scene_PlaceAtLead();
@@ -333,9 +331,6 @@ MATCH void func_801F7D28(void) {
 }
 
 MATCH void func_801F7D6C(void) {
-    /* FAKE: retail reserves 16 bytes of frame that no statement uses. */
-    FAKE_STACK_PADS(u8, 0x10);
-
     Scene_PlaceAtLead();
     func_801FA01C();
     SELF(Actor)->vx = 120;

@@ -713,7 +713,7 @@ void  func_801BBE98(void);
 void  func_801BBFB4(void);
 void  func_801BC000(void);
 s32   func_801BC4D0(void);
-s32   func_801BC760(void);
+u8    func_801BC760(void);
 void  func_801BCD60(s32 target_x, s32 target_y);
 void  func_801BD290(s32 pos_x, s32 pos_y, s8* direction_out);
 void  func_801BD32C(void);

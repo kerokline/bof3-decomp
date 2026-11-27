@@ -2,8 +2,7 @@
 
 /* Orders the live party members by agility and rebuilds the command row list
  * from the surviving ones, after sizing the enemy side. */
-#ifdef NON_MATCHING
-NON_MATCHING void func_801DA7D4(void) {
+MATCH void func_801DA7D4(void) {
     BattleRank entries[BATTLE_PARTY_CHARACTERS_COUNT];
     BattleRank temp;
     u8         n;
@@ -58,6 +57,3 @@ NON_MATCHING void func_801DA7D4(void) {
         }
     }
 }
-#else
-INCLUDE_ASM(func_801DA7D4);
-#endif

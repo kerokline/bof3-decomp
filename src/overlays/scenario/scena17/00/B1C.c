@@ -566,8 +566,7 @@ MATCH void func_801F88CC(s32 semi, s32 color) {
     GFX_AddPrim(GFX_LAYER_EFFECT_FRONT, sizeof(SPRT));
 }
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801F8B10(s32 scale, s32 shade) {
+MATCH void func_801F8B10(s32 scale, s32 shade) {
     SVECTOR  rot;
     SVECTOR  axis;
     MATRIX   mtx;
@@ -589,7 +588,7 @@ NON_MATCHING void func_801F8B10(s32 scale, s32 shade) {
     setVector(&axis, 0, 0, 0);
     rot.vx = (g_AreaScrollTargetX >> 9) - 0x4000;
     rot.vy = (g_AreaScrollTargetCoordY.fixed >> 9) - 0x4000;
-    rot.vz = -Area_HeightSample(g_AreaScrollTargetX, g_AreaScrollTargetY) / 2;
+    rot.vz = -Area_HeightSample(g_AreaScrollTargetCoordX.fixed, g_AreaScrollTargetY) / 2;
     RotTransMatrix(&rot, mtx, &flag);
     RotMatrix(&axis, &mtx);
     MulMatrix2(&g_CameraMatrix, &mtx);
@@ -629,9 +628,6 @@ NON_MATCHING void func_801F8B10(s32 scale, s32 shade) {
     }
     PopMatrix();
 }
-#else
-INCLUDE_ASM(func_801F8B10);
-#endif
 
 MATCH void func_801F8EF0(void) {
     TILE* prim;

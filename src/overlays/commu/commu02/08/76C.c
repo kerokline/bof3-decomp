@@ -2609,13 +2609,13 @@ MATCH void Menu_DrawPanelIcon(u16 x, u16 y, s32 u, s32 v, u16 clut, u8 color) {
     MenuDrawPanelIcon(x, y, u, v, clut, color);
 }
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_801D9B80(s32 x, s32 y, s32 width, s32 height) {
+MATCH void func_801D9B80(s32 x, s32 y, s32 width, s32 height) {
     RECT  window;
     SPRT* sprite;
     s32   columns;
     s32   rows;
     u8    edge;
+    FAKE_STACK_PADS(u8, 8); /* FAKE: retail reserves 8 unused stack bytes after the window rectangle; without them the frame is 0x40 (16 rows). */
 
     /* not setRECT: retail stores h before w */
     window.x = 112;
@@ -2704,9 +2704,6 @@ NON_MATCHING void func_801D9B80(s32 x, s32 y, s32 width, s32 height) {
     UI_SpriteDraw((s16)x, (s16)(y + rows * 8), 0x27, UI_SPRITE_ALT_PAGE);
     UI_SpriteDraw((s16)(x + columns * 8), (s16)(y + rows * 8), 0x29, UI_SPRITE_ALT_PAGE);
 }
-#else
-INCLUDE_ASM(func_801D9B80);
-#endif
 
 MATCH s8 func_801DA114(void) {
     s32 pressed;

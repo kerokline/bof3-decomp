@@ -1,7 +1,7 @@
 #include "game_00.h"
 
-#ifdef NON_MATCHING
-NON_MATCHING void func_8019B704(void) {
+/* Steps a sliding rock: moves it along its push axis, settles it on the ground and stops it when blocked. */
+MATCH void func_8019B704(void) {
     s32    saved;
     s32    acc;
     s32    gap;
@@ -27,7 +27,7 @@ NON_MATCHING void func_8019B704(void) {
         saved = self->vx;
         sum += saved;
         self->pos.x.fixed = sum;
-        gap               = sum - g_Game.members[0].pos.x.fixed;
+        gap               = abs(sum - g_Game.members[0].pos.x.fixed);
     } else {
         s32 sum;
 
@@ -44,10 +44,7 @@ NON_MATCHING void func_8019B704(void) {
         saved = self->vy;
         sum += saved;
         self->pos.y.fixed = sum;
-        gap               = sum - g_Game.members[0].pos.y.fixed;
-    }
-    if (gap < 0) {
-        gap = -gap;
+        gap               = abs(sum - g_Game.members[0].pos.y.fixed);
     }
     if ((SELF(Actor)->unk_18 == 0) && (SELF(Actor)->unk_1C == 0)) {
         SELF(Actor)->unk_06       = 1;
@@ -113,6 +110,3 @@ NON_MATCHING void func_8019B704(void) {
         Area_SetDrawMode();
     }
 }
-#else
-INCLUDE_ASM(func_8019B704);
-#endif

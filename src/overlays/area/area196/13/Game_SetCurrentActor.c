@@ -1,11 +1,11 @@
 #include "area196_13.h"
 
-#ifdef NON_MATCHING
 /* Draws the current actor's spinning cone: sixteen rotated copies of a tapered ring of twisted gouraud quads, each with a back quad, and two depth-scaled sprites per copy. */
-NON_MATCHING void Game_SetCurrentActor(s32 tint) {
+MATCH void Game_SetCurrentActor(s32 tint) {
     s32       row;
     s32       i;
     s32       size;
+    s32       angle;
     POLY_GT4* quad;
     POLY_GT4* back;
     long      p;
@@ -60,15 +60,19 @@ NON_MATCHING void Game_SetCurrentActor(s32 tint) {
             setRGB1(back, D_801F412C[i], D_801F412C[i], D_801F412C[i]);
             setRGB2(back, D_801F412C[i + 1], D_801F412C[i + 1], D_801F412C[i + 1]);
             setRGB3(back, D_801F412C[i + 1], D_801F412C[i + 1], D_801F412C[i + 1]);
-            Area_CellAddPrim(SELF(PartyMember)->pos.x.fixed, SELF(PartyMember)->pos.y.fixed, (s8)D_801F4168[row], sizeof(POLY_GT4));
+            {
+                Coord x = {SELF(PartyMember)->pos.x.fixed};
+                Coord y = {SELF(PartyMember)->pos.y.fixed};
+
+                Area_CellAddPrim(x.fixed, y.fixed, (s8)D_801F4168[row], sizeof(POLY_GT4));
+            }
         }
 
         /* Two sprites ride the rim of the copy, their size scaled by the camera depth. */
         for (i = 0; i < 2; i++) {
-            size = i << 7;
-            size += row << 8;
-            g_ScratchPadVectors[2].vx = ((u16*)D_1F800034)[0] + (rsin(size) >> 8) * D_801F4150[8];
-            g_ScratchPadVectors[2].vy = ((u16*)D_1F800034)[1] + (rcos(size) >> 8) * D_801F4150[8];
+            angle                     = (row << 8) + (i << 7);
+            g_ScratchPadVectors[2].vx = ((u16*)D_1F800034)[0] + (rsin(angle) >> 8) * D_801F4150[8];
+            g_ScratchPadVectors[2].vy = ((u16*)D_1F800034)[1] + (rcos(angle) >> 8) * D_801F4150[8];
             g_ScratchPadVectors[2].vz = -(D_801F415C[8] << 5);
             RotTransPers(&g_ScratchPadVectors[2], (long*)&((u16*)D_1F800034)[6], &p, &flag);
             size = (abs(3 - ((g_FrameCount + row / 2) & 7)) + 0x10) * 0x1194;
@@ -87,6 +91,3 @@ NON_MATCHING void Game_SetCurrentActor(s32 tint) {
         }
     }
 }
-#else
-INCLUDE_ASM(Game_SetCurrentActor);
-#endif
